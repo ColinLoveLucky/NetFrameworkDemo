@@ -1,0 +1,18 @@
+[[fuzzy-matching]]
+== 拼写错误
+
+我们期望在类似时间和价格的结构化数据上执行一个查询来返回精确匹配的文档。((("typoes and misspellings", "fuzzy matching")))((("fuzzy matching")))
+然而，好的全文检索不应该是完全相同的限定逻辑。
+相反，我们可以扩大范围以包括 _可能_ 的匹配，而根据相关性得分将更好的匹配推到结果集的顶部。
+
+事实上，只能完全匹配的全文搜索可能会困扰你的用户。
+难道不希望在搜索 `quick brown fox` 时匹配一个包含  `fast brown foxes` 的文档，
+搜索 `Johnny Walker` 同时匹配 `Johnnie Walker` ，搜索 `Arnold Shcwarzenneger` 同时匹配 `Arnold Schwarzenegger` ?
+
+如果存在完全符合用户查询的文档，他们应该出现在结果集的顶部，而较弱的匹配可以被包含在列表的后面。
+如果没有精确匹配的文档，至少我们可以显示有可能匹配用户要求的文档，它们甚至可能是用户最初想要的！
+
+我们已经在 <<token-normalization>> 看过自由变音匹配， <<stemming>> 中的词干， <<synonyms>> 中的同义词，
+但所有这些方法假定单词拼写正确，或者每个单词拼写只有唯一的方法。
+
+Fuzzy matching 允许查询时匹配错误拼写的单词，而语音语汇单元过滤器可以在索引时用来进行 _近似读音_ 匹配。

@@ -1,0 +1,45 @@
+[[update-doc]]
+=== 更新整个文档
+
+在 Elasticsearch 中文档是 _不可改变_ 的，不能修改它们。((("documents", "updating whole document")))((("updating documents", "whole document")))相反，如果想要更新现有的文档，需要 _重建索引_ 或者进行替换，
+((("reindexing")))((("indexing", seealso="reindexing")))我们可以使用相同的 `index` API 进行实现，在 <<index-doc>> 中已经进行了讨论。
+
+
+[source,js]
+--------------------------------------------------
+PUT /website/blog/123
+{
+  "title": "My first blog entry",
+  "text":  "I am starting to get the hang of this...",
+  "date":  "2014/01/02"
+}
+--------------------------------------------------
+// SENSE: 030_Data/25_Reindex_doc.json
+
+在响应体中，我们能看到 Elasticsearch 已经增加了 `_version` 字段值：
+
+[source,js]
+--------------------------------------------------
+{
+  "_index" :   "website",
+  "_type" :    "blog",
+  "_id" :      "123",
+  "_version" : 2,
+  "created":   false <1>
+}
+--------------------------------------------------
+<1> `created` 标志设置成 `false` ，是因为相同的索引、类型和 ID 的文档已经存在。
+
+在内部，Elasticsearch 已将旧文档标记为已删除，并增加一个全新的文档。((("deleted documents")))
+尽管你不能再对旧版本的文档进行访问，但它并不会立即消失。当继续索引更多的数据，Elasticsearch 会在后台清理这些已删除文档。
+
+
+在本章的后面部分，我们会介绍 `update` API, 这个 API 可以用于 <<partial-updates,partial updates to a document>> 。
+虽然它似乎对文档直接进行了修改，但实际上 Elasticsearch 按前述完全相同方式执行以下过程：
+
+1. 从旧文档构建 JSON
+2. 更改该 JSON
+3. 删除旧文档
+4. 索引一个新文档
+
+唯一的区别在于,  `update` API 仅仅通过一个客户端请求来实现这些步骤，而不需要单独的 `get` 和 `index` 请求。

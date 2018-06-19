@@ -1,0 +1,400 @@
+[[_retrieving_a_document]]
+=== 检索文档
+
+目前我们已经在 Elasticsearch 中存储了一些数据，((("documents", "retrieving"))) 接下来就能专注于实现应用的业务需求了。第一个需求是可以检索到单个雇员的数据。
+
+这在 Elasticsearch 中很简单。简单地执行((("HTTP requests", "retrieving a document with GET"))) 一个 HTTP +GET+ 请求并指定文档的地址——索引库、类型和ID。((("id", "specifying in a request")))((("indices", "specifying index in a request")))((("types", "specifying type in a request"))) 使用这三个信息可以返回原始的 JSON 文档：
+
+[source,js]
+--------------------------------------------------
+GET /megacorp/employee/1
+--------------------------------------------------
+// SENSE: 010_Intro/30_Get.json
+
+返回结果包含了文档的一些元数据，以及 `_source` 属性，内容是 John Smith 雇员的原始 JSON 文档((("_source field", sortas="source field")))：
+
+[source,js]
+--------------------------------------------------
+{
+  "_index" :   "megacorp",
+  "_type" :    "employee",
+  "_id" :      "1",
+  "_version" : 1,
+  "found" :    true,
+  "_source" :  {
+      "first_name" :  "John",
+      "last_name" :   "Smith",
+      "age" :         25,
+      "about" :       "I love to go rock climbing",
+      "interests":  [ "sports", "music" ]
+  }
+}
+--------------------------------------------------
+
+[TIP]
+====
+将 HTTP 命令由 `PUT` 改为 `GET` 可以用来检索文档，同样的，可以使用 `DELETE` 命令来删除文档，以及使用 `HEAD` 指令来检查文档是否存在。如果想更新已存在的文档，只需再次 `PUT` 。
+====
+
+[[_search_lite]]
+=== 轻量搜索
+
+一个 `GET` 是相当简单的，可以直接得到指定的文档。((("GET method")))((("searches", "simple search"))) 现在尝试点儿稍微高级的功能，比如一个简单的搜索！
+
+第一个尝试的几乎是最简单的搜索了。我们使用下列请求来搜索所有雇员：
+
+[source,js]
+--------------------------------------------------
+GET /megacorp/employee/_search
+--------------------------------------------------
+// SENSE: 010_Intro/30_Simple_search.json
+
+可以看到，我们仍然使用索引库 `megacorp` 以及类型 `employee`，但与指定一个文档 ID 不同，这次使用 `_search` 。返回结果包括了所有三个文档，放在数组 `hits` 中。一个搜索默认返回十条结果。
+
+[source,js]
+--------------------------------------------------
+{
+   "took":      6,
+   "timed_out": false,
+   "_shards": { ... },
+   "hits": {
+      "total":      3,
+      "max_score":  1,
+      "hits": [
+         {
+            "_index":         "megacorp",
+            "_type":          "employee",
+            "_id":            "3",
+            "_score":         1,
+            "_source": {
+               "first_name":  "Douglas",
+               "last_name":   "Fir",
+               "age":         35,
+               "about":       "I like to build cabinets",
+               "interests": [ "forestry" ]
+            }
+         },
+         {
+            "_index":         "megacorp",
+            "_type":          "employee",
+            "_id":            "1",
+            "_score":         1,
+            "_source": {
+               "first_name":  "John",
+               "last_name":   "Smith",
+               "age":         25,
+               "about":       "I love to go rock climbing",
+               "interests": [ "sports", "music" ]
+            }
+         },
+         {
+            "_index":         "megacorp",
+            "_type":          "employee",
+            "_id":            "2",
+            "_score":         1,
+            "_source": {
+               "first_name":  "Jane",
+               "last_name":   "Smith",
+               "age":         32,
+               "about":       "I like to collect rock albums",
+               "interests": [ "music" ]
+            }
+         }
+      ]
+   }
+}
+--------------------------------------------------
+
+注意：返回结果不仅告知匹配了哪些文档，还包含了整个文档本身：显示搜索结果给最终用户所需的全部信息。
+
+接下来，尝试下搜索姓氏为 ``Smith`` 的雇员。为此，我们将使用一个 _高亮_ 搜索，很容易通过命令行完成。这个方法一般涉及到一个((("query strings"))) _查询字符串_ （_query-string_） 搜索，因为我们通过一个URL参数来传递查询信息给搜索接口：
+
+[source,js]
+--------------------------------------------------
+GET /megacorp/employee/_search?q=last_name:Smith
+--------------------------------------------------
+// SENSE: 010_Intro/30_Simple_search.json
+
+我们仍然在请求路径中使用 `_search` 端点，并将查询本身赋值给参数 `q=` 。返回结果给出了所有的 Smith：
+
+[source,js]
+--------------------------------------------------
+{
+   ...
+   "hits": {
+      "total":      2,
+      "max_score":  0.30685282,
+      "hits": [
+         {
+            ...
+            "_source": {
+               "first_name":  "John",
+               "last_name":   "Smith",
+               "age":         25,
+               "about":       "I love to go rock climbing",
+               "interests": [ "sports", "music" ]
+            }
+         },
+         {
+            ...
+            "_source": {
+               "first_name":  "Jane",
+               "last_name":   "Smith",
+               "age":         32,
+               "about":       "I like to collect rock albums",
+               "interests": [ "music" ]
+            }
+         }
+      ]
+   }
+}
+--------------------------------------------------
+
+[[_search_with_query_dsl]]
+=== 使用查询表达式搜索
+
+Query-string 搜索通过命令非常方便地进行临时性的即席搜索 ((("ad hoc searches"))) ，但它有自身的局限性（参见 <<search-lite>> ）。Elasticsearch 提供一个丰富灵活的查询语言叫做 _查询表达式_ ，((("Query DSL"))) 它支持构建更加复杂和健壮的查询。
+
+_领域特定语言_ （DSL），((("DSL (Domain Specific Language)"))) 指定了使用一个 JSON 请求。我们可以像这样重写之前的查询所有 Smith 的搜索 ：
+
+
+[source,js]
+--------------------------------------------------
+GET /megacorp/employee/_search
+{
+    "query" : {
+        "match" : {
+            "last_name" : "Smith"
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 010_Intro/30_Simple_search.json
+
+返回结果与之前的查询一样，但还是可以看到有一些变化。其中之一是，不再使用 _query-string_ 参数，而是一个请求体替代。这个请求使用 JSON 构造，并使用了一个 `match` 查询（属于查询类型之一，后续将会了解）。
+
+[[_more_complicated_searches]]
+=== 更复杂的搜索
+
+现在尝试下更复杂的搜索。((("searches", "more complicated")))((("filters"))) 同样搜索姓氏为 Smith 的雇员，但这次我们只需要年龄大于 30 的。查询需要稍作调整，使用过滤器 _filter_ ，它支持高效地执行一个结构化查询。
+
+[source,js]
+--------------------------------------------------
+GET /megacorp/employee/_search
+{
+    "query" : {
+        "bool": {
+            "must": {
+                "match" : {
+                    "last_name" : "smith" <1>
+                }
+            },
+            "filter": {
+                "range" : {
+                    "age" : { "gt" : 30 } <2>
+                }
+            }
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 010_Intro/30_Query_DSL.json
+
+<1> 这部分与我们之前使用的((("match queries")))  `match` _查询_ 一样。
+<2> 这部分是一个 `range` _过滤器_ ，((("range filters"))) 它能找到年龄大于 30 的文档，其中 `gt` 表示_大于_(_great than_)。
+
+目前无需太多担心语法问题，后续会更详细地介绍。只需明确我们添加了一个 _过滤器_ 用于执行一个范围查询，并复用之前的 `match` 查询。现在结果只返回了一个雇员，叫 Jane Smith，32 岁。
+
+[source,js]
+--------------------------------------------------
+{
+   ...
+   "hits": {
+      "total":      1,
+      "max_score":  0.30685282,
+      "hits": [
+         {
+            ...
+            "_source": {
+               "first_name":  "Jane",
+               "last_name":   "Smith",
+               "age":         32,
+               "about":       "I like to collect rock albums",
+               "interests": [ "music" ]
+            }
+         }
+      ]
+   }
+}
+--------------------------------------------------
+
+[[_full_text_search]]
+=== 全文搜索
+
+截止目前的搜索相对都很简单：单个姓名，通过年龄过滤。现在尝试下稍微高级点儿的全文搜索——一项((("full text search"))) 传统数据库确实很难搞定的任务。
+
+搜索下所有喜欢攀岩（rock climbing）的雇员：
+
+[source,js]
+--------------------------------------------------
+GET /megacorp/employee/_search
+{
+    "query" : {
+        "match" : {
+            "about" : "rock climbing"
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 010_Intro/30_Query_DSL.json
+
+显然我们依旧使用之前的 `match` 查询在`about` 属性上搜索 ``rock climbing'' 。得到两个匹配的文档：
+
+[source,js]
+--------------------------------------------------
+{
+   ...
+   "hits": {
+      "total":      2,
+      "max_score":  0.16273327,
+      "hits": [
+         {
+            ...
+            "_score":         0.16273327, <1>
+            "_source": {
+               "first_name":  "John",
+               "last_name":   "Smith",
+               "age":         25,
+               "about":       "I love to go rock climbing",
+               "interests": [ "sports", "music" ]
+            }
+         },
+         {
+            ...
+            "_score":         0.016878016, <1>
+            "_source": {
+               "first_name":  "Jane",
+               "last_name":   "Smith",
+               "age":         32,
+               "about":       "I like to collect rock albums",
+               "interests": [ "music" ]
+            }
+         }
+      ]
+   }
+}
+--------------------------------------------------
+<1> 相关性得分
+
+Elasticsearch ((("relevance scores"))) 默认按照相关性得分排序，即每个文档跟查询的匹配程度。第一个最高得分的结果很明显：John Smith 的 `about` 属性清楚地写着 ``rock
+climbing'' 。
+
+但为什么 Jane Smith 也作为结果返回了呢？原因是她的 `about` 属性里提到了 ``rock'' 。因为只有 ``rock'' 而没有 ``climbing'' ，所以她的相关性得分低于 John 的。
+
+这是一个很好的案例，阐明了 Elasticsearch 如何 _在_ 全文属性上搜索并返回相关性最强的结果。Elasticsearch中的 _相关性_ ((("relevance", "importance to Elasticsearch"))) 概念非常重要，也是完全区别于传统关系型数据库的一个概念，数据库中的一条记录要么匹配要么不匹配。
+
+[[_phrase_search]]
+=== 短语搜索
+
+找出一个属性中的独立单词是没有问题的，但有时候想要精确匹配一系列单词或者_短语_ 。((("phrase matching"))) 比如， 我们想执行这样一个查询，仅匹配同时包含 ``rock'' _和_ ``climbing'' ，_并且_  二者以短语 ``rock climbing'' 的形式紧挨着的雇员记录。
+
+为此对 `match` 查询稍作调整，使用一个叫做 `match_phrase` 的查询：
+
+[source,js]
+--------------------------------------------------
+GET /megacorp/employee/_search
+{
+    "query" : {
+        "match_phrase" : {
+            "about" : "rock climbing"
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 010_Intro/30_Query_DSL.json
+
+毫无悬念，返回结果仅有 John Smith 的文档。
+
+[source,js]
+--------------------------------------------------
+{
+   ...
+   "hits": {
+      "total":      1,
+      "max_score":  0.23013961,
+      "hits": [
+         {
+            ...
+            "_score":         0.23013961,
+            "_source": {
+               "first_name":  "John",
+               "last_name":   "Smith",
+               "age":         25,
+               "about":       "I love to go rock climbing",
+               "interests": [ "sports", "music" ]
+            }
+         }
+      ]
+   }
+}
+--------------------------------------------------
+
+[[highlighting-intro]]
+=== 高亮搜索
+
+许多应用都倾向于在每个搜索结果中 _高亮_ ((("searches", "highlighting search results")))((("highlighting searches"))) 部分文本片段，以便让用户知道为何该文档符合查询条件。在 Elasticsearch 中检索出高亮片段也很容易。
+
+再次执行前面的查询，并增加一个新的 `highlight` 参数：
+
+[source,js]
+--------------------------------------------------
+GET /megacorp/employee/_search
+{
+    "query" : {
+        "match_phrase" : {
+            "about" : "rock climbing"
+        }
+    },
+    "highlight": {
+        "fields" : {
+            "about" : {}
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 010_Intro/30_Query_DSL.json
+
+当执行该查询时，返回结果与之前一样，与此同时结果中还多了一个叫做 `highlight` 的部分。这个部分包含了 `about` 属性匹配的文本片段，并以 HTML 标签 `<em></em>` 封装：
+
+[source,js]
+--------------------------------------------------
+{
+   ...
+   "hits": {
+      "total":      1,
+      "max_score":  0.23013961,
+      "hits": [
+         {
+            ...
+            "_score":         0.23013961,
+            "_source": {
+               "first_name":  "John",
+               "last_name":   "Smith",
+               "age":         25,
+               "about":       "I love to go rock climbing",
+               "interests": [ "sports", "music" ]
+            },
+            "highlight": {
+               "about": [
+                  "I love to go <em>rock</em> <em>climbing</em>" <1>
+               ]
+            }
+         }
+      ]
+   }
+}
+--------------------------------------------------
+
+<1> 原始文本中的高亮片段
+
+关于高亮搜索片段，可以在 {ref}/search-request-highlighting.html[highlighting reference documentation] 了解更多信息。

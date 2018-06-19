@@ -1,0 +1,89 @@
+[[bool-query]]
+=== 组合查询
+
+在 <<combining-filters,组合过滤器>> 中，我们讨论过如何使用 `bool` 过滤器通过 `and` 、 `or` 和 `not` 逻辑组合将多个过滤器进行组合。在查询中， `bool` 查询有类似的功能，只有一个重要的区别。
+
+过滤器做二元判断：文档是否应该出现在结果中？但查询更精妙，它除了决定一个文档是否应该被包括在结果中，还会计算文档的 _相关程度_ 。
+
+与过滤器一样， `bool` 查询也可以接受 `must` 、 `must_not` 和 `should` 参数下的多个查询语句。((("bool query")))比如：
+
+[source,js]
+--------------------------------------------------
+GET /my_index/my_type/_search
+{
+  "query": {
+    "bool": {
+      "must":     { "match": { "title": "quick" }},
+      "must_not": { "match": { "title": "lazy"  }},
+      "should": [
+                  { "match": { "title": "brown" }},
+                  { "match": { "title": "dog"   }}
+      ]
+    }
+  }
+}
+--------------------------------------------------
+// SENSE: 100_Full_Text_Search/15_Bool_query.json
+
+以上的查询结果返回 `title` 字段包含词项 `quick` 但不包含 `lazy` 的任意文档。目前为止，这与 `bool` 过滤器的工作方式非常相似。
+
+区别就在于两个 `should` 语句，也就是说：一个文档不必包含((("should clause", "in bool queries"))) `brown` 或 `dog` 这两个词项，但如果一旦包含，我们就认为它们 _更相关_ ：
+
+[source,js]
+--------------------------------------------------
+{
+  "hits": [
+     {
+        "_id":      "3",
+        "_score":   0.70134366, <1>
+        "_source": {
+           "title": "The quick brown fox jumps over the quick dog"
+        }
+     },
+     {
+        "_id":      "1",
+        "_score":   0.3312608,
+        "_source": {
+           "title": "The quick brown fox"
+        }
+     }
+  ]
+}
+--------------------------------------------------
+
+<1> 文档 3 会比文档 1 有更高评分是因为它同时包含 `brown` 和 `dog` 。
+
+==== 评分计算
+
+`bool` 查询会为每个文档计算相关度评分 `_score` ，((("relevance scores", "calculation in bool queries")))((("bool query", "score calculation")))再将所有匹配的 `must` 和 `should` 语句的分数 `_score` 求和，最后除以 `must` 和 `should` 语句的总数。
+
+`must_not` 语句不会影响评分；((("must_not clause", "in bool queries")))它的作用只是将不相关的文档排除。
+
+==== 控制精度
+
+所有 `must` 语句必须匹配，所有 `must_not` 语句都必须不匹配，但有多少 `should` 语句应该匹配呢？((("bool query", "controlling precision")))((("full text search", "combining queries", "controlling precision")))((("precision", "controlling for bool query")))默认情况下，没有 `should` 语句是必须匹配的，只有一个例外：那就是当没有 `must` 语句的时候，至少有一个 `should` 语句必须匹配。
+
+就像我们能控制 <<match-precision, `match` 查询的精度>> 一样，我们可以通过 `minimum_should_match` 参数控制需要匹配的 `should` 语句的数量，((("minimum_should_match parameter", "in bool queries")))它既可以是一个绝对的数字，又可以是个百分比：
+
+[source,js]
+--------------------------------------------------
+GET /my_index/my_type/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        { "match": { "title": "brown" }},
+        { "match": { "title": "fox"   }},
+        { "match": { "title": "dog"   }}
+      ],
+      "minimum_should_match": 2 <1>
+    }
+  }
+}
+--------------------------------------------------
+// SENSE: 100_Full_Text_Search/15_Bool_query.json
+
+<1> 这也可以用百分比表示。
+
+这个查询结果会将所有满足以下条件的文档返回： `title` 字段包含 `"brown"
+AND "fox"` 、 `"brown" AND "dog"` 或 `"fox" AND "dog"` 。如果有文档包含所有三个条件，它会比只包含两个的文档更相关。

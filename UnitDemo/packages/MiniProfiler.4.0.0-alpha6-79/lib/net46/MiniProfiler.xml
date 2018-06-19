@@ -1,0 +1,231 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MiniProfiler</name>
+    </assembly>
+    <members>
+        <member name="T:StackExchange.Profiling.MiniProfilerHandler">
+            <summary>
+            Understands how to route and respond to MiniProfiler UI URLS.
+            </summary>
+        </member>
+        <member name="F:StackExchange.Profiling.MiniProfilerHandler.ResourceCache">
+            <summary>
+            Embedded resource contents keyed by filename.
+            </summary>
+        </member>
+        <member name="P:StackExchange.Profiling.MiniProfilerHandler.IsReusable">
+            <summary>
+            Gets a value indicating whether to keep things static and reusable.
+            </summary>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerHandler.RegisterRoutes">
+            <summary>
+            Usually called internally, sometimes you may clear the routes during the apps lifecycle, 
+            if you do that call this to bring back mini profiler.
+            </summary>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerHandler.System#Web#Routing#IRouteHandler#GetHttpHandler(System.Web.Routing.RequestContext)">
+            <summary>
+            Returns this <see cref="T:StackExchange.Profiling.MiniProfilerHandler"/> to handle <paramref name="requestContext"/>.
+            </summary>
+            <param name="requestContext">The <see cref="T:System.Web.Routing.RequestContext"/> to handle.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            Returns either includes' <c>css/javascript</c> or results' html.
+            </summary>
+            <param name="context">The <see cref="T:System.Web.HttpContext"/> to process.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerHandler.Includes(System.Web.HttpContext,System.String)">
+            <summary>
+            Handles rendering static content files.
+            </summary>
+            <param name="context">The <see cref="T:System.Web.HttpContext"/> being handled.</param>
+            <param name="path">The path being requested.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerHandler.AuthorizeRequest(System.Web.HttpContext,System.Boolean,System.String@)">
+            <summary>
+            Returns true if the current request is allowed to see the profiler response.
+            </summary>
+            <param name="context">The <see cref="T:System.Web.HttpContext"/> context for the request being authorixed.</param>
+            <param name="isList">Whether this is a list route being accessed.</param>
+            <param name="message">The access denied message, if present.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerHandler.GetSingleProfilerResult(System.Web.HttpContext)">
+            <summary>
+            Returns either json or full page html of a previous <see cref="T:StackExchange.Profiling.MiniProfiler"/> session, 
+            identified by its <c>"?id=GUID"</c> on the query.
+            </summary>
+            <param name="context">The context to get a profiler response for.</param>
+        </member>
+        <member name="T:StackExchange.Profiling.MiniProfilerWebExtensions">
+            <summary>
+            Contains helper methods that ease working with null <see cref="T:StackExchange.Profiling.MiniProfiler"/>s.
+            </summary>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerWebExtensions.RenderIncludes(StackExchange.Profiling.MiniProfiler,System.Nullable{StackExchange.Profiling.RenderPosition},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+            <summary>
+            Returns the <c>css</c> and <c>javascript</c> includes needed to display the MiniProfiler results UI.
+            </summary>
+            <param name="profiler">The profiler this extension method is called on</param>
+            <param name="position">Which side of the page the profiler popup button should be displayed on (defaults to left)</param>
+            <param name="showTrivial">Whether to show trivial timings by default (defaults to false)</param>
+            <param name="showTimeWithChildren">Whether to show time the time with children column by default (defaults to false)</param>
+            <param name="maxTracesToShow">The maximum number of trace popups to show before removing the oldest (defaults to 15)</param>
+            <param name="showControls">when true, shows buttons to minimize and clear MiniProfiler results</param>
+            <param name="startHidden">Should the profiler start as hidden. Default to null.</param>
+            <returns>Script and link elements normally; an empty string when there is no active profiling session.</returns>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerWebExtensions.Render(StackExchange.Profiling.MiniProfiler)">
+            <summary>
+            Returns an html-encoded string with a text-representation of <paramref name="profiler"/>; returns "" when profiler is null.
+            </summary>
+            <param name="profiler">The current profiling session or null.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerWebExtensions.RenderPlainText(StackExchange.Profiling.MiniProfiler)">
+            <summary>
+            Returns a plain-text representation of <paramref name="profiler"/>, suitable for viewing from 
+            <see cref="T:System.Console"/>, log, or unit test output.
+            </summary>
+            <param name="profiler">A profiling session with child <see cref="T:StackExchange.Profiling.Timing"/> instances.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerWebExtensions.GetClientTimings(System.Web.HttpRequest)">
+            <summary>
+            Returns null if there is not client timing stuff
+            </summary>
+            <param name="request">The <see cref="T:System.Web.HttpRequest"/> to get client timings from.</param>
+        </member>
+        <member name="T:StackExchange.Profiling.MiniProfilerWebSettings">
+            <summary>
+            Contains the settings specific to web applications (not in MiniProfiler.Standard)
+            </summary>
+        </member>
+        <member name="P:StackExchange.Profiling.MiniProfilerWebSettings.UserProvider">
+            <summary>
+            Provides user identification for a given profiling request.
+            </summary>
+        </member>
+        <member name="P:StackExchange.Profiling.MiniProfilerWebSettings.ResultsAuthorize">
+            <summary>
+            A function that determines who can access the MiniProfiler results url and list url.  It should return true when
+            the request client has access to results, false for a 401 to be returned. HttpRequest parameter is the current request and
+            </summary>
+            <remarks>
+            The HttpRequest parameter that will be passed into this function should never be null.
+            </remarks>
+        </member>
+        <member name="P:StackExchange.Profiling.MiniProfilerWebSettings.ResultsListAuthorize">
+            <summary>
+            Special authorization function that is called for the list results (listing all the profiling sessions), 
+            we also test for results authorize always. This must be set and return true, to enable the listing feature.
+            </summary>
+        </member>
+        <member name="P:StackExchange.Profiling.MiniProfilerWebSettings.EnableCompression">
+            <summary>
+            By default, the output of the MiniProfilerHandler is compressed, if the request supports that.
+            If this setting is false, the output won't be compressed. (Only do this when you take care of compression yourself)
+            </summary>
+        </member>
+        <member name="P:StackExchange.Profiling.MiniProfilerWebSettings.IgnoredPaths">
+            <summary>
+            When <see cref="M:StackExchange.Profiling.MiniProfiler.Start(System.String)"/> is called, if the current request url contains any items in this property,
+            no profiler will be instantiated and no results will be displayed.
+            Default value is { "/content/", "/scripts/", "/favicon.ico" }.
+            </summary>
+        </member>
+        <member name="P:StackExchange.Profiling.MiniProfilerWebSettings.CustomUITemplates">
+            <summary>
+            The path where custom ui elements are stored.
+            If the custom file doesn't exist, the standard resource is used.
+            This setting should be in APP RELATIVE FORM, e.g. "~/App_Data/MiniProfilerUI"
+            </summary>
+            <remarks>A web server restart is required to reload new files.</remarks>
+        </member>
+        <member name="M:StackExchange.Profiling.MiniProfilerWebSettings.#cctor">
+            <summary>
+            On first call, set the version hash for all cache breakers
+            </summary>
+        </member>
+        <member name="T:StackExchange.Profiling.IpAddressIdentity">
+            <summary>
+            Identifies users based on ip address.
+            </summary>
+        </member>
+        <member name="M:StackExchange.Profiling.IpAddressIdentity.GetUser(System.Web.HttpRequest)">
+            <summary>
+            Returns the paramter HttpRequest's client ip address.
+            We combine both the REMOTE_ADDR header (which is the connecting device's IP address),
+            plus the HTTP_X_FORWARDED_FOR header if present (which is set by some proxy
+            servers and load balancers). This allows us to have a unique per-user view, even
+            when behind a proxy or load balancer.
+            </summary>
+            <param name="request">The request to get the client IP from.</param>
+        </member>
+        <member name="T:StackExchange.Profiling.IUserProvider">
+            <summary>
+            Provides functionality to identify which user is profiling a request.
+            </summary>
+        </member>
+        <member name="M:StackExchange.Profiling.IUserProvider.GetUser(System.Web.HttpRequest)">
+            <summary>
+            Returns a string to identify the user profiling the current 'request'.
+            </summary>
+            <param name="request">The current HttpRequest being profiled.</param>
+        </member>
+        <member name="T:StackExchange.Profiling.WebRequestProfilerProvider">
+            <summary>
+            HttpContext based profiler provider.  This is the default provider to use in a web context.
+            The current profiler is associated with a HttpContext.Current ensuring that profilers are 
+            specific to a individual HttpRequest.
+            </summary>
+        </member>
+        <member name="M:StackExchange.Profiling.WebRequestProfilerProvider.#ctor">
+            <summary>
+            Initialises a new instance of the <see cref="T:StackExchange.Profiling.WebRequestProfilerProvider"/> class. 
+            Public constructor.  This also registers any UI routes needed to display results
+            </summary>
+        </member>
+        <member name="M:StackExchange.Profiling.WebRequestProfilerProvider.Start(System.String)">
+            <summary>
+            Starts a new MiniProfiler and associates it with the current <see cref="P:System.Web.HttpContext.Current"/>.
+            </summary>
+            <param name="profilerName">The name for the started <see cref="T:StackExchange.Profiling.MiniProfiler"/>.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.WebRequestProfilerProvider.Stop(System.Boolean)">
+            <summary>
+            Ends the current profiling session, if one exists.
+            </summary>
+            <param name="discardResults">
+            When true, clears the <see cref="P:StackExchange.Profiling.MiniProfiler.Current"/> for this HttpContext, allowing profiling to 
+            be prematurely stopped and discarded. Useful for when a specific route does not need to be profiled.
+            </param>
+        </member>
+        <member name="M:StackExchange.Profiling.WebRequestProfilerProvider.StopAsync(System.Boolean)">
+            <summary>
+            Asynchronously ends the current profiling session, if one exists.
+            </summary>
+            <param name="discardResults">
+            When true, clears the <see cref="P:StackExchange.Profiling.MiniProfiler.Current"/> for this HttpContext, allowing profiling to 
+            be prematurely stopped and discarded. Useful for when a specific route does not need to be profiled.
+            </param>
+        </member>
+        <member name="M:StackExchange.Profiling.WebRequestProfilerProvider.EnsureName(StackExchange.Profiling.MiniProfiler,System.Web.HttpRequest)">
+            <summary>
+            Makes sure <paramref name="profiler"/> has a Name, pulling it from route data or url.
+            </summary>
+            <param name="profiler">The <see cref="T:StackExchange.Profiling.MiniProfiler"/> to ensure a name ie set on.</param>
+            <param name="request">The <see cref="T:System.Web.HttpRequest"/> request to get the name from.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.WebRequestProfilerProvider.GetCurrentProfiler">
+            <summary>
+            Returns the current profiler
+            </summary>
+        </member>
+        <member name="P:StackExchange.Profiling.WebRequestProfilerProvider.Current">
+            <summary>
+            Gets the currently running MiniProfiler for the current HttpContext; null if no MiniProfiler was <see cref="M:StackExchange.Profiling.WebRequestProfilerProvider.Start(System.String)"/>ed.
+            </summary>
+        </member>
+    </members>
+</doc>

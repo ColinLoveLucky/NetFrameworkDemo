@@ -1,0 +1,53 @@
+[[indexing-geo-shapes]]
+=== 索引地理形状
+
+地理形状通过 http://geojson.org/[GeoJSON] 来表示，这是一种开放的使用 JSON 实现的二维形状编码方式。((("JSON", "shapes in (GeoJSON)")))((("shapes", see="geo-shapes")))((("GeoJSON")))((("geo-shapes", "indexing"))) 
+每个形状都包含了形状类型&#x2014; `point`, `line`, `polygon`, `envelope` &#x2014;和一个或多个经纬度点集合的数组。
+
+CAUTION: 在 GeoJSON 里，经纬度表示方式通常是 _纬度_ 在前， _经度_ 在后。((("longitude/latitude coordinates in GeoJSON")))
+
+如，我们用一个多边形来索引阿姆斯特丹达姆广场：
+
+[source,json]
+-----------------------
+PUT /attractions/landmark/dam_square
+{
+    "name" : "Dam Square, Amsterdam",
+    "location" : {
+        "type" : "polygon", <1>
+        "coordinates" : [[ <2>
+          [ 4.89218, 52.37356 ],
+          [ 4.89205, 52.37276 ],
+          [ 4.89301, 52.37274 ],
+          [ 4.89392, 52.37250 ],
+          [ 4.89431, 52.37287 ],
+          [ 4.89331, 52.37346 ],
+          [ 4.89305, 52.37326 ],
+          [ 4.89218, 52.37356 ]
+        ]]
+    }
+}
+-----------------------
+<1> `type` 参数指明了经纬度坐标集表示的形状类型。
+<2> `lon/lat` 列表描述了多边形的形状。
+
+上例中大量的方括号可能看起来让人困惑，不过实际上 GeoJSON 的语法非常简单：
+
+1. 用一个数组表示 `经纬度` 坐标点：
++
+    [lon,lat]
+
+2. 一组坐标点放到一个数组来表示一个多边形：
++
+    [[lon,lat],[lon,lat], ... ]
+
+3. 一个多边形（ `polygon` ）形状可以包含多个多边形；第一个表示多边形的外轮廓，后续的多边形表示第一个多边形内部的空洞：
++
+    [
+      [[lon,lat],[lon,lat], ... ],  # main polygon
+      [[lon,lat],[lon,lat], ... ],  # hole in main polygon
+      ...
+    ]
+
+参见 {ref}/geo-shape.html[Geo-shape mapping documentation] 了解更多支持的形状。
+

@@ -1,0 +1,31 @@
+[[_exact_value_fields]]
+=== Exact-Value 精确值字段
+
+在结束多字段查询这个话题之前，我们最后要讨论的是精确值 `not_analyzed` 未分析字段。((("not_analyzed fields", "exact value, in multi-field queries")))((("multifield search", "exact value fields")))((("exact values", "exact value not_analyzed fields in multifield search")))((("analyzed fields", "avoiding mixing with not analyzed fields in multi_match queries")))将 `not_analyzed` 字段与 `multi_match` 中 `analyzed` 字段混在一起没有多大用处。
+
+原因可以通过查看查询的 explanation 解释得到，设想将 `title` 字段设置成 `not_analyzed` ：
+
+[source,js]
+--------------------------------------------------
+GET /_validate/query?explain
+{
+    "query": {
+        "multi_match": {
+            "query":       "peter smith",
+            "type":        "cross_fields",
+            "fields":      [ "title", "first_name", "last_name" ]
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 110_Multi_Field_Search/55_Not_analyzed.json
+
+因为 `title` 字段是未分析过的，Elasticsearch 会将 “peter smith” 这个完整的字符串作为查询条件来搜索！
+
+    title:peter smith
+    (
+        blended("peter", fields: [first_name, last_name])
+        blended("smith", fields: [first_name, last_name])
+    )
+
+显然这个项不在 `title` 的倒排索引中，所以需要在 `multi_match` 查询中避免使用 `not_analyzed` 字段。

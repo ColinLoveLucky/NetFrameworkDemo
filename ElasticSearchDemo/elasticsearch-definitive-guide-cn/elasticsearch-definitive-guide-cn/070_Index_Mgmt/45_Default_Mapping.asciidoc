@@ -1,0 +1,25 @@
+[[default-mapping]]
+=== 缺省映射
+
+通常，一个索引中的所有类型共享相同的字段和设置。 ((("mapping (types)", "default")))((("default mapping"))) `_default_` 映射更加方便地指定通用设置，而不是每次创建新类型时都要重复设置。 `_default_` 映射是新类型的模板。在设置 `_default_` 映射之后创建的所有类型都将应用这些缺省的设置，除非类型在自己的映射中明确覆盖这些设置。
+
+例如，我们可以使用 `_default_` 映射为所有的类型禁用 `_all` 字段，((("_all field", sortas="all field")))  而只在 `blog` 类型启用：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index
+{
+    "mappings": {
+        "_default_": {
+            "_all": { "enabled":  false }
+        },
+        "blog": {
+            "_all": { "enabled":  true  }
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 070_Index_Mgmt/45_Default_mapping.json
+
+
+`_default_` 映射也是一个指定索引 <<dynamic-templates,dynamic templates>> 的好方法。

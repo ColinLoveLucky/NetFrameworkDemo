@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DbBooks" Class="DbBookContextDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=QF-XGZHANG-01\SQLEXPRESS;Initial Catalog=DbBooks;User ID=sa" SettingsObjectName="SqlServerDemo.Properties.Settings" SettingsPropertyName="DbBooksConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Authors" Member="Authors">
+    <Type Name="Authors">
+      <Column Name="AuthorId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Association Name="Authors_Books" Member="Books" ThisKey="AuthorId" OtherKey="Author_AuthorId" Type="Books" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Books" Member="Books">
+    <Type Name="Books">
+      <Column Name="BookId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Genre" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PublishDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Author_AuthorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Authors_Books" Member="Authors" ThisKey="Author_AuthorId" OtherKey="AuthorId" Type="Authors" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BinaryStreams" Member="BinaryStreams">
+    <Type Name="BinaryStreams">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="bindata" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BinaryStreamsCopy" Member="BinaryStreamsCopy">
+    <Type Name="BinaryStreamsCopy">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="bindata" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Products" Member="Products">
+    <Type Name="Products">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Category" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Streams" Member="Streams">
+    <Type Name="Streams">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="textdata" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="bindata" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="xmldata" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TextStreams" Member="TextStreams">
+    <Type Name="TextStreams">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="textdata" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

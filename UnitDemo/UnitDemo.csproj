@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{994E6101-381E-46A5-9FFF-A0A988B46AC6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UnitDemo</RootNamespace>
+    <AssemblyName>UnitDemo</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
+    <CodeContractsAssertsToContractsCheckBox>True</CodeContractsAssertsToContractsCheckBox>
+    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsMissingPublicEnsuresAsWarnings>False</CodeContractsMissingPublicEnsuresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferEnsuresAutoProperties>True</CodeContractsInferEnsuresAutoProperties>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestAssumptionsForCallees>False</CodeContractsSuggestAssumptionsForCallees>
+    <CodeContractsSuggestRequires>False</CodeContractsSuggestRequires>
+    <CodeContractsNecessaryEnsures>True</CodeContractsNecessaryEnsures>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>True</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile>..\..\baseline.xml</CodeContractsBaseLineFile>
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Diagnostics, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Owin.Diagnostics.3.1.0\lib\net45\Microsoft.Owin.Diagnostics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Owin.Host.HttpListener.3.1.0\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Hosting, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Owin.Hosting.3.1.0\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Collections.Immutable.1.2.0-rc2-24027\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ASISDemo\ASUnit.cs" />
+    <Compile Include="ASISDemo\IsUnit.cs" />
+    <Compile Include="ClosePackage\ClosePack.cs" />
+    <Compile Include="CodeDomT\CodeComplier.cs" />
+    <Compile Include="CodeDomT\CodeDomDemo.cs" />
+    <Compile Include="CodeDomT\CodeGenerateContent.cs" />
+    <Compile Include="Compare\CompareDemo.cs" />
+    <Compile Include="ContactProgram\ContactPro.cs" />
+    <Compile Include="ConvertDemo\ConvertT.cs" />
+    <Compile Include="DataTableExtensions\staticExtension.cs" />
+    <Compile Include="delegateT\DelegateTest.cs" />
+    <Compile Include="Descarts.cs" />
+    <Compile Include="Dynamic\DynamicType.cs" />
+    <Compile Include="EMIT\EMITTest.cs" />
+    <Compile Include="EMIT\ILTest.cs" />
+    <Compile Include="EMIT\SimpleEmit.cs" />
+    <Compile Include="EnumDemo\EnumTestDemo.cs" />
+    <Compile Include="EnumerableT\EnumerableTest.cs" />
+    <Compile Include="ExceptionDemo\ExceptionT.cs" />
+    <Compile Include="ExtendMethod\ExtendMethod.cs" />
+    <Compile Include="FileT\FileTest.cs" />
+    <Compile Include="Finalize\Finalize.cs" />
+    <Compile Include="Fomratter\MyFormatter.cs" />
+    <Compile Include="FruitCompsite.cs" />
+    <Compile Include="Gereneric\CollectionGerneric.cs" />
+    <Compile Include="Gereneric\GenericChangeUnit.cs" />
+    <Compile Include="Gereneric\GenericClass.cs" />
+    <Compile Include="Gereneric\GenericMethodUnit.cs" />
+    <Compile Include="HashAlgorithm\HashAlgorithm.cs" />
+    <Compile Include="HashTableAndDictionary\HashTableDemo.cs" />
+    <Compile Include="HttpCache\HttpCache.cs" />
+    <Compile Include="DataTableExtensions\ColumnAttribute.cs" />
+    <Compile Include="DataTableExtensions\DataTableExtensions.cs" />
+    <Compile Include="doubleQestion\DoubleQuesionUnit.cs" />
+    <Compile Include="Dynamic\DynamicMethod.cs" />
+    <Compile Include="Event\EventDemo.cs" />
+    <Compile Include="ImplictAndExplictApp\ImplicatAndExplictUnitDemo.cs" />
+    <Compile Include="ImplictAndExplictApp\ImplictAndExplict.cs" />
+    <Compile Include="inherit\Inherit.cs" />
+    <Compile Include="Iterator\IteratarUnitTest.cs" />
+    <Compile Include="Iterator\Iterator.cs" />
+    <Compile Include="LamdaExpression\ISqlQueryable.cs" />
+    <Compile Include="LamdaExpression\LambdaClass.cs" />
+    <Compile Include="LamdaExpression\LambdaReflection.cs" />
+    <Compile Include="LamdaExpression\LamdaExpressionDynamic.cs" />
+    <Compile Include="LamdaExpression\LamdaExpressionUnitDemo.cs" />
+    <Compile Include="LamdaExpression\Order.cs" />
+    <Compile Include="LamdaExpression\QuarableExpression.cs" />
+    <Compile Include="LamdaExpression\QueryableDemo.cs" />
+    <Compile Include="ListHashSetCompare\CollectionCompare.cs" />
+    <Compile Include="Lock\ReadWriteLockTest.cs" />
+    <Compile Include="MemBaseCopy\DeepClone.cs" />
+    <Compile Include="NodeList\NodeList.cs" />
+    <Compile Include="OperateOverride\OperateCharOverride.cs" />
+    <Compile Include="OperateOverride\OperateCharOverrideUnitDemo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProxyPattern\CacheProxy.cs" />
+    <Compile Include="ProxyPattern\ProtectedProxy.cs" />
+    <Compile Include="ProxyPattern\RemoteProxy.cs" />
+    <Compile Include="ProxyPattern\VirtualProxy.cs" />
+    <Compile Include="RefAndOut\RefTest.cs" />
+    <Compile Include="ReflectionT\ReflectionTest.cs" />
+    <Compile Include="ReflectionT\RelectionTypeUnit.cs" />
+    <Compile Include="Serialize\SerlializeTest.cs" />
+    <Compile Include="Socket\WebHttpServer.cs" />
+    <Compile Include="Startup1.cs" />
+    <Compile Include="staticT\StaticClass.cs" />
+    <Compile Include="Struct\Point.cs" />
+    <Compile Include="TaskAwait\TaskAwait.cs" />
+    <Compile Include="TextWriterDemo\TextWriterDe.cs" />
+    <Compile Include="ThreadDemo\AsyncAwaitUnit.cs" />
+    <Compile Include="ThreadDemo\AsyncDelegateUnit.cs" />
+    <Compile Include="ThreadDemo\CallBackModelUnit.cs" />
+    <Compile Include="ThreadDemo\ConcurrentUnit.cs" />
+    <Compile Include="ThreadDemo\EventDeleUnit.cs" />
+    <Compile Include="ThreadDemo\FutureAsynModelUnit.cs" />
+    <Compile Include="ThreadDemo\MultiUserModelUnit.cs" />
+    <Compile Include="ThreadDemo\MutiMixThreadUnit.cs" />
+    <Compile Include="ThreadDemo\MutltiThreadSync.cs" />
+    <Compile Include="ThreadDemo\ParrelUnit.cs" />
+    <Compile Include="ThreadDemo\Standing.cs" />
+    <Compile Include="ThreadDemo\TaskAsyncUnit.cs" />
+    <Compile Include="ThreadDemo\ThreadContextUnit.cs" />
+    <Compile Include="ThreadDemo\ThreadPoolUnit.cs" />
+    <Compile Include="ThreadDemo\ThreadStatusUnit.cs" />
+    <Compile Include="ThreadDemo\ThreadT.cs" />
+    <Compile Include="TraceDemoNamespace\TraceDemo.cs" />
+    <Compile Include="TupleDemo\TupleUnitDemo.cs" />
+    <Compile Include="TupleDemo\TupleUnitTest.cs" />
+    <Compile Include="Using\UsingT.cs" />
+    <Compile Include="WeakReference\WeakRef.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CLR\CLR.csproj">
+      <Project>{ccc44b56-e5bb-49d7-9cd2-b95e71ba1810}</Project>
+      <Name>CLR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EntityFrameWorkInfrans\EntityFrameWorkInfrans.csproj">
+      <Project>{739d6fbf-8d84-4615-b805-bab6f145aa97}</Project>
+      <Name>EntityFrameWorkInfrans</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Equals\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

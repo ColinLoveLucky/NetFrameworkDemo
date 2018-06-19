@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Add Product</h2>
+
+<form action="/Product/Add" method="post">
+	<dl>
+		
+		<dt>Type</dt>
+		<dd>
+			<select name="ProductType" id="ProductType">
+				<option>phone</option>
+				<option>computer</option>
+			</select>
+		</dd>
+		<dt>
+			Name
+		</dt>
+		<dd>
+			<input type="text" id="ProdcutName" name="ProdcutName" />
+		</dd>
+		<dt>
+			Price
+		</dt>
+		<dd>
+			<input type="text" id="Price" name="Price" />
+		</dd>
+		<dt>
+			Surplus
+		</dt>
+		<dd>
+			<input type="text" id="SurplusNum" name="SurplusNum" />
+		</dd>
+		<dt>
+			StartTime
+		</dt>
+		<dd>
+			<input type="date" name="StartTime" id="StartTime" />
+		</dd>
+		<dt>
+			EndTime
+		</dt>
+		<dd>
+			<input type="date" name="EndTime" id="EndTime" />
+		</dd>
+		<dt>
+			<input type="submit" value="Submit" />
+		</dt>
+	</dl>
+	
+</form>

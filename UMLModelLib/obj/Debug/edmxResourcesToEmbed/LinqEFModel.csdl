@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LinqToEntityDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="C__MigrationHistory">
+    <Key>
+      <PropertyRef Name="MigrationId" />
+      <PropertyRef Name="ContextKey" />
+    </Key>
+    <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+    <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="blogs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="posts" Relationship="Self.FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId" FromRole="blogs" ToRole="posts" />
+  </EntityType>
+  <EntityType Name="course">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="instructor" Relationship="Self.InstructorCourses" FromRole="course" ToRole="instructor" />
+  </EntityType>
+  <EntityType Name="department">
+    <Key>
+      <PropertyRef Name="DepartmentId" />
+    </Key>
+    <Property Name="DepartmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Budget" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Name" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="manager" Relationship="Self.FK_ModelOne_manager_ModelOne_employee_Id" FromRole="employee" ToRole="manager" />
+  </EntityType>
+  <EntityType Name="instructor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="course" Relationship="Self.InstructorCourses" FromRole="instructor" ToRole="course" />
+  </EntityType>
+  <EntityType Name="Lodgings">
+    <Key>
+      <PropertyRef Name="LodgingId" />
+    </Key>
+    <Property Name="LodgingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Owner" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Activities" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Entertainment" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Discriminator" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="manager">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="SectionManaged" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="employee" Relationship="Self.FK_ModelOne_manager_ModelOne_employee_Id" FromRole="manager" ToRole="employee" />
+  </EntityType>
+  <EntityType Name="person">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="posts" Relationship="Self.FK_ModelOne_posts_ModelOne_person_CreatedBy_Id" FromRole="person" ToRole="posts" />
+    <NavigationProperty Name="posts1" Relationship="Self.FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id" FromRole="person" ToRole="posts" />
+  </EntityType>
+  <EntityType Name="posts">
+    <Key>
+      <PropertyRef Name="PostId" />
+    </Key>
+    <Property Name="PostId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Content" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Blog_Id" Type="Int32" />
+    <Property Name="UpdatedBy_Id" Type="Int32" />
+    <Property Name="CreatedBy_Id" Type="Int32" />
+    <NavigationProperty Name="blogs" Relationship="Self.FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId" FromRole="posts" ToRole="blogs" />
+    <NavigationProperty Name="person" Relationship="Self.FK_ModelOne_posts_ModelOne_person_CreatedBy_Id" FromRole="posts" ToRole="person" />
+    <NavigationProperty Name="person1" Relationship="Self.FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id" FromRole="posts" ToRole="person" />
+  </EntityType>
+  <EntityType Name="product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="productDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="product_category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="university">
+    <Key>
+      <PropertyRef Name="UniversityID" />
+    </Key>
+    <Property Name="UniversityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Location" Type="Geography" />
+  </EntityType>
+  <EntityType Name="OnLineCourse">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="CourseDetails_Time" Type="DateTime" Precision="3" />
+    <Property Name="CourseDetails_Location" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="CourseDetails_Days" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId">
+    <End Role="blogs" Type="Self.blogs" Multiplicity="0..1" />
+    <End Role="posts" Type="Self.posts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="blogs">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="posts">
+        <PropertyRef Name="Blog_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ModelOne_manager_ModelOne_employee_Id">
+    <End Role="employee" Type="Self.employee" Multiplicity="1" />
+    <End Role="manager" Type="Self.manager" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="manager">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ModelOne_posts_ModelOne_person_CreatedBy_Id">
+    <End Role="person" Type="Self.person" Multiplicity="0..1" />
+    <End Role="posts" Type="Self.posts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="person">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="posts">
+        <PropertyRef Name="CreatedBy_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id">
+    <End Role="person" Type="Self.person" Multiplicity="0..1" />
+    <End Role="posts" Type="Self.posts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="person">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="posts">
+        <PropertyRef Name="UpdatedBy_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="InstructorCourses">
+    <End Role="course" Type="Self.course" Multiplicity="*" />
+    <End Role="instructor" Type="Self.instructor" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="LinqToEntityDbEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
+    <EntitySet Name="blogs" EntityType="Self.blogs" />
+    <EntitySet Name="course" EntityType="Self.course" />
+    <EntitySet Name="department" EntityType="Self.department" />
+    <EntitySet Name="employee" EntityType="Self.employee" />
+    <EntitySet Name="instructor" EntityType="Self.instructor" />
+    <EntitySet Name="Lodgings" EntityType="Self.Lodgings" />
+    <EntitySet Name="manager" EntityType="Self.manager" />
+    <EntitySet Name="person" EntityType="Self.person" />
+    <EntitySet Name="posts" EntityType="Self.posts" />
+    <EntitySet Name="product" EntityType="Self.product" />
+    <EntitySet Name="product_category" EntityType="Self.product_category" />
+    <EntitySet Name="university" EntityType="Self.university" />
+    <EntitySet Name="OnLineCourse" EntityType="Self.OnLineCourse" />
+    <AssociationSet Name="FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId" Association="Self.FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId">
+      <End Role="blogs" EntitySet="blogs" />
+      <End Role="posts" EntitySet="posts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ModelOne_manager_ModelOne_employee_Id" Association="Self.FK_ModelOne_manager_ModelOne_employee_Id">
+      <End Role="employee" EntitySet="employee" />
+      <End Role="manager" EntitySet="manager" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ModelOne_posts_ModelOne_person_CreatedBy_Id" Association="Self.FK_ModelOne_posts_ModelOne_person_CreatedBy_Id">
+      <End Role="person" EntitySet="person" />
+      <End Role="posts" EntitySet="posts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id" Association="Self.FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id">
+      <End Role="person" EntitySet="person" />
+      <End Role="posts" EntitySet="posts" />
+    </AssociationSet>
+    <AssociationSet Name="InstructorCourses" Association="Self.InstructorCourses">
+      <End Role="course" EntitySet="course" />
+      <End Role="instructor" EntitySet="instructor" />
+    </AssociationSet>
+    <FunctionImport Name="DeleteBlogs">
+      <Parameter Name="blogId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetAandB" ReturnType="Collection(LinqToEntityDbModel.GetAandB_Result)" />
+    <FunctionImport Name="GetAllBlogsAndPosts" ReturnType="Collection(LinqToEntityDbModel.GetAllBlogsAndPosts_Result)" />
+    <FunctionImport Name="GetAllBologsandCourse" ReturnType="Collection(LinqToEntityDbModel.GetAllBologsandCourse_Result)" />
+    <FunctionImport Name="InsertBlogs" ReturnType="Collection(Int32)">
+      <Parameter Name="Name" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SQuery" ReturnType="Collection(LinqToEntityDbModel.SQuery_Result)">
+      <Parameter Name="count" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="updateBlogs">
+      <Parameter Name="blogId" Mode="In" Type="Int32" />
+      <Parameter Name="Name" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="GetAandB_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
+  </ComplexType>
+  <ComplexType Name="GetAllBlogsAndPosts_Result">
+    <Property Type="Int32" Name="BlogId" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
+  </ComplexType>
+  <ComplexType Name="GetAllBologsandCourse_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
+  </ComplexType>
+  <ComplexType Name="SQuery_Result">
+    <Property Type="Int32" Name="BlogId" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
+  </ComplexType>
+</Schema>

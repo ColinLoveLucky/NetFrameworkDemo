@@ -1,0 +1,138 @@
+[[geo-bounds-agg]]
+=== 地理边界聚合
+
+在我们<<geohash-grid-agg,之前的例子>>中，我们通过一个覆盖大纽约区的边框来过滤结果。((("aggregations", "geo_bounds")))((("geo_bounds aggregation"))) 然而，我们的结果全部都位于曼哈顿市中心。当为我们的用户显示一个地图的时候，放大包含数据的区域是有意义的；展示大量的空白空间是没有任何意义的。
+
+`geo_bounds` 正好是这样的：它计算封装所有地理位置点需要的最小边界框：
+
+[source,json]
+----------------------------
+GET /attractions/restaurant/_search
+{
+  "size" : 0,
+  "query": {
+    "constant_score": {
+      "filter": {
+        "geo_bounding_box": {
+          "location": {
+            "top_left": {
+              "lat":  40,8,
+              "lon": -74.1
+            },
+            "bottom_right": {
+              "lat":  40.4,
+              "lon": -73.9
+            }
+          }
+        }
+      }
+    }
+  },
+  "aggs": {
+    "new_york": {
+      "geohash_grid": {
+        "field":     "location",
+        "precision": 5
+      }
+    },
+    "map_zoom": { <1>
+      "geo_bounds": {
+        "field":     "location"
+      }
+    }
+  }
+}
+----------------------------
+<1> `geo_bounds` 聚合将计算封装所有匹配查询文档所需要的最小边界框。
+
+响应现在包括了一个可以用来缩放地图的边界框。
+
+[source,json]
+----------------------------
+...
+"aggregations": {
+  "map_zoom": {
+     "bounds": {
+        "top_left": {
+           "lat":  40.722,
+           "lon": -74.011
+        },
+        "bottom_right": {
+           "lat":  40.715,
+           "lon": -73.983
+        }
+     }
+  },
+...
+----------------------------
+
+事实上，我们甚至可以在每一个 geohash 单元内部使用 `geo_bounds` 聚合，((("geohash cells, geo_bounds aggregation in"))) 以免一个单元内的地理位置点仅集中在单元的一部分上：
+
+[source,json]
+----------------------------
+GET /attractions/restaurant/_search
+{
+  "size" : 0,
+  "query": {
+    "constant_score": {
+      "filter": {
+        "geo_bounding_box": {
+          "location": {
+            "top_left": {
+              "lat":  40,8,
+              "lon": -74.1
+            },
+            "bottom_right": {
+              "lat":  40.4,
+              "lon": -73.9
+            }
+          }
+        }
+      }
+    }
+  },
+  "aggs": {
+    "new_york": {
+      "geohash_grid": {
+        "field":     "location",
+        "precision": 5
+      },
+      "aggs": {
+        "cell": { <1>
+          "geo_bounds": {
+            "field": "location"
+          }
+        }
+      }
+    }
+  }
+}
+----------------------------
+<1> `cell_bounds` 子聚合会为每个 geohash 单元计算边界框。
+
+现在在每个单元里的点((("cell_bounds aggregation")))有一个边界框。
+
+[source,json]
+----------------------------
+...
+"aggregations": {
+  "new_york": {
+     "buckets": [
+        {
+           "key": "dr5rs",
+           "doc_count": 2,
+           "cell": {
+              "bounds": {
+                 "top_left": {
+                    "lat":  40.722,
+                    "lon": -73.989
+                 },
+                 "bottom_right": {
+                    "lat":  40.719,
+                    "lon": -73.983
+                 }
+              }
+           }
+        },
+...
+----------------------------

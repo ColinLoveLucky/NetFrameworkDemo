@@ -1,0 +1,23 @@
+[[_ngrams_for_partial_matching]]
+=== Ngrams 在部分匹配的应用
+
+之前提到：“只能在倒排索引中找到存在的词。” 尽管 `prefix` 、 `wildcard` 、 `regexp` 查询告诉我们这种说法并不完全正确，但单个词的查找 _确实_ 要比在词列表中盲目挨个查找的效率要高得多。((("partial matching", "index time optimizations", "n-grams")))在搜索之前准备好供部分匹配的数据可以提高搜索的性能。
+
+在索引时准备数据意味着要选择合适的分析链，这里部分匹配使用的工具是 _n-gram_ 。((("n-grams")))可以将 _n-gram_ 看成一个在词语上 _滑动窗口_ ， _n_ 代表这个 “窗口” 的长度。如果我们要 n-gram `quick` 这个词 —— 它的结果取决于 _n_ 的选择长度：
+
+[horizontal]
+* 长度 1（unigram）：    [ `q`, `u`, `i`, `c`, `k` ]
+* 长度 2（bigram）：     [ `qu`, `ui`, `ic`, `ck` ]
+* 长度 3（trigram）：    [ `qui`, `uic`, `ick` ]
+* 长度 4（four-gram）：  [ `quic`, `uick` ]
+* 长度 5（five-gram）：  [ `quick` ]
+
+朴素的 n-gram 对 _词语内部的匹配_ 非常有用，即在 <<ngrams-compound-words,Ngram 匹配复合词>> 介绍的那样。但对于输入即搜索（search-as-you-type）这种应用场景，我们会使用一种特殊的 n-gram 称为 _边界 n-grams_ （edge n-grams）。((("edge n-grams")))所谓的边界 n-gram 是说它会固定词语开始的一边，以单词 `quick` 为例，它的边界 n-gram 的结果为：
+
+* `q`
+* `qu`
+* `qui`
+* `quic`
+* `quick`
+
+可能会注意到这与用户在搜索时输入 “quick” 的字母次序是一致的，换句话说，这种方式正好满足即时搜索（instant search）！

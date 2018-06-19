@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MVCDemo.Models.Course">
+    <Position X="3.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAEAAAAAAAAAEAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Course.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MVCDemo.Models.Enrollment">
+    <Position X="3.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAQAAAAAAAAIAAAAAAAAAAAAgAAAAAAAECAAA=</HashCode>
+      <FileName>Models\Enrollment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MVCDemo.Models.Student">
+    <Position X="5.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAg=</HashCode>
+      <FileName>Models\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="MVCDemo.Models.Grade">
+    <Position X="5.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAtAEAAAA=</HashCode>
+      <FileName>Models\Enrollment.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="微软雅黑" Size="9" />
+</ClassDiagram>

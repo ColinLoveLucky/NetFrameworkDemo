@@ -1,0 +1,5 @@
+D:\FrameWork4.0TestDemo\ListenerServer\bin\Debug\ListenerServer.exe.config
+D:\FrameWork4.0TestDemo\ListenerServer\bin\Debug\ListenerServer.exe
+D:\FrameWork4.0TestDemo\ListenerServer\bin\Debug\ListenerServer.pdb
+D:\FrameWork4.0TestDemo\ListenerServer\obj\Debug\ListenerServer.exe
+D:\FrameWork4.0TestDemo\ListenerServer\obj\Debug\ListenerServer.pdb

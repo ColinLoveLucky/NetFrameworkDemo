@@ -1,0 +1,21 @@
+﻿{
+  "defaultAssembly": "AutoFacDemo",
+  "components": [
+    {
+      "type": "AutoFacDemo.JosnConfig,AutoFacDemo",
+      "services": [
+        {
+          "type": "AutoFacDemo.IJson"
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "type": "AutoFacDemo.AdModule,AutoFacDemo"
+    },
+    {
+      "type": "AutoFacDemo.BdModule,AutoFacDemo"
+    }
+  ]
+}

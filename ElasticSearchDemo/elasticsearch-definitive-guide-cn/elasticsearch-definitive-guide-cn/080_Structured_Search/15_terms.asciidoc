@@ -1,0 +1,70 @@
+[[_finding_multiple_exact_values]]
+=== 查找多个精确值
+
+`term` 查询对于查找单个值非常有用，但通常我们可能想搜索多个值。((("exact values", "finding multiple")))((("structured search", "finding multiple exact values")))  如果我们想要查找价格字段值为 $20 或 $30 的文档该如何处理呢？
+
+不需要使用多个 `term` 查询，我们只要用单个 `terms` 查询（注意末尾的 _s_ ）， `terms` 查询好比是 `term` 查询的复数形式（以英语名词的单复数做比）。
+
+它几乎与 `term` 的使用方式一模一样，与指定单个价格不同，我们只要将 `term` 字段的值改为数组即可：
+
+[source,js]
+--------------------------------------------------
+{
+    "terms" : {
+        "price" : [20, 30]
+    }
+}
+--------------------------------------------------
+
+与 `term` 查询一样，也需要将其置入 `filter` 语句的常量评分查询中使用：
+
+[source,js]
+--------------------------------------------------
+GET /my_store/products/_search
+{
+    "query" : {
+        "constant_score" : {
+            "filter" : {
+                "terms" : { <1>
+                    "price" : [20, 30]
+                }
+            }
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 080_Structured_Search/15_Terms_filter.json
+
+<1> 这个 `terms` 查询被置于 `constant_score` 查询中
+
+运行结果返回第二、第三和第四个文档：
+
+[source,json]
+--------------------------------------------------
+"hits" : [
+    {
+        "_id" :    "2",
+        "_score" : 1.0,
+        "_source" : {
+          "price" :     20,
+          "productID" : "KDKE-B-9947-#kL5"
+        }
+    },
+    {
+        "_id" :    "3",
+        "_score" : 1.0,
+        "_source" : {
+          "price" :     30,
+          "productID" : "JODL-X-1937-#pV7"
+        }
+    },
+    {
+        "_id":     "4",
+        "_score":  1.0,
+        "_source": {
+           "price":     30,
+           "productID": "QQPX-R-3956-#aD8"
+        }
+     }
+]
+--------------------------------------------------

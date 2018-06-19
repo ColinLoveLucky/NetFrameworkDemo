@@ -1,0 +1,6 @@
+D:\FrameWork4.0TestDemo\CrypDemo\bin\Debug\CrypDemo.exe.config
+D:\FrameWork4.0TestDemo\CrypDemo\bin\Debug\CrypDemo.exe
+D:\FrameWork4.0TestDemo\CrypDemo\bin\Debug\CrypDemo.pdb
+D:\FrameWork4.0TestDemo\CrypDemo\obj\Debug\CrypDemo.csprojResolveAssemblyReference.cache
+D:\FrameWork4.0TestDemo\CrypDemo\obj\Debug\CrypDemo.exe
+D:\FrameWork4.0TestDemo\CrypDemo\obj\Debug\CrypDemo.pdb

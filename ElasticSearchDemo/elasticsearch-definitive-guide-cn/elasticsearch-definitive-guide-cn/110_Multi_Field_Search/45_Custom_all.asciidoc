@@ -1,0 +1,73 @@
+[[custom-all]]
+=== 自定义 _all 字段
+
+在 <<all-field,all-field>> 字段中，我们解释过 `_all` 字段的索引方式是将所有其他字段的值作为一个大字符串索引的。((("_all field", sortas="all field")))((("multifield search", "custom _all fields")))然而这么做并不十分灵活，为了灵活我们可以给人名添加一个自定义 `_all` 字段，再为地址添加另一个 `_all` 字段。
+
+Elasticsearch 在字段映射中为我们提供 `copy_to` ((("copy_to parameter")))((("mapping (types)", "copy_to parameter")))参数来实现这个功能：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index
+{
+    "mappings": {
+        "person": {
+            "properties": {
+                "first_name": {
+                    "type":     "string",
+                    "copy_to":  "full_name" <1>
+                },
+                "last_name": {
+                    "type":     "string",
+                    "copy_to":  "full_name" <1>
+                },
+                "full_name": {
+                    "type":     "string"
+                }
+            }
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 110_Multi_Field_Search/45_Custom_all.json
+
+<1> `first_name` 和 `last_name` 字段中的值会被复制到 `full_name` 字段。
+
+有了这个映射，我们可以用 `first_name` 来查询名，用 `last_name` 来查询姓，或者直接使用 `full_name` 查询整个姓名。
+
+`first_name` 和 `last_name` 的映射并不影响 `full_name` 如何被索引， `full_name` 将两个字段的内容复制到本地，然后根据 `full_name` 的映射自行索引。
+
+[WARNING]
+====
+`copy_to` 设置对<<multi-fields,multi-field>>无效。如果尝试这样配置映射，Elasticsearch 会抛异常。
+
+为什么呢？多字段只是以不同方式简单索引“主”字段；它们没有自己的数据源。也就是说没有可供 `copy_to` 到另一字段的数据源。
+
+只要对“主”字段 `copy_to` 就能轻而易举的达到相同的效果：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index
+{
+    "mappings": {
+        "person": {
+            "properties": {
+                "first_name": {
+                    "type":     "string",
+                    "copy_to":  "full_name", <1>
+                    "fields": {
+                        "raw": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        }
+                    }
+                },
+                "full_name": {
+                    "type":     "string"
+                }
+            }
+        }
+    }
+}
+--------------------------------------------------
+<1> `copy_to` 是针对“主”字段，而不是多字段的
+====

@@ -1,0 +1,109 @@
+[[validating-queries]]
+=== 验证查询
+
+查询可以变得非常的复杂，尤其((("validate query API")))((("queries", "validating")))和不同的分析器与不同的字段映射结合时，理解起来就有点困难了。不过 `validate-query` API 可以用来验证查询是否合法。
+
+[source,js]
+--------------------------------------------------
+GET /gb/tweet/_validate/query
+{
+   "query": {
+      "tweet" : {
+         "match" : "really powerful"
+      }
+   }
+}
+--------------------------------------------------
+// SENSE: 054_Query_DSL/80_Validate_query.json
+
+
+以上 `validate` 请求的应答告诉我们这个查询是不合法的： 
+
+[source,js]
+--------------------------------------------------
+{
+  "valid" :         false,
+  "_shards" : {
+    "total" :       1,
+    "successful" :  1,
+    "failed" :      0
+  }
+}
+--------------------------------------------------
+
+[[understanding-errors]]
+==== 理解错误信息
+
+为了找出 ((("validate query API", "understanding errors"))) 查询不合法的原因，可以将 `explain` 参数((("explain parameter"))) 加到查询字符串中：
+
+[source,js]
+--------------------------------------------------
+GET /gb/tweet/_validate/query?explain <1>
+{
+   "query": {
+      "tweet" : {
+         "match" : "really powerful"
+      }
+   }
+}
+--------------------------------------------------
+// SENSE: 054_Query_DSL/80_Validate_query.json
+<1>  `explain` 参数可以提供更多关于查询不合法的信息。
+
+很明显，我们将查询类型(`match`)与字段名称 (`tweet`)搞混了：
+
+[source,js]
+--------------------------------------------------
+{
+  "valid" :     false,
+  "_shards" :   { ... },
+  "explanations" : [ {
+    "index" :   "gb",
+    "valid" :   false,
+    "error" :   "org.elasticsearch.index.query.QueryParsingException:
+                 [gb] No query registered for [tweet]"
+  } ]
+}
+--------------------------------------------------
+
+[[understanding-queries]]
+==== 理解查询语句
+
+对于合法查询，使用 `explain` 参数将返回可读的描述，这对准确理解 Elasticsearch 是如何解析你的 query 是非常有用的：
+
+[source,js]
+--------------------------------------------------
+GET /_validate/query?explain
+{
+   "query": {
+      "match" : {
+         "tweet" : "really powerful"
+      }
+   }
+}
+--------------------------------------------------
+// SENSE: 054_Query_DSL/80_Understanding_queries.json
+
+我们查询的每一个 index ((("indices", "explanation for each index queried")))都会返回对应的 `explanation` ，因为每一个 index 都有自己的映射和分析器：
+
+[source,js]
+--------------------------------------------------
+{
+  "valid" :         true,
+  "_shards" :       { ... },
+  "explanations" : [ {
+    "index" :       "us",
+    "valid" :       true,
+    "explanation" : "tweet:really tweet:powerful"
+  }, {
+    "index" :       "gb",
+    "valid" :       true,
+    "explanation" : "tweet:realli tweet:power"
+  } ]
+}
+--------------------------------------------------
+
+
+从 `explanation` 中可以看出，匹配 `really powerful` 的 `match` 查询被重写为两个针对 `tweet` 字段的 single-term 查询，一个single-term查询对应查询字符串分出来的一个term。
+
+当然，对于索引 `us` ，这两个 term 分别是 `really` 和 `powerful` ，而对于索引 `gb` ，term 则分别是 `realli` 和 `power` 。之所以出现这个情况，是由于我们将索引 `gb` 中 `tweet` 字段的分析器修改为 `english` 分析器。

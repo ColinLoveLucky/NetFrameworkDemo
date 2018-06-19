@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "Welcome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>@HttpUtility.HtmlEncode("Hello " + @ViewBag.Name + ", ID: " + @ViewBag.Id)</h2>
+

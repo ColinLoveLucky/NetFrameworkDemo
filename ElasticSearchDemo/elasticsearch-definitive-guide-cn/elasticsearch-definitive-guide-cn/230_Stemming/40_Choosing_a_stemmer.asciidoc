@@ -1,0 +1,94 @@
+[[choosing-a-stemmer]]
+=== 选择一个词干提取器
+
+在文档
+{ref}/analysis-stemmer-tokenfilter.html[`stemmer`] token filter
+里面列出了一些针对语言的若干词干提取器。((("stemming words", "choosing a stemmer")))((("English", "stemmers for")))
+就英语来说我们有如下提取器：
+
+`english`::
+
+    {ref}/analysis-porterstem-tokenfilter.html[`porter_stem`] 语汇单元过滤器（token filter）。
+
+`light_english`::
+
+    {ref}/analysis-kstem-tokenfilter.html[`kstem`] 语汇单元过滤器（token filter）。
+
+`minimal_english`::
+
+    Lucene 里面的 `EnglishMinimalStemmer` ，用来移除复数。
+
+`lovins`::
+
+    基于 {ref}/analysis-snowball-tokenfilter.html[Snowball] 的
+    http://snowball.tartarus.org/algorithms/lovins/stemmer.html[Lovins]
+    提取器, 第一个词干提取器。
+
+`porter`::
+
+    基于 {ref}/analysis-snowball-tokenfilter.html[Snowball] 的
+    http://snowball.tartarus.org/algorithms/porter/stemmer.html[Porter] 提取器。
+
+`porter2`::
+
+    基于 {ref}/analysis-snowball-tokenfilter.html[Snowball] 的
+    http://snowball.tartarus.org/algorithms/english/stemmer.html[Porter2] 提取器。
+
+`possessive_english`::
+
+    Lucene 里面的 `EnglishPossessiveFilter` ，移除 `'s`
+
+Hunspell 词干提取器也要纳入到上面的列表中，还有多种英文的词典可用。
+
+有一点是可以肯定的：当一个问题存在多个解决方案的时候，这意味着没有一个解决方案充分解决这个问题。
+这一点同样体现在词干提取上 -- 每个提取器使用不同的方法不同程度的对单词进行了弱提取或是过度提取。
+
+在 `stemmer` 文档 ((("languages", "stemmers for")))中，使用粗体高亮了每一个语言的推荐的词干提取器，
+通常是因为它提供了一个在性能和质量之间合理的妥协。也就是说，推荐的词干提取器也许不适用所有场景。
+关于哪个是最好的词干提取器，不存在一个唯一的正确答案 -- 它要看你具体的需求。
+这里有3个方面的因素需要考虑在内：
+性能、质量、程度。
+
+[[stemmer-performance]]
+==== 提取性能
+
+算法提取器一般来说比 Hunspell 提取器快4到5倍。((("stemming words", "choosing a stemmer", "stemmer performance")))((("Hunspell stemmer", "performance")))
+``Handcrafted'' 算法提取器通常（不是永远） 要比 Snowball 快或是差不多。
+比如，`porter_stem` 语汇单元过滤器（token filter）就明显要比基于 Snowball 实现的 Porter 提取器要快的多。
+
+Hunspell 提取器需要加载所有的词典、前缀和后缀表到内存，可能需要消耗几兆的内存。而算法提取器，由一点点代码组成，只需要使用很少内存。
+
+[[stemmer-quality]]
+==== 提取质量
+
+所有的语言，除了世界语（Esperanto）都是不规范的。((("stemming words", "choosing a stemmer", "stemmer quality")))
+最日常用语使用的词往往不规则，而更正式的书面用语则往往遵循规律。
+一些提取算法经过多年的开发和研究已经能够产生合理的高质量的结果了，其他人只需快速组装做很少的研究就能解决大部分的问题了。
+
+虽然 Hunspell 提供了精确地处理不规则词语的承诺，但在实践中往往不足。
+一个基于词典的提取器往往取决于词典的好坏。如果 Hunspell 碰到的这个词不在词典里，那它什么也不能做。
+Hunspell 需要一个广泛的、高质量的、最新的词典以产生好的结果；这样级别的词典可谓少之又少。
+另一方面，一个算法提取器，将愉快的处理新词而不用为新词重新设计算法。
+
+如果一个好的算法词干提取器可用于你的语言，那明智的使用它而不是 Hunspell。它会更快并且消耗更少内存，并且会产生和通常一样好或者比 Hunspell 等价的结果.
+
+如果精度和可定制性对你很重要，那么你需要（和有精力）来维护一个自定义的词典，那么 Hunspell 会给你比算法提取器更大的灵活性。 (查看
+<<controlling-stemming>> 来了解可用于任何词干提取器的自定义技术。)
+
+[[stemmer-degree]]
+==== 提取程度
+
+不同的词干提取器会将词弱提取或过度提取到一定的程度((("stemming words", "choosing a stemmer", "stemmer degree")))。  `light_`
+提取器提干力度不及标准的提取器。 `minimal_` 提取器同样也不那么积极。Hunspell 提取力度要激进一些。
+
+是否想要积极提取还是轻量提取取决于你的场景。如果你的搜索结果是要用于聚类算法，你可能会希望匹配的更广泛一点（因此，提取力度要更大一点）。
+如果你的搜索结果是面向最终用户，轻量的提取一般会产生更好的结果。对搜索来说，将名称和形容词提干比动词提干更重要，当然这也取决于语言。
+
+另外一个要考虑的因素就是你的文档集的大小。
+一个只有 10,000 个产品的小集合，你可能要更激进的提干来确保至少匹配到一些文档。
+如果你的文档集很大，使用轻量的弱提取可能会得到更好的匹配结果。
+
+==== 做一个选择
+
+从推荐的一个词干提取器出发，如果它工作的很好，那没有什么需要调整的。如果不是，你将需要花点时间来调查和比较该语言可用的各种不同提取器，
+来找到最适合你目的的那一个。

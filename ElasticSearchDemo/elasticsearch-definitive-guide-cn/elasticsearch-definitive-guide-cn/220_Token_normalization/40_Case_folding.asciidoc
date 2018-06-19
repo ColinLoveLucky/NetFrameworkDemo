@@ -1,0 +1,56 @@
+[[case-folding]]
+=== Unicode 大小写折叠
+
+人类没有创造力的话就不会是人类，((("tokens", "normalizing", "Unicode case folding")))((("Unicode", "case folding"))) 而人类的语言就恰恰反映了这一点。
+
+处理一个单词的大小写看起来是一个简单的任务，除非遇到需要处理多语言的情况。
+
+那就举一个例子：转换小写德国单词 `ß`。把它转换成大写是 `SS`，然后在转换成小写就成了 `ss`。还有一个例子：转换希腊字母 `ς` (sigma, 在单词末尾使用)。把它转换成大写是 `Σ`，然后再转换成小写就成了 `σ`。
+
+把词条小写的核心是让他们看起来更像，而不是更不像。在Unicode中，这个工作是大小写折叠(case folding)((("case folding")))来完成的，而不是小写化(lowercasing)。  _大小写折叠_ (_Case folding_) 把单词转换到一种(通常是小写)形式，是让写法不会影响单词的比较，所以拼写不需要完全正确。
+
+例如：单词 `ß`，已经是小写形式了，会被_折叠_(_folded_)成 `ss`。类似的小写的 `ς` 被折叠成 `σ`，这样的话，无论 `σ`， `ς`， 和 `Σ`出现在哪里， 他们就都可以比较了。((("nfkc_cf normalization form")))((("icu_normalizer token filter", "nfkc_cf normalization form")))
+
+ `icu_normalizer` 语汇单元过滤器默认的归一化(normalization)模式是 `nfkc_cf`。它像 `nfkc` 模式一样：
+
+* _组合_ (_Composes_) 字符用最短的字节来表示。
+* 用 _兼容_ (_compatibility_）模式，把像 `ﬃ` 的字符转换成简单的 `ffi`
+
+但是，也会这样做：
+
+* _大小写折叠_ (_Case-folds_) 字符成一种适合比较的形式
+
+换句话说， `nfkc_cf`等价于 `lowercase` 语汇单元过滤器(token filters)，但是却适用于所有的语言。((("lowercase token filter", "nfkc_cf normalization form and"))) _on-steroids_ 等价于 `standard` 分析器，例如：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_lowercaser": {
+          "tokenizer": "icu_tokenizer",
+          "filter":  [ "icu_normalizer" ] <1>
+        }
+      }
+    }
+  }
+}
+--------------------------------------------------
+<1>  `icu_normalizer` 默认是 `nfkc_cf` 模式.
+
+我们来比较 `Weißkopfseeadler`和 `WEISSKOPFSEEADLER`(大写形式) 分别通过 `standard`分析器和我们的Unicode自识别(Unicode-aware)分析器处理得到的结果：
+
+[source,js]
+--------------------------------------------------
+GET /_analyze?analyzer=standard <1>
+Weißkopfseeadler WEISSKOPFSEEADLER
+
+GET /my_index/_analyze?analyzer=my_lowercaser <2>
+Weißkopfseeadler WEISSKOPFSEEADLER
+--------------------------------------------------
+<1> 得到的词元(token)是 `weißkopfseeadler`, `weisskopfseeadler`
+<2> 得到的词元(token)是 `weisskopfseeadler`, `weisskopfseeadler`
+
+ `standard`分析器得到了两个不同且不可比较的词元(token)，而我们定制化的分析器得到了两个相同但是不符合原意的词元(token)。

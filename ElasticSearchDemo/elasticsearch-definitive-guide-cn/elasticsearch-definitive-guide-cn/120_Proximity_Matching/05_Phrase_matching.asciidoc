@@ -1,0 +1,111 @@
+[[phrase-matching]]
+=== 短语匹配
+
+就像 `match` 查询对于标准全文检索是一种最常用的查询一样，当你想找到彼此邻近搜索词的查询方法时，就会想到 `match_phrase` 查询((("proximity matching", "phrase matching")))((("phrase matching")))((("match_phrase query")))。
+
+[source,js]
+--------------------------------------------------
+GET /my_index/my_type/_search
+{
+    "query": {
+        "match_phrase": {
+            "title": "quick brown fox"
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 120_Proximity_Matching/05_Match_phrase_query.json
+
+类似 `match` 查询， `match_phrase` 查询首先将查询字符串解析成一个词项列表，然后对这些词项进行搜索，但只保留那些包含 _全部_ 搜索词项，且 _位置_ 与搜索词项相同的文档。
+比如对于 `quick fox` 的短语搜索可能不会匹配到任何文档，因为没有文档包含的 `quick` 词之后紧跟着 `fox` 。
+
+[TIP]
+==================================================
+
+`match_phrase` 查询同样可写成一种类型为 `phrase` 的 `match` 查询:
+
+[source,js]
+--------------------------------------------------
+"match": {
+    "title": {
+        "query": "quick brown fox",
+        "type":  "phrase"
+    }
+}
+--------------------------------------------------
+// SENSE: 120_Proximity_Matching/05_Match_phrase_query.json
+
+==================================================
+
+==== 词项的位置
+
+
+当一个字符串被分词后，这个分析器不但会((("phrase matching","term positions")))((("match_phrase query", "position of terms")))((("position-aware matching")))返回一个词项列表，而且还会返回各词项在原始字符串中的 _位置_ 或者顺序关系：
+
+[source,js]
+--------------------------------------------------
+GET /_analyze?analyzer=standard
+Quick brown fox
+--------------------------------------------------
+// SENSE: 120_Proximity_Matching/05_Term_positions.json
+
+返回信息如下：
+
+[role="pagebreak-before"]
+[source,js]
+--------------------------------------------------
+{
+   "tokens": [
+      {
+         "token": "quick",
+         "start_offset": 0,
+         "end_offset": 5,
+         "type": "<ALPHANUM>",
+         "position": 1 <1>
+      },
+      {
+         "token": "brown",
+         "start_offset": 6,
+         "end_offset": 11,
+         "type": "<ALPHANUM>",
+         "position": 2 <1>
+      },
+      {
+         "token": "fox",
+         "start_offset": 12,
+         "end_offset": 15,
+         "type": "<ALPHANUM>",
+         "position": 3 <1>
+      }
+   ]
+}
+--------------------------------------------------
+<1> `position` 代表各词项在原始字符串中的位置。
+
+位置信息可以被存储在倒排索引中，因此 `match_phrase` 查询这类对词语位置敏感的查询，
+就可以利用位置信息去匹配包含所有查询词项，且各词项顺序也与我们搜索指定一致的文档，中间不夹杂其他词项。
+
+==== 什么是短语
+
+一个被认定为和短语 `quick brown fox` ((("match_phrase query", "documents matching a phrase")))((("phrase matching", "criteria for matching documents")))匹配的文档，必须满足以下这些要求：
+
+* `quick` 、 `brown` 和 `fox` 需要全部出现在域中。
+
+* `brown` 的位置应该比 `quick` 的位置大 `1` 。
+
+* `fox` 的位置应该比 `quick` 的位置大 `2` 。
+
+如果以上任何一个选项不成立，则该文档不能认定为匹配。
+
+[TIP]
+==================================================
+
+本质上来讲，`match_phrase` 查询是利用一种低级别的 `span` 查询族（query family）去做词语位置敏感的匹配。
+((("match_phrase query", "use of span queries for position-aware matching")))((("span queries")))
+Span 查询是一种词项级别的查询，所以它们没有分词阶段；它们只对指定的词项进行精确搜索。
+
+
+值得庆幸的是，`match_phrase` 查询已经足够优秀，大多数人是不会直接使用 `span` 查询。
+然而，在一些专业领域，例如专利检索，还是会采用这种低级别查询去执行非常具体而又精心构造的位置搜索。
+
+==================================================

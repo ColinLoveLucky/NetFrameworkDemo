@@ -1,0 +1,264 @@
+[[_finding_exact_values]]
+=== 精确值查找
+
+当进行精确值查找时，((("structured search", "finding exact values")))((("exact values", "finding"))) 我们会使用过滤器（filters）。过滤器很重要，因为它们执行速度非常快，不会计算相关度（直接跳过了整个评分阶段）而且很容易被缓存。我们会在本章后面的 <<filter-caching, 过滤器缓存>> 中讨论过滤器的性能优势，不过现在只要记住：请尽可能多的使用过滤式查询。
+
+==== term 查询数字
+
+我们首先来看最为常用的 `term` 查询，((("term query", "with numbers")))
+((("structured search", "finding exact values", "using term filter with numbers")))可以用它处理数字（numbers）、布尔值（Booleans）、日期（dates）以及文本（text）。
+
+ 让我们以下面的例子开始介绍，创建并索引一些表示产品的文档，文档里有字段 `price` 和 `productID` （ `价格` 和 `产品ID` ）：
+
+[source,js]
+--------------------------------------------------
+POST /my_store/products/_bulk
+{ "index": { "_id": 1 }}
+{ "price" : 10, "productID" : "XHDK-A-1293-#fJ3" }
+{ "index": { "_id": 2 }}
+{ "price" : 20, "productID" : "KDKE-B-9947-#kL5" }
+{ "index": { "_id": 3 }}
+{ "price" : 30, "productID" : "JODL-X-1937-#pV7" }
+{ "index": { "_id": 4 }}
+{ "price" : 30, "productID" : "QQPX-R-3956-#aD8" }
+--------------------------------------------------
+// SENSE: 080_Structured_Search/05_Term_number.json
+
+我们想要做的是查找具有某个价格的所有产品，有关系数据库背景的人肯定熟悉 SQL，如果我们将其用 SQL 形式表达，会是下面这样：
+
+[source,sql]
+--------------------------------------------------
+SELECT document
+FROM   products
+WHERE  price = 20
+--------------------------------------------------
+
+在 Elasticsearch 的查询表达式（query DSL）中，我们可以使用 `term` 查询达到相同的目的。 `term` 查询会查找我们指定的精确值。作为其本身， `term` 查询是简单的。它接受一个字段名以及我们希望查找的数值：
+
+[source,js]
+--------------------------------------------------
+{
+    "term" : {
+        "price" : 20
+    }
+}
+--------------------------------------------------
+
+通常当查找一个精确值的时候，我们不希望对查询进行评分计算。只希望对文档进行包括或排除的计算，所以我们会使用 `constant_score` 查询以非评分模式来执行 `term` 查询并以一作为统一评分。
+
+最终组合的结果是一个 `constant_score` 查询，它包含一个 `term` 查询：
+
+[source,js]
+--------------------------------------------------
+GET /my_store/products/_search
+{
+    "query" : {
+        "constant_score" : { <1>
+            "filter" : {
+                "term" : { <2>
+                    "price" : 20
+                }
+            }
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 080_Structured_Search/05_Term_number.json
+
+<1> 我们用 `constant_score` 将 `term` 查询转化成为过滤器
+<2> 我们之前看到过的 `term` 查询
+
+执行后，这个查询所搜索到的结果与我们期望的一致：只有文档 2 命中并作为结果返回（因为只有 `2` 的价格是 `20` ）:
+
+[source,json]
+--------------------------------------------------
+"hits" : [
+    {
+        "_index" : "my_store",
+        "_type" :  "products",
+        "_id" :    "2",
+        "_score" : 1.0, <1>
+        "_source" : {
+          "price" :     20,
+          "productID" : "KDKE-B-9947-#kL5"
+        }
+    }
+]
+--------------------------------------------------
+<1> 查询置于 `filter` 语句内不进行评分或相关度的计算，所以所有的结果都会返回一个默认评分 `1` 。
+
+==== term 查询文本
+
+如本部分开始处提到过的一样 ((("structured search", "finding exact values", "using term filter with text")))((("term filter", "with text")))，使用 `term` 查询匹配字符串和匹配数字一样容易。如果我们想要查询某个具体 UPC ID 的产品，使用 SQL 表达式会是如下这样：
+
+[source,sql]
+--------------------------------------------------
+SELECT product
+FROM   products
+WHERE  productID = "XHDK-A-1293-#fJ3"
+--------------------------------------------------
+
+转换成查询表达式（query DSL），同样使用 `term` 查询，形式如下：
+
+[source,js]
+--------------------------------------------------
+GET /my_store/products/_search
+{
+    "query" : {
+        "constant_score" : {
+            "filter" : {
+                "term" : {
+                    "productID" : "XHDK-A-1293-#fJ3"
+                }
+            }
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 080_Structured_Search/05_Term_text.json
+
+但这里有个小问题：我们无法获得期望的结果。为什么呢？问题不在 `term` 查询，而在于索引数据的方式。 ((("analyze API, using to understand tokenization"))) 如果我们使用 `analyze` API (<<analyze-api, 分析 API>>)，我们可以看到这里的 UPC 码被拆分成多个更小的 token ：
+
+[source,js]
+--------------------------------------------------
+GET /my_store/_analyze
+{
+  "field": "productID",
+  "text": "XHDK-A-1293-#fJ3"
+}
+--------------------------------------------------
+// SENSE: 080_Structured_Search/05_Term_text.json
+
+[source,js]
+--------------------------------------------------
+{
+  "tokens" : [ {
+    "token" :        "xhdk",
+    "start_offset" : 0,
+    "end_offset" :   4,
+    "type" :         "<ALPHANUM>",
+    "position" :     1
+  }, {
+    "token" :        "a",
+    "start_offset" : 5,
+    "end_offset" :   6,
+    "type" :         "<ALPHANUM>",
+    "position" :     2
+  }, {
+    "token" :        "1293",
+    "start_offset" : 7,
+    "end_offset" :   11,
+    "type" :         "<NUM>",
+    "position" :     3
+  }, {
+    "token" :        "fj3",
+    "start_offset" : 13,
+    "end_offset" :   16,
+    "type" :         "<ALPHANUM>",
+    "position" :     4
+  } ]
+}
+--------------------------------------------------
+// SENSE: 080_Structured_Search/05_Term_text.json
+
+这里有几点需要注意：
+
+* Elasticsearch 用 4 个不同的 token 而不是单个 token 来表示这个 UPC 。
+* 所有字母都是小写的。
+* 丢失了连字符和哈希符（ `#` ）。
+
+所以当我们用 `term` 查询查找精确值 `XHDK-A-1293-#fJ3` 的时候，找不到任何文档，因为它并不在我们的倒排索引中，正如前面呈现出的分析结果，索引里有四个 token 。
+
+显然这种对 ID 码或其他任何精确值的处理方式并不是我们想要的。
+
+为了避免这种问题，我们需要告诉 Elasticsearch 该字段具有精确值，要将其设置成 `not_analyzed` 无需分析的。((("not_analyzed string fields"))) 我们可以在 <<custom-field-mappings, 自定义字段映射>> 中查看它的用法。为了修正搜索结果，我们需要首先删除旧索引（因为它的映射不再正确）然后创建一个能正确映射的新索引：
+
+[source,js]
+--------------------------------------------------
+DELETE /my_store <1>
+
+PUT /my_store <2>
+{
+    "mappings" : {
+        "products" : {
+            "properties" : {
+                "productID" : {
+                    "type" : "string",
+                    "index" : "not_analyzed" <3>
+                }
+            }
+        }
+    }
+
+}
+--------------------------------------------------
+// SENSE: 080_Structured_Search/05_Term_text.json
+<1> 删除索引是必须的，因为我们不能更新已存在的映射。
+<2> 在索引被删除后，我们可以创建新的索引并为其指定自定义映射。
+<3> 这里我们告诉 Elasticsearch ，我们不想对 `productID` 做任何分析。
+
+现在我们可以为文档重建索引：
+
+[source,js]
+--------------------------------------------------
+POST /my_store/products/_bulk
+{ "index": { "_id": 1 }}
+{ "price" : 10, "productID" : "XHDK-A-1293-#fJ3" }
+{ "index": { "_id": 2 }}
+{ "price" : 20, "productID" : "KDKE-B-9947-#kL5" }
+{ "index": { "_id": 3 }}
+{ "price" : 30, "productID" : "JODL-X-1937-#pV7" }
+{ "index": { "_id": 4 }}
+{ "price" : 30, "productID" : "QQPX-R-3956-#aD8" }
+--------------------------------------------------
+// SENSE: 080_Structured_Search/05_Term_text.json
+
+此时， `term` 查询就能搜索到我们想要的结果，让我们再次搜索新索引过的数据（注意，查询和过滤并没有发生任何改变，改变的是数据映射的方式）：
+
+[source,js]
+--------------------------------------------------
+GET /my_store/products/_search
+{
+    "query" : {
+        "constant_score" : {
+            "filter" : {
+                "term" : {
+                    "productID" : "XHDK-A-1293-#fJ3"
+                }
+            }
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 080_Structured_Search/05_Term_text.json
+
+因为 `productID` 字段是未分析过的， `term` 查询不会对其做任何分析，查询会进行精确查找并返回文档 1 。成功！
+
+[[_internal_filter_operation]]
+==== 内部过滤器的操作
+
+在内部，Elasticsearch ((("structured search", "finding exact values", "intrnal filter operations")))
+((("filters", "internal filter operation")))会在运行非评分查询的时执行多个操作：
+
+1. _查找匹配文档_.
++
+`term` 查询在倒排索引中查找 `XHDK-A-1293-#fJ3` 然后获取包含该 term 的所有文档。本例中，只有文档 1 满足我们要求。
+
+2. _创建 bitset_.
++
+过滤器会创建一个 _bitset_ （一个包含 0 和 1 的数组），它描述了哪个文档会包含该 term 。匹配文档的标志位是 1 。本例中，bitset 的值为 `[1,0,0,0]` 。在内部，它表示成一个 https://www.elastic.co/blog/frame-of-reference-and-roaring-bitmaps["roaring bitmap"]，可以同时对稀疏或密集的集合进行高效编码。
+
+3. _迭代 bitset(s)_
++
+一旦为每个查询生成了 bitsets ，Elasticsearch 就会循环迭代 bitsets 从而找到满足所有过滤条件的匹配文档的集合。执行顺序是启发式的，但一般来说先迭代稀疏的 bitset （因为它可以排除掉大量的文档）。
+
+4. _增量使用计数_.
++
+Elasticsearch 能够缓存非评分查询从而获取更快的访问，但是它也会不太聪明地缓存一些使用极少的东西。非评分计算因为倒排索引已经足够快了，所以我们只想缓存那些我们 _知道_ 在将来会被再次使用的查询，以避免资源的浪费。
++
+为了实现以上设想，Elasticsearch 会为每个索引跟踪保留查询使用的历史状态。如果查询在最近的 256 次查询中会被用到，那么它就会被缓存到内存中。当 bitset 被缓存后，缓存会在那些低于 10,000 个文档（或少于 3% 的总索引数）的段（segment）中被忽略。这些小的段即将会消失，所以为它们分配缓存是一种浪费。
+
+
+实际情况并非如此（执行有它的复杂性，这取决于查询计划是如何重新规划的，有些启发式的算法是基于查询代价的），理论上非评分查询 _先于_ 评分查询执行。非评分查询任务旨在降低那些将对评分查询计算带来更高成本的文档数量，从而达到快速搜索的目的。
+
+从概念上记住非评分计算是首先执行的，这将有助于写出高效又快速的搜索请求。

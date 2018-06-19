@@ -1,0 +1,30 @@
+[[nested-mapping]]
+=== 嵌套对象映射
+
+设置一个字段为 `nested` 很简单 -- ((("mapping (types)", "nested object")))((("nested object mapping"))) 你只需要将字段类型 `object` 替换为 `nested` 即可：
+
+[source,json]
+--------------------------
+PUT /my_index
+{
+  "mappings": {
+    "blogpost": {
+      "properties": {
+        "comments": {
+          "type": "nested", <1>
+          "properties": {
+            "name":    { "type": "string"  },
+            "comment": { "type": "string"  },
+            "age":     { "type": "short"   },
+            "stars":   { "type": "short"   },
+            "date":    { "type": "date"    }
+          }
+        }
+      }
+    }
+  }
+}
+--------------------------
+<1> `nested` 字段类型的设置参数与 `object` 相同。
+
+这就是需要设置的一切。至此，所有 `comments` 对象会被索引在独立的嵌套文档中。可以查看 {ref}/nested.html[`nested` 类型参考文档] 获取更多详细信息。

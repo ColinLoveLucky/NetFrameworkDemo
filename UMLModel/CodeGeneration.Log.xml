@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="file:///C:/PROGRAM FILES (X86)/MICROSOFT VISUAL STUDIO 12.0/COMMON7/IDE/EXTENSIONS/MICROSOFT/ARCHITECTURE TOOLS/EXTENSIBILITY/Logging/CodeGenLog.xslt"?>
+<Log xmlns="http://schemas.microsoft.com/VisualStudio/2010/CodeGen.RE.Log" Label="代码生成/文本转换记录">
+  <MessageClass Name="Message" Label="消息" Option="显示提供相关信息的消息" />
+  <MessageClass Name="Warning" Label="警告" Option="显示警告" />
+  <MessageClass Name="Error" Label="错误" Option="显示错误" />
+  <MessageClass Name="Property" Label="属性" Option="显示元数据" />
+  <MessageClass Name="Diagnostic" Label="消息" Option="显示诊断消息" />
+  <Message Timestamp="2017-01-05T18:18:48" Importance="High" Text="已启动代码生成或文本转换。" />
+  <Message Timestamp="2017-01-05T18:18:48" Importance="Diagnostic" Text="名称 = ClassTemplate" />
+  <Message Timestamp="2017-01-05T18:18:48" Importance="Diagnostic" Text="覆盖 = True" />
+  <Message Timestamp="2017-01-05T18:18:48" Importance="Diagnostic" Text="ProjectPath = ..\UMLModelLib\UMLModelLib.csproj" />
+  <Message Timestamp="2017-01-05T18:18:48" Importance="Diagnostic" Text="TargetDirectory = GeneratedCode\{PackageStructure}" />
+  <Message Timestamp="2017-01-05T18:18:48" Importance="Diagnostic" Text="TargetName = {Name}" />
+  <Message Timestamp="2017-01-05T18:18:48" Importance="Diagnostic" Text="TemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\ClassTemplate.t4" />
+  <Message Timestamp="2017-01-05T18:18:48" Importance="Diagnostic" Text="ResolvedTemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\ClassTemplate.t4" />
+  <Message Timestamp="2017-01-05T18:18:48" Importance="Medium" Text="UMLModel 的文本模板绑定: “ClassTemplate”会将 ClassTemplate.t4 应用于: “UMLModel::Tree”-  (Class), “UMLModel::DefaultProvider”-  (Class), “UMLModel::AppleTree”-  (Class), “UMLModel::Company”-  (Class), “UMLModel::Employee”-  (Class), “UMLModel::Programmer”-  (Class), “UMLModel::Computer”-  (Class), “UMLModel::Car”-  (Class), “UMLModel::Motor”-  (Class), “UMLModel::Person”-  (Class), “UMLModel::Brain”-  (Class) " />
+  <Message Timestamp="2017-01-05T18:18:48" Importance="Medium" Text="“UMLModel::Tree”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\Tree.cs" />
+  <Message Timestamp="2017-01-05T18:18:49" Importance="Medium" Text="“UMLModel::DefaultProvider”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\DefaultProvider.cs" />
+  <Message Timestamp="2017-01-05T18:18:49" Importance="Medium" Text="“UMLModel::AppleTree”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\AppleTree.cs" />
+  <Message Timestamp="2017-01-05T18:18:49" Importance="Medium" Text="“UMLModel::Company”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\Company.cs" />
+  <Message Timestamp="2017-01-05T18:18:49" Importance="Medium" Text="“UMLModel::Employee”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\Employee.cs" />
+  <Message Timestamp="2017-01-05T18:18:49" Importance="Medium" Text="“UMLModel::Programmer”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\Programmer.cs" />
+  <Message Timestamp="2017-01-05T18:18:49" Importance="Medium" Text="“UMLModel::Computer”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\Computer.cs" />
+  <Message Timestamp="2017-01-05T18:18:49" Importance="Medium" Text="“UMLModel::Car”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\Car.cs" />
+  <Message Timestamp="2017-01-05T18:18:49" Importance="Medium" Text="“UMLModel::Motor”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\Motor.cs" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Medium" Text="“UMLModel::Person”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\Person.cs" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Medium" Text="“UMLModel::Brain”-  (Class) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\Brain.cs" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="名称 = InterfaceTemplate" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="覆盖 = True" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="ProjectPath = ..\UMLModelLib\UMLModelLib.csproj" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="TargetDirectory = GeneratedCode\{PackageStructure}" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="TargetName = {Name}" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="TemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\InterfaceTemplate.t4" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="ResolvedTemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\InterfaceTemplate.t4" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Medium" Text="UMLModel 的文本模板绑定: “InterfaceTemplate”会将 InterfaceTemplate.t4 应用于: “UMLModel::IDbProvider”-  (Interface) " />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Medium" Text="“UMLModel::IDbProvider”-  (Interface) : 成功(已创建文件) - D:\FrameWork4.0TestDemo\UMLModelLib\GeneratedCode\IDbProvider.cs" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="名称 = StructTemplate" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="覆盖 = True" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="ProjectPath = ..\UMLModelLib\UMLModelLib.csproj" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="TargetDirectory = GeneratedCode\{PackageStructure}" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="TargetName = {Name}" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="TemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\StructTemplate.t4" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="ResolvedTemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 12.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\StructTemplate.t4" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Medium" Text="UMLModel 的文本模板绑定: “StructTemplate”会将 StructTemplate.t4 应用于: “UMLModel::Tree”-  (Class), “UMLModel::DefaultProvider”-  (Class), “UMLModel::AppleTree”-  (Class), “UMLModel::Company”-  (Class), “UMLModel::Employee”-  (Class), “UMLModel::Programmer”-  (Class), “UMLModel::Computer”-  (Class), “UMLModel::Car”-  (Class), “UMLModel::Motor”-  (Class), “UMLModel::Person”-  (Class), “UMLModel::Brain”-  (Class) " />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::Tree”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::DefaultProvider”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::AppleTree”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::Company”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::Employee”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::Programmer”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::Computer”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::Car”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::Motor”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::Person”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::Brain”-  (Class):  没有生成任何文件，因为模板“StructTemplate.t4”的“AppliesToElement”方法的计算结果为 false。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="选定内容包含未绑定到模板的 6 元素。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“6d13760a-e2ff-49f0-99b2-01565cae3832”-  (Generalization):  没有绑定的模板。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::”-  (InterfaceRealization):  没有绑定的模板。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::”-  (Association):  没有绑定的模板。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::”-  (Dependency):  没有绑定的模板。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::”-  (Association):  没有绑定的模板。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="Diagnostic" Text="“UMLModel::”-  (Association):  没有绑定的模板。" />
+  <Message Timestamp="2017-01-05T18:18:50" Importance="High" Text="代码生成完成。错误:  0。警告:  0。" />
+</Log>

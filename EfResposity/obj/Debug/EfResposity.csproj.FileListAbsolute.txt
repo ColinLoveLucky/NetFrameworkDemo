@@ -1,0 +1,17 @@
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\EfResposity.exe.config
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\EfResposity.exe
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\EfResposity.pdb
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\EntityFramework.dll
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\EntityFramework.SqlServer.dll
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\EntityFramework.xml
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\EntityFramework.SqlServer.xml
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\zh-Hans\EntityFramework.resources.dll
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\zh-Hans\EntityFramework.SqlServer.resources.dll
+D:\FrameWork4.0TestDemo\EfResposity\obj\Debug\EfResposity.exe
+D:\FrameWork4.0TestDemo\EfResposity\obj\Debug\EfResposity.pdb
+D:\FrameWork4.0TestDemo\EfResposity\obj\Debug\EfResposity.Migrations.InitialCreate.resources
+D:\FrameWork4.0TestDemo\EfResposity\obj\Debug\EfResposity.csproj.GenerateResource.Cache
+D:\FrameWork4.0TestDemo\EfResposity\obj\Debug\EfResposity.Migrations.addlength.resources
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\System.Collections.Immutable.dll
+D:\FrameWork4.0TestDemo\EfResposity\bin\Debug\EntityFramework.DynamicFilters.dll
+D:\FrameWork4.0TestDemo\EfResposity\obj\Debug\EfResposity.csprojResolveAssemblyReference.cache

@@ -1,0 +1,64 @@
+ifndef::es_build[= placeholder2]
+
+[[languages]]
+= 处理人类语言
+
+[partintro]
+--
+
+ifdef::es_build[]
+[quote,Matt Groening]
+____
+``我认识这句话里的所有单词，但并不能理解全句。''
+____
+endif::es_build[]
+
+ifndef::es_build[]
+++++
+<blockquote data-type="epigraph">
+    <p>我认识这句话里的所有单词，但并不能理解全句。</p>
+    <p data-type="attribution">Matt Groening</p>
+</blockquote>
+++++
+endif::es_build[]
+
+全文搜索是一场 _查准率_ 与 _查全率_ 之间的较量&#x2014;查准率即尽量返回较少的无关文档，而查全率则尽量返回较多的相关文档。
+((("recall", "in full text search")))((("precision", "in full text search")))((("full text search", "battle between precision and recall")))
+尽管能够精准匹配用户查询的单词，但这仍然不够，我们会错过很多被用户认为是相关的文档。
+因此，我们需要把网撒得更广一些，去搜索那些和原文不是完全匹配但却相关的单词。
+
+难道你不期待在搜索“quick brown fox“时匹配到包含“fast brown foxed“的文档，或是搜索“Johnny Walker“时匹配到“Johnnie Walker“， 又或是搜索“Arnolt Schwarzenneger“时匹配到“Arnold Schwarzenegger“吗？
+
+如果文档 _确实_ 包含用户查询的内容，那么这些文档应当出现在返回结果的最前面，而匹配程度较低的文档将会排在靠后的位置。
+如果没有任何完全匹配的文档，我们至少可以给用户展示一些潜在的匹配结果；它们甚至可能就是用户最初想要的结果。
+
+以下列出了一些可优化的地方：((("full text search", "finding inexact matches")))
+
+*   清除类似 +´+ ， `^` ， `¨` 的变音符号，这样在搜索 `rôle` 的时候也会匹配 `role` ，反之亦然。请见 <<token-normalization>>。
+
+*   通过提取单词的词干，清除单数和复数之间的差异&#x2014;`fox` 与 `foxes`&#x2014;以及时态上的差异&#x2014;`jumping` 、 `jumped` 与 `jumps` 。请见 <<stemming>>。
+
+*   清除常用词或者 _停用词_ ，如 `the` ， `and` ， 和 `or` ，从而提升搜索性能。请见 <<stopwords>>。
+
+*   包含同义词，这样在搜索 `quick` 时也可以匹配 `fast` ，或者在搜索 `UK` 时匹配 `United Kingdom` 。 请见 <<synonyms>>。
+
+*   检查拼写错误和替代拼写方式，或者 _同音异型词_ &#x2014;发音一致的不同单词，例如 `their` 与 `there` ， `meat` 、 `meet` 与 `mete` 。 请见 <<fuzzy-matching>>。
+
+在我们可以操控单个单词之前，需要先将文本切分成单词，((("words", "dividing text into")))这也意味着我们需要知道 _单词_ 是由什么组成的。我们将在 <<identifying-words>> 章节阐释这个问题。
+
+在这之前，让我们看看如何更快更简单地开始。
+--
+
+include::200_Language_intro.asciidoc[]
+
+include::210_Identifying_words.asciidoc[]
+
+include::220_Token_normalization.asciidoc[]
+
+include::230_Stemming.asciidoc[]
+
+include::240_Stopwords.asciidoc[]
+
+include::260_Synonyms.asciidoc[]
+
+include::270_Fuzzy_matching.asciidoc[]

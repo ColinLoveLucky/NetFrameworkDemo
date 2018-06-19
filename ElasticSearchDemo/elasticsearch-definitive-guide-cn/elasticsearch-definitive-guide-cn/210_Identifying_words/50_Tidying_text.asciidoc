@@ -1,0 +1,153 @@
+[[char-filters]]
+=== 整理输入文本
+
+
+当输入文本是干净的时候分词器提供最佳分词结果，有效文本，这里 _有效_ 指的是遵从 Unicode 算法期望的标点符号规则((("text", "tidying up text input for tokenizers")))((("words", "identifying", "tidying up text input")))。
+然而很多时候，我们需要处理的文本会是除了干净文本之外的任何文本。在分词之前整理文本会提升输出结果的质量。
+
+==== HTML 分词
+
+将 HTML 通过 `标准分词器` 或 `icu_分词器` 分词将产生糟糕的结果((("HTML, tokenizing")))。这些分词器不知道如何处理 HTML 标签。例如：
+
+[source,js]
+--------------------------------------------------
+GET /_analyze?tokenizer=standard
+<p>Some d&eacute;j&agrave; vu <a href="http://somedomain.com>">website</a>
+--------------------------------------------------
+
+`标准分词器` ((("standard tokenizer", "tokenizing HTML")))会混淆 HTML 标签和实体，并且输出以下词汇单元： `p` 、 `Some` 、 `d` 、 `eacute` 、 `j` 、 `agrave` 、 `vu` 、 `a` 、
+`href` 、 `http` 、 `somedomain.com` 、 `website` 、 `a` 。这些词汇单元显然不知所云！
+
+
+_字符过滤器_ 可以添加进分析器中，在将文本传给分词器之前预处理该文本。在这种情况下，我们可以用 `html_strip` 字符过滤器((("analyzers", "adding character filters to")))((("html_strip character filter")))移除 HTML 标签并编码 HTML 实体如 `&eacute;` 为一致的 Unicode 字符。
+
+
+字符过滤器可以通过 `analyze` API 进行测试，这需要在查询字符串中指明它们：
+
+[source,js]
+--------------------------------------------------
+GET /_analyze?tokenizer=standard&char_filters=html_strip
+<p>Some d&eacute;j&agrave; vu <a href="http://somedomain.com>">website</a>
+--------------------------------------------------
+
+想将它们作为分析器的一部分使用，需要把它们添加到 `custom` 类型的自定义分析器里：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index
+{
+    "settings": {
+        "analysis": {
+            "analyzer": {
+                "my_html_analyzer": {
+                    "tokenizer":     "standard",
+                    "char_filter": [ "html_strip" ]
+                }
+            }
+        }
+    }
+}
+--------------------------------------------------
+
+
+一旦自定义分析器创建好之后， 我们新的 `my_html_analyzer` 就可以用 `analyze` API 测试：
+
+[source,js]
+--------------------------------------------------
+GET /my_index/_analyze?analyzer=my_html_analyzer
+<p>Some d&eacute;j&agrave; vu <a href="http://somedomain.com>">website</a>
+--------------------------------------------------
+
+
+这次输出的词汇单元才是我们期望的： `Some` ， ++déjà++ ， `vu` ， `website` 。
+
+==== 整理标点符号
+
+
+`标准分词器` 和 `icu_分词器` 都能理解单词中的撇号应当被视为单词的一部分，然而包围单词的单引号在不应该。((("standard tokenizer", "handling of punctuation")))((("icu_tokenizer", "handling of punctuation")))((("punctuation", "tokenizers&#x27; handling of")))分词文本  `You're my 'favorite'` ，
+会被输出正确的词汇单元 `You're ， my ， favorite` 。
+
+
+
+不幸的是，((("apostrophes"))) Unicode 列出了一些有时会被用为撇号的字符：
+
+`U+0027`::
+      撇号标记为 (`'`)&#x2014; 原始 ASCII 符号
+
+`U+2018`::
+      左单引号标记为 (`‘`)&#x2014; 当单引用时作为一个引用的开始
+
+`U+2019`::
+      右单引号标记为 (`’`)&#x2014; 当单引用时座位一个引用的结束，也是撇号的首选字符。
+
+
+当这三个字符出现在单词中间的时候， `标准分词器` 和 `icu_分词器` 都会将这三个字符视为撇号（这会被视为单词的一部分）。
+然而还有另外三个长得很像撇号的字符：
+
+`U+201B`::
+      Single high-reversed-9 （高反单引号）标记为  (`‛`)&#x2014; 跟 `U+2018` 一样，但是外观上有区别
+
+
+`U+0091`::
+      ISO-8859-1 中的左单引号 &#x2014; 不会被用于 Unicode 中
+
+`U+0092`::
+      ISO-8859-1 中的右单引号 &#x2014; 不会被用于 Unicode 中
+
+
+`标准分词器` 和 `icu_分词器` 把这三个字符视为单词的分界线 -- 一个将文本拆分为词汇单元的位置。((("quotation marks")))不幸的是，一些出版社用 `U+201B` 作为名字的典型书写方式例如 `M‛coy` ，
+第二个俩字符或许可以被你的文字处理软件打出来，这取决于这款软件的年纪。
+
+
+即使在使用可以“接受”的引号标记时，一个用单引号书写的词 &#x2014; `You’re` &#x2014; 也和一个用撇号书写的词 &#x2014; `You're` &#x2014; 不一样，这意味着搜索其中的一个变体将会找不到另一个。
+
+
+幸运的是，可以用 `mapping` 对这些混乱的字符进行分类，((("character filters", "mapping character filter")))((("mapping character filter")))
+该过滤器可以运行我们用另一个字符替换所有实例中的一个字符。这种情况下，我们可以简单的用 `U+0027` 替换所有的撇号变体：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index
+{
+  "settings": {
+    "analysis": {
+      "char_filter": { <1>
+        "quotes": {
+          "type": "mapping",
+          "mappings": [ <2>
+            "\\u0091=>\\u0027",
+            "\\u0092=>\\u0027",
+            "\\u2018=>\\u0027",
+            "\\u2019=>\\u0027",
+            "\\u201B=>\\u0027"
+          ]
+        }
+      },
+      "analyzer": {
+        "quotes_analyzer": {
+          "tokenizer":     "standard",
+          "char_filter": [ "quotes" ] <3>
+        }
+      }
+    }
+  }
+}
+--------------------------------------------------
+<1> 我们自定义了一个 `char_filter` （字符过滤器）叫做 `quotes` ，提供所有撇号变体到简单撇号的映射。
+
+<2> 为了更清晰，我们使用每个字符的 JSON Unicode 转义语句，当然我们也可以使用他们本身字符表示： `"‘=>'"` 。
+
+
+<3> 我们用自定义的 `quotes` 字符过滤器创建一个新的分析器叫做 `quotes_analyzer` 。
+
+像以前一样，我们需要在创建了分析器后测试它：
+
+[source,js]
+--------------------------------------------------
+GET /my_index/_analyze?analyzer=quotes_analyzer
+You’re my ‘favorite’ M‛Coy
+--------------------------------------------------
+
+这个例子返回如下词汇单元，其中所有的单词中的引号标记都被替换为了撇号： `You're`, `my`, `favorite`, `M'Coy` 。
+
+投入更多的努力确保你的分词器接收到高质量的输入，你的搜索结果质量也将会更好。

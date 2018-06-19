@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DbBookContext">
+  <DataContextMoniker Name="/DbBookContextDataContext" />
+  <nestedChildShapes>
+    <classShape Id="bf9d4715-24b3-4d7f-a506-023257172e84" absoluteBounds="3, 0.875, 2, 1.1895064290364583">
+      <DataClassMoniker Name="/DbBookContextDataContext/Authors" />
+      <nestedChildShapes>
+        <elementListCompartment Id="40b04507-6656-4968-a95d-14a58bd7aad3" absoluteBounds="3.015, 1.335, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="81c23a1d-6405-4848-9f7f-794c414cc477" absoluteBounds="3, 2.5, 2, 2.1446048990885416">
+      <DataClassMoniker Name="/DbBookContextDataContext/Books" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ba32f09c-0c20-4f5a-86ba-fb1d62f4871a" absoluteBounds="3.015, 2.96, 1.9700000000000002, 1.5846048990885415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(4.34375 : 2.06450642903646); (4.34375 : 2.5)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DbBookContextDataContext/Authors/Authors_Books" />
+      <nodes>
+        <classShapeMoniker Id="bf9d4715-24b3-4d7f-a506-023257172e84" />
+        <classShapeMoniker Id="81c23a1d-6405-4848-9f7f-794c414cc477" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="7321a80d-6bed-47d9-a899-310874c12f71" absoluteBounds="0.5, 2.375, 2, 1.1895064290364583">
+      <DataClassMoniker Name="/DbBookContextDataContext/BinaryStreams" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6ac72ebd-344b-4ecd-bba3-15b22e200ee6" absoluteBounds="0.51500000000000012, 2.835, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="86d4d16b-cfc3-487a-a6ec-3900eabd9a63" absoluteBounds="0.5, 0.875, 2, 1.1895064290364583">
+      <DataClassMoniker Name="/DbBookContextDataContext/BinaryStreamsCopy" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ab4b3ee9-1199-404b-846b-3c800b3c04f0" absoluteBounds="0.515, 1.335, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7b21cc63-d7e6-4f88-b177-5217f3f393ce" absoluteBounds="0.5, 3.875, 2, 1.5715458170572916">
+      <DataClassMoniker Name="/DbBookContextDataContext/Products" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e68f1bf1-4b79-4772-a069-4ea129c615f7" absoluteBounds="0.51500000000000012, 4.335, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4062a8e0-db99-4600-82a8-fffe1717757c" absoluteBounds="5.375, 1.5, 2, 1.5715458170572916">
+      <DataClassMoniker Name="/DbBookContextDataContext/Streams" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e5a994a9-218b-4864-936b-65ba55197142" absoluteBounds="5.3900000000000006, 1.96, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="145daa23-c699-4361-b43a-fe87770545ef" absoluteBounds="3.125, 5, 2, 1.1895064290364583">
+      <DataClassMoniker Name="/DbBookContextDataContext/TextStreams" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e1ff2a6c-5a6b-4a1e-bc57-59aadfb2a915" absoluteBounds="3.14, 5.46, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

@@ -1,0 +1,19 @@
+[[standard-analyzer]]
+=== 标准分析器
+
+
+任何全文检索的字符串域都默认使用 `standard` 分析器。((("standard analyzer")))
+如果我们想要一个 <<custom-analyzers, `自定义` 分析器>> ，可以按照如下定义方式重新实现 `标准` 分析器：
+
+[role="pagebreak-before"]
+[source,js]
+--------------------------------------------------
+{
+    "type":      "custom",
+    "tokenizer": "standard",
+    "filter":  [ "lowercase", "stop" ]
+}
+--------------------------------------------------
+
+
+在 <<token-normalization>> （标准化词汇单元）和 <<stopwords>> （停用词）中，我们讨论了 `lowercase` （小写字母）和 `stop` （停用词） _词汇单元过滤器_ ，但是现在，我们专注于 `standard` _tokenizer_ （标准分词器）。

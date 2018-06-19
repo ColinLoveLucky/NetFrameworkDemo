@@ -1,0 +1,5 @@
+D:\FrameWork4.0TestDemo\Logstash\bin\Debug\Logstash.dll
+D:\FrameWork4.0TestDemo\Logstash\bin\Debug\Logstash.pdb
+D:\FrameWork4.0TestDemo\Logstash\obj\Debug\Logstash.dll
+D:\FrameWork4.0TestDemo\Logstash\obj\Debug\Logstash.pdb
+D:\FrameWork4.0TestDemo\Logstash\obj\Debug\ELKDEmo.csprojResolveAssemblyReference.cache

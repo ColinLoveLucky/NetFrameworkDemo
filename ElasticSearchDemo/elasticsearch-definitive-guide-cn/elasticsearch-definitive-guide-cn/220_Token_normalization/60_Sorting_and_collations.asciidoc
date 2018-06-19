@@ -1,0 +1,387 @@
+[[sorting-collations]]
+=== 排序和整理
+
+本章到目前为止，我们已经了解了怎么以搜索为目的去规范化词汇单元。 ((("tokens", "normalizing", "for sorting and collation"))) 本章节中要考虑的最终用例是字符串排序。 ((("sorting")))
+
+在 <<multi-fields>> （复数域）中，我们解释了 Elasticsearch  为什么不能在 `analyzed` （分析过）的字符串字段上排序，并演示了如何为同一个域创建 _复数域索引_ ，其中 `analyzed` 域用来搜索， `not_analyzed` 域用来排序。 ((("not_analyzed fields", "for string sorting")))((("analyzed fields", "for searh")))
+
+`analyzed` 域无法排序并不是因为使用了分析器，而是因为分析器将字符串拆分成了很多词汇单元，就像一个 _词汇袋_ ，所以 Elasticsearch 不知道使用那一个词汇单元排序。
+
+依赖于 `not_analyzed` 域来排序的话不是很灵活：这仅仅允许我们使用原始字符串这一确定的值排序。然而我们 _可以_ 使用分析器来实现另外一种排序规则，只要你选择的分析器总是为每个字符串输出有且仅有一个的词汇单元。
+
+[[case-insensitive-sorting]]
+==== 大小写敏感排序
+
+想象下我们有三个 `用户` 文档，文档的 `姓名` 域分别含有 `Boffey` 、((("case insensitive sorting")))((("sorting", "case insensitive"))) `BROWN` 和 `bailey` 。首先我们将使用在 <<multi-fields>> 中提到的技术，使用 `not_analyzed` 域来排序：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index
+{
+  "mappings": {
+    "user": {
+      "properties": {
+        "name": { <1>
+          "type": "string",
+          "fields": {
+            "raw": { <2>
+              "type":  "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+--------------------------------------------------
+<1>  `analyzed` `name` 域用来搜索。
+<2>  `not_analyzed` `name.raw` 域用来排序。
+
+我们可以索引一些文档用来测试排序：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index/user/1
+{ "name": "Boffey" }
+
+PUT /my_index/user/2
+{ "name": "BROWN" }
+
+PUT /my_index/user/3
+{ "name": "bailey" }
+
+GET /my_index/user/_search?sort=name.raw
+--------------------------------------------------
+
+运行这个搜索请求将会返回这样的文档排序： `BROWN` 、 `Boffey` 、 `bailey` 。 这个是 _词典排序_  ((("lexicographical order")))((("alphabetical order")))跟 _字符串排序_ 相反。基本上就是大写字母开头的字节要比小写字母开头的字节权重低，所以这些姓名是按照最低值优先排序。
+
+这可能对计算机是合理的，但是对人来说并不是那么合理，人们更期望这些姓名按照字母顺序排序，忽略大小写。为了实现这个，我们需要把每个姓名按照我们想要的排序的顺序索引。
+
+换句话来说，我们需要一个能输出单个小写词汇单元的分析器：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "case_insensitive_sort": {
+          "tokenizer": "keyword",    <1>
+          "filter":  [ "lowercase" ] <2>
+        }
+      }
+    }
+  }
+}
+--------------------------------------------------
+<1> `keyword` 分词器将输入的字符串原封不动的输出。 ((("keyword tokenizer")))
+<2> `lowercase` 分词过滤器将词汇单元转化为小写字母。
+
+使用 ((("lowercase token filter"))) `大小写不敏感排序` 分析器替换后，现在我们可以将其用在我们的复数域：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index/_mapping/user
+{
+  "properties": {
+    "name": {
+      "type": "string",
+      "fields": {
+        "lower_case_sort": { <1>
+          "type":     "string",
+          "analyzer": "case_insensitive_sort"
+        }
+      }
+    }
+  }
+}
+
+PUT /my_index/user/1
+{ "name": "Boffey" }
+
+PUT /my_index/user/2
+{ "name": "BROWN" }
+
+PUT /my_index/user/3
+{ "name": "bailey" }
+
+GET /my_index/user/_search?sort=name.lower_case_sort
+--------------------------------------------------
+
+<1> `name.lower_case_sort` 域将会为我们提供大小写不敏感排序。
+
+运行这个搜索请求会得到我们想要的文档排序： `bailey` 、 `Boffey` 、 `BROWN` 。
+
+但是这个顺序是正确的么？它符合我门的期望所以看起来像是正确的，
+但我们的期望可能受到这个事实的影响：这本书是英文的，我们的例子中使用的所有字母都属于到英语字母表。
+
+如果我们添加一个德语姓名 _Böhm_ 会怎样呢？
+
+现在我们的姓名会返回这样的排序： `bailey` 、 `Boffey` 、 `BROWN` 、 `Böhm` 。 `Böhm` 会排在 `BROWN` 后面的原因是这些单词依然是按照它们表现的字节值排序的。 `r` 所存储的字节为 `0x72` ，而 `ö` 存储的字节值为 `0xF6` ，所以 `Böhm` 排在最后。每个字符的字节值都是历史的意外。
+
+显然，默认排序顺序对于除简单英语之外的任何事物都是无意义的。事实上，没有完全“正确”的排序规则。这完全取决于你使用的语言。
+
+==== 语言之间的区别
+
+每门语言都有自己的排序规则，并且 ((("sorting", "differences between languages")))((("languages", "sort order, differences in"))) 有时候甚至有多种排序规则。 ((("Swedish, sort order")))((("German", "sort order")))((("English", "sort order"))) 这里有几个例子，我们前一小节中的四个名字在不同的上下文中是怎么排序的：
+
+* 英语：     `bailey` 、 `boffey` 、 `böhm` 、   `brown`
+
+* 德语：      `bailey` 、 `boffey` 、 `böhm` 、 `brown`
+
+* 德语电话簿：  `bailey` 、 `böhm` 、 `boffey` 、 `brown`
+
+* 瑞典语：          `bailey`, `boffey`, `brown`,  `böhm`
+
+[NOTE]
+====
+德语电话簿将 `böhm` 放在 `boffey` 的原因是 `ö` 和 `oe` 在处理名字和地点的时候会被看成同义词，所以 `böhm` 在排序时像是被写成了 `boehm` 。
+====
+
+[[uca]]
+==== Unicode 归类算法
+
+归类是将文本按预定义顺序排序的过程。 ((("collation")))((("Unicode Collation Algorithm (UCA)"))) _Unicode 归类算法_ 或称为 UCA （参见  http://www.unicode.org/reports/tr10/[_www.unicode.org/reports/tr10_] ） 定义了一种将字符串按照在归类单元表中定义的顺序排序的方法（通常称为排序规则）。
+
+UCA 还定义了 _默认 Unicode 排序规则元素表_ 或称为 _DUCET_ ， _DUCET_ 为无论任何语言的所有 Unicode 字符((("Default Unicode Collation Element Table (DUCET)")))定义了默认排序。如你所见，没有惟一一个正确的排序规则，所以 DUCET 让更少的人感到烦恼，且烦恼尽可能的小，但它还远不是解决所有排序烦恼的万能药。
+
+
+而且，明显几乎每种语言都有((("languages", "collations")))自己的排序规则。大多时候使用
+ DUCET 作为起点并且添加一些自定义规则用来处理每种语言的特性。
+
+UCA 将字符串和排序规则作为输入，并输出二进制排序键。
+将根据指定的排序规则对字符串集合进行排序转化为对其二进制排序键的简单比较。
+
+==== Unicode 排序
+
+[TIP]
+=================================================
+
+本节中描述的方法可能会在未来版本的((("Unicode", "sorting")))((("sorting", "Unicode"))) Elasticsearch 中更改。请查看 <<icu-plugin,`icu` plugin>> 文档的最新信息。
+
+=================================================
+
+`icu_collation` 分词过滤器默认使用 DUCET 排序规则。这已经是对默认排序的改进了。想要使用 `icu_collation` 我们仅需要创建一个使用默认 `icu_collation` 过滤器的分析器：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "ducet_sort": {
+          "tokenizer": "keyword",
+          "filter": [ "icu_collation" ] <1>
+        }
+      }
+    }
+  }
+}
+--------------------------------------------------
+<1> 使用默认 DUCET 归类。
+
+通常，我们想要排序的字段就是我们想要搜索的字段，
+因此我们使用与在 <<case-insensitive-sorting>> 中使用的相同的复数域方法：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index/_mapping/user
+{
+  "properties": {
+    "name": {
+      "type": "string",
+      "fields": {
+        "sort": {
+          "type": "string",
+          "analyzer": "ducet_sort"
+        }
+      }
+    }
+  }
+}
+--------------------------------------------------
+
+使用这个映射， `name.sort` 域将会含有一个仅用来排序的键。((("Default Unicode Collation Element Table (DUCET)")))((("Unicode Collation Algorithm (UCA)")))我们没有指定某种语言，所以它会默认会使用 <<uca,DUCET collation>> 。
+
+现在，我们可以重新索引我们的案例文档并测试排序：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index/user/_bulk
+{ "index": { "_id": 1 }}
+{ "name": "Boffey" }
+{ "index": { "_id": 2 }}
+{ "name": "BROWN" }
+{ "index": { "_id": 3 }}
+{ "name": "bailey" }
+{ "index": { "_id": 4 }}
+{ "name": "Böhm" }
+
+GET /my_index/user/_search?sort=name.sort
+--------------------------------------------------
+
+[NOTE]
+====
+注意，每个文档返回的 `sort` 键，在前面的例子中看起来像 `brown` 和 `böhm` ，现在看起来像天书： `ᖔ乏昫တ倈⠀\u0001` 。原因是 `icu_collat​​ion` 过滤器输出键
+仅用于有效分类，不用于任何其他目的。
+====
+
+运行这个搜索请求反问的文档排序为： `bailey` 、 `Boffey` 、 `Böhm` 、 `BROWN` 。这个排序对英语和德语来说都正确，这已经是一种进步，但是它对德语电话簿和瑞典语来说还不正确。下一步我们为不同的语言自定义映射。
+
+==== 指定语言
+
+可以为特定的语言配置((("icu_collation token filter", "specifying a language")))((("languages", "collation table for a specific language, icu_collation filter using")))使用归类表的 `icu_collation` 过滤器，例如一个国家特定版本的语言，或者像德语电话簿之类的子集。
+这个可以按照如下所示通过((("German", "collation table for, icu_collation filter using")))使用 `language` 、 `country` 、 和 `variant` 参数来创建自定义版本的分词过滤器：
+
+英语::
++
+[source,json]
+-------------------------
+{ "language": "en" }
+-------------------------
+
+德语::
++
+[source,json]
+-------------------------
+{ "language": "de" }
+-------------------------
+
+奥地利德语::
++
+[source,json]
+-------------------------
+{ "language": "de", "country": "AT" }
+-------------------------
+
+德语电话簿::
++
+[source,json]
+-------------------------
+{ "language": "de", "variant": "@collation=phonebook" }
+-------------------------
+
+[TIP]
+==================================================
+
+你可以在一下网址阅读更多的 ICU 本地支持：
+http://userguide.icu-project.org/locale.
+
+==================================================
+
+这个例子演示怎么创建德语电话簿排序规则：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index
+{
+  "settings": {
+    "number_of_shards": 1,
+    "analysis": {
+      "filter": {
+        "german_phonebook": { <1>
+          "type":     "icu_collation",
+          "language": "de",
+          "country":  "DE",
+          "variant":  "@collation=phonebook"
+        }
+      },
+      "analyzer": {
+        "german_phonebook": { <2>
+          "tokenizer": "keyword",
+          "filter":  [ "german_phonebook" ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "user": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "fields": {
+            "sort": { <3>
+              "type":     "string",
+              "analyzer": "german_phonebook"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+--------------------------------------------------
+<1> 首先我们为德语电话薄创建一个自定义版本的  `icu_collation` 。
+<2> 之后我们将其包装在自定义的分析器中。
+<3> 并且为我们的 `name.sort` 域配置它。
+
+像我们之前那样重新索引并重新搜索：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index/user/_bulk
+{ "index": { "_id": 1 }}
+{ "name": "Boffey" }
+{ "index": { "_id": 2 }}
+{ "name": "BROWN" }
+{ "index": { "_id": 3 }}
+{ "name": "bailey" }
+{ "index": { "_id": 4 }}
+{ "name": "Böhm" }
+
+GET /my_index/user/_search?sort=name.sort
+--------------------------------------------------
+
+现在返回的文档排序为： `bailey` 、 `Böhm` 、 `Boffey` 、 `BROWN` 。在德语电话簿归类中， `Böhm` 等同于 `Boehm` ，所以排在 `Boffey` 前面。
+
+===== 多排序规则
+
+每种语言都可以使用复数域((("sorting", "multiple sort orders supported by same field")))来支持对同一个域进行多规则排序：
+
+[source,js]
+--------------------------------------------------
+PUT /my_index/_mapping/_user
+{
+  "properties": {
+    "name": {
+      "type": "string",
+      "fields": {
+        "default": {
+          "type":     "string",
+          "analyzer": "ducet" <1>
+        },
+        "french": {
+          "type":     "string",
+          "analyzer": "french" <1>
+        },
+        "german": {
+          "type":     "string",
+          "analyzer": "german_phonebook" <1>
+        },
+        "swedish": {
+          "type":     "string",
+          "analyzer": "swedish" <1>
+        }
+      }
+    }
+  }
+}
+--------------------------------------------------
+<1> 我们需要为每个排序规则创建相应的分析器。
+
+使用这个映射，只要按照 `name.french` 、  `name.german` 或 `name.swedish` 域排序，就可以为法语、德语和瑞典语用户正确的排序结果了。不支持的语言可以回退到使用 `name.default` 域，它使用 DUCET 排序顺序。
+
+==== 自定义排序
+
+`icu_collation` 分词过滤器提供很多((("collation", "customizing collations")))((("icu_collation token filter", "customizing collations")))选项，不止 `language` 、 `country` 、和 `variant` ，这些选项可以用于定制排序算法。可用的选项有以下作用：
+
+* 忽略变音符号
+* 顺序大写排先或排后，或忽略大小写
+* 考虑或忽略标点符号和空白
+* 将数字按字符串或数字值排序
+* 自定义现有归类或定义自己的归类
+
+这些选项的详细信息超出了本书的范围，更多的信息可以查询 https://github.com/elasticsearch/elasticsearch-analysis-icu[ICU plug-in documentation] 和 http://userguide.icu-project.org/collation/concepts[ICU project collation documentation] 。

@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+<h2>Before PartialView</h2>
+<hr />
+@Html.Partial("_partialPage", "zhangsan")
+<hr />
+@{
+    Html.RenderPartial("_partialPage", "lisi");
+}
+<hr />
+<h2>After PartialView</h2>
+
+
+@{
+    Layout = null;
+}
+<h2>Before PartialView</h2>
+<hr />
+@Html.Action("ChildAction", new { time = DateTime.Now })
+<hr />
+@{
+    Html.RenderAction("ChildAction", new { time = DateTime.Now.AddHours(12) });
+}
+<hr />
+<h2>After PartialView</h2> 

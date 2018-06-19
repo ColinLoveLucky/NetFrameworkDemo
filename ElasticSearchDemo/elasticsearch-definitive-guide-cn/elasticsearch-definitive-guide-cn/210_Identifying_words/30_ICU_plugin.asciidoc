@@ -1,0 +1,33 @@
+[[icu-plugin]]
+=== 安装 ICU 插件
+
+
+Elasticsearch的 https://github.com/elasticsearch/elasticsearch-analysis-icu[ICU 分析器插件] 使用 _国际化组件 Unicode_ (ICU) 函数库（详情查看 http://site.icu-project.org[site.project.org] ）提供丰富的处理 Unicode 工具。
+这些包含对处理亚洲语言特别有用的 `icu_分词器` ，还有大量对除英语外其他语言进行正确匹配和排序所必须的分词过滤器。
+
+[NOTE]
+==================================================
+
+ICU 插件是处理英语之外语言的必需工具，非常推荐你安装并使用它，不幸的是，因为是基于额外的 ICU 函数库，
+不同版本的ICU插件可能并不兼容之前的版本，当更新插件的时候，你需要重新索引你的数据。
+
+==================================================
+
+
+安装这个插件，第一步先关掉你的Elasticsearch节点，然后在Elasticsearch的主目录运行以下命令：
+
+[source,sh]
+--------------------------------------------------
+./bin/plugin -install elasticsearch/elasticsearch-analysis-icu/$VERSION <1>
+--------------------------------------------------
+
+<1> 当前 `$VERSION` （版本）可以在以下地址找到
+    _https://github.com/elasticsearch/elasticsearch-analysis-icu_.
+
+
+一旦安装后，重启Elasticsearch，你将会看到类似如下的一条启动日志：
+
+
+    [INFO][plugins] [Mysterio] loaded [marvel, analysis-icu], sites [marvel]
+
+如果你有很多节点并以集群方式运行的，你需要在集群的每个节点都安装这个插件。

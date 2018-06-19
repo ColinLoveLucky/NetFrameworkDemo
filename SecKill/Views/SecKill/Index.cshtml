@@ -1,0 +1,68 @@
+﻿
+@{
+	ViewBag.Title = "Index";
+}
+@using SecKill.domain
+
+<h2>Start SecKill</h2>
+
+<form>
+	<table cellpadding="0" cellspacing="0" border="1" style="text-align:center;line-height:30px;">
+		<tr>
+			<td width="100px">
+				Name
+			</td>
+			<td width="100px">
+				Price
+			</td>
+			<td width="200px">
+				StartTime
+			</td>
+			<td width="200px">
+				EndTime
+			</td>
+			<td width="100px">
+				Operation
+			</td>
+		</tr>
+		@{
+			foreach (Stock item in ViewBag.Stock)
+			{
+				<tr>
+					<td>
+						@item.ProductName
+					</td>
+					<td>
+						@item.SecKillPrice
+					</td>
+					<td>
+						@item.StartTime
+					</td>
+					<td>
+						@item.EndTime
+					</td>
+					<td>
+						<input type="button" value="Start" id="btnStart" />
+					</td>
+				</tr>
+			}
+		}
+	</table>
+</form>
+
+
+@section Scripts{
+	<script>
+		$(function () {
+			$("#btnStart").click(function () {
+				$.post("/SecKill/StartKill", {},
+					function (response) {
+						alert(response.Data);
+					});
+			});
+		});
+	</script>
+}
+
+
+

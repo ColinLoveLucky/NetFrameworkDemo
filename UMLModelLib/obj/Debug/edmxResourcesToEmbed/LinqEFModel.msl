@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="LinqToEntityDbModelStoreContainer" CdmEntityContainer="LinqToEntityDbEntities1">
+    <EntitySetMapping Name="C__MigrationHistory">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.C__MigrationHistory">
+        <MappingFragment StoreEntitySet="__MigrationHistory">
+          <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+          <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="blogs">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.blogs">
+        <MappingFragment StoreEntitySet="blogs">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="course">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.course">
+        <MappingFragment StoreEntitySet="course">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="department">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.department">
+        <MappingFragment StoreEntitySet="department">
+          <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+          <ScalarProperty Name="Budget" ColumnName="Budget" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="employee">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.employee">
+        <MappingFragment StoreEntitySet="employee">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="instructor">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.instructor">
+        <MappingFragment StoreEntitySet="instructor">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Lodgings">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.Lodgings">
+        <MappingFragment StoreEntitySet="Lodgings">
+          <ScalarProperty Name="LodgingId" ColumnName="LodgingId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Owner" ColumnName="Owner" />
+          <ScalarProperty Name="Activities" ColumnName="Activities" />
+          <ScalarProperty Name="Entertainment" ColumnName="Entertainment" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="manager">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.manager">
+        <MappingFragment StoreEntitySet="manager">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SectionManaged" ColumnName="SectionManaged" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="person">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.person">
+        <MappingFragment StoreEntitySet="person">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="posts">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.posts">
+        <MappingFragment StoreEntitySet="posts">
+          <ScalarProperty Name="PostId" ColumnName="PostId" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="Blog_Id" ColumnName="Blog_Id" />
+          <ScalarProperty Name="UpdatedBy_Id" ColumnName="UpdatedBy_Id" />
+          <ScalarProperty Name="CreatedBy_Id" ColumnName="CreatedBy_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="product">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.product">
+        <MappingFragment StoreEntitySet="product">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="productDate" ColumnName="productDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="product_category">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.product_category">
+        <MappingFragment StoreEntitySet="product_category">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="university">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.university">
+        <MappingFragment StoreEntitySet="university">
+          <ScalarProperty Name="UniversityID" ColumnName="UniversityID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OnLineCourse">
+      <EntityTypeMapping TypeName="LinqToEntityDbModel.OnLineCourse">
+        <MappingFragment StoreEntitySet="OnLineCourse">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="CourseDetails_Time" ColumnName="CourseDetails_Time" />
+          <ScalarProperty Name="CourseDetails_Location" ColumnName="CourseDetails_Location" />
+          <ScalarProperty Name="CourseDetails_Days" ColumnName="CourseDetails_Days" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="InstructorCourses" TypeName="LinqToEntityDbModel.InstructorCourses" StoreEntitySet="InstructorCourses">
+      <EndProperty Name="course">
+        <ScalarProperty Name="Id" ColumnName="InstructorID" />
+      </EndProperty>
+      <EndProperty Name="instructor">
+        <ScalarProperty Name="Id" ColumnName="CourseID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <FunctionImportMapping FunctionImportName="DeleteBlogs" FunctionName="LinqToEntityDbModel.Store.DeleteBlogs" />
+    <FunctionImportMapping FunctionImportName="GetAandB" FunctionName="LinqToEntityDbModel.Store.GetAandB">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="LinqToEntityDbModel.GetAandB_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetAllBlogsAndPosts" FunctionName="LinqToEntityDbModel.Store.GetAllBlogsAndPosts">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="LinqToEntityDbModel.GetAllBlogsAndPosts_Result">
+          <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetAllBologsandCourse" FunctionName="LinqToEntityDbModel.Store.GetAllBologsandCourse">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="LinqToEntityDbModel.GetAllBologsandCourse_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="InsertBlogs" FunctionName="LinqToEntityDbModel.Store.InsertBlogs" />
+    <FunctionImportMapping FunctionImportName="SQuery" FunctionName="LinqToEntityDbModel.Store.SQuery">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="LinqToEntityDbModel.SQuery_Result">
+          <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="updateBlogs" FunctionName="LinqToEntityDbModel.Store.updateBlogs" />
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,110 @@
+[[geo-distance-agg]]
+=== 地理距离聚合
+
+`geo_distance` 聚合 ((("geo_distance aggregation")))((("aggregations", "geo_distance")))对一些搜索非常有用，例如找到所有距离我 1km 以内的披萨店。搜索结果应该也的确被限制在用户指定 1km 范围内，但是我们可以添加在 2km 范围内找到的其他结果：
+
+[source,json]
+----------------------------
+GET /attractions/restaurant/_search
+{
+  "query": {
+    "bool": {
+      "must": {
+        "match": { <1>
+          "name": "pizza"
+        }
+      },
+      "filter": {
+        "geo_bounding_box": {
+          "location": { <2>
+            "top_left": {
+              "lat":  40.8,
+              "lon": -74.1
+            },
+            "bottom_right": {
+              "lat":  40.4,
+              "lon": -73.7
+            }
+          }
+        }
+      }
+    }
+  },
+  "aggs": {
+    "per_ring": {
+      "geo_distance": { <3>
+        "field":    "location",
+        "unit":     "km",
+        "origin": {
+          "lat":    40.712,
+          "lon":   -73.988
+        },
+        "ranges": [
+          { "from": 0, "to": 1 },
+          { "from": 1, "to": 2 }
+        ]
+      }
+    }
+  },
+  "post_filter": { <4>
+    "geo_distance": {
+      "distance":   "1km",
+      "location": {
+        "lat":      40.712,
+        "lon":     -73.988
+      }
+    }
+  }
+}
+----------------------------
+<1> 主查询查找名称中含有 `pizza` 的饭店。
+<2> `geo_bounding_box` 筛选那些只在纽约区域的结果。
+<3> `geo_distance` 聚合统计距离用户 1km 以内，1km 到 2km 的结果的数量。
+<4> 最后，`post_filter` 将结果缩小至那些在用户 1km 范围内的饭店。
+
+前面的请求 ((("post filter", "geo_distance aggregation"))) 响应如下：
+
+[source,json]
+----------------------------
+"hits": {
+  "total":     1,
+  "max_score": 0.15342641,
+  "hits": [ <1>
+     {
+        "_index": "attractions",
+        "_type":  "restaurant",
+        "_id":    "3",
+        "_score": 0.15342641,
+        "_source": {
+           "name": "Mini Munchies Pizza",
+           "location": [
+              -73.983,
+              40.719
+           ]
+        }
+     }
+  ]
+},
+"aggregations": {
+  "per_ring": { <2>
+     "buckets": [
+        {
+           "key":       "*-1.0",
+           "from":      0,
+           "to":        1,
+           "doc_count": 1
+        },
+        {
+           "key":       "1.0-2.0",
+           "from":      1,
+           "to":        2,
+           "doc_count": 1
+        }
+     ]
+  }
+}
+----------------------------
+<1> `post_filter` 已经将搜索结果缩小至仅在用户 1km 范围以内的披萨店。   
+<2> 聚合包括搜索结果加上其他在用户 2km 范围以内的披萨店。
+
+在这个例子中，我们计算了落在每个同心环内的饭店数量。当然，我们可以在 `per_rings` 聚合下面嵌套子聚合来计算每个环的平均价格、最受欢迎程度，等等。

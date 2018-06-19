@@ -1,0 +1,14 @@
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\bin\Release\EntityFrameWorkInfrans.dll.config
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\bin\Release\EntityFrameWorkInfrans.dll
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\bin\Release\EntityFrameWorkInfrans.pdb
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\bin\Release\EntityFramework.dll
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\bin\Release\EntityFramework.SqlServer.dll
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\bin\Release\EntityFramework.xml
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\bin\Release\EntityFramework.SqlServer.xml
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\bin\Release\zh-Hans\EntityFramework.resources.dll
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\bin\Release\zh-Hans\EntityFramework.SqlServer.resources.dll
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\obj\Release\EntityFrameWorkInfrans.Migrations.initaldatabase.resources
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\obj\Release\EntityFrameWorkInfrans.csproj.GenerateResource.Cache
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\obj\Release\EntityFrameWorkInfrans.dll
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\obj\Release\EntityFrameWorkInfrans.pdb
+D:\FrameWork4.0TestDemo\EntityFrameWorkInfrans\obj\Release\EntityFrameWorkInfrans.csprojResolveAssemblyReference.cache

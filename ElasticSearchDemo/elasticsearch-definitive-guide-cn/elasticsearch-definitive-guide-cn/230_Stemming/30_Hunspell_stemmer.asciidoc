@@ -1,0 +1,215 @@
+[[hunspell]]
+=== Hunspell 词干提取器
+
+Elasticsearch 提供了基于词典提取词干的
+((("dictionary stemmers", "Hunspell stemmer")))((("stemming words", "dictionary stemmers", "Hunspell stemmer")))
+{ref}/analysis-hunspell-tokenfilter.html[`hunspell` 语汇单元过滤器（token filter）].
+Hunspell http://hunspell.github.io/[_hunspell.github.io_] 是一个 Open Office、LibreOffice、Chrome、Firefox、Thunderbird 等众多其它开源项目都在使用的拼写检查器。
+
+可以从这里获取 Hunspell 词典((("Hunspell stemmer", "obtaining a Hunspell dictionary"))) ：
+
+* http://extensions.openoffice.org/[_extensions.openoffice.org_]: 下载解压 `.oxt` 后缀的文件。
+* http://mzl.la/157UORf[_addons.mozilla.org_]: 下载解压 `.xpi` 扩展文件。
+* http://download.services.openoffice.org/contrib/dictionaries/[OpenOffice archive]: 下载解压 `.zip` 文件。
+
+一个 Hunspell 词典由两个文件组成 -- 具有相同的文件名和两个不同的后缀 -- 如
+`en_US`&#x2014;和下面的两个后缀的其中一个：
+
+`.dic`::
+
+    包含所有词根，采用字母顺序，再加上一个代表所有可能前缀和后缀的代码表 【集体称之为词缀( _affixes_ 】
+
+`.aff`::
+
+    包含实际 `.dic` 文件每一行代码表对应的前缀和后缀转换
+
+==== 安装一个词典
+
+Hunspell 语汇单元过滤器((("Hunspell stemmer", "installing a dictionary")))在特定的 Hunspell 目录里寻找词典，
+默认目录是 `./config/hunspell/` 。 `.dic` 文件和 `.aff` 文件应该要以子目录且按语言/区域的方式来命名。
+例如，我们可以为美式英语创建一个 Hunspell 词干提取器，目录结构如下：
+
+[source,text]
+------------------------------------------------
+config/
+  └ hunspell/ <1>
+      └ en_US/ <2>
+          ├ en_US.dic
+          ├ en_US.aff
+          └ settings.yml <3>
+------------------------------------------------
+<1> Hunspell 目录位置可以通过编辑 `config/elasticsearch.yml` 文件的：
+    `indices.analysis.hunspell.dictionary.location` 设置来修改。
+<2> `en_US` 是这个区域的名字，也是我们传给 `hunspell` 语汇单元过滤器参数 `language` 值。
+<3> 一个语言一个设置文件，下面的章节会具体介绍。
+
+==== 按语言设置
+
+在语言的目录设置文件 `settings.yml` 包含适用于所有字典内的语言目录的设置选项。((("Hunspell stemmer", "per-language settings")))
+
+[source,yaml]
+-------------------------
+---
+ignore_case:          true
+strict_affix_parsing: true
+
+-------------------------
+
+这些选项的意思如下：
+
+`ignore_case`::
++
+--
+
+Hunspell 目录默认是区分大小写的，如，姓氏 `Booker` 和名词 `booker` 是不同的词，所以应该分别进行词干提取。
+也许让 `hunspell` 提取器区分大小写是一个好主意，不过也可能让事情变得复杂：((("Hunspell stemmer", "using in case insensitive mode")))
+
+* 一个句子的第一个词可能会被大写，因此感觉上会像是一个名词。
+* 输入的文本可能全是大写，如果这样那几乎一个词都找不到。
+* 用户也许会用小写来搜索名字，在这种情况下，大写开头的词将找不到。
+
+一般来说，设置参数 `ignore_case` 为 `true` 是一个好主意。
+
+--
+
+`strict_affix_parsing`::
+
+词典的质量千差万别。((("Hunspell stemmer", "strict_affix_parsing"))) 一些网上的词典的 `.aff` 文件有很多畸形的规则。
+默认情况下，如果 Lucene 不能正常解析一个词缀(affix)规则， 它会抛出一个异常。
+你可以通过设置 `strict_affix_parsing` 为 `false` 来告诉 Lucene 忽略错误的规则。((("strict_affix_parsing")))
+
+.自定义词典
+***********************************************
+如果一个目录放置了多个词典 (`.dic` 文件)， ((("Hunspell stemmer", "custom dictionaries")))
+他们会在加载时合并到一起。这可以让你以自定义的词典的方式对下载的词典进行定制：
+
+[source,text]
+------------------------------------------------
+config/
+  └ hunspell/
+      └ en_US/  <1>
+          ├ en_US.dic
+          ├ en_US.aff <2>
+          ├ custom.dic
+          └ settings.yml
+------------------------------------------------
+<1> `custom` 词典和 `en_US` 词典将合并到一起。
+<2> 多个 `.aff` 文件是不允许的，因为会产生规则冲突。
+
+`.dic` 文件和 `.aff` 文件的格式在这里讨论：
+<<hunspell-dictionary-format>> 。
+
+***********************************************
+
+==== 创建一个 Hunspell 语汇单元过滤器
+
+一旦你在所有节点上安装好了词典，你就能像这样定义一个 `hunspell` 语汇单元过滤器((("Hunspell stemmer", "creating a hunspell token filter")))：
+
+[source,json]
+------------------------------------------------
+PUT /my_index
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "en_US": {
+          "type":     "hunspell",
+          "language": "en_US" <1>
+        }
+      },
+      "analyzer": {
+        "en_US": {
+          "tokenizer":  "standard",
+          "filter":   [ "lowercase", "en_US" ]
+        }
+      }
+    }
+  }
+}
+------------------------------------------------
+<1> 参数 `language` 和目录下对应的名称相同。
+
+你可以通过 `analyze` API 来测试这个新的分析器，
+然后和 `english` 分析器比较一下它们的输出：
+
+[source,json]
+------------------------------------------------
+GET /my_index/_analyze?analyzer=en_US <1>
+reorganizes
+
+GET /_analyze?analyzer=english <2>
+reorganizes
+------------------------------------------------
+<1> 返回 `organize`
+<2> 返回 `reorgan`
+
+在前面的例子中，`hunspell` 提取器有一个有意思的事情，它不仅能移除前缀还能移除后缀。大多数算法词干提取仅能移除后缀。
+
+[TIP]
+==================================================
+
+Hunspell 词典会占用几兆的内存。幸运的是，Elasticsearch 每个节点只会创建一个词典的单例。
+所有的分片都会使用这个相同的 Hunspell 分析器。
+
+==================================================
+
+[[hunspell-dictionary-format]]
+==== Hunspell 词典格式
+
+尽管使用 `hunspell` 不必了解 Hunspell 词典的格式， ((("Hunspell stemmer", "Hunspell dictionary format")))
+不过了解格式可以帮助我们编写自己的自定义的词典。其实很简单。
+
+例如，在美式英语词典（US English dictionary），`en_US.dic` 文件包含了一个包含词 `analyze` 的实体，看起来如下：
+
+[source,text]
+-----------------------------------
+analyze/ADSG
+-----------------------------------
+
+`en_US.aff` 文件包含了一个针对标记 `A` 、 `G` 、`D` 和 `S` 的前后缀的规则。
+其中应该只有一个能匹配，每一个规则的格式如下：
+
+[source,text]
+-----------------------------------
+[type] [flag] [letters to remove] [letters to add] [condition]
+-----------------------------------
+
+例如，下面的后缀 (`SFX`) 规则 `D` 。它是说，当一个词由一个辅音 (除了 `a` 、`e` 、`i` 、`o` 或 `u` 外的任意音节)
+ 后接一个 `y` ，那么它可以移除 `y` 和添加 `ied` 结尾 （如，`ready` -> `readied` ）。
+
+[source,text]
+-----------------------------------
+SFX    D      y   ied  [^aeiou]y
+-----------------------------------
+
+前面提到的 `A` 、 `G` 、`D` 和 `S` 标记对应规则如下：
+
+[source,text]
+-----------------------------------
+SFX D Y 4
+SFX D   0     d          e <1>
+SFX D   y     ied        [^aeiou]y
+SFX D   0     ed         [^ey]
+SFX D   0     ed         [aeiou]y
+
+SFX S Y 4
+SFX S   y     ies        [^aeiou]y
+SFX S   0     s          [aeiou]y
+SFX S   0     es         [sxzh]
+SFX S   0     s          [^sxzhy] <2>
+
+SFX G Y 2
+SFX G   e     ing        e <3>
+SFX G   0     ing        [^e]
+
+PFX A Y 1
+PFX A   0     re         . <4>
+-----------------------------------
+<1> `analyze` 以一个 `e` 结尾，所以它可以添加一个 `d` 变成 `analyzed` 。
+<2> `analyze` 不是由 `s` 、`x` 、`z` 、`h` 或 `y` 结尾，所以，它可以添加一个 `s` 变成 `analyzes` 。
+<3> `analyze` 以一个 `e` 结尾，所以，它可以移除 `e` 和添加 `ing` 然后变成 `analyzing` 。
+
+<4> 可以添加前缀 `re` 来形成 `reanalyze` 。这个规则可以组合后缀规则一起形成： `reanalyzes` 、`reanalyzed` 、
+    `reanalyzing` 。
+
+了解更多关于 Hunspell 的语法，可以前往 http://sourceforge.net/projects/hunspell/files/Hunspell/Documentation/[Hunspell 文档] 。

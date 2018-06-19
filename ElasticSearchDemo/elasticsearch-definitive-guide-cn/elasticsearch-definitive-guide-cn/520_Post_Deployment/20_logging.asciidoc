@@ -1,0 +1,67 @@
+[[logging]]
+=== 日志记录
+
+Elasticsearch 会输出很多日志，都放在 `ES_HOME/logs` 目录下。默认的日志记录等级是 `INFO` 。((("post-deployment", "logging")))((("logging", "Elasticsearch logging")))它提供了适度的信息，但是又设计好了不至于让你的日志太过庞大。
+
+当调试问题的时候，特别是节点发现相关的问题（因为这个经常依赖于各式过于繁琐的网络配置），提高日志记录等级到 `DEBUG` 是很有帮助的。
+
+你 _可以_ 修改 `logging.yml` 文件然后重启你的节点——但是这样做即繁琐还会导致不必要的宕机时间。作为替代，你可以通过 `cluster-settings` API 更新日志记录级别((("Cluster Settings API, updating logging levels")))，就像我们前面刚学过的那样。
+
+要实现这个更新，选择你感兴趣的日志器，然后在前面补上 `logger.` 。对根日志器你可以用 `logger._root` 来表示。
+
+让我们调高节点发现的日志记录级别：
+
+[source,js]
+----
+PUT /_cluster/settings
+{
+    "transient" : {
+        "logger.discovery" : "DEBUG"
+    }
+}
+----
+
+设置失效，Elasticsearch 将开始输出 `discovery` 模块的 `DEBUG` 级别的日志。
+
+TIP: 避免使用 `TRACE` 。这个级别非常的详细，详细到日志反而不再有用了。
+
+[[slowlog]]
+==== 慢日志
+
+还有另一个日志叫 _慢日志_ 。这个日志的目的((("Slowlog")))是捕获那些超过指定时间阈值的查询和索引请求。这个日志用来追踪由用户产生的很慢的请求很有用。
+
+默认情况，慢日志是不开启的。要开启它，需要定义具体动作（query，fetch 还是 index），你期望的事件记录等级（ `WARN` 、 `DEBUG` 等），以及时间阈值。
+
+这是一个索引级别的设置，也就是说可以独立应用给单个索引：
+
+[source,js]
+----
+PUT /my_index/_settings
+{
+    "index.search.slowlog.threshold.query.warn" : "10s", <1>
+    "index.search.slowlog.threshold.fetch.debug": "500ms", <2>
+    "index.indexing.slowlog.threshold.index.info": "5s" <3>
+}
+----
+<1> 查询慢于 10 秒输出一个 `WARN` 日志。
+<2> 获取慢于 500 毫秒输出一个 `DEBUG` 日志。
+<3> 索引慢于 5 秒输出一个 `INFO` 日志。
+
+你也可以在 `elasticsearch.yml` 文件里定义这些阈值。没有阈值设置的索引会自动继承在静态配置文件里配置的参数。
+
+一旦阈值设置过了，你可以和其他日志器一样切换日志记录等级：
+
+[source,js]
+----
+PUT /_cluster/settings
+{
+    "transient" : {
+        "logger.index.search.slowlog" : "DEBUG", <1>
+        "logger.index.indexing.slowlog" : "WARN" <2>
+    }
+}
+----
+<1> 设置搜索慢日志为 `DEBUG` 级别。
+<2> 设置索引慢日志为 `WARN` 级别。
+
+

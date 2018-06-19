@@ -1,0 +1,35 @@
+[[root-object]]
+=== 根对象
+
+映射的最高一层被称为((("mapping (types)", "root object")))((("root object"))) _根对象_ ，它可能包含下面几项：
+
+* 一个 _properties_ 节点，列出了文档中可能包含的每个字段的映射
+
+* 各种元数据字段，它们都以一个下划线开头，例如 `_type` 、 `_id` 和 `_source`
+
+* 设置项，控制如何动态处理新的字段，例如 `analyzer` 、 `dynamic_date_formats` 和
+  `dynamic_templates`
+
+* 其他设置，可以同时应用在根对象和其他 `object` 类型的字段上，例如 `enabled` 、 `dynamic` 和 `include_in_all`
+
+==== 属性
+
+我们已经在 <<core-fields>> 和 <<complex-core-fields>> 章节中介绍过文档字段和属性的三个((("root object", "properties")))((("properties", "important settings")))最重要的设置：
+
+ `type`::
+   字段的数据类型，例如 `string` 或 `date`
+
+ `index`::
+   字段是否应当被当成全文来搜索（ `analyzed` ），或被当成一个准确的值（ `not_analyzed` ），还是完全不可被搜索（ `no` ）
+
+ `analyzer`::
+   确定在索引和搜索时全文字段使用的 `analyzer`
+
+
+我们将在本书的后续部分讨论其他字段类型，例如 `ip` 、 `geo_point` 和 `geo_shape` 。
+
+include::31_Metadata_source.asciidoc[]
+
+include::32_Metadata_all.asciidoc[]
+
+include::33_Metadata_ID.asciidoc[]

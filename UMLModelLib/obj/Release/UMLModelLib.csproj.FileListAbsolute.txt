@@ -1,0 +1,11 @@
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Release\UMLModelLib.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Release\UMLModelLib.pdb
+D:\FrameWork4.0TestDemo\UMLModelLib\obj\Release\UMLModelLib.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\obj\Release\UMLModelLib.pdb
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Release\UMLModelLib.dll.config
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Release\EntityFramework.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Release\EntityFramework.SqlServer.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Release\EntityFramework.xml
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Release\EntityFramework.SqlServer.xml
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Release\zh-Hans\EntityFramework.resources.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Release\zh-Hans\EntityFramework.SqlServer.resources.dll

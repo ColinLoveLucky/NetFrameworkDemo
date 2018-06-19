@@ -1,0 +1,778 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="LinqToEntityDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="blogs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="ChinaPerson">
+          <Key>
+            <PropertyRef Name="PersonId" />
+          </Key>
+          <Property Name="PersonId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="ChinaPersonInfo">
+          <Key>
+            <PropertyRef Name="PersonId" />
+          </Key>
+          <Property Name="PersonId" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="course">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Budget" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Name" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="instructor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="InstructorCourses">
+          <Key>
+            <PropertyRef Name="CourseID" />
+            <PropertyRef Name="InstructorID" />
+          </Key>
+          <Property Name="CourseID" Type="int" Nullable="false" />
+          <Property Name="InstructorID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lodgings">
+          <Key>
+            <PropertyRef Name="LodgingId" />
+          </Key>
+          <Property Name="LodgingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+          <Property Name="Owner" Type="nvarchar" MaxLength="250" />
+          <Property Name="Activities" Type="nvarchar" MaxLength="250" />
+          <Property Name="Entertainment" Type="nvarchar" MaxLength="250" />
+          <Property Name="Discriminator" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="manager">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="SectionManaged" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="person">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="posts">
+          <Key>
+            <PropertyRef Name="PostId" />
+          </Key>
+          <Property Name="PostId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="250" />
+          <Property Name="Content" Type="nvarchar" MaxLength="250" />
+          <Property Name="Blog_Id" Type="int" />
+          <Property Name="UpdatedBy_Id" Type="int" />
+          <Property Name="CreatedBy_Id" Type="int" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="productDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="product_category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="university">
+          <Key>
+            <PropertyRef Name="UniversityID" />
+          </Key>
+          <Property Name="UniversityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+          <Property Name="Location" Type="geography" />
+        </EntityType>
+        <Association Name="FK_ModelOne_InstructorCourses_ModelOne_course_InstructorID">
+          <End Role="course" Type="Self.course" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InstructorCourses" Type="Self.InstructorCourses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="course">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InstructorCourses">
+              <PropertyRef Name="InstructorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelOne_InstructorCourses_ModelOne_instructor_CourseID">
+          <End Role="instructor" Type="Self.instructor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InstructorCourses" Type="Self.InstructorCourses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instructor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InstructorCourses">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelOne_manager_ModelOne_employee_Id">
+          <End Role="employee" Type="Self.employee" Multiplicity="1" />
+          <End Role="manager" Type="Self.manager" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="manager">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId">
+          <End Role="blogs" Type="Self.blogs" Multiplicity="0..1" />
+          <End Role="posts" Type="Self.posts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="blogs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="posts">
+              <PropertyRef Name="Blog_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelOne_posts_ModelOne_person_CreatedBy_Id">
+          <End Role="person" Type="Self.person" Multiplicity="0..1" />
+          <End Role="posts" Type="Self.posts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="posts">
+              <PropertyRef Name="CreatedBy_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id">
+          <End Role="person" Type="Self.person" Multiplicity="0..1" />
+          <End Role="posts" Type="Self.posts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="posts">
+              <PropertyRef Name="UpdatedBy_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Person_PersonInfo">
+          <End Role="ChinaPerson" Type="Self.ChinaPerson" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ChinaPersonInfo" Type="Self.ChinaPersonInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ChinaPerson">
+              <PropertyRef Name="PersonId" />
+            </Principal>
+            <Dependent Role="ChinaPersonInfo">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="DeleteBlogs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ModelOne">
+          <Parameter Name="blogId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetAandB" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ModelOne" />
+        <Function Name="GetAllBlogsAndPosts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ModelOne" />
+        <Function Name="GetAllBologsandCourse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ModelOne" />
+        <Function Name="GetCourse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="ModelOne">
+          <Parameter Name="CourseID" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Id" Type="int" Nullable="false" />
+                <Property Name="Name" Type="nvarchar" MaxLength="250" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="InsertBlogs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ModelOne">
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SQuery" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ModelOne">
+          <Parameter Name="count" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="updateBlogs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ModelOne">
+          <Parameter Name="blogId" Type="int" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="LinqToEntityDbModelStoreContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="blogs" EntityType="Self.blogs" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="ChinaPerson" EntityType="Self.ChinaPerson" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="ChinaPersonInfo" EntityType="Self.ChinaPersonInfo" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="course" EntityType="Self.course" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="department" EntityType="Self.department" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="employee" EntityType="Self.employee" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="instructor" EntityType="Self.instructor" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="InstructorCourses" EntityType="Self.InstructorCourses" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="Lodgings" EntityType="Self.Lodgings" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="manager" EntityType="Self.manager" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="person" EntityType="Self.person" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="posts" EntityType="Self.posts" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="product" EntityType="Self.product" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="product_category" EntityType="Self.product_category" Schema="ModelOne" store:Type="Tables" />
+          <EntitySet Name="university" EntityType="Self.university" Schema="ModelOne" store:Type="Tables" />
+          <AssociationSet Name="FK_ModelOne_InstructorCourses_ModelOne_course_InstructorID" Association="Self.FK_ModelOne_InstructorCourses_ModelOne_course_InstructorID">
+            <End Role="course" EntitySet="course" />
+            <End Role="InstructorCourses" EntitySet="InstructorCourses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelOne_InstructorCourses_ModelOne_instructor_CourseID" Association="Self.FK_ModelOne_InstructorCourses_ModelOne_instructor_CourseID">
+            <End Role="instructor" EntitySet="instructor" />
+            <End Role="InstructorCourses" EntitySet="InstructorCourses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelOne_manager_ModelOne_employee_Id" Association="Self.FK_ModelOne_manager_ModelOne_employee_Id">
+            <End Role="employee" EntitySet="employee" />
+            <End Role="manager" EntitySet="manager" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId" Association="Self.FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId">
+            <End Role="blogs" EntitySet="blogs" />
+            <End Role="posts" EntitySet="posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelOne_posts_ModelOne_person_CreatedBy_Id" Association="Self.FK_ModelOne_posts_ModelOne_person_CreatedBy_Id">
+            <End Role="person" EntitySet="person" />
+            <End Role="posts" EntitySet="posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id" Association="Self.FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id">
+            <End Role="person" EntitySet="person" />
+            <End Role="posts" EntitySet="posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Person_PersonInfo" Association="Self.FK_Person_PersonInfo">
+            <End Role="ChinaPerson" EntitySet="ChinaPerson" />
+            <End Role="ChinaPersonInfo" EntitySet="ChinaPersonInfo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LinqToEntityDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="blog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="posts" Relationship="Self.FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId" FromRole="blogs" ToRole="posts" />
+        </EntityType>
+        <EntityType Name="course">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="instructors" Relationship="Self.InstructorCourses" FromRole="course" ToRole="instructor" />
+        </EntityType>
+        <EntityType Name="department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Budget" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Name" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="manager" Relationship="Self.FK_ModelOne_manager_ModelOne_employee_Id" FromRole="employee" ToRole="manager" />
+        </EntityType>
+        <EntityType Name="instructor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="courses" Relationship="Self.InstructorCourses" FromRole="instructor" ToRole="course" />
+        </EntityType>
+        <EntityType Name="Lodging">
+          <Key>
+            <PropertyRef Name="LodgingId" />
+          </Key>
+          <Property Name="LodgingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Owner" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Activities" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Entertainment" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Discriminator" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="manager">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="SectionManaged" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="employee" Relationship="Self.FK_ModelOne_manager_ModelOne_employee_Id" FromRole="manager" ToRole="employee" />
+        </EntityType>
+        <EntityType Name="person">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="posts" Relationship="Self.FK_ModelOne_posts_ModelOne_person_CreatedBy_Id" FromRole="person" ToRole="posts" />
+          <NavigationProperty Name="posts1" Relationship="Self.FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id" FromRole="person" ToRole="posts" />
+        </EntityType>
+        <EntityType Name="post">
+          <Key>
+            <PropertyRef Name="PostId" />
+          </Key>
+          <Property Name="PostId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Blog_Id" Type="Int32" />
+          <Property Name="UpdatedBy_Id" Type="Int32" />
+          <Property Name="CreatedBy_Id" Type="Int32" />
+          <NavigationProperty Name="blog" Relationship="Self.FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId" FromRole="posts" ToRole="blogs" />
+          <NavigationProperty Name="person" Relationship="Self.FK_ModelOne_posts_ModelOne_person_CreatedBy_Id" FromRole="posts" ToRole="person" />
+          <NavigationProperty Name="person1" Relationship="Self.FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id" FromRole="posts" ToRole="person" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="productDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="product_category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="university">
+          <Key>
+            <PropertyRef Name="UniversityID" />
+          </Key>
+          <Property Name="UniversityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="Geography" />
+        </EntityType>
+        <Association Name="FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId">
+          <End Role="blogs" Type="Self.blog" Multiplicity="0..1" />
+          <End Role="posts" Type="Self.post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="blogs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="posts">
+              <PropertyRef Name="Blog_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelOne_manager_ModelOne_employee_Id">
+          <End Role="employee" Type="Self.employee" Multiplicity="1" />
+          <End Role="manager" Type="Self.manager" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="manager">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelOne_posts_ModelOne_person_CreatedBy_Id">
+          <End Role="person" Type="Self.person" Multiplicity="0..1" />
+          <End Role="posts" Type="Self.post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="posts">
+              <PropertyRef Name="CreatedBy_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id">
+          <End Role="person" Type="Self.person" Multiplicity="0..1" />
+          <End Role="posts" Type="Self.post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="posts">
+              <PropertyRef Name="UpdatedBy_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="InstructorCourses">
+          <End Role="course" Type="Self.course" Multiplicity="*" />
+          <End Role="instructor" Type="Self.instructor" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="LinqToEntityDbEntities3" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
+          <EntitySet Name="blogs" EntityType="Self.blog" />
+          <EntitySet Name="courses" EntityType="Self.course" />
+          <EntitySet Name="departments" EntityType="Self.department" />
+          <EntitySet Name="employees" EntityType="Self.employee" />
+          <EntitySet Name="instructors" EntityType="Self.instructor" />
+          <EntitySet Name="Lodgings" EntityType="Self.Lodging" />
+          <EntitySet Name="managers" EntityType="Self.manager" />
+          <EntitySet Name="people" EntityType="Self.person" />
+          <EntitySet Name="posts" EntityType="Self.post" />
+          <EntitySet Name="products" EntityType="Self.product" />
+          <EntitySet Name="product_category" EntityType="Self.product_category" />
+          <EntitySet Name="universities" EntityType="Self.university" />
+          <AssociationSet Name="FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId" Association="Self.FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId">
+            <End Role="blogs" EntitySet="blogs" />
+            <End Role="posts" EntitySet="posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelOne_manager_ModelOne_employee_Id" Association="Self.FK_ModelOne_manager_ModelOne_employee_Id">
+            <End Role="employee" EntitySet="employees" />
+            <End Role="manager" EntitySet="managers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelOne_posts_ModelOne_person_CreatedBy_Id" Association="Self.FK_ModelOne_posts_ModelOne_person_CreatedBy_Id">
+            <End Role="person" EntitySet="people" />
+            <End Role="posts" EntitySet="posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id" Association="Self.FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id">
+            <End Role="person" EntitySet="people" />
+            <End Role="posts" EntitySet="posts" />
+          </AssociationSet>
+          <AssociationSet Name="InstructorCourses" Association="Self.InstructorCourses">
+            <End Role="course" EntitySet="courses" />
+            <End Role="instructor" EntitySet="instructors" />
+          </AssociationSet>
+          <FunctionImport Name="DeleteBlogs">
+          <Parameter Name="blogId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetAandB" ReturnType="Collection(LinqToEntityDbModel.GetAandB_Result)" />
+          <FunctionImport Name="GetAllBlogsAndPosts" ReturnType="Collection(LinqToEntityDbModel.GetAllBlogsAndPosts_Result)" />
+          <FunctionImport Name="GetAllBologsandCourse" ReturnType="Collection(LinqToEntityDbModel.GetAllBologsandCourse_Result)" />
+          <FunctionImport Name="InsertBlogs" ReturnType="Collection(Int32)">
+          <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SQuery" ReturnType="Collection(LinqToEntityDbModel.SQuery_Result)">
+          <Parameter Name="count" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="updateBlogs">
+            <Parameter Name="blogId" Mode="In" Type="Int32" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="ChinaPersons" EntityType="LinqToEntityDbModel.ChinaPerson" />
+          <FunctionImport Name="GetCourse" IsComposable="true" ReturnType="Collection(LinqToEntityDbModel.GetCourse_Result)">
+          <Parameter Name="CourseID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetAandB_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="GetAllBlogsAndPosts_Result">
+          <Property Type="Int32" Name="BlogId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="GetAllBologsandCourse_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="SQuery_Result">
+          <Property Type="Int32" Name="BlogId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <EntityType Name="ChinaPerson">
+          <Key>
+            <PropertyRef Name="PersonId" />
+          </Key>
+          <Property Name="PersonId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="GetCourse_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="250" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LinqToEntityDbModelStoreContainer" CdmEntityContainer="LinqToEntityDbEntities3">
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="blogs">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.blog">
+              <MappingFragment StoreEntitySet="blogs">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.blog">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="LinqToEntityDbModel.Store.InsertBlogs">
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                </InsertFunction>
+                <DeleteFunction FunctionName="LinqToEntityDbModel.Store.DeleteBlogs" >
+                  <ScalarProperty Name="Id" ParameterName="blogId" />
+                </DeleteFunction>
+                <UpdateFunction FunctionName="LinqToEntityDbModel.Store.updateBlogs">
+                  <ScalarProperty Name="Id" ParameterName="blogId" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
+                </UpdateFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="courses">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.course">
+              <MappingFragment StoreEntitySet="course">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="departments">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.department">
+              <MappingFragment StoreEntitySet="department">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Budget" ColumnName="Budget" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="employees">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.employee">
+              <MappingFragment StoreEntitySet="employee">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="instructors">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.instructor">
+              <MappingFragment StoreEntitySet="instructor">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lodgings">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.Lodging">
+              <MappingFragment StoreEntitySet="Lodgings">
+                <ScalarProperty Name="LodgingId" ColumnName="LodgingId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="Activities" ColumnName="Activities" />
+                <ScalarProperty Name="Entertainment" ColumnName="Entertainment" />
+                <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="managers">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.manager">
+              <MappingFragment StoreEntitySet="manager">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SectionManaged" ColumnName="SectionManaged" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="people">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.person">
+              <MappingFragment StoreEntitySet="person">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="posts">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.post">
+              <MappingFragment StoreEntitySet="posts">
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Blog_Id" ColumnName="Blog_Id" />
+                <ScalarProperty Name="UpdatedBy_Id" ColumnName="UpdatedBy_Id" />
+                <ScalarProperty Name="CreatedBy_Id" ColumnName="CreatedBy_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="products">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.product">
+              <MappingFragment StoreEntitySet="product">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="productDate" ColumnName="productDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product_category">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.product_category">
+              <MappingFragment StoreEntitySet="product_category">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="universities">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.university">
+              <MappingFragment StoreEntitySet="university">
+                <ScalarProperty Name="UniversityID" ColumnName="UniversityID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="InstructorCourses" TypeName="LinqToEntityDbModel.InstructorCourses" StoreEntitySet="InstructorCourses">
+            <EndProperty Name="course">
+              <ScalarProperty Name="Id" ColumnName="InstructorID" />
+            </EndProperty>
+            <EndProperty Name="instructor">
+              <ScalarProperty Name="Id" ColumnName="CourseID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="DeleteBlogs" FunctionName="LinqToEntityDbModel.Store.DeleteBlogs" />
+          <FunctionImportMapping FunctionImportName="GetAandB" FunctionName="LinqToEntityDbModel.Store.GetAandB">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LinqToEntityDbModel.GetAandB_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAllBlogsAndPosts" FunctionName="LinqToEntityDbModel.Store.GetAllBlogsAndPosts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LinqToEntityDbModel.GetAllBlogsAndPosts_Result">
+                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAllBologsandCourse" FunctionName="LinqToEntityDbModel.Store.GetAllBologsandCourse">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LinqToEntityDbModel.GetAllBologsandCourse_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertBlogs" FunctionName="LinqToEntityDbModel.Store.InsertBlogs" />
+          <FunctionImportMapping FunctionImportName="SQuery" FunctionName="LinqToEntityDbModel.Store.SQuery">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LinqToEntityDbModel.SQuery_Result">
+                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="updateBlogs" FunctionName="LinqToEntityDbModel.Store.updateBlogs" />
+          <EntitySetMapping Name="ChinaPersons">
+            <EntityTypeMapping TypeName="LinqToEntityDbModel.ChinaPerson">
+              <MappingFragment StoreEntitySet="ChinaPerson">
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+              </MappingFragment>
+              <MappingFragment StoreEntitySet="ChinaPersonInfo">
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetCourse" FunctionName="LinqToEntityDbModel.Store.GetCourse">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LinqToEntityDbModel.GetCourse_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

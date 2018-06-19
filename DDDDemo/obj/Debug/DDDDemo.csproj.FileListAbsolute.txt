@@ -1,0 +1,6 @@
+D:\FrameWork4.0TestDemo\DDDDemo\bin\Debug\DDDDemo.exe.config
+D:\FrameWork4.0TestDemo\DDDDemo\bin\Debug\DDDDemo.exe
+D:\FrameWork4.0TestDemo\DDDDemo\bin\Debug\DDDDemo.pdb
+D:\FrameWork4.0TestDemo\DDDDemo\obj\Debug\DDDDemo.exe
+D:\FrameWork4.0TestDemo\DDDDemo\obj\Debug\DDDDemo.pdb
+D:\FrameWork4.0TestDemo\DDDDemo\obj\Debug\DDDDemo.csprojResolveAssemblyReference.cache

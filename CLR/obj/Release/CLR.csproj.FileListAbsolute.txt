@@ -1,0 +1,10 @@
+D:\FrameWork4.0TestDemo\CLR\bin\Release\CLR.exe.config
+D:\FrameWork4.0TestDemo\CLR\bin\Release\CLR.exe
+D:\FrameWork4.0TestDemo\CLR\bin\Release\CLR.pdb
+D:\FrameWork4.0TestDemo\CLR\bin\Release\Frame4.0Unit.exe
+D:\FrameWork4.0TestDemo\CLR\bin\Release\Frame4.0Unit.pdb
+D:\FrameWork4.0TestDemo\CLR\obj\Release\CLR.csprojResolveAssemblyReference.cache
+D:\FrameWork4.0TestDemo\CLR\obj\Release\CLR.Resource1.resources
+D:\FrameWork4.0TestDemo\CLR\obj\Release\CLR.csproj.GenerateResource.Cache
+D:\FrameWork4.0TestDemo\CLR\obj\Release\CLR.exe
+D:\FrameWork4.0TestDemo\CLR\obj\Release\CLR.pdb

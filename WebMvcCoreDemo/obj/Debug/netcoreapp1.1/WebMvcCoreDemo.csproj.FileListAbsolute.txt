@@ -1,0 +1,9 @@
+D:\FrameWork4.0TestDemo\WebMvcCoreDemo\bin\Debug\netcoreapp1.1\WebMvcCoreDemo.deps.json
+D:\FrameWork4.0TestDemo\WebMvcCoreDemo\bin\Debug\netcoreapp1.1\WebMvcCoreDemo.runtimeconfig.json
+D:\FrameWork4.0TestDemo\WebMvcCoreDemo\bin\Debug\netcoreapp1.1\WebMvcCoreDemo.runtimeconfig.dev.json
+D:\FrameWork4.0TestDemo\WebMvcCoreDemo\bin\Debug\netcoreapp1.1\WebMvcCoreDemo.dll
+D:\FrameWork4.0TestDemo\WebMvcCoreDemo\obj\Debug\netcoreapp1.1\WebMvcCoreDemo.AssemblyInfo.cs
+D:\FrameWork4.0TestDemo\WebMvcCoreDemo\bin\Debug\netcoreapp1.1\WebMvcCoreDemo.pdb
+D:\FrameWork4.0TestDemo\WebMvcCoreDemo\obj\Debug\netcoreapp1.1\WebMvcCoreDemo.dll
+D:\FrameWork4.0TestDemo\WebMvcCoreDemo\obj\Debug\netcoreapp1.1\WebMvcCoreDemo.pdb
+D:\FrameWork4.0TestDemo\WebMvcCoreDemo\obj\Debug\netcoreapp1.1\WebMvcCoreDemo.csprojResolveAssemblyReference.cache

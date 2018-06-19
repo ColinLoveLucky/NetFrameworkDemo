@@ -1,0 +1,127 @@
+[[match-multi-word]]
+=== 多词查询
+
+如果我们一次只能搜索一个词，那么全文搜索就会不太灵活，幸运的是 `match` 查询让多词查询变得简单：((("full text search", "multi-word queries")))((("match query", "multi-word query")))
+
+[source,js]
+--------------------------------------------------
+GET /my_index/my_type/_search
+{
+    "query": {
+        "match": {
+            "title": "BROWN DOG!"
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 100_Full_Text_Search/05_Match_query.json
+
+上面这个查询返回所有四个文档：
+
+[source,js]
+--------------------------------------------------
+{
+  "hits": [
+     {
+        "_id":      "4",
+        "_score":   0.73185337, <1>
+        "_source": {
+           "title": "Brown fox brown dog"
+        }
+     },
+     {
+        "_id":      "2",
+        "_score":   0.47486103, <2>
+        "_source": {
+           "title": "The quick brown fox jumps over the lazy dog"
+        }
+     },
+     {
+        "_id":      "3",
+        "_score":   0.47486103, <2>
+        "_source": {
+           "title": "The quick brown fox jumps over the quick dog"
+        }
+     },
+     {
+        "_id":      "1",
+        "_score":   0.11914785, <3>
+        "_source": {
+           "title": "The quick brown fox"
+        }
+     }
+  ]
+}
+--------------------------------------------------
+
+<1> 文档 4 最相关，因为它包含词 `"brown"` 两次以及 `"dog"` 一次。
+
+<2> 文档 2、3 同时包含 `brown` 和 `dog` 各一次，而且它们 `title` 字段的长度相同，所以具有相同的评分。
+
+<3> 文档 1 也能匹配，尽管它只有 `brown` 没有 `dog` 。
+
+因为 `match` 查询必须查找两个词（ `["brown","dog"]` ），它在内部实际上先执行两次 `term` 查询，然后将两次查询的结果合并作为最终结果输出。为了做到这点，它将两个 `term` 查询包入一个 `bool` 查询中，详细信息见 <<bool-query, 布尔查询>>。
+
+以上示例告诉我们一个重要信息：即任何文档只要 `title` 字段里包含 _指定词项中的至少一个词_ 就能匹配，被匹配的词项越多，文档就越相关。
+
+[[match-improving-precision]]
+==== 提高精度
+
+用 _任意_ 查询词项匹配文档可能会导致结果中出现不相关的长尾。((("full text search", "multi-word queries", "improving precision")))((("precision", "improving for full text search multi-word queries")))这是种散弹式搜索。可能我们只想搜索包含 _所有_ 词项的文档，也就是说，不去匹配 `brown OR dog` ，而通过匹配 `brown AND dog` 找到所有文档。
+
+`match` 查询还可以接受 `operator` 操作符作为输入参数，默认情况下该操作符是 `or` 。我们可以将它修改成 `and` 让所有指定词项都必须匹配：
+
+[source,js]
+--------------------------------------------------
+GET /my_index/my_type/_search
+{
+    "query": {
+        "match": {
+            "title": {      <1>
+                "query":    "BROWN DOG!",
+                "operator": "and"
+            }
+        }
+    }
+}
+--------------------------------------------------
+// SENSE: 100_Full_Text_Search/05_Match_query.json
+
+<1>  `match` 查询的结构需要做稍许调整才能使用 `operator` 操作符参数。
+
+这个查询可以把文档 1 排除在外，因为它只包含两个词项中的一个。
+
+[[match-precision]]
+==== 控制精度
+
+在 _所有_ 与 _任意_ 间二选一有点过于非黑即白。((("full text search", "multi-word queries", "controlling precision")))如果用户给定 5 个查询词项，想查找只包含其中 4 个的文档，该如何处理？将 `operator` 操作符参数设置成 `and` 只会将此文档排除。
+
+有时候这正是我们期望的，但在全文搜索的大多数应用场景下，我们既想包含那些可能相关的文档，同时又排除那些不太相关的。换句话说，我们想要处于中间某种结果。
+
+`match` 查询支持 `minimum_should_match` 最小匹配参数，((("match query", "minimum_should_match parameter")))((("minimum_should_match parameter")))这让我们可以指定必须匹配的词项数用来表示一个文档是否相关。我们可以将其设置为某个具体数字，更常用的做法是将其设置为一个百分数，因为我们无法控制用户搜索时输入的单词数量：
+
+[source,js]
+--------------------------------------------------
+GET /my_index/my_type/_search
+{
+  "query": {
+    "match": {
+      "title": {
+        "query":                "quick brown dog",
+        "minimum_should_match": "75%"
+      }
+    }
+  }
+}
+--------------------------------------------------
+// SENSE: 100_Full_Text_Search/05_Match_query.json
+
+当给定百分比的时候， `minimum_should_match` 会做合适的事情：在之前三词项的示例中， `75%` 会自动被截断成 `66.6%` ，即三个里面两个词。无论这个值设置成什么，至少包含一个词项的文档才会被认为是匹配的。
+
+[NOTE]
+====
+参数 `minimum_should_match` 的设置非常灵活，可以根据用户输入词项的数目应用不同的规则。完整的信息参考文档
+{ref}/query-dsl-minimum-should-match.html#query-dsl-minimum-should-match
+====
+
+为了完全理解 `match` 是如何处理多词查询的，我们就需要查看如何使用 `bool` 查询将多个查询条件组合在一起。

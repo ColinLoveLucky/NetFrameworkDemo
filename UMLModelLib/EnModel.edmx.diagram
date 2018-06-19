@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="02e4f5eb6c11458e955074186abe6fe5" Name="Diagram1">
+        <EntityTypeShape EntityType="LinqToEntityDbModel.C__MigrationHistory" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.blog" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.course" Width="1.5" PointX="5.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.department" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.employee" Width="1.5" PointX="2.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.instructor" Width="1.5" PointX="8" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.Lodging" Width="1.5" PointX="4.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.manager" Width="1.5" PointX="5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.person" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.post" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.product" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.product_category" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.university" Width="1.5" PointX="9.75" PointY="5.75" IsExpanded="true" />
+        <AssociationConnector Association="LinqToEntityDbModel.FK_ModelOne_posts_ModelOne_blogs_Blogs_BlogId" ManuallyRouted="false" />
+        <AssociationConnector Association="LinqToEntityDbModel.FK_ModelOne_manager_ModelOne_employee_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="LinqToEntityDbModel.FK_ModelOne_posts_ModelOne_person_CreatedBy_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="LinqToEntityDbModel.FK_ModelOne_posts_ModelOne_person_UpdatedBy_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="LinqToEntityDbModel.InstructorCourses" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="LinqToEntityDbModel.ChinaPerson" Width="1.5" PointX="7.75" PointY="8.875" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

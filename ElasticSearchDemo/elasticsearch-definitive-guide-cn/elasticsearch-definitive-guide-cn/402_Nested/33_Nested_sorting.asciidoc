@@ -1,0 +1,74 @@
+[[nested-sorting]]
+=== 使用嵌套字段排序
+
+尽管嵌套字段的值存储于独立的嵌套文档中，但依然有方法按照嵌套字段的值排序。 ((("nested fields, sorting by")))((("sorting", "by nested fields"))) 让我们添加另一个记录，以使得结果更有意思：
+
+[source,json]
+--------------------------
+PUT /my_index/blogpost/2
+{
+  "title": "Investment secrets",
+  "body":  "What they don't tell you ...",
+  "tags":  [ "shares", "equities" ],
+  "comments": [
+    {
+      "name":    "Mary Brown",
+      "comment": "Lies, lies, lies",
+      "age":     42,
+      "stars":   1,
+      "date":    "2014-10-18"
+    },
+    {
+      "name":    "John Smith",
+      "comment": "You're making it up!",
+      "age":     28,
+      "stars":   2,
+      "date":    "2014-10-16"
+    }
+  ]
+}
+--------------------------
+
+假如我们想要查询在10月份收到评论的博客文章，并且按照 `stars` 数的最小值来由小到大排序，那么查询语句如下：
+
+[source,json]
+--------------------------
+GET /_search
+{
+  "query": {
+    "nested": { <1>
+      "path": "comments",
+      "filter": {
+        "range": {
+          "comments.date": {
+            "gte": "2014-10-01",
+            "lt":  "2014-11-01"
+          }
+        }
+      }
+    }
+  },
+  "sort": {
+    "comments.stars": { <2>
+      "order": "asc",   <2>
+      "mode":  "min",   <2>
+      "nested_path": "comments", <3>
+      "nested_filter": {
+        "range": {
+          "comments.date": {
+            "gte": "2014-10-01",
+            "lt":  "2014-11-01"
+          }
+        }
+      }
+    }
+  }
+}
+--------------------------
+<1> 此处的 `nested` 查询将结果限定为在10月份收到过评论的博客文章。
+<2> 结果按照匹配的评论中 `comment.stars` 字段的最小值 (`min`) 来由小到大 (`asc`) 排序。
+<3> 排序子句中的 `nested_path` 和 `nested_filter` 和 `query` 子句中的 `nested` 查询相同，原因在下面有解释。
+
+我们为什么要用 nested_path 和 nested_filter 重复查询条件呢？原因在于，排序发生在查询执行之后。
+查询条件限定了只在10月份收到评论的博客文档，但返回整个博客文档。如果我们不在排序子句中加入 `nested_filter` ，
+那么我们对博客文档的排序将基于博客文档的所有评论，而不是仅仅在10月份接收到的评论。

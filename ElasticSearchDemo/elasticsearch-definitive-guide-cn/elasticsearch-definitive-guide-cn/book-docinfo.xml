@@ -1,0 +1,46 @@
+<legalnotice>
+  <simpara>
+    本作品采用 <ulink url="http://creativecommons.org/licenses/by-nc-nd/3.0/">署名-非商业性使用-禁止演绎 3.0 未本地化版本</ulink> 许可协议。
+  </simpara>
+</legalnotice>
+
+<copyright>
+  <year>2014</year>
+  <year>2015</year>
+  <year>2016</year>
+  <holder>Elasticsearch</holder>
+</copyright>
+
+<edition>Elasticsearch: 权威指南，第二版</edition>
+
+<abstract>
+    <title>摘要</title>
+    <simpara>
+        一旦本书完成，你可以从 O'Reilly Media 购买纸质印刷版 :
+        <ulink url="http://www.oreilly.com/catalog/0636920028505">O'Reilly Media 购买链接</ulink>
+    </simpara>
+    <simpara>
+         我们欢迎提交反馈 – 如果你遇到任何错误或是修改建议，请前往 <ulink url="https://github.com/elasticsearch-cn/elasticsearch-definitive-guide/issues">Github</ulink> 仓库提交一个 issue。
+    </simpara>
+</abstract>
+
+<authorgroup>
+    <author>
+        <firstname>Clinton</firstname>
+        <surname>Gormley</surname>
+        <authorblurb>
+            <simpara>
+                Clinton Gormley was the first user of Elasticsearch and wrote the Perl API back in 2010. When Elasticsearch formed a company in 2012, he joined as a developer and the maintainer of the Perl modules. Now Clinton spends a lot of his time designing the user interfaces and speaking and writing about Elasticsearch. He studied medicine at UCT in Cape Town and lives in Barcelona.
+            </simpara>
+        </authorblurb>
+    </author>
+    <author>
+        <firstname>Zachary</firstname>
+        <surname>Tong</surname>
+        <authorblurb>
+            <simpara>
+                Zachary Tong has been working with Elasticsearch since 2011.  During that time, he has written a number of tutorials to help beginners start using Elasticsearch.  Zach is now a developer at Elasticsearch and maintains the PHP client, gives trainings and helps customers manage clusters in production.  He studied biology at Rensselaer Polytechnic Institute and now lives in South Carolina.
+            </simpara>
+        </authorblurb>
+    </author>
+</authorgroup>

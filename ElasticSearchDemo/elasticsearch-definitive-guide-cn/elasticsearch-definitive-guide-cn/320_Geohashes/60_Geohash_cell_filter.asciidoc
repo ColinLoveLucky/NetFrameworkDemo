@@ -1,0 +1,61 @@
+[[geohash-cell-query]]
+=== Geohash 单元查询
+
+`geohash_cell` 查询做的事情非常简单：((("geohash_cell query")))((("geohash_cell"))) 把经纬度坐标位置根据指定精度转换成一个 geohash ，然后查找所有包含这个 geohash 的位置——这是非常高效的查询。
+
+[source,json]
+----------------------------
+GET /attractions/restaurant/_search
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "geohash_cell": {
+          "location": {
+            "lat":  40.718,
+            "lon": -73.983
+          },
+          "precision": "2km" <1>
+        }
+      }
+    }
+  }
+}
+----------------------------
+<1> `precision` 字段设置的精度不能高于映射时 `geohash_precision` 字段指定的值。
+
+此查询将 `lat/lon` 坐标点转换成对应长度的 geohash —— 本例中为 `dr5rsk`&#x2014;然后查找所有包含这个短语的位置。
+
+然而，如上例中的写法可能不会返回 2km 内所有的餐馆。要知道 geohash 实际上仅是个矩形，而指定的点可能位于这个矩形中的任何位置。有可能这个点刚好落在了 geohash 单元的边缘附近，但过滤器会排除那些落在相邻单元的餐馆。
+
+为了修复这个问题，我们可以通过设置 `neighbors`((("neighbors setting (geohash_cell)")))参数为 `true` ，让查询把周围的单元也包含进来：
+
+[source,json]
+----------------------------
+GET /attractions/restaurant/_search
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "geohash_cell": {
+          "location": {
+            "lat":  40.718,
+            "lon": -73.983
+          },
+          "neighbors": true, <1>
+          "precision": "2km"
+        }
+      }
+    }
+  }
+}
+----------------------------
+
+<1> 此查询将会寻找对应的 geohash 和包围它的 geohashes 。
+    
+
+明显的， `2km` 精度的 geohash 加上周围的单元，最终导致一个范围极大的搜索区域。此查询不是为精度而生，但是它非常有效率，而且可以作为更高精度的地理位置过滤器的前置过滤器。
+
+TIP: 将 `precision` 参数设置为一个距离可能会有误导性。 `2km` 的  `precision` 会被转换成长度为 6 的 geohash 。实际上它的尺寸是约 1.2km x 0.6km。你可能会发现明确的设置长度为 `5` 或 `6` 会更容易理解。
+
+此查询的另一个优点是，相比 `geo_bounding_box` 查询，它支持一个字段中有多个坐标位置的情况。((("latitude/longitude pairs", "multiple lat/lon points per field, geohash_cell"))) 我们在 <<optimize-bounding-box>> 中讨论过，设置 `lat_lon` 选项也是一个很有效的方式，但是它只在每个字段只有单个坐标点的情况下有效。

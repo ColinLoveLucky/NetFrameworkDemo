@@ -1,0 +1,12 @@
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Debug\UMLModelLib.dll.config
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Debug\UMLModelLib.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Debug\UMLModelLib.pdb
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Debug\EntityFramework.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Debug\EntityFramework.SqlServer.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Debug\EntityFramework.xml
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Debug\EntityFramework.SqlServer.xml
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Debug\zh-Hans\EntityFramework.resources.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\bin\Debug\zh-Hans\EntityFramework.SqlServer.resources.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\obj\Debug\UMLModelLib.dll
+D:\FrameWork4.0TestDemo\UMLModelLib\obj\Debug\UMLModelLib.pdb
+D:\FrameWork4.0TestDemo\UMLModelLib\obj\Debug\UMLModelLib.csprojResolveAssemblyReference.cache

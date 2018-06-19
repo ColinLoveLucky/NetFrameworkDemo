@@ -1,0 +1,23 @@
+[[_metadata_document_identity]]
+==== 元数据：文档标识
+
+文档标识与四个元数据字段((("metadata, document", "identity")))相关：
+
+`_id`::
+   文档的 ID 字符串
+
+`_type`::
+   文档的类型名
+
+`_index`::
+   文档所在的索引
+
+`_uid`::
+   `_type` 和 `_id` 连接在一起构造成 `type#id`
+
+默认情况下， `_uid` 字段是被((("id field")))存储（可取回）和索引（可搜索）的。
+`_type` 字段((("type field")))((("index field")))((("uid field")))被索引但是没有存储，
+`_id` 和 `_index` 字段则既没有被索引也没有被存储，这意味着它们并不是真实存在的。
+
+尽管如此，你仍然可以像真实字段一样查询 `_id` 字段。Elasticsearch 使用 `_uid` 字段来派生出 `_id` 。
+虽然你可以修改这些字段的 `index` 和 `store` 设置，但是基本上不需要这么做。

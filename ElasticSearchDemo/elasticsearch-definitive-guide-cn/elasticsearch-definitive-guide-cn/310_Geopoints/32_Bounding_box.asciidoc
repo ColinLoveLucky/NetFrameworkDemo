@@ -1,0 +1,91 @@
+[[geo-bounding-box]]
+=== 地理坐标盒模型过滤器
+
+这是目前为止最有效的地理坐标过滤器了，因为它计算起来非常简单。 ((("geo_bounding_box filter")))((("filtering", "by geo-points", "geo_bounding_box filter"))) 你指定一个矩形的 `顶部` , `底部` , `左边界` ，和 `右边界` ，然后过滤器只需判断坐标的经度是否在左右边界之间，纬度是否在上下边界之间：
+
+[source,json]
+---------------------
+GET /attractions/restaurant/_search
+{
+  "query": {
+    "filtered": {
+      "filter": {
+        "geo_bounding_box": {
+          "location": { <1>
+            "top_left": {
+              "lat":  40.8,
+              "lon": -74.0
+            },
+            "bottom_right": {
+              "lat":  40.7,
+              "lon": -73.0
+            }
+          }
+        }
+      }
+    }
+  }
+}
+---------------------
+<1> 这些坐标也可以用 `bottom_left` 和 `top_right` 来表示。
+
+[[optimize-bounding-box]]
+==== 优化盒模型
+
+`地理坐标盒模型过滤器` 不需要把所有坐标点都加载到内存里。((("geo_bounding_box filter", "optimization"))) 因为它要做的
+只是简单判断 `lat` 和 `lon`  坐标数值是否在给定的范围内，可以用倒排索引做一个((("range filters"))) `range` 过滤来实现目标。
+
+要使用这种优化方式，需要把 `geo_point` 字段 ((("latitude/longitude pairs", "geo-point fields mapped to index lat/lon values separately")))用 `lat` 和 `lon` 的方式分别映射到索引中：
+
+[source,json]
+-----------------------
+PUT /attractions
+{
+  "mappings": {
+    "restaurant": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type":    "geo_point",
+          "lat_lon": true <1>
+        }
+      }
+    }
+  }
+}
+-----------------------
+<1> `location.lat` 和 `location.lon` 字段将被分别索引。它们可以被用于检索，但是不会在检索结果中返回。
+
+然后，查询时你需要告诉 Elasticesearch 使用已索引的 `lat` 和 `lon` ：
+
+[source,json]
+---------------------
+GET /attractions/restaurant/_search
+{
+  "query": {
+    "filtered": {
+      "filter": {
+        "geo_bounding_box": {
+          "type":    "indexed", <1>
+          "location": {
+            "top_left": {
+              "lat":  40.8,
+              "lon": -74.0
+            },
+            "bottom_right": {
+              "lat":  40.7,
+              "lon":  -73.0
+            }
+          }
+        }
+      }
+    }
+  }
+}
+---------------------
+<1> 设置 `type` 参数为 `indexed` （替代默认值 `memory` ）来明确告诉 Elasticsearch 对这个过滤器使用倒排索引。
+
+CAUTION: `geo_point` 类型的字段可以包含多个地理坐标点，但是针对经度纬度分别索引的这种优化方式只对包含单个坐标点的字段有效。
+

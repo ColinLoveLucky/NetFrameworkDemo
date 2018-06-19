@@ -1,0 +1,20 @@
+[[post_deploy]]
+== 部署后
+
+一旦将集群部署到生产环境后，就需要有一些工具及最佳实践经验来保证集群运行在最佳状态。本章将探讨动态配置、日志调优、索引性能优化以及集群备份。
+
+include::520_Post_Deployment/10_dynamic_settings.asciidoc[]
+
+include::520_Post_Deployment/20_logging.asciidoc[]
+
+include::520_Post_Deployment/30_indexing_perf.asciidoc[]
+
+include::520_Post_Deployment/35_delayed_shard_allocation.asciidoc[]
+
+include::520_Post_Deployment/40_rolling_restart.asciidoc[]
+
+include::520_Post_Deployment/50_backup.asciidoc[]
+
+include::520_Post_Deployment/60_restore.asciidoc[]
+
+include::520_Post_Deployment/70_conclusion.asciidoc[]

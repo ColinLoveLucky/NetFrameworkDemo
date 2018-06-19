@@ -1,0 +1,153 @@
+[[mixed-lang-fields]]
+=== 混合语言域
+
+通常,那些从源数据中获得的多种语言混合在一个域中的文档会超出你的控制，
+例如((("languages", "mixed language fields")))((("fields", "mixed language")))从网上爬取的页面：
+
+[source,js]
+--------------------------------------------------
+{ "body": "Page not found / Seite nicht gefunden / Page non trouvée" }
+--------------------------------------------------
+
+
+
+正确的处理多语言类型文档是非常困难的。即使你简单对所有的域使用 `standard` （标准）分析器，
+但你的文档会变得不利于搜索，除非你使用了合适的词干提取器。当然，你不可能只选择一个词干提取器。
+词干提取器是由语言具体决定的。或者，词干提取器是由语言和脚本所具体决定的。像在 <<different-scripts>> 讨论中那样。
+如果每个语言都使用不同的脚本，那么词干提取器就可以合并了。
+
+
+假设你的混合语言使用的是一样的脚本，例如拉丁文，你有三个可用的选择：
+
+* 切分到不同的域
+* 进行多次分析
+* 使用 n-grams
+
+==== 切分到不同的域
+
+
+在 <<identifying-language>> 提到过的紧凑的语言检测((("languages", "mixed language fields", "splitting into separate fields")))((("Compact Language Detector (CLD)")))可以告诉你哪部分文档属于哪种语言。
+你可以用 <<one-lang-fields>> 中用过的一样的方法来根据语言切分文本。
+
+==== 进行多次分析
+
+
+
+如果你主要处理数量有限的语言，((("languages", "mixed language fields", "analyzing multiple times")))((("analyzers", "for mixed language fields")))((("multifields", "analying mixed language fields")))
+你可以使用多个域，每种语言都分析文本一次。
+
+[source,js]
+--------------------------------------------------
+PUT /movies
+{
+  "mappings": {
+    "title": {
+      "properties": {
+        "title": { <1>
+          "type": "string",
+          "fields": {
+            "de": { <2>
+              "type":     "string",
+              "analyzer": "german"
+            },
+            "en": { <2>
+              "type":     "string",
+              "analyzer": "english"
+            },
+            "fr": { <2>
+              "type":     "string",
+              "analyzer": "french"
+            },
+            "es": { <2>
+              "type":     "string",
+              "analyzer": "spanish"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+--------------------------------------------------
+
+<1> 主域 `title` 使用 `standard` （标准）分析器
+
+<2> 每个子域提供不同的语言分析器来对  `title` 域文本进行分析。
+
+==== 使用 n-grams
+
+
+
+你可以使用 <<ngrams-compound-words>> 中描述的((("n-grams", "for mixed language fields")))((("languages", "mixed language fields", "n-grams, indexing words as")))方法索引所有的词汇为 n-grams。
+大多数语型变化包含给单词添加一个后缀（或在一些语言中添加前缀），所以通过将单词拆成 n-grams，你有很大的机会匹配到相似但不完全一样的单词。
+这个可以结合 _analyze-multiple times_ （多次分析）方法为不支持的语言提供全域抓取：
+
+
+[source,js]
+--------------------------------------------------
+PUT /movies
+{
+  "settings": {
+    "analysis": {...} <1>
+  },
+  "mappings": {
+    "title": {
+      "properties": {
+        "title": {
+          "type": "string",
+          "fields": {
+            "de": {
+              "type":     "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type":     "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type":     "string",
+              "analyzer": "french"
+            },
+            "es": {
+              "type":     "string",
+              "analyzer": "spanish"
+            },
+            "general": { <2>
+              "type":     "string",
+              "analyzer": "trigrams"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+--------------------------------------------------
+
+<1> 在 `analysis` 章节, 我们按照 <<ngrams-compound-words>> 中描述的定义了同样的 `trigrams` 分析器。
+
+<2> 在 `title.general` 域使用 `trigrams` 分析器索引所有的语言。
+
+
+
+当查询抓取所有 `general` 域时，你可以使用 `minimum_should_match` （最少应当匹配数）来减少低质量的匹配。
+或许也需要对其他字段进行稍微的加权，给与主语言域的权重要高于其他的在 `general` 上的域：
+
+[source,js]
+--------------------------------------------------
+GET /movies/movie/_search
+{
+    "query": {
+        "multi_match": {
+            "query":    "club de la lucha",
+            "fields": [ "title*^1.5", "title.general" ], <1>
+            "type":     "most_fields",
+            "minimum_should_match": "75%" <2>
+        }
+    }
+}
+--------------------------------------------------
+
+<1> 所有 `title` 或 `title.*` 域给与了比 `title.general` 域稍微高的加权。
+
+<2>  `minimum_should_match`（最少应当匹配数） 参数减少了低质量匹配的返回数, 这对 `title.general` 域尤其重要。
