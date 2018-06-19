@@ -1,0 +1,205 @@
+﻿@model QK.QAPP.Entity.JobAmtInfo
+@{
+    ViewBag.Title = "BidJobMainConfigEdit";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<style>
+    .form-group { margin-bottom: 2px; }
+</style>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<script src="~/Content/assets/js/bootstrap-tooltip.js"></script>
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="frmInfo" role="form">
+            <input type="hidden" id="AmtType" name="AmtType" value="@Model.AmtType" />
+            <fieldset>
+                <legend>配置信息</legend>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label no-padding-right" for="JOB_AMT_TYPE">额度类型：</label>
+                    <div class="input-group col-xs-5 col-sm-3">
+                        <select name="JOB_AMT_TYPE" id="JOB_AMT_TYPE" class="col-xs-12">
+                            <option value="">--选择标的类型--</option>
+                            @foreach (var item in @ViewBag.AmtListInfo)
+                            {
+                                if (item.AMT_TYPE == @Model.AmtType)
+                                {
+                                    <option value="@item.AMT_TYPE" selected="selected">@item.AMT_NAME</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.AMT_TYPE">@item.AMT_NAME</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label no-padding-right" for="JOB_TYPE">任务类型：</label>
+                    <div class="input-group col-xs-5 col-sm-3">
+                        @{var isContain = false; var isConAutoCancelBid = false;}
+                        @foreach (KeyValuePair<string, string> kv in @ViewBag.JobTypeInfo as Dictionary<string, string>)
+                        {
+                            isContain = false;
+
+                            if (@Model.JobInfo != null)
+                            {
+                                foreach (string str in @Model.JobInfo)
+                                {
+                                    if (@kv.Key == str)
+                                    {
+                                        <input type="checkbox" class="ace ace-checkbox-2" id="JobInfo" name="JobInfo" checked="checked" value="@kv.Key" />
+                                        <label class="lbl" for="JobInfo">@kv.Value</label>
+                                        <div class="space-1"></div>
+
+                                        isContain = true;
+                                        if (str == "AutoCancelGBJob")
+                                        {
+                                            isConAutoCancelBid = true;
+                                        }
+                                    }
+                                }
+                            }
+                            if (!isContain)
+                            {
+                                <input type="checkbox" class="ace ace-checkbox-2" id="JobInfo" name="JobInfo" value="@kv.Key" />
+                                <label class="lbl" for="JobInfo">@kv.Value</label>
+                                <div class="space-1"></div>
+                            }
+
+                        }
+                    </div>
+                </div>
+                @if (isConAutoCancelBid)
+                {
+                    <div class="form-group" id="divCancelDay">
+                        <label class="col-xs-3 control-label no-padding-right" for="AutoCancelDay">自动取消挂标时限(天)：</label>
+                        <div class="input-group col-xs-5 col-sm-3">
+                            <input type="text" class="ace ace-checkbox-2" id="AutoCancelDay" name="AutoCancelDay" value="@Model.AutoCancelDay" />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group" id="divCancelDay" style="display:none">
+                        <label class="col-xs-3 control-label no-padding-right" for="AutoCancelDay">自动取消挂标时限(天)：</label>
+                        <div class="input-group col-xs-5 col-sm-3">
+                            <input type="text" class="ace ace-checkbox-2" id="AutoCancelDay" name="AutoCancelDay" value="@Model.AutoCancelDay" />
+                        </div>
+                    </div>
+                }
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px; z-index: 1000000">
+    <button class="btn btn-sm" data-dismiss="modal" onclick="parent.CloseDialog();">
+        <i class="icon-remove"></i>
+        取消
+    </button>
+
+    <button class="btn btn-sm btn-primary" onclick="saveData();">
+        <i class="icon-ok"></i>
+        保存
+    </button>
+</div>
+
+<script type="text/javascript">
+    var vCancelGBJob = "AutoCancelGBJob";
+    // 保存数据
+    function saveData() {
+        if (!checkData()) { return false; }
+        $.ajax({
+            type: "post",
+            url: "/SystemConfig/EditJobAmt",
+            data: $("#frmInfo").serialize(),
+            async: true,
+            success: function (d) {
+                if (d) {
+                    Utilities.alertTip(d);
+                }
+                else {
+                    Utilities.alertTip("保存成功!");
+                    parent.CloseDialog();
+                }
+            }
+        });
+    }
+
+    $(function () {
+        // 下拉框选择变更
+        $("#JOB_AMT_TYPE").change(function () {
+            // 设置选择额度
+            $("#AmtType").val($(this).val());
+            //额度变更
+            $.ajax({
+                type: "POST",
+                url: "/SystemConfig/GetJobByAmtType?amttype=" + $(this).val(),
+                data: { amttype: $(this).val() }, //在这里可以设置需要传递的参数
+                dataType: "json",
+                success: function (msg) {
+                    var josndata = eval(msg);
+                    $("input[type='checkbox']").prop("checked", false);
+
+                    jQuery("#divCancelDay").hide();
+                    jQuery("#AutoCancelDay").val('');
+
+                    if (josndata != null && josndata.JobInfo != null && josndata.JobInfo.length > 0) {
+                        for (var i = 0; i < josndata.JobInfo.length; i++) {
+                            if ($("input[type='checkbox'][value='" + josndata.JobInfo[i] + "']").length > 0) {
+                                $("input[type='checkbox'][value='" + josndata.JobInfo[i] + "']").prop("checked", true);
+                               
+                                if (josndata.JobInfo[i] == vCancelGBJob) {
+                                    jQuery("#AutoCancelDay").val(josndata.AutoCancelDay);
+
+                                    jQuery("#divCancelDay").show();
+
+                                }
+                            }
+                        }
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        })
+
+        // 自动取消挂标选项选择的场合
+        jQuery("input[type='checkbox'][value='" + vCancelGBJob + "']").change(function () {
+            if (jQuery(this).prop("checked")) {
+                // 显示流标时间
+                jQuery("#divCancelDay").show();
+            }
+            else {
+
+                jQuery("#divCancelDay").hide();
+                jQuery("#AutoCancelDay").val('');
+            }
+
+        })
+    });
+
+    function checkData() {
+        if (jQuery("#JOB_AMT_TYPE").val() == "") {
+            Utilities.alertTip("请选择额度类型!");
+            return false;
+        }
+
+        if (jQuery("input[type='checkbox']:checked").length == 0) {
+            Utilities.alertTip("请选择任务类型!");
+            return false;
+        }
+       
+        // 自动取消挂标
+        var autocancelday = jQuery("#AutoCancelDay").val();
+        if (jQuery("input[type='checkbox'][value='" + vCancelGBJob + "']").prop("checked")) {
+            if (autocancelday == "" || autocancelday < 0 || parseInt(autocancelday) != autocancelday) {
+                Utilities.alertTip("自动取消挂标时限请输入大于0的整数!");
+                return false;
+            }
+        }
+        return true;
+    }
+</script>

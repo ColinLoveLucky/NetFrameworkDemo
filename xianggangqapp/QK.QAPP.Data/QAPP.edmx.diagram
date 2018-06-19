@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="73c56086a07e4149a0a5368bff8cf314" Name="Diagram1" ZoomLevel="53">
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_BANKCARD" Width="1.5" PointX="3" PointY="13.25" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_JOB" Width="1.5" PointX="3" PointY="2.625" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_LOAN" Width="1.5" PointX="3.875" PointY="22.25" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_SALES" Width="1.5" PointX="14.25" PointY="10.5" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_STAFF_ONLY" Width="1.5" PointX="3" PointY="17.625" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_DFORM_FIELDATTRIBUTE" Width="1.5" PointX="21.625" PointY="2" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_DFORM_FORMBUILDER" Width="1.5" PointX="12.875" PointY="1.375" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_DFORM_FORMFIELD" Width="1.5" PointX="17.875" PointY="1.375" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_DFORM_FORMINFO" Width="1.5" PointX="15.625" PointY="1" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_FORMFIELD_FIELDATTRIBUTE" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_FORMINFO_FORMBUILDER" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_FORMFIELD_FORMINFO" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_CONTACT" Width="1.5" PointX="10.375" PointY="5.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_MAIN" Width="1.5" PointX="0.75" PointY="22.25" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_APP_BANK_2_APP_MAIN" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_APP_JOB_2_APP_MAIN" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_APP_LOAN_2_APP_MAIN" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_APP_STAF_2_APP_MAIN" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.FL_BIZ" Width="1.5" PointX="5.375" PointY="3.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.FL_LIST" Width="1.5" PointX="7.375" PointY="4.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_FILE_CHECK" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.V_APPMAIN" Width="1.5" PointX="5.375" PointY="9.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_NR_LIST" Width="1.5" PointX="3" PointY="9.25" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_APP_NR_LIST_2_APP_MAIN" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_CITY" Width="1.5" PointX="11.375" PointY="10.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_MSGBOX_USER" Width="2.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_MSGBOX" Width="1.5" PointX="7.375" PointY="9.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_CUSTOMER" Width="1.5" PointX="2.625" PointY="29.375" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_APP_CUST_2_APP_MAIN" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_APPLY_SEQUENCE" Width="1.5" PointX="12.375" PointY="5.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_GLOBALCONFIG" Width="1.5" PointX="7.375" PointY="13.75" />
+        <AssociationConnector Association="QK.QAPP.Entity.UK_GLOBALCONFIG_GLOBALCONFIG" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_AEO" Width="1.5" PointX="13.375" PointY="13.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_AUTH" Width="1.5" PointX="3" PointY="56.75" />
+        <AssociationConnector Association="QK.QAPP.Entity.APPAUTH_APPMAIN_FK" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_EXTEND_CONFIG" Width="1.5" PointX="9.375" PointY="14.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_EXTEND_RELATION" Width="1.5" PointX="15.375" PointY="14.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_CARPRICE" Width="1.5" PointX="5.375" PointY="17.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_FORBIDEN_AREA" Width="2.125" PointX="12.25" PointY="17.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_CARINFO" Width="1.5" PointX="3" PointY="61.125" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_APP_CARINFO_APP_MAIN" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.PAD_CARJUDGE" Width="1.5" PointX="17.375" PointY="13.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_CARVALUATORS" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_QUEUE_ASSESS" Width="1.5" PointX="16.375" PointY="6.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_CARAGENCY" Width="1.5" PointX="18.375" PointY="6.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.PRE_APP_AUTH" Width="1.5" PointX="19.625" PointY="20" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.PRE_APP_BANKCARD" Width="1.5" PointX="19.625" PointY="36.5" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.PRE_APP_CUSTOMER" Width="1.5" PointX="19.625" PointY="23.125" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.PRE_APP_JOB" Width="1.5" PointX="19.625" PointY="43.625" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.PRE_APP_LOAN" Width="1.5" PointX="19.625" PointY="39.625" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.PRE_APP_MAIN" Width="1.5" PointX="17.375" PointY="28.625" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.PRE_APP_STAFF_ONLY" Width="1.5" PointX="19.625" PointY="33.25" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_PRE_APP_AUTH_2_APP_ID" />
+        <AssociationConnector Association="QK.QAPP.Entity.FF_PRE_APP_BANKCARD_2_APP_ID" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_PRE_APP_CUST_2_PRE_APP_MAIN" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_PRE_APP_JOB_2_PRE_APP_MAIN" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_PRE_APP_LOAN_2_APP_MAIN" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_PRE_APP_STAF_2_PRE_APP_MAIN" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.V_PRE_APPMAIN" Width="1.5" PointX="7.375" PointY="19.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_QUEUE" Width="1.5" PointX="3" PointY="67.875" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_APP_QUEUE_2_APP_MAIN" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_HOUSE" Width="1.5" PointX="19.375" PointY="9.75" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_APP_MAIN_APP_HOUSE" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.PRE_APP_CARINFO" Width="1.5" PointX="19.625" PointY="15.875" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_MAIN_CARINFO_APP_ID" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.V_APP_CONTRACT" Width="1.5" PointX="9.375" PointY="19.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_CITY_PRODUCT" Width="1.5" PointX="9.375" PointY="19.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_QUANT" Width="1.5" PointX="3" PointY="39.75" />
+        <EntityTypeShape EntityType="QK.QAPP.Entity.APP_QUANT_TEMP" Width="1.5" PointX="15.375" PointY="19.75" />
+        <AssociationConnector Association="QK.QAPP.Entity.FK_APPQUANT_APPMAIN" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

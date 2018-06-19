@@ -1,0 +1,8 @@
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.APP.Entity\bin\Debug\QK.QAPP.Entity.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.APP.Entity\bin\Debug\QK.QAPP.Entity.pdb
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.APP.Entity\bin\Debug\Newtonsoft.Json.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.APP.Entity\bin\Debug\Oracle.DataAccess.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.APP.Entity\bin\Debug\Newtonsoft.Json.xml
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.APP.Entity\obj\Debug\QK.QAPP.Entity.csprojResolveAssemblyReference.cache
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.APP.Entity\obj\Debug\QK.QAPP.Entity.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.APP.Entity\obj\Debug\QK.QAPP.Entity.pdb

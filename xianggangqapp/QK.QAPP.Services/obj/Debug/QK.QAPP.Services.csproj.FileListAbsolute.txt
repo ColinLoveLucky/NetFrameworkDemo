@@ -1,0 +1,5 @@
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.QAPP.SalesCenter\bin\QK.QAPP.Services.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.QAPP.SalesCenter\bin\QK.QAPP.Services.pdb
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.QAPP.Services\obj\Debug\QK.QAPP.Services.csprojResolveAssemblyReference.cache
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.QAPP.Services\obj\Debug\QK.QAPP.Services.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.QAPP.Services\obj\Debug\QK.QAPP.Services.pdb

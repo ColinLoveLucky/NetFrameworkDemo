@@ -1,0 +1,298 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+    ViewBag.Title = "人员选择器";
+}
+
+@section css
+{
+    <style type="text/css">
+        .tree .tree-item, .tree .tree-folder .tree-folder-header {
+            margin: 0;
+            padding: 0px;
+            color: #4d6878;
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+        }
+    </style>
+}
+<!-- PAGE CONTENT BEGINS -->
+@*<div class="row">
+    <div class="col-sm-12" style="float:none">*@
+<div class="widget-box">
+    <div class="widget-header header-color-blue">
+        <h4 class="lighter smaller">已选择人员</h4>
+    </div>
+    <div class="widget-body" style="min-height:39px;">
+        <div class="widget-main padding-8">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12" id="div_Staff">
+                    @*<span class="label label-success">Registered</span>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="widget-box">
+    <div class="widget-header header-color-blue">
+        <h4 class="lighter smaller">人员选择</h4>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main padding-8">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active">
+                                <a data-toggle="tab" href="#tree">
+                                    树
+                                </a>
+                            </li>
+
+                            <li class="nav nav-tabs">
+                                <a data-toggle="tab" href="#seach">
+                                    搜索
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" style="height:230px; overflow-y:auto;">
+                            <div id="tree" class="tab-pane active">
+                                <div id="User_Tree" class="tree">
+
+                                </div>
+                            </div>
+                            <div id="seach" class="tab-pane">
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="input-group">
+                                        <input class="form-control search-query" id="txt_keyword" placeholder="关键字" type="text">
+                                        <span class="input-group-btn">
+                                            <button type="button" id="btn_seach" class="btn btn-purple btn-sm">
+                                                Search
+                                                <i class="icon-search icon-on-right bigger-110"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="table-responsive">
+                                        <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>&nbsp;</th>
+                                                    <th>姓名</th>
+                                                    <th>所属公司</th>
+                                                    <th>所属部门</th>
+                                                    <th>系统角色</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="table_Body"></tbody>
+                                        </table>
+                                    </div><!-- /.table-responsive -->
+                                </div><!-- /span -->
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+@*</div>
+    </div>*@
+
+
+<script src="~/Content/assets/js/fuelux/fuelux.tree.min.js"></script>
+<script type="text/javascript">
+    //数据格式
+    var selectValue = [];
+    var DataSourceTree = function (options) {
+        this._data = options.data;
+        this._delay = options.delay;
+    }
+    DataSourceTree.prototype.data = function (options, callback) {
+        var self = this;
+        var $data = null;
+
+        if (!("name" in options) && !("type" in options)) {
+            $data = this._data;//the root tree
+            callback({ data: $data });
+            return;
+        }
+        else if ("type" in options && options.type == "folder") {
+            if ("additionalParameters" in options) {
+                //$data = options.additionalParameters.children;
+                $.ajax({
+                    url: options.additionalParameters,   // 提交的页面
+                    type: "GET",                   // 设置请求类型为"POST"，默认为"GET"
+                    success: function (data) {
+                        //var treeDataSource = new DataSourceTree({ "data": data });
+                        $data = data;
+                        callback({ data: $data });
+                    }
+                });
+            }
+            else $data = {}//no data
+        }
+
+        //if ($data != null)//this setTimeout is only for mimicking some random delay
+        //    setTimeout(function () { callback({ data: $data }); }, parseInt(Math.random() * 500) + 200);
+
+        //we have used static data here
+        //but you can retrieve your data dynamically from a server using ajax call
+        //checkout examples/treeview.html and examples/treeview.js for more info
+    };
+    var companyid;
+    var roleid;
+    var MultiSelect;
+    $(function () {
+        companyid = Utilities.getUrlParam("companyid");
+        roleid = Utilities.getUrlParam("roleid");
+        MultiSelect = Utilities.getUrlParam("MultiSelect");
+
+        //异步初始化数据
+        $.ajax({
+            url: "/User/GetStaffUnit?parent=" + "&roleid=" + roleid + "&companyId=" + companyid,   // 提交的页面
+            type: "GET",                   // 设置请求类型为"POST"，默认为"GET"
+            cache: false,
+            beforeSend: function () {
+                $("#loading").modal('show');
+            },
+            error: function (request) {      // 设置表单提交出错
+                $("#loading").modal('hide');
+                alert("数据读取出错，请稍候再试或者联系管理员");
+            },
+            success: function (data) {
+                //绑定数据
+                var treeDataSource = new DataSourceTree({ "data": data });
+                $("#loading").modal('hide');
+                $('#User_Tree').ace_tree({
+                    dataSource: treeDataSource,
+                    multiSelect: MultiSelect == "true",
+                    loadingHTML: '<div class="tree-loading"><i class="icon-refresh icon-spin blue"></i></div>',
+                    'open-icon': 'icon-minus',
+                    'close-icon': 'icon-plus',
+                    'selectable': true,
+                    'selected-icon': 'icon-ok',
+                    'unselected-icon': 'icon-remove'
+
+                });
+                //展开默认项
+                $("#User_Tree").find(".tree-folder:visible").find(".tree-folder-header").click();
+                $('#User_Tree').on('selected', function (evt, data) {
+                    if (data.info.length > 0) {
+                        selectValue = [];
+                        if (MultiSelect == 'false') {
+                            selectValue.push({ name: data.info[0].name, value: data.info[0].value });
+                        }
+                        else {
+                            for (var i = 0; i < data.info.length; i++) {
+                                if (!Contain(data.info[i].value)) {
+                                    selectValue.push({ name: data.info[i].name, value: data.info[i].value });
+                                }
+                            }
+                        }
+
+                    }
+                    else {
+                        selectValue = [];
+                    }
+                    RefalshSelect();
+                });
+
+            }
+        });
+
+        //绑定数据表
+        $("#btn_seach").click(function () {
+            var keyword = escape($("#txt_keyword").val());
+
+            $.ajax({
+                url: "/user/SeachStaff?keyWord=" + keyword + "&companyid=" + companyid + "&roleid=" + roleid,   // 提交的页面
+                type: "GET",                   // 设置请求类型为"POST"，默认为"GET"
+                cache: false,
+                beforeSend: function () {
+                    $("#loading").modal('show');
+                },
+                error: function (request) {      // 设置表单提交出错
+                    $("#loading").modal('hide');
+                    alert("数据读取出错，请稍候再试或者联系管理员");
+                },
+                success: function (data) {
+                    $("#loading").modal('hide');
+                    var t = "";
+                    //绑定数据
+                    for (var i = 0; i < data.length; i++) {
+                        t += "<tr>";
+                        t += "  <td class='center'>";
+                        t += "    <label>";
+                        t += "      <input class='ace' type='checkbox' data-name='" + data[i].OBJECTNAME + "' data-value='" + data[i].OBJECTVALUE + "'/>";
+                        t += "      <span class='lbl'></span>";
+                        t += "    </label>";
+                        t += "  </td>";
+                        t += "  <td class='center'>" + (data[i].OBJECTNAME ? data[i].OBJECTNAME : "") + "</td>";
+                        t += "  <td class='center'>" + (data[i].COMPANYNAME ? data[i].COMPANYNAME : "") + "</td>";
+                        t += "  <td class='center'>" + (data[i].DEPARTNAME ? data[i].DEPARTNAME : "") + "</td>";
+                        t += "  <td class='center'>" + (data[i].ROLENAME ? data[i].ROLENAME : "") + "</td>";
+                        t += "</tr>";
+                    }
+                    $("#table_Body").html(t);
+                    BulidCheck();
+
+                }
+            });
+        });
+        $("#txt_keyword").keydown(function (event) {
+            if (event.keyCode == 13) { $("#btn_seach").click() }
+        });
+    });
+
+    function RefalshSelect() {
+        var h = "";
+        $("#div_Staff").html("");
+        for (var i = 0; i < selectValue.length; i++) {
+            h += "<span class='label label-success' data-val='" + selectValue[i].value + "'>";
+            h += "  " + selectValue[i].name;
+            h += "</span>&nbsp;";
+        }
+        $("#div_Staff").html(h);
+    };
+    function Contain(value) {
+        for (var i = 0; i < selectValue.length; i++) {
+            if (selectValue[i].value == value) { return true; }
+        }
+        return false;
+    }
+    function RefalshTable() {
+        var checkList = $("#table_Body").find("input:checked");
+        selectValue = [];
+        for (var i = 0; i < checkList.length; i++) {
+            var item = checkList.eq(i);
+            var name = item.attr("data-name");
+            var value = item.attr("data-value");
+            if (!Contain(value)) {
+                selectValue.push({ name: name, value: value });
+            }
+        }
+        RefalshSelect();
+    }
+    function BulidCheck() {
+        $("#table_Body").find("input[type='checkbox']").each(function () {
+            $(this).click(function () {
+                if (MultiSelect == "false") {
+                    $("#table_Body").find("input[type='checkbox']").each(function () {
+                        this.checked = false;
+                    });
+                    this.checked = true;
+                }
+
+                RefalshTable();
+            });
+
+
+        });
+    }
+</script>

@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{007C5112-F4A6-496D-A425-A3BA554AB48C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QK.QAPP.Infrastructure</RootNamespace>
+    <AssemblyName>QK.QAPP.Infrastructure</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Apache.NMS">
+      <HintPath>..\01.Depends\MQ\Apache.NMS.dll</HintPath>
+    </Reference>
+    <Reference Include="Apache.NMS.ActiveMQ">
+      <HintPath>..\01.Depends\MQ\Apache.NMS.ActiveMQ.dll</HintPath>
+    </Reference>
+    <Reference Include="Clutch, Version=1.0.5398.23443, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\01.Depends\Traceing\Clutch.dll</HintPath>
+    </Reference>
+    <Reference Include="Clutch.Diagnostics.EntityFramework, Version=1.0.5398.23627, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\01.Depends\Traceing\Clutch.Diagnostics.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="HibernatingRhinos.Profiler.Appender">
+      <HintPath>..\01.Depends\MiniProfilter\HibernatingRhinos.Profiler.Appender.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\01.Depends\Pdf\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Http">
+      <HintPath>..\01.Depends\RestHelper\Microsoft.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
+      <HintPath>..\01.Depends\Practices\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Security.Cryptography">
+      <HintPath>..\01.Depends\Practices\Microsoft.Practices.EnterpriseLibrary.Security.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ObjectBuilder2">
+      <HintPath>..\01.Depends\Practices\Microsoft.Practices.ObjectBuilder2.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\01.Depends\Practices\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler">
+      <HintPath>..\01.Depends\MiniProfilter\MiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler.EntityFramework">
+      <HintPath>..\01.Depends\MiniProfilter\MiniProfiler.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis">
+      <HintPath>..\packages\StackExchange.Redis.1.0.371\lib\net45\StackExchange.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="wnvpdfcreator">
+      <HintPath>..\01.Depends\Pdf\wnvpdfcreator.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cache\RedisCacheProvider.cs" />
+    <Compile Include="Cache\ICacheProvider.cs" />
+    <Compile Include="Captcha\CaptchaController.cs" />
+    <Compile Include="Captcha\CaptchaVerifyAttribute.cs" />
+    <Compile Include="Captcha\Config.cs" />
+    <Compile Include="Captcha\HtmlHelperExtensions.cs" />
+    <Compile Include="Captcha\ImageBuilder.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\NullableExtensions.cs" />
+    <Compile Include="Extensions\QueryableExtensions.cs" />
+    <Compile Include="Extensions\RouteCollectionExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Extensions\UriExtensions.cs" />
+    <Compile Include="Ioc\Ioc.cs" />
+    <Compile Include="Ioc\UnityContainerExtensions.cs" />
+    <Compile Include="Ioc\UnityDependencyResolver.cs" />
+    <Compile Include="Log4Net\CustomerPatternLayout.cs" />
+    <Compile Include="Log4Net\LogEntity.cs" />
+    <Compile Include="Log4Net\LogWriter.cs" />
+    <Compile Include="Logging\CommonLogger.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Logging\LogSettings.cs" />
+    <Compile Include="MessageQueue\MessageBody.cs" />
+    <Compile Include="MessageQueue\MQConsumer.cs" />
+    <Compile Include="MessageQueue\MQHelper.cs" />
+    <Compile Include="Mvc\AdminAttribute.cs" />
+    <Compile Include="Mvc\ExcelAttribute.cs" />
+    <Compile Include="Mvc\LogicalActionFilterAttribute.cs" />
+    <Compile Include="PushMessage\MessageProtocol.cs" />
+    <Compile Include="MessageQueue\MQProducer.cs" />
+    <Compile Include="Mvc\AllowCrossDomainAttribute.cs" />
+    <Compile Include="Mvc\AuthorizationAttribute.cs" />
+    <Compile Include="Mvc\ConfigHelper.cs" />
+    <Compile Include="Mvc\Extensions\ControllerExtensions.cs" />
+    <Compile Include="Mvc\Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Mvc\IStandardResult.cs" />
+    <Compile Include="Mvc\MvcSolutionWebViewPage.cs" />
+    <Compile Include="Mvc\StandardJsonResult.cs" />
+    <Compile Include="Mvc\StandardResult.cs" />
+    <Compile Include="Mvc\Validation\DataAnnotationsModelValidatorProviderHelper.cs" />
+    <Compile Include="Mvc\Validation\DataTypeAttributeAdapter .cs" />
+    <Compile Include="Profilter\ProfilterHepler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\CryptoService.cs" />
+    <Compile Include="Sql\PagingHelper.cs" />
+    <Compile Include="Traceing\EFTracingListener.cs" />
+    <Compile Include="Traceing\LogTextTraceListener.cs" />
+    <Compile Include="Traceing\TraceComponent.cs" />
+    <Compile Include="Utilities\DotNetBean\CookieHelper.cs" />
+    <Compile Include="Utilities\NPOI\ColumnBuilder.cs" />
+    <Compile Include="Utilities\NPOI\ColumnFactory.cs" />
+    <Compile Include="Utilities\NPOI\ExcelImporter.cs" />
+    <Compile Include="Utilities\NPOI\ExcelReporter.cs" />
+    <Compile Include="Utilities\Pdf\PdfHelper.cs" />
+    <Compile Include="Utilities\RestHelper\DtoMessage.cs" />
+    <Compile Include="Utilities\RestHelper\RestApiHelper.cs" />
+    <Compile Include="Utilities\RestHelper\RestHelper.cs" />
+    <Compile Include="Security\SecuritySignHelper.cs" />
+    <Compile Include="Utilities\RestHelper\WebRequestHelper.cs" />
+    <Compile Include="Utilities\Serializer.cs" />
+    <Compile Include="WebApi\AppAccountBiz.cs" />
+    <Compile Include="WebApi\BaseApiRequest.cs" />
+    <Compile Include="WebApi\BaseApiResponse.cs" />
+    <Compile Include="WebApi\ErrorCode.cs" />
+    <Compile Include="WebApi\IApiRequest.cs" />
+    <Compile Include="WebApi\Singleton.cs" />
+    <Compile Include="WebApi\VerifyHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QK.APP.Entity\QK.QAPP.Entity.csproj">
+      <Project>{ba44676a-cc87-4e0b-9050-a6e88c589515}</Project>
+      <Name>QK.QAPP.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Global\QK.QAPP.Global.csproj">
+      <Project>{6c5277ae-2aa1-4390-b536-0979bc8c30b1}</Project>
+      <Name>QK.QAPP.Global</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,555 @@
+﻿@Scripts.Render("~/bundles/bootbox")
+<script type="text/javascript">
+    var appPermission_msg = '@ViewData["noPermission"]';
+    if (appPermission_msg != '') {
+        bootbox.alert(appPermission_msg, function () { $(window).unbind('beforeunload'); window.location.href = '/'; });
+    }
+</script>
+@if (@ViewData["noPermission"] == null || string.IsNullOrEmpty(@ViewData["noPermission"] + string.Empty))
+{
+    <!--表单开始-->
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-header widget-header-blue widget-header-flat">
+                    <h4 class="lighter">
+                        贷款申请
+                        <button class="btn btn-prev" type="button" onclick=" history.go(-1); " style="float: right">
+                            <i class="icon-arrow-left"></i>
+                            返回
+                        </button>
+                    </h4>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <form id="applyInfoForm" action="#" method="post" class="form-horizontal">
+                            <div class="step-content row-fluid position-relative" id="step-container">
+                                <div id="step1">
+                                    <fieldset>
+                                        <legend>申请信息</legend>
+                                        @*预申请单子的ID*@
+                                        <input type="hidden" name="preAppId" id="preAppId"
+                                               value="@if (ViewData["preAppId"] != null)
+                                                      {
+                                                          @ViewData["preAppId"]
+                                                      }" />
+                                        <div class="form-group">
+                                            <div class="clearfix">
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    客户名称
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <input type="text" name="customerName" id="customerName" class="col-xs-12" maxlength="25" readonly="readonly"
+                                                           value="@if (ViewData["customerName"] != null)
+                                                                  {
+                                                                      @ViewData["customerName"]
+                                                                  }" />
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    身份证号码
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <input type="text" name="customerIDCard" id="customerIDCard" class="col-xs-12" maxlength="18" readonly="readonly"
+                                                           value="@if (ViewData["customerCardID"] != null)
+                                                                  {
+                                                                      @ViewData["customerCardID"]
+                                                                  }" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    业务开办城市
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <select class="col-xs-12" id="applyCity" name="applyCity">
+                                                        <option value="">--选择城市--</option>
+                                                        @foreach (var city in ViewBag.CityList)
+                                                        {
+                                                            if (ViewData["edit_cityCode"] != null && city.CITY_CODE == ViewData["edit_cityCode"].ToString())
+                                                            {
+                                                                <option value='@city.AREA_CODE,@city.CITY_CODE' selected="selected">@city.CITY_NAME</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@city.AREA_CODE,@city.CITY_CODE">@city.CITY_NAME</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">合同金额：</label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="contractValue" id="contractValue" class="col-xs-12" readonly="readonly" />
+                                                    <span class="input-group-addon">元</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    业务品种
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <select class="col-xs-12" id="productCode" name="productCode">
+                                                        <option value="">--选择品种--</option>
+                                                        @foreach (var product in ViewBag.ProductList)
+                                                        {
+                                                            if (ViewData["proCode"] != null && ViewData["proCode"].ToString() == product.productCode)
+                                                            {
+                                                                <option value="@product.productCode" selected="selected">@product.productName</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@product.productCode">@product.productName</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    申请期限
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <select class="col-xs-12" id="productTerm" name="productTerm">
+                                                        <option value="">--选择期限--</option>
+                                                        @foreach (var term in ViewBag.TermList)
+                                                        {
+                                                            if (ViewData["terms"] != null && ViewData["terms"].ToString() == term.ToString())
+                                                            {
+                                                                <option value="@term" selected="selected">@term</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@term">@term</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">还款方式：</label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <select class="col-xs-12" id="repaymentType" name="repaymentType">
+                                                        @foreach (var repayType in ViewBag.RePayTypeList)
+                                                        {
+                                                            <option value="@repayType.dataCode">@repayType.dataName</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">申请利率：</label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="rate" id="rate" class="col-xs-12" disabled="disabled" />
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    合作渠道
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <select class="col-xs-12" id="platform" name="platform">
+                                                        <option value="">--选择渠道--</option>
+                                                        @foreach (var item in ViewBag.Plantform)
+                                                        {
+                                                            <option value="@item.DATA_CODE">@(item.DATA_CODE + " " + item.DATA_NAME)</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">罚息利率：</label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="defaultInterestRatio" id="defaultInterestRatio" class="col-xs-12" disabled="disabled" />
+                                                    <input type="hidden" name="rateType" id="rateType" value="0" />
+                                                    <span class="input-group-addon">‰</span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    借款用途
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-8">
+                                                    <div class="input-group">
+                                                        @foreach (var item in ViewBag.LoanPurpose)
+                                                        {
+                                                            <label class="radio-inline">
+                                                                @if (item.DATA_CODE.ToString() == (ViewData["loanPur"] == null ? string.Empty : ViewData["loanPur"].ToString()))
+                                                                {
+                                                                    <input name="loanPurpose" type="radio" class="ace" value="@item.DATA_CODE" id="@item.DATA_CODE" checked="checked">
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input name="loanPurpose" type="radio" class="ace" value="@item.DATA_CODE" id="@item.DATA_CODE">
+                                                                }
+
+                                                                <span class="lbl control-label">@item.DATA_NAME</span>
+                                                                @if (item.DATA_CODE.ToString() == "LoanPurposeOther")
+                                                                {
+                                                                    if (item.DATA_CODE.ToString() == (ViewData["loanPur"] == null ? string.Empty : ViewData["loanPur"].ToString()))
+                                                                    {
+                                                                        <input type="text" name="memoOfLoanPurposeOther" id="memoOfLoanPurposeOther" value="@ViewData["memoOfLoanPurposeOther"]" />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input type="text" name="memoOfLoanPurposeOther" id="memoOfLoanPurposeOther" style="display: none" />
+                                                                    }
+                                                                }
+                                                            </label>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    申请金额
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <div class="input-group">
+                                                        <input type="text" name="applyAmount" id="applyAmount" class="col-xs-12" maxlength="25"
+                                                               value="@if (ViewData["applyAmt"] != null)
+                                                                      {
+                                                                          @ViewData["applyAmt"]
+                                                                      }" />
+                                                        <span class="input-group-addon">元</span>
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    可接受月还款：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <div class="input-group">
+                                                        <input type="text" name="payAmtMonthly" id="payAmtMonthly" class="col-xs-12" maxlength="25"
+                                                               value="" />
+                                                        <span class="input-group-addon">元</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <legend>费用信息</legend>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">借款咨询费(含风险金)：</label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="consultationCharge" id="consultationCharge" class="col-xs-12" disabled="disabled" />
+                                                    <input type="hidden" name="consultationChargeRate" id="consultationChargeRate" />
+                                                    <span class="input-group-addon">元</span>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">借款服务费：</label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="serviceCharge" id="serviceCharge" class="col-xs-12" disabled="disabled" />
+                                                    <input type="hidden" name="serviceChargeRate" id="serviceChargeRate" />
+                                                    <span class="input-group-addon">元</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+                                <hr />
+                                <div class="row-fluid wizard-actions">
+
+                                    <button class="btn btn-success" type="submit" id="submitBtn">
+                                        下一步
+                                        <i class="icon-arrow-right icon-on-right"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                        <!-- /widget-main -->
+                    </div>
+                    <!-- /widget-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Content/assets/js/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        //**ready函数开始**
+        $(function() {
+            //限制输入，只能输入数字及小数点
+            $('#applyAmount').focus(function() {
+                $(this).keyup(function() {
+                    $(this).val($(this).val().replace(/[^\d.]/g, "")); //清除“数字”和“.”以外的字符
+                    $(this).val($(this).val().replace(/^\./g, "")); //验证第一个字符是数字而不是.
+                    $(this).val($(this).val().replace(/\.{2,}/g, ".")); //只保留第一个. 清除多余的.
+                    //输入贷款金额后计算合同金额
+                    CalcuContractValue.apply(this);
+                });
+            });
+            //限制输入，只能输入数字及小数点
+            $('#payAmtMonthly').focus(function() {
+                $(this).keyup(function() {
+                    $(this).val($(this).val().replace(/[^\d.]/g, ""));
+                    $(this).val($(this).val().replace(/^\./g, ""));
+                    $(this).val($(this).val().replace(/\.{2,}/g, "."));
+                });
+            });
+
+            $.validator.addMethod("checkIfGreatThen", function(value, element) {
+                return value <= parseFloat($('#applyAmount').val());
+            }, "数值过大！");
+            $.validator.addMethod("isIdCard", function(value, element) {
+                return Utilities.IsIdCard(value); //this.optional(element) ||
+            }, '不是合法的身份证！');
+
+            //借款用途change事件
+            $('[name=loanPurpose]').change(function() {
+                var loanOtherText = $('#memoOfLoanPurposeOther');
+                if ($('#LoanPurposeOther').is(':checked')) {
+                    $(loanOtherText).css('display', 'inline-block');
+                } else {
+                    $(loanOtherText).css('display', 'none');
+                }
+            });
+
+            $('#applyCity').change(function () {
+                //清空产品信息
+                InitProduct();
+                var cityVal = $(this).val().split(',')[1];//城市编码
+                if (cityVal != '') {
+                    //加载产品信息
+                    $.getJSON('/ProductApplication/GetProductAndRepayType?cityCode=' + cityVal + '&d=' + new Date() + '&type=CREDIT', function (result) {
+                        var products = InitProduct();
+                        $(result.proList).each(function(index, item) {
+                            $(products).append('<option value="' + item.productCode + '">' + item.productName + '</option>');
+                        });
+                    });
+                    InitRepayment();
+                } else {
+                    //清空相关信息
+                    InitProduct();
+                    InitTerm();
+                    InitRate();
+                    CalcuContractValue.apply($('#applyAmount'));
+                }
+            });
+
+            //选择产品后加载期数，费率,logo
+            //还款方式 2015/10/8 修改
+            $('#productCode').change(function() {
+                var proCode = $(this).val();
+                //期数
+                InitTerm();
+                //费率归零
+                InitRate();
+
+                $.getJSON('/ProductApplication/GetProductInfo?proCode=' + proCode + '&d=' + new Date(), function(data) {
+                    //期数
+                    var term = InitTerm();
+                    $(data.termList).each(function(index, item) {
+                        if (data.termList.length == 1) {
+                            $(term).append('<option value="' + item + '" selected="selected">' + item + '</option>');
+                        } else {
+                            $(term).append('<option value="' + item + '">' + item + '</option>');
+                        }
+                    });
+                    if (data.chargeList != null) {
+                        //申请利率
+                        $('#rate').val(Utilities.MoveDecimalPoint(data.chargeList.rate, 2));
+                        //罚息利率
+                        $('#defaultInterestRatio').val(Utilities.MoveDecimalPoint(data.chargeList.defaultInterestRatio, 3));
+                        $('#serviceChargeRate').val(data.chargeList.serviceChargeRatio); //借款服务费
+                        $('#rateType').val(data.chargeList.rateType); //利率类型
+                    }
+                    //还款方式 2015/10/8 修改
+                    //if (result.repayType != null) {
+                    //    $('#repaymentType').empty().append('<option value="' + result.repayType.dataCode + '">' + result.repayType.dataName + '</option>');
+                    //}
+                    if (data.repayType != null) {
+                        var repaymentType = $('#repaymentType').empty();
+                        $(data.repayType).each(function(index, item) {
+                            repaymentType.append('<option value="' + item.dataCode + '">' + item.dataName + '</option>');
+                        });
+                    }
+
+                    $('#consultationChargeRate').val(data.consultationChargeRatio); //借款咨询费
+
+                    CalcuContractValue.apply($('#applyAmount'));
+                });
+            });
+            //$('#productCode').change();
+            //先归零金额信息的显示，重置费用信息
+            ResetInfo();
+
+            //表单验证
+            $('#applyInfoForm').validate({
+                errorElement: 'i',
+                errorPlacement: function(error, element) {
+                    //$(element).attr('id') == 'applyAmount' || $(element).attr('id') == 'payAmtMonthly' ||
+                    if ($(element).attr('id') == 'applyAmount' || $(element).attr('id') == 'payAmtMonthly') {
+                        $(element).parent().parent().append(error);
+                    } else if ($(element).attr('name') == 'loanPurpose' || $(element).attr('name') == 'customerType') {
+                        $(element).parent().parent().parent().append(error);
+                    } else {
+                        $(element).parent().append(error);
+                    }
+                },
+                rules: {
+                    customerName: { required: true, maxlength: 25 },
+                    customerIDCard: { required: true, isIdCard: true },
+                    applyCity: { required: true },
+                    productCode: { required: true },
+                    productTerm: { required: true },
+                    applyAmount: { required: true, number: true, min: 10000, max: 500000 },
+                    payAmtMonthly: { number: true, checkIfGreatThen: true },
+                    loanPurpose: { required: true },
+                    customerType: { required: true },
+                    carType: { required: true },
+                    memoOfLoanPurposeOther: { required: true },
+                    platform: { required: true }
+                },
+                messages: {
+                    customerName: { required: '<i class="icon-info-sign red">请填写客户名称!</i>', maxlength: '<i class="icon-info-sign red">客户名称大于规定字符数！</i>' },
+                    customerIDCard: { required: '<i class="icon-info-sign red">请输入身份证号!</i>', isIdCard: '<i class="icon-info-sign red">不是合法的身份证号!</i>' },
+                    applyCity: { required: '<i class="icon-info-sign red">请选择开办城市!</i>' },
+                    productCode: { required: '<i class="icon-info-sign red">请选择业务品种!</i>' },
+                    productTerm: { required: '<i class="icon-info-sign red">请选择申请期限!</i>' },
+                    applyAmount: {
+                        required: '<i class="icon-info-sign red">请填写申请金额!</i>',
+                        number: '<i class="icon-info-sign red">申请金额格式错误!</i>',
+                        min: '<i class="icon-info-sign red">请输入不小于{0}的申请金额!</i>',
+                        max: '<i class="icon-info-sign red">请输入不大于{0}的申请金额!</i>'
+                    },
+                    payAmtMonthly: { number: '<i class="icon-info-sign red">月还款金额格式错误!</i>', checkIfGreatThen: '<i class="icon-info-sign red">月还款金额不能大于申请金额!</i>' },
+                    loanPurpose: { required: '<i class="icon-info-sign red">请选择借款用途!</i>' },
+                    customerType: { required: '<i class="icon-info-sign red">请选择客户类型!</i>' },
+                    carType: { required: '<i class="icon-info-sign red">请选择购车种类!</i>' },
+                    memoOfLoanPurposeOther: { required: '<i class="icon-info-sign red" style="font-size:12px">请填写借款用途其他!</i>' },
+                    platform: { required: '<i class="icon-info-sign red" style="font-size:12px">请选择合作渠道!</i>' }
+                },
+                invalidHandler: function(form, validator) { //验证不通过
+                    return false;
+                },
+                submitHandler: function(form) { //验证通过
+                    if (!$(form).valid()) {
+                        return false;
+                    }
+
+                    var param = $("#applyInfoForm").serialize();
+                    $.ajax({
+                        url: "/PreApplication/PreApplication",
+                        type: "post",
+                        dataType: "text",
+                        data: param,
+                        success: function(result) {
+                            eval('var data = ' + result);
+                            if (data.isRedirect != 'true') {
+                                Utilities.alertTip(data.resultMsg);
+                            } else {
+                                window.location.href = data.resultMsg;
+                            }
+                        }
+                    });
+
+                    //为了防止多次点击生成多余的申请单，所以在点击一次后禁用
+                    $('#submitBtn').attr('disabled', 'disabled');
+                    return true;
+                }
+            });
+        });
+        //**ready函数结束**
+
+        @*页面用到的函数*@
+        //清空申请金额，可接受月还款；重置费用信息
+        var ResetInfo = function() {
+            $('#payAmtMonthly').val('');
+            $('#productCode').change();
+        };
+
+        //费率归零
+        var InitRate = function() {
+            $('#rate').val(0);
+            $('#defaultInterestRatio').val(0);
+            $('#serviceChargeRate').val(0);
+            $('#consultationChargeRate').val(0);
+            $('#rateType').val(0);
+        };
+        //初始化期限
+        var InitTerm = function() {
+            return $('#productTerm').empty().append('<option value="">--选择期限--</option>');
+        };
+        //初始化品种
+        var InitProduct = function() {
+            return $('#productCode').empty().append('<option value="">--选择品种--</option>');
+        };
+        //初始化还款方式
+        var InitRepayment = function () {
+            return $('#repaymentType').empty();
+        };
+
+        //计算合同金额，咨询费，服务费
+        var CalcuContractValue = function() {
+            var applyAmount = parseFloat($(this).val());
+            if (!applyAmount) {
+                applyAmount = 0;
+            }
+            //合同金额
+            var contractAmt = applyAmount / (1 - parseFloat($('#consultationChargeRate').val()));
+            //保留百位
+            contractAmt = (contractAmt / 100).toFixed(0) * 100;
+            //咨询费
+            var consultationCharge = contractAmt - applyAmount;
+            if (consultationCharge < 0) {
+                consultationCharge = 0;
+            }
+            //服务费
+            var serviceCharge = contractAmt * parseFloat($('#serviceChargeRate').val());
+
+
+            $('#serviceCharge').val(serviceCharge.toFixed(2));
+            $('#consultationCharge').val(consultationCharge.toFixed(2));
+            $('#contractValue').val(contractAmt.toFixed(0));
+        };
+        
+    </script>
+}

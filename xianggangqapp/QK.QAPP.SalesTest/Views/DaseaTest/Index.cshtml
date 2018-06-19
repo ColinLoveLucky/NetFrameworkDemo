@@ -1,0 +1,42 @@
+﻿@using NPOI.HSSF.Record.Formula.Functions
+@using QK.QAPP.SalesTest.Controllers
+@{
+    Layout = null;
+    int count = 0;
+}
+
+<table>
+    <tr>
+        <th>排序</th>
+        <th>Map时间</th>
+        <th>插入数据时间</th>
+        <th>总时间</th>
+    </tr>
+
+    @{
+        if (ViewBag.Message != null )
+        {
+            long mapTimeSum = 0, updateTimeSum = 0, totalTimeSum = 0;
+            foreach (var data in DaseaTestController.saveCustomerTimes)
+            {
+                <tr>
+                    <td>@data.Order</td>
+                    <td>@data.MapTime</td>
+                    <td>@data.UpdateTime</td>
+                    <td>@data.TotalTime</td>
+                </tr>
+                count = count + 1;
+                mapTimeSum = mapTimeSum + data.MapTime;
+                updateTimeSum = updateTimeSum + data.UpdateTime;
+                totalTimeSum = totalTimeSum + data.TotalTime;
+            }
+            <tr>
+                <td>合计</td>
+                <td>@mapTimeSum</td>
+                <td>@updateTimeSum</td>
+                <td>@totalTimeSum</td>
+            </tr>
+        }
+    }
+</table>
+<p> 总共 @count 条数据</p>

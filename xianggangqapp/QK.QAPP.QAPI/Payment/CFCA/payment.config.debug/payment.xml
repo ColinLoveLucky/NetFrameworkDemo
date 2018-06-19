@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<PaymentConfig>
+
+	<!--构的的签名证书和口令-->
+	<MyKeystoreFilename>test.pfx</MyKeystoreFilename>
+	<MyKeystorePassword>cfca1234</MyKeystorePassword>
+	
+	<!--支付平台的公钥证书-->
+	<PaymentCertificateFilename>paytest.cer</PaymentCertificateFilename>
+	
+	<!--支付平台支付接口地址-->
+	<PaymentUrl>https://test.china-clearing.com/Gateway/InterfaceI</PaymentUrl>
+	
+	<!--支付平台交易接口地址-->
+	<TxUrl>https://test.china-clearing.com/Gateway/InterfaceII</TxUrl>
+	
+	<!--支付平台支付接口地址-->
+	<CmbPaymentUrl>https://test.china-clearing.com/Gateway4cmbchina/InterfaceI</CmbPaymentUrl>
+	
+	<!--支付平台交易接口地址-->
+	<CmbTxUrl>https://test.china-clearing.com/Gateway4cmbchina/InterfaceII</CmbTxUrl>
+	
+	<!--支付平台支付接口地址-->
+	<PaymentUserPaymentUrl>https://test.china-clearing.com/Gateway4PaymentUser/InterfaceI</PaymentUserPaymentUrl>
+	
+	<!--支付平台交易接口地址-->
+	<PaymentUserTxUrl>https://test.china-clearing.com/Gateway4PaymentUser/InterfaceII</PaymentUserTxUrl>
+</PaymentConfig>

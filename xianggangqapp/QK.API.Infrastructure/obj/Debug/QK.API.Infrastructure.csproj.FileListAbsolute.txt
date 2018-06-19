@@ -1,0 +1,5 @@
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.API.Infrastructure\bin\Debug\QK.API.Infrastructure.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.API.Infrastructure\bin\Debug\QK.API.Infrastructure.pdb
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.API.Infrastructure\obj\Debug\QK.API.Infrastructure.csprojResolveAssemblyReference.cache
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.API.Infrastructure\obj\Debug\QK.API.Infrastructure.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.API.Infrastructure\obj\Debug\QK.API.Infrastructure.pdb

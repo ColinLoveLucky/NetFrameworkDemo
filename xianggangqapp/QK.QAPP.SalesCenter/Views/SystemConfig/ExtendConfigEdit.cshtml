@@ -1,0 +1,303 @@
+﻿@{
+    ViewBag.Title = "ExtendConfigEdit";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<link href="~/Content/assets/css/chosen.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="extendConfigEditForm" role="form" style="margin-bottom:50px">
+            <input id="ID" name="ID" class="col-sm-12 col-xs-12" type="hidden">
+            <fieldset>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">操作类型：</label>
+                    <div class="col-sm-9">
+                        <select id="ACTION_GROUP" name="ACTION_GROUP" class="col-sm-12 col-xs-12">
+                            <option value="">--请选择操作类型--</option>
+                            @foreach (var item in ViewBag.ActionGroup)
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">产品：</label>
+                    <div class="col-sm-9">
+                        <select id="PRODUCT_CODE" name="PRODUCT_CODE">
+                            <option value="">--请选择产品--</option>
+                            @foreach (var item in ViewBag.ProductInfo)
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">城市：</label>
+                    <div class="col-sm-9">
+                        <select id="CITY_CODE" name="CITY_CODE" class="col-sm-12 col-xs-12">
+                            <option value="">--请选择城市--</option>
+                            @foreach (var item in ViewBag.City)
+                            {
+                                <option value="@item.CITY_CODE">@item.CITY_NAME</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">目标表单：</label>
+                    <div class="col-sm-9">
+                        <select id="TARGET_LOGO" name="TARGET_LOGO" class="col-sm-12 col-xs-12">
+                            <option value="">--请选择目标表单--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">目标产品列表：</label>
+                    <div class="col-sm-9">
+                        <select id="TARGET_PRODUCT_CODE" name="TARGET_PRODUCT_CODE" multiple class="chosen-select tag-input-style" style=" width: 568px;" data-placeholder="请选择产品..."></select>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">目标表单版本：</label>
+                    <div class="col-sm-9">
+                        <select id="TARGET_DFORM_VERSION" name="TARGET_DFORM_VERSION" class="col-sm-12 col-xs-12"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">可续展总期数：</label>
+                    <div class="col-sm-9">
+                        <input id="PERIOD_AMOUNT_TOTAL" name="PERIOD_AMOUNT_TOTAL" class="col-sm-12 col-xs-12" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">每次续展期数：</label>
+                    <div class="col-sm-9">
+                        <input id="PERIOD_AMOUNT" name="PERIOD_AMOUNT" class="col-sm-12 col-xs-12" type="text">
+                    </div>
+                </div>
+                <!-- 暂时不可用-->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">结算金额类型：</label>
+                    <div class="col-sm-9">
+                        <select id="SETTLEMENT_TYPE" name="SETTLEMENT_TYPE" class="col-sm-12 col-xs-12" disabled="disabled">
+                            <option value="STATIC">STATIC</option>
+                            <option value="FORMULA">FORMULA</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">结算金额：</label>
+                    <div class="col-sm-9">
+                        <input id="SETTLEMENT_AMOUNT" name="SETTLEMENT_AMOUNT" class="col-sm-12 col-xs-12" type="text" disabled="disabled">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">借款服务费类型：</label>
+                    <div class="col-sm-9">
+                        <select id="SERVICE_CHARGE_TYPE" name="SERVICE_CHARGE_TYPE" class="col-sm-12 col-xs-12" disabled="disabled">
+                            <option value="STATIC">STATIC</option>
+                            <option value="FORMULA">FORMULA</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">借款服务费：</label>
+                    <div class="col-sm-9">
+                        <input id="SERVICE_CHARGE" name="SERVICE_CHARGE" class="col-sm-12 col-xs-12" type="text" disabled="disabled">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">借款咨询费类型：</label>
+                    <div class="col-sm-9">
+                        <select id="CONSULT_CHARGE_TYPE" name="CONSULT_CHARGE_TYPE" class="col-sm-12 col-xs-12" disabled="disabled">
+                            <option value="STATIC">STATIC</option>
+                            <option value="FORMULA">FORMULA</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">借款咨询费：</label>
+                    <div class="col-sm-9">
+                        <input id="CONSULT_CHARGE" name="CONSULT_CHARGE" class="col-sm-12 col-xs-12" type="text" disabled="disabled">
+                    </div>
+                </div>
+                <!-- 暂时不可用-->
+            </fieldset>
+        </form>
+
+        <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px;">
+            <button class="btn btn-sm" data-dismiss="modal" onclick="parent.CloseDialog();">
+                <i class="icon-remove"></i>
+                取消
+            </button>
+
+            <button class="btn btn-sm btn-primary" onclick="$('#extendConfigEditForm').submit()">
+                <i class="icon-ok"></i>
+                保存
+            </button>
+        </div>
+    </div>
+</div>
+<script src="~/Content/assets/js/chosen.jquery.min.js"></script>
+<script src="/Content/assets/js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    $('.page-content').css('overflow-x', '');
+    $('#TARGET_PRODUCT_CODE').css('width', $('#TARGET_LOGO').width()).chosen();
+    $(function () {
+        //加载产品logo列表
+        $.getJSON('/SystemConfig/GetDFormCodes', function (codeList) {
+            var productCode = $('#TARGET_LOGO');
+            $(codeList).each(function (index, item) {
+                $(productCode).append('<option value="' + item + '">' + item + '</option>');
+            });
+        });
+        //加载目标表单版本列表
+        $('#TARGET_LOGO').change(function () {
+            $("#TARGET_PRODUCT_CODE").html("");
+            var proCode = $(this).val();
+            $.ajax({
+                url: "/SystemConfig/GetProductByLoGo?logo=" + proCode,
+                type: "post",
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        //parent.Utilities.alertTip(data[i].productName);
+                        $("#TARGET_PRODUCT_CODE").append('<option value="' + data[i].productCode + '">' + data[i].productName + '</option>')
+                        $('#TARGET_PRODUCT_CODE').trigger("chosen:updated");
+                    }
+                }
+            })
+            $.getJSON('/SystemConfig/GetDFormVersions?code=' + proCode + '&d=' + new Date(), function (result) {
+                var productVersion = $('#TARGET_DFORM_VERSION').empty();
+                $(result.versionList).each(function (index, item) {
+                    if (result.dicVers[proCode] == item) {
+                        $(productVersion).append('<option value="' + item + '">' + item + '（使用中）</option>');
+                    } else {
+                        $(productVersion).append('<option value="' + item + '">' + item + '</option>');
+                    }
+                });
+            });
+
+        });
+        var TARGET_PRODUCT_CODE = "";
+        //加载展期配置信息
+        if ('@ViewBag.OperateType' == 'edit') {
+            var id = Utilities.getUrlParam("id");
+            var productVersion = $('#TARGET_DFORM_VERSION').empty();
+            $.getJSON("/SystemConfig/GetExtendConfigEntiy?id=" + id, function (data) {
+                for (var i in data.extendConfigList) {
+                    if (i == 'TARGET_DFORM_VERSION') {
+                        if (data.usingDicVers[$('#TARGET_LOGO').val()] == data.extendConfigList[i]) {
+                            productVersion.append('<option value="' + data.extendConfigList[i] + '">' + data.extendConfigList[i] + '（使用中）</option>');
+                        } else {
+                            productVersion.append('<option value="' + data.extendConfigList[i] + '">' + data.extendConfigList[i] + '</option>');
+                        }
+                    } else if (i == "TARGET_LOGO") {
+                        $("#TARGET_LOGO").val(data.extendConfigList[i]);
+                        $.ajax({
+                            url: "/SystemConfig/GetProductByLoGo?logo=" + data.extendConfigList[i],
+                            type: "post",
+                            async: false,
+                            success: function (data) {
+                                //$("#TARGET_PRODUCT_CODE").html("");
+                                for (var m = 0; m < data.length; m++) {
+                                    //parent.Utilities.alertTip(data[i].productName);
+                                    $("#TARGET_PRODUCT_CODE").append('<option value="' + data[m].productCode + '">' + data[m].productName + '</option>')
+                                    $('#TARGET_PRODUCT_CODE').trigger("chosen:updated");
+                                }
+                            }
+                        })
+                        $.getJSON('/SystemConfig/GetDFormVersions?code=' + data.extendConfigList[i] + '&d=' + new Date(), function (result) {
+                            var productVersion = $('#TARGET_DFORM_VERSION');
+                            $(result.versionList).each(function (index, item) {
+                                if (result.dicVers[data.extendConfigList[i]] == item) {
+                                    $(productVersion).append('<option value="' + item + '">' + item + '（使用中）</option>');
+                                } else if (productVersion.val() == item) {
+
+                                } else {
+                                    $(productVersion).append('<option value="' + item + '">' + item + '</option>');
+                                }
+                            });
+                        });
+                    } else if (i == "TARGET_PRODUCT_CODE") {
+                        TARGET_PRODUCT_CODE = data.extendConfigList[i];
+                    } else {
+                        $('#' + i).val(data.extendConfigList[i]);
+                    }
+                }
+                var ops = $('#TARGET_PRODUCT_CODE').children('option');
+                for (var j = 0; j < ops.length; j++) {
+                    if (TARGET_PRODUCT_CODE.indexOf($(ops[j]).val()) >= 0) {
+                        $(ops[j]).attr('selected', 'true');
+                    }
+                }
+                $('#TARGET_PRODUCT_CODE').trigger("chosen:updated");
+            });
+
+        }
+        if ('@ViewData["operation"]' == 'add') {
+            $("#ID").val(0);
+        }
+    });
+
+    $('#extendConfigEditForm').validate({
+        errorElement: 'i',
+        errorPlacement: function (error, element) {
+            $(element).parent().append(error);
+        },
+        rules: {
+            ACTION_GROUP: { required: true },
+            PRODUCT_CODE: { required: true },
+            CITY_CODE: { required: true },
+            TARGET_LOGO: { required: true },
+            TARGET_PRODUCT_CODE: { required: true },
+            TARGET_DFORM_VERSION: { required: true },
+            PERIOD_AMOUNT_TOTAL: { required: true, number: true },
+            PERIOD_AMOUNT: { required: true, number: true }
+        },
+        messages: {
+            ACTION_GROUP: { required: '<i class="icon-info-sign red">请选择操作类型!</i>' },
+            PRODUCT_CODE: { required: '<i class="icon-info-sign red">请选择产品!</i>' },
+            CITY_CODE: { required: '<i class="icon-info-sign red">请填写城市!</i>' },
+            TARGET_LOGO: { required: '<i class="icon-info-sign red">请选择目标表单</i>' },
+            TARGET_PRODUCT_CODE: { required: '<i class="icon-info-sign red">请选择目标产品</i>' },
+            TARGET_DFORM_VERSION: { required: '<i class="icon-info-sign red">请选择目标表单版本</i>' },
+            PERIOD_AMOUNT_TOTAL: { required: '<i class="icon-info-sign red">请输入可续展总期数</i>' },
+            PERIOD_AMOUNT: { required: '<i class="icon-info-sign red">请输入每次续展期数</i>' }
+        },
+        invalidHandler: function (form, validator) {  //验证不通过
+            return false;
+        },
+        submitHandler: function (form) {  //验证通过
+            if (!$(form).valid()) {
+                return false;
+            }
+
+            SaveData();
+        }
+    });
+
+    function SaveData() {
+        $.ajax({
+            url: '/SystemConfig/AddOrUpdateExtendConfig',
+            type: 'post',
+            cache: false,
+            data: $('#extendConfigEditForm').serialize(),
+            success: function (data) {
+                if (data) {
+                    Utilities.alertTip(data);
+                }
+                else {
+                    if (parent && parent.CloseDialog) {
+                        parent.CloseDialog();
+                        parent.Utilities.alertTip("保存成功！");
+                    }
+                }
+            }
+        });
+    };
+</script>

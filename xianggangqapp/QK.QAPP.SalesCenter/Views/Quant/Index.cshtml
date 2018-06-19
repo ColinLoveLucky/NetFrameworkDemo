@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@Scripts.Render("~/bundles/bootbox")
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">量化派数据导入</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            <div class="col-sm-5 col-xs-12">
+                                <input type="file" id="excelFile" name="excelFile">
+                            </div>
+                            <button class="btn btn-purple btn-sm" type="button" id="importBtn">导入</button>
+                        </form>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+                            <span class="red">提示：根据导入数据量的不同，此操作可能需要几分钟时间，请耐心等待，谢谢。</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="HanldeData">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">处理数据</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="alert alert-info col-xs-3">未处理：<span id="unProcessNum">0</span></p>
+                        <p class="alert alert-danger col-xs-3">失败：<span id="failNum">0</span></p>
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            <button class="btn btn-purple btn-sm" type="button" id="handleBtn">开始处理</button>
+                        </form>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+                            <span class="red">提示：根据处理数据量的不同，此操作可能需要几分钟时间，请耐心等待，谢谢。</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="ImportResult" style="display:none">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">本次导入结果</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row">
+                        <p class="alert alert-info col-xs-3">总数据：<span id="importTotal">0</span></p>
+                        <p class="alert alert-success col-xs-3">新增：<span id="importInsert">0</span></p>
+                        <p class="alert alert-warning col-xs-3">更新：<span id="importUpdate">0</span></p>
+                        <p class="alert alert-danger col-xs-3">已存在：<span id="importExsit">0</span></p>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>已存在的申请单编号</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="exsitCodeList">
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="HandleResult" style="display:none">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">处理结果</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row">
+                        <p class="alert alert-info col-xs-4">总数据：<span id="handleTotal">0</span></p>
+                        <p class="alert alert-success col-xs-4">成功：<span id="handleSuccess">0</span></p>
+                        <p class="alert alert-danger col-xs-4">失败：<span id="handleFail">0</span></p>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>失败的申请单编号</th>
+                                        <th>失败原因</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="handleErrorList">
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/assets/js/ajaxfileupload.js"></script>
+<script>
+    $(function () {
+        //初始化
+        InitAceFileInput();
+        $('#importBtn').click(function () {
+            if ($("#excelFile").val().length > 0) {
+                bootbox.confirm('确定要导入新的量化派数据吗？', function (result) {
+                    if (result) {
+                        //上传
+                        UploadQuantData();
+                    }
+                });
+            }
+            else {
+                Utilities.alertTip("请选择文件！");
+            }
+        });
+        $('#handleBtn').click(function() {
+            bootbox.confirm('点击确定将处理量化派数据', function (result) {
+                    if (result) {
+                        //处理
+                        HandleData();
+                    }
+                });
+        });
+        HandleInfo();
+    });
+
+    //初始化文件上传控件
+    function InitAceFileInput() {
+        $('#excelFile').ace_file_input({
+            no_file: '未选择任何文件...',
+            btn_choose: '选择文件',
+            btn_change: '重新选择',
+            droppable: false,
+            onchange: null,
+            thumbnail: false, //| true | large
+            whitelist: 'xlsx|xls'
+            //blacklist:'exe|php'
+        });
+    }
+    //上传数据（Excel）
+    function UploadQuantData() {
+        $.ajaxFileUpload({
+            url: '/Quant/QuantImport',
+            type: 'post',
+            secureuri: false, //一般设置为false
+            fileElementId: 'excelFile', // 上传文件的id、name属性名
+            dataType: 'text', //返回值类型，一般设置为json、application/json
+            //elementIds: elementIds, //传递参数到服务器
+            success: function (result, status) {
+                var data = eval('('+result+')');
+                var exsitBody = $('#exsitCodeList');
+                exsitBody.empty();
+                $(data.ExsitsList).each(function(index, item) {
+                    var tr = $('<tr></tr>').appendTo(exsitBody);
+                    $('<td>' + item + '</td>').appendTo(tr);
+                });
+                $('#importTotal').text(data.TotleCount);
+                $('#importInsert').text(data.InsertCount);
+                $('#importUpdate').text(data.UpdateCount);
+                $('#importExsit').text(data.ExsitsList.length);
+
+                $('#ImportResult').slideDown(500);
+                $('#HandleResult').slideUp();
+            },
+            error: function (data, status, e) {
+                Utilities.alertTip("导入数据时出错！");
+            }
+        });
+    }
+    //处理数据
+    function HandleData() {
+        $.ajax({
+            url: '/Quant/Handle',
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var handleBody = $('#handleErrorList');
+                handleBody.empty();
+                for (var r in result.ResultDic) {
+                    var tr = $('<tr></tr>').appendTo(handleBody);
+                    $('<td>' + r + '</td>').appendTo(tr);
+                    $('<td>' + result.ResultDic[r] + '</td>').appendTo(tr);
+                }
+                $('#handleTotal').text(result.TotleCount);
+                $('#handleSuccess').text(result.SuccessCount);
+                $('#handleFail').text(result.FailCount);
+
+                $('#ImportResult').slideUp();
+                $('#HandleResult').slideDown(500);
+                HandleInfo();
+            }
+        });
+    }
+    //未处理及失败条数
+    function HandleInfo() {
+        $.ajax({
+            url:'/Quant/HandleInfo',
+            type:'get',
+            dataType:'json',
+            success: function(result) {
+                var up = $('#unProcessNum');
+                var f = $('#failNum');
+                up.text(result.UnProcess);
+                f.text(result.FailCount);
+            }
+        });
+    }
+</script>
+

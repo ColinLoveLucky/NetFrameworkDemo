@@ -1,0 +1,108 @@
+﻿@model QK.QAPP.Entity.QbEntity.BidSystemConfigInfo
+@{
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<style>
+    .form-group {
+        margin-bottom: 2px;
+    }
+</style>
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="frmInfo" role="form">
+            <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+            <fieldset>
+                <legend>配置信息</legend>
+                @*KEY*@
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="SYS_KEY">KEY</label>
+
+                    <div class="col-sm-9">
+                        <input id="SYS_KEY" class="col-xs-10 col-sm-5" name="SYS_KEY" type="text" value="@Model.SYS_KEY">
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+                @*VALUE*@
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="SYS_VALUE">VALUE</label>
+
+                    <div class="col-sm-9">
+                        <textarea id="SYS_VALUE" class="col-xs-10 col-sm-5" name="SYS_VALUE" type="text" rows="4">@Model.SYS_VALUE</textarea>
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+                @*描述*@
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="SYS_DEC">备注</label>
+
+                    <div class="col-sm-9">
+                        <textarea id="SYS_DEC" class="col-xs-10 col-sm-5" name="SYS_DEC" type="text" rows="4">@Model.SYS_DEC</textarea>
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+                @*排序*@
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="SYS_ORDER">排序</label>
+
+                    <div class="col-sm-9">
+                        <input id="SYS_ORDER" class="col-xs-10 col-sm-5" name="SYS_ORDER" type="text" value="@Model.SYS_ORDER">
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+                @*类型*@
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="SYS_TYPE">类型</label>
+
+                    <div class="col-sm-9">
+                        <input id="SYS_TYPE" class="col-xs-10 col-sm-5" name="SYS_TYPE" type="text" value="@Model.SYS_TYPE">
+                    </div>
+                </div>
+                <div class="space-1"></div>
+            </fieldset>
+        </form>
+    </div>
+
+</div>
+<div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px; z-index: 1000000">
+    <button class="btn btn-sm" data-dismiss="modal" onclick="parent.CloseDialog();">
+        <i class="icon-remove"></i>
+        取消
+    </button>
+
+    <button class="btn btn-sm btn-primary" onclick="saveData();">
+        <i class="icon-ok"></i>
+        保存
+    </button>
+</div>
+
+<script type="text/javascript">
+    function saveData() {
+        $.ajax({
+            type: "post",
+            url: "/BidSystemConfig/BidSysConfig",
+            data: $("#frmInfo").serialize(),
+            async: true,
+            success: function (d) {
+                if (d) {
+                    Utilities.alertTip(d);
+                }
+                else {
+                    Utilities.alertTip("保存成功!");
+                    parent.CloseDialog();
+                }
+            }
+        });
+    }
+
+    $(function () {
+        var id = Utilities.getUrlParam("id");
+        if (id && id !== "0") {
+            $("#KEY").attr("readonly", "readonly");
+        }
+
+    });
+</script>

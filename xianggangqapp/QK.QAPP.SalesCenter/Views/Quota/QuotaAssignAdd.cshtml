@@ -1,0 +1,172 @@
+﻿@{
+    ViewBag.Title = "QuotaAssignAdd";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+
+<form class="form-horizontal" id="quota_form">
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">全国剩余挂标额度：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static" id ="AMT_GLOBAL">@ViewBag.GlobalAvailableAmt</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">选择区域：</span>
+        <div class="col-xs-8">
+            <select name="AMT_ASSIGN_AREA" id="AMT_ASSIGN_AREA" class="form-control">
+                <option value="">--请选择--</option>
+                @foreach (KeyValuePair<string, string> kv in ViewBag.District as Dictionary<string, string>)
+                {
+                    <option value="@kv.Key">@kv.Value</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">分配金额(元)：</span>
+        <div class="col-xs-8">
+            <input type="text" name="AMT_ASSIGN" id="AMT_ASSIGN" class="form-control" maxlength="28" placeholder="请输入金额" />
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">使用日期：</span>
+        <div class="input-group col-xs-8">
+            <input type="text" name="AMT_ASSIGN_USE_DATE" id="AMT_ASSIGN_USE_DATE" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                   data-val="true" value="@ViewData["T1Date"]" />
+            <span class="input-group-addon" style="cursor:pointer;">
+                <i class="icon-calendar bigger-110"></i>
+            </span>
+        </div>
+    </div>
+    <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px; z-index: 0">
+        <a class="btn btn-sm" data-dismiss="modal" onclick="CloseDialog()">
+            <i class="icon-remove"></i>
+            取消
+        </a>
+
+        <button class="btn btn-sm btn-primary" type="submit">
+            <i class="icon-ok"></i>
+            保存
+        </button>
+    </div>
+</form>
+<script src="/Content/assets/js/jquery.validate.min.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<script type="text/javascript">
+    jQuery(function () {
+        jQuery("#AMT_ASSIGN_USE_DATE").datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            minDate: new Date(),//设置最小日期今天
+            //beforeShowDay: noWeekendsOrHolidays,//屏蔽非工作日
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            },
+            onSelect: function () {
+                $.ajax({
+                    url: "/QuotaAssign/GetGlobalAvailableAmt",
+                    type: "post",
+                    data: "dateTime=" + this.value,
+                    success: function (data) {
+                        if (data != "") {
+                            $('#AMT_GLOBAL').html(data);
+                        }
+                    }
+                });
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+    });
+
+    /*jquery datepicker 过滤非工作日  以下*/
+    /*[月份，日期，"自定义字符串"] */
+    var notDays = "@ViewData["NonWorkDayJson"]";
+    var nonWorkDayArry = notDays.split(',');
+    function noWeekendsOrHolidays(date) {
+        /*特别说明：以下注释放开，日历插件会自动识别周末并屏蔽，此处注释掉，会根据数据库维护自动屏蔽非工作日*/
+        //var noWeekend = $.datepicker.noWeekends(date);
+        // if (noWeekend[0]) {
+        for (i = 0; i < nonWorkDayArry.length; i++) {
+            var nonDay = new Date(nonWorkDayArry[i]);
+            if (date.getFullYear() == nonDay.getFullYear() && date.getMonth() == nonDay.getMonth() && date.getDate() == nonDay.getDate()) {
+                return [false, "非工作日"];
+            }
+        }
+        return [true, ''];
+        //} else {
+        //    return noWeekend;
+        //}
+    };
+    /*jquery datepicker 过滤非工作日  以上*/
+
+    var CloseDialog = function () {
+        parent.CloseDialog("#addAssign_dialog");  //父窗口对话框ID
+    }
+    /*非负数验证*/
+    jQuery.validator.addMethod("numCheck", function (value, element) {
+        return Utilities.CheckNum(value);
+    }, $.validator.format("输入值必须是非负数"));
+    /*表单验证保存额度*/
+    $('#quota_form').validate({
+        errorElement: 'i',
+        errorPlacement: function (error, element) {
+            if ($(element).attr('id') == 'AMT_ASSIGN_USE_DATE') {
+                $(element).parent().parent().append(error);
+            } else {
+                $(element).parent().append(error);
+            }
+        },
+        rules: {
+            AMT_ASSIGN_AREA: { required: true },
+            AMT_ASSIGN: { required: true, number: true ,numCheck:true},
+            AMT_ASSIGN_USE_DATE: { required: true }
+        },
+        messages: {
+            AMT_ASSIGN_AREA: { required: '<i class="icon-info-sign red">请选择区域!</i>' },
+            AMT_ASSIGN: {
+                required: '<i class="icon-info-sign red">请输入分配金额!</i>',
+                number: '<i class="icon-info-sign red">金额格式错误!</i>',
+                numCheck: '<i class="icon-info-sign red">输入金额必须为纯数字且不能小于0!</i>'
+            },
+            AMT_ASSIGN_USE_DATE: { required: '<i class="icon-info-sign red" style="margin-left:130px;">请选择使用开始日期!</i>' }
+        },
+        invalidHandler: function (form, validator) {  //验证不通过
+            return false;
+        },
+        submitHandler: function (form) {  //验证通过
+            if (!$(form).valid()) {
+                return false;
+            }
+            $.ajax({
+                url: "/QuotaAssign/AddQuotaAssign",
+                type: "post",
+                data: $("#quota_form").serialize() + "&AMT_ASSIGN_AREA_NM=" + $("#AMT_ASSIGN_AREA option:selected").text(),
+                success: function (data) {
+                    //此处需要加入异常处理，成功：关闭当前窗口，重新加载列表，失败：提示信息，停留在当前窗口
+                    if (data != "") {
+                        var result = JSON.parse(data);
+                        if (result.flag == "true") {
+                            parent.MsgTip(3000, result.errMsg, "success");
+                            CloseDialog();
+                        }
+                        else {
+                            parent.MsgTip(4000, result.errMsg, "warning");
+                        }
+                    }
+                    else {
+                        parent.MsgTip(4000, "额度分配失败,请重试！", "error");
+                    }
+                }
+            });
+        }
+    });
+</script>

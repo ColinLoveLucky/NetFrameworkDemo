@@ -1,0 +1,652 @@
+﻿@using QK.QAPP.Entity;
+@{
+    Dictionary<string, List<QB_V_AMTLIMIT>> dicQuotaInfo = ViewBag.QuotaInfo as Dictionary<string, List<QB_V_AMTLIMIT>>;
+    var TGJList = dicQuotaInfo["T"].Where(w => w.AMT_DEPT_NAME == "个人金融部");
+    var TFDList = dicQuotaInfo["T"].Where(w => w.AMT_DEPT_NAME == "房贷管理部");
+    var TCXList = dicQuotaInfo["T"].Where(w => w.AMT_DEPT_NAME == "创新业务部");
+    var TCDList = dicQuotaInfo["T"].Where(w => w.AMT_DEPT_NAME == "汽车金融部");
+    var TQDList = dicQuotaInfo["T"].Where(w => w.AMT_DEPT_NAME == "产品企划部");
+
+    var T1GJList = dicQuotaInfo["T1"].Where(w => w.AMT_DEPT_NAME == "个人金融部");
+    var T1FDList = dicQuotaInfo["T1"].Where(w => w.AMT_DEPT_NAME == "房贷管理部");
+    var T1CXList = dicQuotaInfo["T1"].Where(w => w.AMT_DEPT_NAME == "创新业务部");
+    var T1CDList = dicQuotaInfo["T1"].Where(w => w.AMT_DEPT_NAME == "汽车金融部");
+    var T1QDList = dicQuotaInfo["T1"].Where(w => w.AMT_DEPT_NAME == "产品企划部");
+}
+<ul id="quotaInfoTab" class="nav nav-tabs">
+    <li class="active">
+        <a href="#T" data-toggle="tab">
+            T日额度信息总览
+        </a>
+    </li>
+    <li>
+        <a href="#T1" data-toggle="tab">
+            T+1日额度信息总览
+        </a>
+    </li>
+</ul>
+<div id="quotaInfoTabContent" class="tab-content">
+    <div class="tab-pane fade in active" id="T" style="height:610px;overflow-y:auto;">
+        <!--个金额度  Start-->
+        <div class="form-inline">
+            <div class="col-xs-12 btn-primary">
+                <p class="form-control-static text-center">个人金融部额度</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">P2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">直投挂标总额度</td>
+                        <td>@TGJList.Where(p => p.AMT_TYPE.Equals("P2P_ZT")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">直投挂标可用额度</td>
+                        <td>@TGJList.Where(p => p.AMT_TYPE.Equals("P2P_ZT")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">理财挂标总额度</td>
+                        <td>@TGJList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">理财挂标可用额度</td>
+                        <td>@TGJList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">点融其他额度</td>
+                        <td>@TGJList.Where(p => p.AMT_TYPE.Equals("P2P_DR")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">点融其他可用额度</td>
+                        <td>@TGJList.Where(p => p.AMT_TYPE.Equals("P2P_DR")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">挂标总额度</td>
+                        <td>@TGJList.Where(p => p.AMT_TYPE.Equals("P2P_LC") || p.AMT_TYPE.Equals("P2P_ZT") || p.AMT_TYPE.Equals("P2P_DR")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">可用挂标总额度</td>
+                        <td>@TGJList.Where(p => p.AMT_TYPE.Equals("P2P_LC") || p.AMT_TYPE.Equals("P2P_ZT") || p.AMT_TYPE.Equals("P2P_DR")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">T2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">外贸抵押车贷额度</td>
+                        <td>@TGJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">外贸抵押车贷可用额度</td>
+                        <td>@TGJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">中航抵押车贷额度</td>
+                        <td>@TGJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_DYCD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">中航抵押车贷可用额度</td>
+                        <td>@TGJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_DYCD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">外贸其他额度</td>
+                        <td>@TGJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">外贸其他可用额度</td>
+                        <td>@TGJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">中航其他额度</td>
+                        <td>@TGJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">中航其他可用额度</td>
+                        <td>@TGJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--个金额度  End-->
+        <!--房贷额度  Start-->
+        <div class="form-inline">
+            <div class="col-xs-12 btn-primary">
+                <p class="form-control-static text-center">房贷管理部额度</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">P2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">理财挂标总额度</td>
+                        <td>@TFDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">理财挂标可用额度</td>
+                        <td>@TFDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">挂标总额度</td>
+                        <td>@TFDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">可用挂标总额度</td>
+                        <td>@TFDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">T2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">外贸房贷额度</td>
+                        <td>@TFDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_FD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">外贸房贷可用额度</td>
+                        <td>@TFDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_FD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">中航房贷额度</td>
+                        <td>@TFDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_FD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">中航房贷可用额度</td>
+                        <td>@TFDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_FD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--房贷额度  End-->
+        <!--创新部额度  Start-->
+        <div class="form-inline">
+            <div class="col-xs-12 btn-primary">
+                <p class="form-control-static text-center">创新业务部额度</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">P2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">P2P理财铜板街额度</td>
+                        <td>@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_LC_TBJ_CX")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">P2P理财铜板街可用额度</td>
+                        <td>@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_LC_TBJ_CX")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                <tr>
+                    <td class="bg-muted text-right col-xs-2">理财挂标总额度</td>
+                    <td class="col-xs-4">@TCXList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                    <td class="bg-muted text-right col-xs-2">理财挂标可用额度</td>
+                    <td>@TCXList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                </tr>
+                <tr>
+                    <td class="bg-muted text-right col-xs-2">挂标总额度</td>
+                    <td>@TCXList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                    <td class="bg-muted text-right col-xs-2">可用挂标总额度</td>
+                    <td>@TCXList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                </tr>
+
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">消费信贷额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">消费信贷放款额度</td>
+                        <td class="col-xs-4">@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_XFXD_XFXDFK")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">消费信贷放款可用额度</td>
+                        <td>@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_XFXD_XFXDFK")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">T2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸极客贷额度</td>
+                        <td class="col-xs-4">@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER_CX")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸极客贷可用额度</td>
+                        <td>@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER_CX")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+
+                <tr>
+                    <td class="bg-muted text-right col-xs-2">T2P极客贷中航其他额度</td>
+                    <td class="col-xs-4">@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER_CX")).Sum(s => s.AMT).ToString("N")</td>
+                    <td class="bg-muted text-right col-xs-2">T2P极客贷中航其他可用额度</td>
+                    <td>@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER_CX")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸抵押车贷额度</td>
+                        <td class="col-xs-4">@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CX")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸抵押车贷可用额度</td>
+                        <td>@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CX")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸抵押车贷额度</td>
+                        <td class="col-xs-4">@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CX")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸抵押车贷可用额度</td>
+                        <td>@TCXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CX")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--创新部额度  End-->
+        <!--汽车金融部  Start-->
+        <div class="form-inline">
+            <div class="col-xs-12 btn-primary">
+                <p class="form-control-static text-center">汽车金融部额度</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">P2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">理财挂标总额度</td>
+                        <td>@TCDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">理财挂标可用额度</td>
+                        <td>@TCDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">挂标总额度</td>
+                        <td>@TCDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">可用挂标总额度</td>
+                        <td>@TCDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">T2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">外贸抵押车贷额度</td>
+                        <td>@TCDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">外贸抵押车贷可用额度</td>
+                        <td>@TCDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">中航抵押车贷额度</td>
+                        <td>@TCDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_DYCD_CD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">中航抵押车贷可用额度</td>
+                        <td>@TCDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_DYCD_CD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">外贸其他额度</td>
+                        <td>@TCDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER_CD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">外贸其他可用额度</td>
+                        <td>@TCDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER_CD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">中航其他额度</td>
+                        <td>@TCDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER_CD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">中航其他可用额度</td>
+                        <td>@TCDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER_CD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--汽车金融部  End-->
+        <!--产品企划部额度  Start-->
+        <div class="form-inline">
+            <div class="col-xs-12 btn-primary">
+                <p class="form-control-static text-center">渠道额度额度</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">量化派额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">量化派放款额度</td>
+                        <td class="col-xs-4">@TQDList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_LHP_FK")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">量化派放款可用额度</td>
+                        <td>@TQDList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_LHP_FK")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--产品企划部额度  End-->
+    </div>
+    
+    <div class="tab-pane fade" id="T1" style="height:610px;overflow-y:auto;">
+        <!--个金额度  Start-->
+        <div class="form-inline">
+            <div class="col-xs-12 btn-primary">
+                <p class="form-control-static text-center">个人金融部额度</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">P2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">直投挂标总额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_TYPE.Equals("P2P_ZT")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">直投挂标可用额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_TYPE.Equals("P2P_ZT")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                <tr>
+                    <td class="bg-muted text-right col-xs-2">理财挂标总额度</td>
+                    <td>@T1GJList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                    <td class="bg-muted text-right col-xs-2">理财挂标可用额度</td>
+                    <td>@T1GJList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">点融其他额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_TYPE.Equals("P2P_DR")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">点融其他可用额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_TYPE.Equals("P2P_DR")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">挂标总额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_TYPE.Equals("P2P_LC") || p.AMT_TYPE.Equals("P2P_ZT") || p.AMT_TYPE.Equals("P2P_DR")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">可用挂标总额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_TYPE.Equals("P2P_LC") || p.AMT_TYPE.Equals("P2P_ZT") || p.AMT_TYPE.Equals("P2P_DR")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">T2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">外贸抵押车贷额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">外贸抵押车贷可用额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">中航抵押车贷额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_DYCD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">中航抵押车贷可用额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_DYCD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">外贸其他额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">外贸其他可用额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">中航其他额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">中航其他可用额度</td>
+                        <td>@T1GJList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--个金额度  End-->
+        <!--房贷额度  Start-->
+        <div class="form-inline">
+            <div class="col-xs-12 btn-primary">
+                <p class="form-control-static text-center">房贷管理部额度</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">P2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">理财挂标总额度</td>
+                        <td>@T1FDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">理财挂标可用额度</td>
+                        <td>@T1FDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">挂标总额度</td>
+                        <td>@T1FDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">可用挂标总额度</td>
+                        <td>@T1FDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">T2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">外贸房贷额度</td>
+                        <td>@T1FDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_FD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">外贸房贷可用额度</td>
+                        <td>@T1FDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_FD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">中航房贷额度</td>
+                        <td>@T1FDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_FD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">中航房贷可用额度</td>
+                        <td>@T1FDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_FD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--房贷额度  End-->
+        <!--创新部额度  Start-->
+        <div class="form-inline">
+            <div class="col-xs-12 btn-primary">
+                <p class="form-control-static text-center">创新业务部额度</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">P2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">P2P理财铜板街额度</td>
+                        <td>@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_LC_TBJ_CX")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">P2P理财铜板街可用额度</td>
+                        <td>@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_LC_TBJ_CX")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                <tr>
+                    <td class="bg-muted text-right col-xs-2">理财挂标总额度</td>
+                    <td class="col-xs-4">@T1CXList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                    <td class="bg-muted text-right col-xs-2">理财挂标可用额度</td>
+                    <td>@T1CXList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                </tr>
+                <tr>
+                    <td class="bg-muted text-right col-xs-2">挂标总额度</td>
+                    <td>@T1CXList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                    <td class="bg-muted text-right col-xs-2">可用挂标总额度</td>
+                    <td>@T1CXList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">消费信贷额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">消费信贷放款额度</td>
+                        <td class="col-xs-4">@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_XFXD_XFXDFK")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">费信贷放款可用额度</td>
+                        <td>@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_XFXD_XFXDFK")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">T2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸极客贷额度</td>
+                        <td class="col-xs-4">@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER_CX")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸极客贷可用额度</td>
+                        <td>@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER_CX")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+
+                <tr>
+                    <td class="bg-muted text-right col-xs-2">T2P极客贷中航其他额度</td>
+                    <td class="col-xs-4">@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER_CX")).Sum(s => s.AMT).ToString("N")</td>
+                    <td class="bg-muted text-right col-xs-2">T2P极客贷中航其他可用额度</td>
+                    <td>@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER_CX")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                </tr>
+
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸抵押车贷额度</td>
+                        <td class="col-xs-4">@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CX")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸抵押车贷可用额度</td>
+                        <td>@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CX")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸抵押车贷额度</td>
+                        <td class="col-xs-4">@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CX")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">T2P外贸抵押车贷可用额度</td>
+                        <td>@T1CXList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CX")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--创新部额度  End-->
+        <!--汽车金融部  Start-->
+        <div class="form-inline">
+            <div class="col-xs-12 btn-primary">
+                <p class="form-control-static text-center">汽车金融部额度</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">P2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">理财挂标总额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">理财挂标可用额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">挂标总额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">可用挂标总额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_TYPE.Equals("P2P_LC")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">T2P额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">外贸抵押车贷额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">外贸抵押车贷可用额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_DYCD_CD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">中航抵押车贷额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_DYCD_CD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">中航抵押车贷可用额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_DYCD_CD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">外贸其他额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER_CD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">外贸其他可用额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_WM_OTHER_CD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">中航其他额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER_CD")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">中航其他可用额度</td>
+                        <td>@T1CDList.Where(p => p.AMT_THIRD_TYPE.Equals("T2P_ZH_OTHER_CD")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--汽车金融部  End-->
+        <!--产品企划部额度  Start-->
+        <div class="form-inline">
+            <div class="col-xs-12 btn-primary">
+                <p class="form-control-static text-center">渠道额度</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center text-info">量化派额度信息总览</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-muted text-right col-xs-2">量化派放款额度</td>
+                        <td class="col-xs-4">@T1QDList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_LHP_FK")).Sum(s => s.AMT).ToString("N")</td>
+                        <td class="bg-muted text-right col-xs-2">量化派放款可用额度</td>
+                        <td>@T1QDList.Where(p => p.AMT_THIRD_TYPE.Equals("P2P_LHP_FK")).Sum(s => s.AMT_USABLE).ToString("N")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--产品企划部额度  End-->
+    </div>
+</div>
+<style type="text/css">
+    .tab-content {
+        padding: 5px 10px;
+    }
+
+    .bg-muted {
+        background-color: whitesmoke;
+        /*#f5f5f5*/
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $('#quotaInfoTab a[href="#T"]').click();//tab('show')
+    });
+</script>

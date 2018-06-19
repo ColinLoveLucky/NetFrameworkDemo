@@ -1,0 +1,37 @@
+﻿<form action="
+       $if(thisObj.Readonly)$
+
+       $else$
+         $thisObj.Action_Edit$
+       $endif$
+      "
+      data-readAcion=" $thisObj.Action_Read$"
+      data-subformID="$thisObj.ID$"
+      data-readOnly="$thisObj.Readonly$"
+      method="post"
+      class="form-horizontal"
+      id="$thisObj.Name$">
+
+    <input type="hidden" name="appid" value="" />
+    <input type="hidden" name="subformID" value="$thisObj.ID$" />
+    $Group:
+    {
+
+    <fieldset>
+        <legend>$it.GroupName$</legend>
+        $it.GroupHTML$
+    </fieldset>
+
+    }$
+</form>
+<script>
+    jQuery(function () {
+        //验证绑定
+        //jQuery("#$thisObj.Name$").validate({});
+        //写入APPID隐藏字段
+        var appid = Utilities.getUrlParam("appid");
+        //写入隐藏字段
+        jQuery("#$thisObj.Name$").find("input[name='appid']").val(appid);
+    });
+
+</script>

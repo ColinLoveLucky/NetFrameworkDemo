@@ -1,0 +1,126 @@
+﻿@Scripts.Render("~/bundles/bootbox")
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<div class="row" id="CityList">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">城市列表</h5>
+                <button class="btn btn-purple" id="add_city" onclick="EditCity()" style="float:right">添加城市</button>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="table-responsive">
+                        <table id="cityList_table" class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>编号</th>
+                                    <th>名称</th>
+                                    <th>区域</th>
+                                    <th>行政省</th>
+                                    <th>行政市</th>
+                                    <th>是否可用</th>
+                                    <th>区号</th>
+                                    <th>本城市产品</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cityList_table_body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="cityEdit_dialog" style="display:none;height:500px">
+    <iframe id="cityEdit_iframe" style="border: none; width: 100%; height: 500px;"></iframe>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        LoadCityList();
+    });
+
+    //加载城市列表
+    var LoadCityList = function () {
+        $.ajax({
+            url: '/SystemConfig/GetCityList',
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                var listBody = $('#cityList_table_body');
+                listBody.empty();
+                $(result).each(function (index, item) {
+                    var tr = $('<tr></tr>').appendTo(listBody);
+                    $('<td>' + item.ID + '</td>').appendTo(tr);
+                    $('<td>' + item.CITY_NAME + '</td>').appendTo(tr);
+                    $('<td>' + item.COMPANY_CODE + '</td>').appendTo(tr);
+                    $('<td>' + (item.AREA_PROVINCE == null ? '无' : item.AREA_PROVINCE) + '</td>').appendTo(tr);
+                    $('<td>' + (item.AREA_CITY == null ? '无' : item.AREA_CITY) + '</td>').appendTo(tr);
+                    $('<td>' + (item.ENABLE == '1' ? '可用' : '不可用') + '</td>').appendTo(tr);
+                    $('<td>' + item.CITY_CODE + '</td>').appendTo(tr);
+                    var p = $('<td></td>').appendTo(tr);
+                    var u = $('<ul style="list-style-type:none"></ul>').appendTo(p);
+                    var pros = (item.PRODUCT_CODE).split(',');
+                    $(pros).each(function (index, item) {
+                        $('<li>' + item + '</li>').appendTo(u);
+                    });
+                    $('<td><div class="visible-md visible-lg hidden-sm hidden-xs action-buttons"><a class="blue" href="javascript:void(0);" onclick="EditCity(' + item.ID + ')" title="编辑" data-toggle="modal" data-target="#myModal"><i class="icon-edit bigger-130"></i></a><a class="red" href="javascript:void(0);" onclick="DeleteCity(' + item.ID + ')" title="删除"><i class="icon-trash bigger-130"></i></a></div></td>').appendTo(tr);
+                });
+            }
+        });
+    };
+
+    //编辑城市
+    var EditCity = function (cityId) {
+        //override dialog's title function to allow for HTML titles
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                var $title = this.options.title || '&nbsp;'
+                if (("title_html" in this.options) && this.options.title_html == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+
+        $("#cityEdit_iframe").attr("src", "/SystemConfig/CityEdit?id=" + cityId);
+        jQuery('#cityEdit_dialog').dialog({
+            title: "<h4 class='smaller'><i class='icon-edit'></i>编辑城市信息</h4>",
+            title_html: true,
+            resizable: false,
+            width: "50%",
+            modal: true,
+            draggable: false,
+            close: function (event, ui) {
+                LoadCityList(); //刷新城市列表
+            }
+        });
+
+    };
+
+    var DeleteCity = function (cityId) {
+        bootbox.confirm("确定要删除吗？（注意：此操作将会删除本城市信息以及本城市相关的申请号配置信息！）", function (result) {
+            if (result) {
+                $.ajax({
+                    url: '/SystemConfig/DeleteCity',
+                    type: 'post',
+                    data: 'id=' + cityId,
+                    success: function (msg) {
+                        if (msg) {
+                            Utilities.alertTip(msg);
+                        } else {
+                            LoadCityList();
+                            Utilities.alertTip("删除成功！");
+                        }                        
+                    }
+                });
+            }
+        });
+    };
+
+    var CloseDialog = function () {
+        jQuery('#cityEdit_dialog').dialog("close");
+    };
+</script>

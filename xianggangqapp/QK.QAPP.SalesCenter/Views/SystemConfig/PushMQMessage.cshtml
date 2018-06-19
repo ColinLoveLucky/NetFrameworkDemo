@@ -1,0 +1,120 @@
+﻿
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">MQ消息发送</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="wysiwyg-editor" id="editor" contenteditable="true"></div>
+                    <div class="hr hr-double dotted"></div>
+                    <form class="form-horizontal" id="form_formCopy">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        Queue Name
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <input type="text" class="col-xs-12 form-control" id="queueName" name="account" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-sm btn-purple" onclick="PushMQMessage();">
+                                        <i class="icon-comment-alt"></i>
+                                        发送
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-2">
+
+    </div>
+</div>
+@section scripts{
+    <script src="~/Content/assets/js/bootstrap-wysiwyg.min.js"></script>
+    <script src="~/Content/assets/js/jquery.hotkeys.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //$('#editor').ace_wysiwyg();
+            var editor = $('#editor').ace_wysiwyg({
+                toolbar:
+                [
+                    'font',
+                    null,
+                    'fontSize',
+                    null,
+                    { name: 'bold', className: 'btn-info' },
+                    { name: 'italic', className: 'btn-info' },
+                    { name: 'strikethrough', className: 'btn-info' },
+                    { name: 'underline', className: 'btn-info' },
+                    null,
+                    { name: 'insertunorderedlist', className: 'btn-success' },
+                    { name: 'insertorderedlist', className: 'btn-success' },
+                    { name: 'outdent', className: 'btn-purple' },
+                    { name: 'indent', className: 'btn-purple' },
+                    null,
+                    null,//{ name: 'justifyleft', className: 'btn-primary' },
+                    null,//{ name: 'justifycenter', className: 'btn-primary' },
+                    null,//{ name: 'justifyright', className: 'btn-primary' },
+                    null,//{ name: 'justifyfull', className: 'btn-inverse' },
+                    null,
+                    { name: 'createLink', className: 'btn-pink' },
+                    { name: 'unlink', className: 'btn-pink' },
+                    null,
+                    null,//{ name: 'insertImage', className: 'btn-success' },
+                    null,
+                    'foreColor',
+                    null,
+                    { name: 'undo', className: 'btn-grey' },
+                    { name: 'redo', className: 'btn-grey' }
+                ]
+            }).prev().addClass('wysiwyg-style1');
+            var account = Utilities.getUrlParam('account');
+            $('#account').val(account);
+        });
+
+        //发送消息
+        function PushMQMessage() {
+            var msg = jQuery.trim($('#editor').text());
+            var qName = jQuery.trim($('#queueName').val());
+
+            if (msg == '') {
+                Utilities.alertTip("发送空消息有意思么？");
+                return;
+            }
+            if (qName == '') {
+                Utilities.alertTip("请填写Queue Name ！");
+                return;
+            }
+
+            var sendUrl = '/SystemConfig/PushMQMessageAjax';
+            $.ajax({
+                url: sendUrl,
+                type: 'post',
+                data: { message: msg, queueName: qName },
+                success: function (result) {
+                    Utilities.alertTip("发送成功！");
+                },
+                error: function (result) {
+                    alert(result);
+                }
+            });
+        }
+    </script>
+}

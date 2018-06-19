@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "QuotaAdjust";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+
+<form class="form-horizontal" id="quota_form">
+    <input type="hidden" id="ID" value="@Model.ID" />
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">额度类型：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static" id="AMT_TYPE_NAME">@Model.AMT_TYPE_NAME</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">可用额度：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static" id="AMT_USABLE">@Model.AMT_USABLE.ToString("N")</p>
+            <input type="hidden" id="amtUsable" value="@Model.AMT_USABLE" />
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">调整类型：</span>
+        <div class="col-xs-8">
+            <select name="adjustType" id="adjustType" class="form-control">
+                <option value="">请选择</option>
+                <option value="1">增加</option>
+                <option value="0">减少</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">调整金额：</span>
+        <div class="col-xs-8">
+            <input type="text" name="txtQuotaMoney" id="txtQuotaMoney" class="form-control" maxlength="28" />
+        </div>
+    </div>
+    <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px; z-index: 0">
+        <a class="btn btn-sm" data-dismiss="modal" onclick="CloseDialog()">
+            <i class="icon-remove"></i>
+            取消
+        </a>
+
+        <button class="btn btn-sm btn-primary" type="submit">
+            <i class="icon-ok"></i>
+            保存
+        </button>
+    </div>
+</form>
+<script src="/Content/assets/js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    /*非负数验证*/
+    jQuery.validator.addMethod("numCheck", function (value, element) {
+        return Utilities.CheckNum(value);
+    }, $.validator.format("输入值必须是非负数"));
+    /*减少的额度不能小于当前可用额度！*/
+    jQuery.validator.addMethod("quotaCheck", function (value, element) {
+        var amt_usable = $("#amtUsable").val();//获取当前可用额度
+        var adjust_type = $("#adjustType").val(); //获取选择的调整类型
+        if (adjust_type == 0)//当调整类型为减少时，加入验证信息
+        {
+            return parseFloat(value) <= parseFloat(amt_usable);
+        }
+        return true;
+    }, "减少的额度不能大于当前可用额度！")
+
+    /*表单验证保存额度*/
+    $('#quota_form').validate({
+        errorElement: 'i',
+        errorPlacement: function (error, element) {
+            $(element).parent().append(error);
+        },
+        rules: {
+            adjustType: { required: true },
+            txtQuotaMoney: { required: true, number: true, numCheck: true,quotaCheck:true}
+        },
+        messages: {
+            adjustType: { required: '<i class="icon-info-sign red">请选择调整类型!</i>' },
+            txtQuotaMoney: {
+                required: '<i class="icon-info-sign red">请输入调整金额!</i>',
+                number: '<i class="icon-info-sign red">金额格式错误!</i>',
+                numCheck: '<i class="icon-info-sign red">输入金额必须为纯数字且不能小于0!</i>',
+                quotaCheck: '<i class="icon-info-sign red">减少的额度不能大于当前可用额度!</i>'
+            }
+
+        },
+        invalidHandler: function (form, validator) {  //验证不通过
+            return false;
+        },
+        submitHandler: function (form) {  //验证通过
+            if (!$(form).valid()) {
+                return false;
+            }
+            $.ajax({
+                url: "/QuotaManage/AdjustQuota",
+                type: "post",
+                data: { id: $("#ID").val(), adjustType: $("#adjustType").val(), quotaAmt: $("#txtQuotaMoney").val() },
+                success: function (data) {
+                    //此处需要加入异常处理，成功：关闭当前窗口，重新加载列表，失败：提示信息，停留在当前窗口
+                    if (data != "") {
+                        var result = JSON.parse(data);
+                        if (result.flag == "true") {
+                            parent.MsgTip(3000, result.errMsg, "success");
+                            CloseDialog();
+                        }
+                        else {
+                            parent.MsgTip(4000, result.errMsg, "warning");
+                        }
+                    }
+                    else {
+                        parent.MsgTip(4000, "额度调整失败", "error")
+                    }
+                }
+            });
+        }
+    });
+    var CloseDialog = function () {
+        parent.CloseDialog("#adjust_dialog");  //父窗口对话框ID
+    }
+</script>

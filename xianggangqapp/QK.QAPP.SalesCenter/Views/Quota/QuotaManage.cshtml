@@ -1,0 +1,508 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+@Scripts.Render("~/bundles/bootbox")
+<div>
+    <ul class="nav nav-tabs" id="quotaTabs">
+        <li class="active" id="quotaList" style="border:none;">
+            <a href="#qlist" data-toggle="tab" onclick="javascript:SetCurrentGrid(1);">
+                额度列表
+            </a>
+        </li>
+        <li id="quotaHistory" style="border:none;">
+            <a href="#qhistory" data-toggle="tab" onclick="javascript:SetCurrentGrid(2);">
+                操作历史
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" style="height:auto; overflow-y:auto;">
+        <div id="qlist" class="tab-pane active">
+            <div class="form-horizontal form-group">
+                <div class="clearfix">
+                    <span class="control-label col-xs-12 col-sm-1">额度类型：</span>
+                    <div class="col-xs-12 col-sm-2">
+                        <select name="quotaType" id="quotaType" class="col-xs-12">
+                            <option value="">--请选择--</option>
+                            @foreach (var item in ViewData["QuotaType"] as List<QK.QAPP.Entity.QbEntity.QB_V_AMT_ATTRIBUTE>)
+                            {
+                                <option value="@item.PARENT_CODE">@item.PARENT_NAME</option>
+                            }
+
+                        </select>
+                    </div>
+                    <span class="control-label col-xs-12 col-sm-1">使用日期：</span>
+                    <div class="input-group col-xs-12 col-sm-2">
+                        <input type="text" name="txtUseDate" id="txtUseDate" class="form-control date-picker" data-date-format="yy-mm-dd"
+                               data-val="true" placeholder="请选择日期" />
+                        <span class="input-group-addon"
+                              style="cursor:pointer;">
+                            <i class="icon-calendar bigger-110"></i>
+                        </span>
+                    </div>
+                    <button class="btn btn-sm btn-success" onclick="QuotaQuery()">
+                        <i class="icon-search nav-search-icon"></i>查询
+                    </button>
+                    <button class="btn btn-sm btn-primary" onclick="AddQuota()">
+                        <i class="icon-plus nav-search-icon"></i>新增额度
+                    </button>
+                </div>
+            </div>
+            <table id="qlist-grid-list"></table>
+            <div id="qlist-grid-pager"></div>
+        </div>
+        <div id="qhistory" class="tab-pane">
+            <div class="form-horizontal form-group">
+                <div class="clearfix">
+                    <span class="control-label col-xs-12 col-sm-1">使用日期：</span>
+                    <div class="input-group col-xs-12 col-sm-2">
+                        <input type="text" name="txtUseDateHistory" id="txtUseDateHistory" class="form-control date-picker" data-date-format="yy-mm-dd"
+                               data-val="true" readonly="readonly" />
+                        <span class="input-group-addon"
+                              style="cursor:pointer;">
+                            <i class="icon-calendar bigger-110"></i>
+                        </span>
+                    </div>
+                    <button class="btn btn-sm btn-success" onclick="QuotaHistoryQuery()">
+                        <i class="icon-search nav-search-icon"></i>查询
+                    </button>
+                </div>
+            </div>
+            <table id="qhistory-grid-list"></table>
+            <div id="qhistory-grid-pager"></div>
+        </div>
+
+    </div>
+</div>
+<!--新增额度-->
+<div id="addQuota_dialog" style="display: none; height: 410px">
+    <iframe id="addQuota_iframe" style="border: none; width: 100%; height: 410px;"></iframe>
+</div>
+<!--查看/修改额度-->
+<div id="viewOrEdit_dialog" style="display:none;height:500px">
+    <iframe id="viewOrEdit_iframe" style="border: none; width: 100%; height: 500px;"></iframe>
+</div>
+<!--调整额度-->
+<div id="adjust_dialog" style="display:none;height:250px">
+    <iframe id="adjust_iframe" style="border: none; width: 100%; height: 250px; "></iframe>
+</div>
+<script type="text/javascript">
+    var dept = Utilities.getUrlParam("dept"); //department info 该参数配置在权限系统菜单上
+    jQuery(function () {
+        jQuery("#txtUseDate").datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+        jQuery("#txtUseDateHistory").datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+        //
+        var hs = window.location.hash;
+        if (!hs) {
+            hs = "#qlist";
+        }
+        jQuery('#quotaTabs').find('a[href="' + hs + '"]').click();
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function () {
+            jQuery(window).resize();
+        });
+
+        //override dialog's title function to allow for HTML titles
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                var $title = this.options.title || '&nbsp;';
+                if (("title_html" in this.options) && this.options.title_html == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+
+        /*为额度列表添加智能查询功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function () { IntelligentQuery(); });
+        jQuery(".input-icon").children("input[type='text']").keypress(function (e) { e = e || event; if (e.keyCode == 13) { jQuery(".input-icon").children("i").click(); }; });
+        jQuery("<a/>").attr("href", "javascript:;").text("智能查询").attr("onclick", "javascript:IntelligentQuery();").addClass("label label-lg label-pink arrowed-right").attr("style", "top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+
+        //加载额度列表
+        LoadQuotaList();
+        //加载历史列表
+        LoadHistoryList();
+    });
+
+    var qlist_grid_list = "#qlist-grid-list";
+    var qlist_grid_pager = "#qlist-grid-pager";
+    var qhistory_grid_list = "#qhistory-grid-list";
+    var qhistory_grid_pager = "#qhistory-grid-pager";
+    var currentGrid = qlist_grid_list;
+    /*设置当前页签 */
+    function SetCurrentGrid(flag) {
+        $("#nav_search_input").val('');//清空智能查询框
+        switch (flag) {
+            case 1: {
+                currentGrid = qlist_grid_list;
+            }
+                break;
+            case 2: {
+                currentGrid = qhistory_grid_list;
+            }
+                break;
+            default: break;
+
+        }
+    }
+    //加载额度列表
+    function LoadQuotaList() {
+        var url = "/QuotaManage/GetQuotaManageList?dept=" + dept; //请求地址
+        var colNames = ['<i class="hidden-480 icon-book"></i> 额度类型',
+            '<i class="hidden-480 icon-money"></i> 额度金额(元)', '<i class="hidden-480 icon-money"></i> 可用额度(元)',
+             '<i class="hidden-480 icon-money"></i> 已用额度(元)', '<i class="hidden-480 icon-book"></i> 募集计划编号',
+             '<i class="hidden-480 icon-tags"></i> 状态', '<i class="hidden-480 icon-calendar"></i> 开始使用日期',
+             '<i class="hidden-480 icon-calendar"></i> 结束使用日期', '<i class="hidden-480 icon-calendar"></i> 最后调整时间',
+             '<i class="hidden-480 icon-user"></i> 登记人', '<i class="hidden-480 icon-cogs"></i> 业务办理'];
+        var colModel = [
+            { name: 'AMT_TYPE_NAME', index: 'AMT_TYPE_NAME', width: '10%', sorttype: 'text' },
+            { name: 'AMT', index: 'AMT', width: '8%', formatter: 'number', formatoptions: { thousandsSeparator: ',' } },
+            { name: 'AMT_USABLE', index: 'AMT_USABLE', width: '8%', formatter: 'number', formatoptions: { thousandsSeparator: ',' } },
+            { name: 'AMT_USED', index: 'AMT_USED', width: '8%', formatter: 'number', formatoptions: { thousandsSeparator: ',' } },
+            { name: 'RAISE_PLAN_NO', index: 'RAISE_PLAN_NO', width: '9%' },
+            { name: 'AMT_STATE', index: 'AMT_STATE', width: '8%' },
+            { name: 'USE_START_DATE', index: 'USE_START_DATE', width: '8%', formatter: 'date', formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' } },
+            { name: 'USE_END_DATE', index: 'USE_END_DATE', width: '8%', formatter: 'date', formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' } },
+            { name: 'UPDATE_DATE', index: 'UPDATE_DATE', width: '10%', formatter: 'date', formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s' }, datefmt: 'Y-m-d H:i:s' },
+            { name: 'UPDATE_USER_NAME', index: 'UPDATE_USER_NAME', width: '8%' },
+            {
+                width: '15%',
+                formatter: function (cellvalue, options, rowObject) {
+                    /*根据额度属性，控制修改、删除、调整按钮的显示和隐藏*/
+                    var re = "";
+                    if (rowObject.AMT_MODIFIED_MODE == "AMT_CAN_BE_CHK" && rowObject.AMT_EFFECTIVE == 0)//确认前可修改（对应字典编码）
+                    {
+                        re += "<a style='margin-right:5px;cursor:pointer;' title='修改' onclick=\"ViewOrModifyQuota('" + rowObject.ID + "','modify');\">修改</a>";
+                    }
+                    if (rowObject.AMT_DELETE_MODE == "ADC_CAN_BE_CHK" && rowObject.AMT_EFFECTIVE == 0)//确认前可删除
+                    {
+                        re += "<a style='margin-right:5px;cursor:pointer;' title='删除' onclick=\"DeleteQuota('" + rowObject.ID + "$" + rowObject.AMT_TYPE_NAME + "');\">删除</a>";
+                    }
+                    //如果额度过了有效期，就不允许调整了  
+                    //(根据财务部测试反馈：去除有效期限制，即：不在有效期的情况，只要满足条件都可以调整)
+                    //var datetime = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());//当前时间
+                    //var use_start_date = new Date(new Date(rowObject.USE_START_DATE).toDateString()); //开始日期
+                    //var use_end_date = new Date(new Date(rowObject.USE_END_DATE).toDateString()); //结束日期
+                    //if (use_start_date <= datetime && datetime <= use_end_date) {
+                        //消费信贷一直可以调整||确认后可以调整--要加上额度状态来判断
+                        if (rowObject.AMT_ADJUST_MODE == "AAT_CAN" ||
+                            (rowObject.AMT_ADJUST_MODE == "AAT_LA_CHK" &&
+                            (rowObject.CONFIRM_FLAG == "QS_AUT_CONFIRM" || rowObject.CONFIRM_FLAG == "QS_MAN_CONFIRM" || rowObject.CONFIRM_FLAG == "QS_THR_CONFIRM"))) {
+                            re += "<a style='margin-right:5px;cursor:pointer;' title='调整' onclick=\"AdjustQuota('" + rowObject.ID + "')\">调整</a>";
+                        }
+                    //}
+                 
+                    re += "<a style='margin-right:5px;cursor:pointer;' title='详情' onclick=\"ViewOrModifyQuota('" + rowObject.ID + "','view');\">详情</a>";
+                    re += "<a style='margin-right:5px;cursor:pointer;' title='查看历史' onclick=\"ViewHistory('" + rowObject.ID + "');\">查看历史</a>";
+                    return re;
+                }
+            }
+        ];
+        var postData = { amtType: $("#quotaType").val(), keyWord: $("#nav_search_input").val(), useDate: $("#txtUseDate").val() };
+        LoadGrid(qlist_grid_list, qlist_grid_pager, url, colNames, colModel, postData)
+    }
+    //加载额度历史列表
+    function LoadHistoryList() {
+        var url = "/QuotaManage/GetQuotaHistoryList";
+        var colNames = ['<i class="hidden-480 icon-book"></i> 额度类型',
+            '<i class="hidden-480 icon-money"></i> 操作金额(元)', '<i class="hidden-480 icon-money"></i> 剩余金额(元)',
+            '<i class="hidden-480 icon-book"></i> 业务编号', '<i class="hidden-480 icon-tags"></i> 操作阶段',
+            '<i class="hidden-480 icon-calendar"></i> 使用开始日期', '<i class="hidden-480 icon-calendar"></i> 使用结束日期',
+            '<i class="hidden-480 icon-calendar"></i> 操作时间', '<i class="hidden-480 icon-user"></i> 操作员'];
+        var colModel = [
+            { name: 'AMT_OPERATE_NAME', index: 'AMT_OPERATE_NAME', width: '10%', sorttype: 'text' },
+            { name: 'AMT_OCCUR', index: 'AMT_OCCUR', width: '8%', formatter: 'number', formatoptions: { thousandsSeparator: ',' } },
+            { name: 'AMT_REMAINING', index: 'AMT_REMAINING', width: '8%' },
+            { name: 'BES_ID', index: 'BES_ID', width: '8%' },
+            { name: 'AMT_OCCUR_NAME', index: 'AMT_OCCUR_TYPE', width: '9%' },
+            { name: 'USE_START_DATE', index: 'USE_START_DATE', width: '10%', formatter: 'date', formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' } },
+            { name: 'USE_END_DATE', index: 'USE_END_DATE', width: '10%', formatter: 'date', formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' } },
+            { name: 'CREATE_DATE', index: 'CREATE_DATE', width: '8%', formatter: 'date', formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s' }, datefmt: 'Y-m-d H:i:s' },
+            { name: 'UPDATE_USER_NAME', index: 'UPDATE_USER_NAME', width: '10%' }
+        ];
+        var postData = { useDate: $("#txtUseDateHistory").val(), keyWord: $("#nav_search_input").val(), dept: dept }
+        LoadGrid(qhistory_grid_list, qhistory_grid_pager, url, colNames, colModel, postData)
+    }
+    /****************jQuery jqGrid Begin****************/
+    function LoadGrid(_gridId, _pager, _url, _colNames, _colModel, _postData) {
+        jQuery(_gridId).jqGrid({
+            url: _url,
+            datatype: "json",
+            mtype: "POST",
+            height: jQuery(window).height() - 335,
+            //width: jQuery('.tab-content').width(),
+            colNames: _colNames,
+            colModel: _colModel,
+            postData: _postData,
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: _pager,
+            loadui: "disable",//隐藏loading
+            //onSortCol: function (colName, iCol, sortorder) {
+            //    sortIndex = colName;
+            //    sortOrder = sortorder;
+            //},
+            //beforeRequest: function () {
+            //    jQuery(_gridId).jqGrid('setGridParam', { postData: { 'sidx': sortIndex, 'sord': sortOrder } });
+            //},
+            altRows: true,
+            jsonReader: {
+                root: "DataList",
+                total: "TotalRecords",
+                page: "CurrentPage",
+                records: "TotalCount",
+                repeatitems: false
+            },
+            loadComplete: function () {
+                var table = this;
+                var re_records = jQuery(this).getGridParam('records');
+                if (re_records == 0 || re_records == null) {
+                    //Utilities.alertTip("对不起，未找到符合条件的记录！");
+                    Utilities.ShowMsg(3000, "对不起，未找到符合条件的记录！", 300, "warning");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+                jQuery(window).resize();
+            },
+            autowidth: true
+
+        });
+
+    }
+    /*处理分页控件样式*/
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    };
+    jQuery(window).resize(function () {
+        jQuery(window).unbind("onresize");
+        jQuery(qlist_grid_list).setGridHeight(jQuery(window).height() - 335);
+        jQuery(qlist_grid_list).setGridWidth(jQuery('.tab-content').width());
+        jQuery(qhistory_grid_list).setGridHeight(jQuery(window).height() - 335);
+        jQuery(qhistory_grid_list).setGridWidth(jQuery('.tab-content').width());
+        jQuery('.ui-jqgrid-hbox').each(function () {
+            jQuery(this).find('th').last().css('width', (jQuery(this).find('th').last().width() + 25) + 'px');
+        });
+        jQuery(window).bind("onresize", this);
+    });
+    /****************jQuery jqGrid End****************/
+
+    //新增额度
+    function AddQuota() {
+        jQuery("#addQuota_iframe").attr("src", "/QuotaManage/QuotaAdd?dept=" + dept);
+        jQuery("#addQuota_dialog").dialog({
+            title: "<h4><i class='icon-plus'></i> 新增额度</h4>",//class='smaller'
+            title_html: true,
+            resizable: false,
+            width: "28%",
+            modal: true,
+            draggable: false,
+            close: function (event, ui) {
+                //Utilities.alertTip("新增额度");
+                //location.reload();//重新加载列表
+                $("#qlist-grid-list").jqGrid('setGridParam').trigger("reloadGrid");
+            }
+        });
+    }
+
+    //ViewOrModify额度
+    function ViewOrModifyQuota(key, type) {
+        
+        var title_html = "";
+        if (type == 'modify') {
+            title_html = "<h4 class=''><i class='icon-edit'></i> 修改额度</h4>";
+        }
+        if (type == "view") {
+            title_html = "<h4 class=''><i class='icon-reorder'></i> 额度详情</h4>";
+        }
+        jQuery("#viewOrEdit_iframe").attr("src", "/QuotaManage/QuotaViewOrModify?type=" + type + "&key=" + key);//修改参数
+        jQuery("#viewOrEdit_dialog").dialog({
+            title: title_html,
+            title_html: true,
+            resizable: false,
+            width: "28%",
+            modal: true,
+            draggable: false,
+            close: function (event, ui) {
+                $("#qlist-grid-list").jqGrid('setGridParam').trigger("reloadGrid");
+            }
+        });
+    }
+
+    //调整额度
+    function AdjustQuota(key) {
+        jQuery("#adjust_iframe").attr("src", "/QuotaManage/QuotaAdjust?key=" + key);
+        jQuery("#adjust_dialog").dialog({
+            title: "<h4 class=''><i class='icon-exchange'></i> 调整额度</h4>",
+            title_html: true,
+            resizable: false,
+            width: "28%",
+            modal: true,
+            draggable: false,
+            close: function (event, ui) {
+                $("#qlist-grid-list").jqGrid('setGridParam').trigger("reloadGrid");
+            }
+        });
+    }
+
+    //删除额度
+    function DeleteQuota(id$quotaName) {
+        var id = id$quotaName.split('$')[0];
+        var quotaName = id$quotaName.split('$')[1];
+        bootbox.confirm('确定要删除<b style="color:red;">' + quotaName + '</b>吗？</br>该操作不可恢复！', function (result) {
+            if (result) {
+                //重新加载列表
+                $.ajax({
+                    url: '/QuotaManage/DeleteQuota',
+                    type: 'post',
+                    data: {id:id},
+                    success: function (data) {
+                        //console.log(data);
+                        if (data != "") {
+                            var result = JSON.parse(data);
+                            if (result.flag == "true") {
+                                MsgTip(3000, result.errMsg, "success");
+                            }
+                            else {
+                                MsgTip(4000, result.errMsg, "warning");
+                            }
+                        }
+                        else {
+                            parent.bootbox.alert('<b style="color:red;">' + quotaName + '</b>删除失败,请重试！');
+                        }
+                        $("#qlist-grid-list").jqGrid('setGridParam').trigger("reloadGrid");
+                    }
+                });
+            }
+            jQuery(window).resize();
+        });
+    }
+
+    //查看历史
+    function ViewHistory(key) {
+        $("#quotaList").removeClass("active");
+        $("#qlist").removeClass("active");
+        $("#quotaHistory").addClass("active");
+        $("#qhistory").addClass("active");
+        currentGrid = qhistory_grid_list;
+        //重新加载 额度历史列表
+        //TO Do
+        var para = {
+            amtId: key,
+            useDate: "",
+            keyWord: ""
+        };
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para
+        }).trigger("reloadGrid"); /*重新载入  */
+       
+    }
+
+    //额度查询
+    function QuotaQuery() {
+        var quotaType = $("#quotaType").val();
+        var txtUseDate = $("#txtUseDate").val();
+        var txtKeyWord = $("#nav_search_input").val();
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            page: 1,
+            postData: { amtType: quotaType, useDate: txtUseDate, keyWord: txtKeyWord }  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    //额度历史查询--查询全部
+    function QuotaHistoryQuery() {
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: { amtId:"",useDate: $("#txtUseDateHistory").val(), keyWord: $("#nav_search_input").val() }  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    //智能查询
+    function IntelligentQuery() {
+        var keyword = $("#nav_search_input").val();
+        var para;
+        switch (currentGrid) {
+            case qlist_grid_list:
+                {
+                    para = {
+                        amtType: $("#quotaType").val(), useDate: $("#txtUseDate").val(),
+                        keyWord: keyword
+                    }
+                }
+                break;
+            case qhistory_grid_list:
+                {
+                    para = {
+                        useDate : $("#txtUseDateHistory").val(),
+                        keyWord: keyword
+                    }
+                }
+            default:
+                break;
+        }
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            page: 1,
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    /*关闭Dialog 子窗口调用*/
+    function CloseDialog(e) {
+        jQuery(e).dialog("close");
+    }
+
+    /*顶部提示信息 子窗口调用*/
+    function MsgTip(timeOut,msg,type)
+    {
+        Utilities.ShowMsg(timeOut, msg, 300, type);
+    }
+</script>

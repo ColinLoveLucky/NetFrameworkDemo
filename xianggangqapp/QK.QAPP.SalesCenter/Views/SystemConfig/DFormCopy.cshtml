@@ -1,0 +1,123 @@
+﻿@Scripts.Render("~/bundles/bootbox")
+@Scripts.Render("/Content/assets/js/jquery.validate.min.js")
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">复制表单</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <form class="form-horizontal" id="form_formCopy">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-1">原表单代码</label>
+                                <div class="col-xs-12 col-sm-3">
+                                    <select class="form-control" multiple="multiple" id="productCode" name="productCode"></select>
+                                </div>
+
+                                <label class="control-label col-xs-12 col-sm-1">原版本号</label>
+                                <div class="col-xs-12 col-sm-3">
+                                    <select class="form-control" multiple="multiple" id="productVersion" name="productVersion"></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-1">新表单代码</label>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" class="col-xs-12" id="newCode" name="newCode" />
+                                </div>
+
+                                <label class="control-label col-xs-12 col-sm-1">新版本号</label>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" class="col-xs-12" id="newVersion" name="newVersion" />
+                                </div>
+                            </div>
+
+                            <div class="form-action center col-xs-12 col-sm-8">
+                                <button type="button" class="btn btn-purple btn-lg" id="btnCopy">
+                                    <i class="icon-copy"></i>
+                                    复制
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+
+        //加载产品列表
+        $.getJSON('/SystemConfig/GetDFormCodes', function (codeList) {
+            var productCode = $('#productCode');
+            $(codeList).each(function (index, item) {
+                $(productCode).append('<option value="' + item + '">' + item + '</option>');
+            });
+        });
+        //加载版本列表
+        $('#productCode').change(function () {
+            var proCode = $(this).val();
+            $.getJSON('/SystemConfig/GetDFormVersions?code=' + proCode + '&d=' + new Date(), function (result) {
+                var productVersion = $('#productVersion').empty();
+                $(result.versionList).each(function (index, item) {
+                    if (result.dicVers[proCode] == item) {
+                        $(productVersion).append('<option value="' + item + '">' + item + '（使用中）</option>');
+                    } else {
+                        $(productVersion).append('<option value="' + item + '">' + item + '</option>');
+                    }
+                });
+            });
+        });
+
+        //验证
+        $('#form_formCopy').validate({
+            rules: {
+                productCode: { required: true },
+                productVersion: { required: true },
+                newCode: { required: true },
+                newVersion: { required: true }
+            },
+            messages: {
+                productCode: { required: '<i class="icon-info-sign red">请选择产品代码！</i>' },
+                productVersion: { required: '<i class="icon-info-sign red">请选择版本！</i>' },
+                newCode: { required: '<i class="icon-info-sign red">请输入新代码！</i>' },
+                newVersion: { required: '<i class="icon-info-sign red">请输入新版本！</i>' }
+            }
+        });
+
+        //复制
+        $('#btnCopy').click(function () {
+            var form_Copy = $('#form_formCopy');
+
+            if ($(form_Copy).valid()) {
+
+                var formData = {};
+                $($(form_Copy).serializeArray()).each(function () {
+                    formData[this.name] = this.value;
+                });
+
+                $.ajax({
+                    url: "/SystemConfig/DFormCopy",
+                    data: formData,
+                    type: "POST",
+                    cache: false,
+                    beforeSend: function () {
+                    },
+                    error: function (request) {      // 设置表单提交出错
+                        bootbox.alert("表单提交出错，请稍候再试或者联系管理员");
+                    },
+                    success: function (result) {
+                        bootbox.alert(result, function () { location.reload() });
+
+                    }
+                });
+            }
+
+        });
+
+    });
+</script>

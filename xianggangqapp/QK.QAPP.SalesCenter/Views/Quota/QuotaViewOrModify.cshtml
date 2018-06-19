@@ -1,0 +1,270 @@
+﻿
+@{
+    ViewBag.Title = "QuotaViewOrModify";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<form class="form-horizontal" id="quota_form">
+    <input type="hidden" id="ID" name="ID" />
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">额度类型：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static" id="AMT_TYPE_NAME"></p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">额度金额：</span>
+        <div class="col-xs-8">
+            <input type="text" name="AMT" id="AMT" class="form-control" maxlength="28" />
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">可用额度：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static" id="AMT_USABLE"></p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">已用额度：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static" id="AMT_USED"></p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">状态：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static" id="AMT_STATE"></p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">使用开始日期：</span>
+        <div class="input-group col-xs-8">
+            <input type="text" name="USE_START_DATE" id="USE_START_DATE" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                   data-val="true" readonly="readonly" />
+            <span class="input-group-addon"
+                  style="cursor:pointer;">
+                <i class="icon-calendar bigger-110"></i>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">使用结束日期：</span>
+        <div class="input-group col-xs-8">
+            <input type="text" name="USE_END_DATE" id="USE_END_DATE" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                   data-val="true" readonly="readonly" />
+            <span class="input-group-addon"
+                  style="cursor:pointer;">
+                <i class="icon-calendar bigger-110"></i>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">登记人：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static" id="UPDATE_USER_NAME"></p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">最后调整时间：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static" id="UPDATE_DATE"></p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">募集计划编号：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static" id="RAISE_PLAN_NO"></p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">拒件比例：</span>
+        <div class="col-xs-8">
+            <input type="text" name="BOUNCE_RATE" id="BOUNCE_RATE" class="form-control" placeholder="仅第三方额度需要填写" maxlength="5" />
+        </div>
+    </div>
+    <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px; z-index: 0">
+        <a class="btn btn-sm" data-dismiss="modal" onclick="CloseDialog()">
+            <i class="icon-remove"></i>
+            取消
+        </a>
+
+        <button class="btn btn-sm btn-primary" type="submit" id="btnSave">
+            <i class="icon-ok"></i>
+            保存
+        </button>
+    </div>
+</form>
+<script src="/Content/assets/js/jquery.validate.min.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<style type="text/css">
+    .form-group {
+        margin-bottom: 7px;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        /*日期控件加载和绑定 begin*/
+        jQuery("#USE_START_DATE").datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            numberOfMonths: 1,
+            minDate: new Date(),//设置最小日期今天
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }, onClose: function (selectedDate) {
+                jQuery("#USE_END_DATE").datepicker("option", "minDate", selectedDate);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+        jQuery("#USE_END_DATE").datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            numberOfMonths: 1,
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }//, onClose: function (selectedDate) {
+            //jQuery("#USE_START_DATE").datepicker("option", "minDate", selectedDate);
+            //}
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+        /*日期控件加载和绑定 end*/
+        /*重置控件*/
+        ReSet();
+        /*加载绑定数据*/
+        BindData();
+    });
+    var ReSet = function () {
+        $("#quota_form p ").each(function (i) {
+            var p_id = $(this).attr("id");
+            $("#" + p_id).text("");
+        });
+        
+        $("#quota_form input").each(function (i) {
+            var input_id = $(this).attr("id");
+            $("#" + input_id).val("");
+        });
+    };
+    var BindData = function () {
+        var type = Utilities.getUrlParam("type");
+        var id = Utilities.getUrlParam("key");
+        $.ajax({
+            url: "/QuotaManage/GetQuotaInfoById",
+            data: { Id: id },
+            success: function (data) {
+                //console.log(data);
+                //给所有p标签赋值;
+                $("#quota_form p ").each(function (i) {
+                    var p_id = $(this).attr("id");
+                    $("#" + p_id).text(data[p_id] == null ? "" : data[p_id]);
+                });
+                //给所有input赋值
+                $("#quota_form input").each(function (i) {
+                    var input_id = $(this).attr("id");
+                    $("#" + input_id).val(data[input_id]);
+                    //查看时，设置控件不可用
+                    if (type == "view"){
+                        $("#" + input_id).attr("disabled", "disabled");
+                        $("#btnSave").hide();
+                    }
+                });
+                //是否显示拒件比例输入框
+                if (data["AMT_HAS_BOUNCE_RATE"] == 1) {
+                    $("#BOUNCE_RATE").parent().parent(".form-group").show();
+                }
+                else {
+                    $("#BOUNCE_RATE").parent().parent(".form-group").hide();
+                }
+            },
+            error: function () {
+                //错误
+            }
+        });
+    };
+
+    var CloseDialog = function () {
+        parent.CloseDialog("#viewOrEdit_dialog");  //父窗口对话框ID
+    };
+
+    /*表单验证保存额度*/
+    /*非负数验证*/
+    jQuery.validator.addMethod("numCheck", function (value, element) {
+        return Utilities.CheckNum(value);
+    }, $.validator.format("输入值必须是非负数"));
+    $('#quota_form').validate({
+        errorElement: 'i',
+        errorPlacement: function (error, element) {
+            if ($(element).attr('id') == 'USE_START_DATE' || $(element).attr('id') == 'USE_END_DATE') {
+                $(element).parent().parent().append(error);
+            } else {
+                $(element).parent().append(error);
+            }
+        },
+        rules: {
+            AMT: { required: true, number: true, numCheck: true },
+            BOUNCE_RATE: { required: true, number: true, min: 0, max: 100 },
+            USE_START_DATE: { required: true },
+            USE_END_DATE: { required: true }
+        },
+        messages: {
+            AMT: {
+                required: '<i class="icon-info-sign red">请输入额度金额!</i>',
+                number: '<i class="icon-info-sign red">金额格式错误!</i>',
+                numCheck: '<i class="icon-info-sign red">输入金额必须为纯数字且不能小于0!</i>'
+            },
+            BOUNCE_RATE: {
+                required: '<i class="icon-info-sign red">请输入拒件比例!</i>',
+                number: '<i class="icon-info-sign red">拒件比例格式错误!</i>',
+                min: '<i class="icon-info-sign red">拒件比例必须≥0!</i>',
+                max: '<i class="icon-info-sign red">拒件比例必须≤100!</i>'
+            },
+            USE_START_DATE: { required: '<i class="icon-info-sign red" style="margin-left:130px;">请选择使用开始日期!</i>' },
+            USE_END_DATE: { required: '<i class="icon-info-sign red" style="margin-left:130px;">请选择使用截止日期!</i>' }
+        },
+        invalidHandler: function (form, validator) {  //验证不通过
+            return false;
+        },
+        submitHandler: function (form) {  //验证通过
+            if (!$(form).valid()) {
+                return false;
+            }
+            $.ajax({
+                url: "/QuotaManage/ModifyQuota",
+                type: "post",
+                data: $("#quota_form").serialize(),
+                success: function (data) {
+                    //此处需要加入异常处理，成功：关闭当前窗口，重新加载列表，失败：提示信息，停留在当前窗口
+                    if (data != "") {
+                        var result = JSON.parse(data);
+                        if (result.flag == "true") {
+                            parent.MsgTip(3000, result.errMsg, "success");
+                            CloseDialog();
+                        }
+                        else {
+                            parent.MsgTip(4000, result.errMsg, "warning");
+                        }
+                    }
+                    else {
+                        parent.MsgTip(4000, "额度修改失败,请重试！", "error");
+                    }
+                }
+            });
+        }
+    });
+</script>
+

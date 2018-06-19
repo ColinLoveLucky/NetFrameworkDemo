@@ -1,0 +1,232 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<script src="~/Content/assets/js/bootbox.min.js"></script>
+<div class="row-fluid">
+    <div>
+        <div class="widget-box">
+            <div class="widget-header widget-header-blue widget-header-flat">
+                <h4 class="lighter">在线用户</h4>
+                <button type="button" class="btn btn-danger" id="add_DFormInfo_btn" style="float:right" onclick="LogoutAllUser();">强制登出所有用户</button>
+            </div>
+            <div class="widget-body" style="height:auto; overflow-y:auto;width:auto;">
+                <div class="widget-main">
+                    <table id="grid-table"></table>
+                    <div id="grid-pager"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var sortIndex = "";
+    var sortOrder = "";
+
+
+    jQuery(function () {
+        //禁用页面回车键
+        document.onkeypress = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
+                return false;
+            }
+        }
+
+        /*为Search窗口添加搜索功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function () { doNormalSearch(); });
+        jQuery(".input-icon").children("#nav_search_input").keydown(function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) { jQuery(".input-icon").children("i").click() };
+        });
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function () {
+            jQuery(window).resize();
+        });
+
+
+        /*页面加载时按所有查询条件列出进件*/
+        jQuery(grid_selector).jqGrid({
+            url: "/SystemConfig/GetOnlinUser",
+            datatype: "json",
+            height: jQuery(window).height() - 293,
+            width: jQuery('.widget-main').width(),
+            autowidth: false,
+            shrinkToFit: true,
+            mtype: "POST",
+            altRows: true,
+            colNames: [
+                '<i class="hidden-480 icon-user"></i> 用户姓名',
+                '<i class="hidden-480 icon-home"></i> 公司名',
+                '<i class="hidden-480 icon-group"></i> 部门名',
+                '<i class="hidden-480 icon-key"></i> 用户所有角色',
+                //'<i class="hidden-480 icon-user"></i> 用户名',
+                '<i class="hidden-480 icon-user"></i> IP',
+                '<i class="hidden-480 icon-user"></i>用户浏览器',
+                '<i class="hidden-480 icon-time"></i> 版本',
+                '<i class="hidden-480 icon-calendar"></i> 最后更新时间',
+                '<i class="hidden-480 icon-calendar"></i> 创建时间',
+                '<i class="hidden-480 icon-user"></i> 机器名',
+                '<i class="hidden-480 icon-cogs"></i>  操作'],
+
+            colModel: [
+                { name: 'DISPLAYNAME', index: 'DISPLAYNAME', width: "7%" },
+                { name: 'COMPANYNAME', index: 'COMPANYNAME', width: "8%" },
+                { name: 'DEPARTNAME', index: 'DEPARTNAME', width: "7%" },
+                { name: 'ROLENAME', index: 'ROLENAME', width: "14%" },
+                //{ name: 'USERNAME', index: 'USERNAME', width: "10%", sorttype: "textarea" },
+
+                { name: 'USERIP', index: 'USERIP', width: "7%" },
+                { name: 'USERBROWSER', index: 'USERBROWSER', width: "8%" },
+                { name: 'USERBROWSERVERSION', index: 'USERBROWSERVERSION', width: "4%" },
+                { name: 'LASTUPDATETIME', index: 'LASTUPDATETIME', width: "10.5%", sorttype: "data", formatter: "date", formatoptions: { newformat: 'Y-m-d H:i:s' } },
+                { name: 'CREATETIME', index: 'CREATETIME', width: "10.5%", sorttype: "data", formatter: "date", formatoptions: { newformat: 'Y-m-d H:i:s' } },
+                { name: 'MACHINENAME', index: 'MACHINENAME', width: "14%" },
+                {
+                    name: 'ID', index: 'ID', width: "10%", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var re = "";
+                        re += "<a style='margin-left:8px;'  href='javascript:logoutUser(\"" + rowObject.USERNAME + "\");' ><i class='hidden-480 icon-trash red' title='登出该用户'></i></a>";
+                        re += "<a style='margin-left:8px;' href='javascript:PushMessage(\"" + rowObject.USERNAME + "\");' ><i class='hidden-480 icon-envelope-alt' title='发送消息'></i></a></a>";
+                        return re;
+                    }
+                }],
+
+            jsonReader: {
+                root: "OnlineUserList",
+                total: "TotalPages",
+                page: "CurrentPage",
+                records: "TotalRecords",
+                repeatitems: false
+            },
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: pager_selector,
+            onSortCol: function (colName, iCol, sortorder) {
+                sortIndex = colName;
+                sortOrder = sortorder;
+            },
+            beforeRequest: function () {
+                jQuery(grid_selector).jqGrid('setGridParam', { postData: { 'sidx': sortIndex, 'sord': sortOrder } });
+            },
+            loadComplete: function () {
+                var table = this;
+                var re_records = jQuery(this).getGridParam('records');
+                if (re_records == 0 || re_records == null) {
+
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+            },
+            autowidth: true
+        });
+
+        function updatePagerIcons(table) {
+            var replacement =
+            {
+                'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+                'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+                'ui-icon-seek-next': 'icon-angle-right bigger-140',
+                'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+            };
+            $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                var icon = $(this);
+                var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+                if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+            })
+        };
+
+
+
+
+        jQuery(window).resize(function () {
+            jQuery(window).unbind("onresize");
+            jQuery(grid_selector).setGridHeight(jQuery(window).height() - 293);
+            jQuery(grid_selector).setGridWidth(jQuery('.widget-main').width());
+
+            jQuery(grid_selector).setGridHeight(jQuery(window).height() - 293);
+            jQuery(grid_selector).setGridWidth(jQuery('.widget-main').width());
+            jQuery(window).bind("onresize", this);
+        });
+    });
+    /*Search窗口模糊查询*/
+    function doNormalSearch() {
+        sortIndex = '';
+        sortOrder = '';
+        para = {
+            sidx: sortIndex,
+            userName: escape(jQuery("#nav_search_input").val()),
+            userIp: escape(jQuery("#nav_search_input").val()),
+            userBrowser: escape(jQuery("#nav_search_input").val()),
+            userBrowserVersion: escape(jQuery("#nav_search_input").val()),
+            machineName: escape(jQuery("#nav_search_input").val())
+        };
+        jQuery(grid_selector).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    function logoutUser(account) {
+        bootbox.prompt("您将要强制登出【" + account + "】用户！", function (str) {
+            //alert(str);
+            if (str != null) {
+                str = str ? str : "";
+                $.ajax({
+                    url: "/Home/LogoutUser",
+                    data: "account=" + account + "&msg=" + str,
+                    type: "post",
+                    success: function () {
+                        doNormalSearch();
+                    }
+                });
+            }
+
+        });
+    }
+
+    function PushMessage(account) {
+        bootbox.prompt("请输入消息：", function (str) {
+            if (str != null) {
+                str = str ? str : "";
+                $.ajax({
+                    url: '/SystemConfig/PushMessageAjax',
+                    data: 'user=' + account + '&content=' + escape(escape(str)) + '&allUser=false',
+                    type: 'post',
+                    success: function () {
+                        Utilities.alertTip('消息已发送！');
+                    }
+                });
+            }
+        });
+    }
+
+    function LogoutAllUser() {
+        bootbox.prompt("您将要强制登出【所有】用户！", function (str) {
+            if (str != null) {
+                str = str ? str : "";
+                $.ajax({
+                    url: '/Home/LogoutAllUser',
+                    data: 'msg=' + str,
+                    type: 'post',
+                    success: function () {
+                        doNormalSearch();
+                    }
+                });
+            }
+        });
+    }
+
+</script>

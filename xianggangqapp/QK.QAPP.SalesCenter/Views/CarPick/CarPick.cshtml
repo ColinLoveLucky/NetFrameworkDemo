@@ -1,0 +1,162 @@
+﻿
+@{
+    ViewBag.Title = "CarPick";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+
+<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<div class="widget-box">
+    <div class="widget-header header-color-blue">
+        <h4 class="lighter smaller">已选择车辆</h4>
+    </div>
+    <div class="widget-body" style="min-height:39px;">
+        <div class="widget-main padding-8">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12" id="divCompany">
+                    <span id="selectedCar" class="label label-success"></span> 
+                    <span id="carBrand" style="display:none"></span>
+                    <span id="carSeries" style="display:none"></span>
+                    <span id="carStyle" style="display:none"></span>
+                    <span id="carPrice" style="display:none"></span>
+                    <span id="carYear" style="display:none"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="widget-box">
+    <div class="widget-header header-color-blue">
+        <h4 id="CarSelect" class="lighter smaller">车辆选择</h4>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main padding-8">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <div id="seach">
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="input-group col-xs-3">
+                                <input class="form-control search-query" id="txt_carBrand" placeholder="品牌" type="text">
+                            </div>
+                            <div class="input-group col-xs-4">
+                                <input class="form-control search-query" id="txt_carSeries" placeholder="系列" type="text">
+                            </div>
+                            <div class="input-group col-xs-5">
+                                <input class="form-control search-query" id="txt_carStyle" placeholder="年款" type="text">
+                                <span class="input-group-btn">
+                                    <button type="button" id="btn_seach" class="btn btn-purple btn-sm">
+                                        Search
+                                        <i class="icon-search icon-on-right bigger-110"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="table-responsive">
+                                <table id="grid-table"></table>
+                                <div id="grid-pager"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $("#grid-table").jqGrid({
+            url: "/CarPick/GetCarList",
+            datatype: "json",
+            mtype: "POST",
+            altRows: true,
+            colNames: [
+                '<i class="hidden-480"></i> 编号 ',
+                '<i class="hidden-480"></i> 车辆品牌 ',
+                '<i class="hidden-480"></i> 车辆系列 ',
+                '<i class="hidden-480"></i> 车辆年款 ',
+                '<i class="hidden-400"></i> 参考价格',
+                '<i class="hidden-400"></i> 生产年份'
+            ],
+            colModel: [
+                { name: 'ID', index: 'ID', hidden: true},
+                { name: 'BRAND', index: 'BRAND', sortable: false },
+                { name: 'SERIES', index: 'SERIES', sortable: false },
+                { name: 'STYLE', index: 'STYLE', sortable: false },
+                { name: 'NEW_PRICE', index: 'NEW_PRICE', sortable: false },
+                { name: 'YEAR', index: 'YEAR', sortable: false}
+            ],
+            jsonReader: {
+                root: "ViewList",
+                total: "TotalPages",
+                page: "CurrentPage",
+                records: "TotalRecords",
+                repeatitems: false
+            },
+            viewrecords: true,
+            rowNum: 5,
+            rowList: [5,10,20],
+            pager: $("#grid-pager"),
+            loadComplete: function() {
+                var table = this;
+                var reRecords = jQuery(this).getGridParam('records');
+                if (reRecords == 0 || reRecords == null) {
+                    $("#grid-table tbody").text("对不起，未找到符合条件的记录！");
+                };
+                setTimeout(function() {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+
+                jQuery(window).resize();
+            },
+            onSelectRow: function (rowid) {
+                //var rowid = $("#grid-table").jqGrid('getGridParam', 'selrow');
+                var rowData = $("#grid-table").getRowData(rowid);
+                $("#selectedCar").empty().text(rowData.BRAND + ' | ' + rowData.SERIES + ' | ' + rowData.STYLE);
+                $("#carBrand").empty().text(rowData.BRAND);
+                $("#carSeries").empty().text(rowData.SERIES);
+                $("#carStyle").empty().text(rowData.STYLE);
+                $('#carPrice').empty().text(rowData.NEW_PRICE);
+                $('#carYear').empty().text(rowData.YEAR);
+            },
+            autowidth: true
+        });
+       //查询事件
+        $("#btn_seach").click(function() {
+            var carBrand = escape($("#txt_carBrand").val());
+            var carSeries = escape($('#txt_carSeries').val());
+            var carStyle = escape($('#txt_carStyle').val());
+            jQuery("#grid-table").jqGrid('setGridParam', {
+                datatype: 'json',
+                page: 1,
+                postData: { carBrand: carBrand, carSeries: carSeries, carStyle: carStyle }
+            }).trigger("reloadGrid"); 
+
+        });
+        $("#txt_keyword").keydown(function(event) {
+            if (event.keyCode == 13) {
+                $("#btn_seach").click();
+            }
+        });
+    });
+
+    /*处理分页控件样式*/
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function() {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        });
+    }
+</script>

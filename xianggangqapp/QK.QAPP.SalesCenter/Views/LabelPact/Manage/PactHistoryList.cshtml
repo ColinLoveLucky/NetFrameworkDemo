@@ -1,0 +1,292 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<script src="~/Content/assets/js/numeral/numeral.min.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+
+<div>
+    <ul class="nav nav-tabs" id="tabs">
+        <li class="active" id="PactHistoryLabel" style="border:none;">
+            <a href="#PactHistory" data-toggle="tab" onclick="javascript: SetCurrentGrid(1, this); window.setTimeout(LoadPactHistoryPanel, 1);">
+                协议确认历史
+            </a>
+        </li>
+
+    </ul>
+    <div class="tab-content" style="height:auto; overflow-y:auto;">
+        <div id="PactHistory" class="tab-pane active">
+            <div id="highSearch_PactHistory" style="display:none;">
+                @*<div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">操作时间：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtTimePactHistory" id="txtTimePactHistory" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                   data-val="true" />
+                            <span class="input-group-addon"
+                                  style="cursor:pointer;">
+                                <i class="icon-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">操作人：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtOperator" id="txtOperator" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">操作类型：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtOperatorType" id="txtOperatorType" class="col-xs-12" />
+                        </div>
+
+                    </div>
+                </div>*@
+             
+                <div class="form-group">
+                    <div class="clearfix">
+                        <button class="btn btn-sm btn-success" onclick="javascript: doHighSearch();">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                        <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                    </div>
+                </div>
+            </div>
+            <table id="PactHistory-grid-table"></table>
+            <div id="PactHistory-grid-pager"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var grid_selector_PactHistory = '#PactHistory-grid-table';
+
+    var pager_selector_AgreementAdditional = '#PactHistory-grid-pager';
+
+    var currentHighSearch = '#highSearch_PactHistory';
+    var currentGrid = grid_selector_PactHistory;
+    var sortIndex = "";
+    var sortOrder = "";
+    jQuery(function () {
+        /*禁用页面回车键 */
+        document.onkeypress = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
+                return false;
+            }
+        }
+        /*为Search窗口窗口添加搜索功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function () { doNormalSearch(); });
+        jQuery(".input-icon").children("input[type='text']").keypress(function (e) { e = e || event; if (e.keyCode == 13) { jQuery(".input-icon").children("i").click(); }; });
+        //jQuery("<a/>").attr("href", "javascript:;").text("高级查询").attr("onclick", "javascript:showHighSearch();").addClass("label label-lg label-pink arrowed-right").attr("style", "top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function () {
+            jQuery(window).resize();
+        });
+        /*页面加载时如果没有指定锚点则显示第一个页签*/
+        var hs = window.location.hash;
+        if (!hs) {
+            hs = "#PactHistory";
+        }
+        jQuery('#tabs').find('a[href="' + hs + '"]').click();
+        jQuery('.date-picker').datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+
+    });
+    /*加载jqGrid */
+    function LoadGrid(grid_selector, _colNames, _colModel, _pager, _postData, multiselect) {
+        jQuery(grid_selector).jqGrid({
+            url: "/PactHistory/GetPactHistoryList",
+            datatype: "json",
+            mtype: "POST",
+            height: jQuery(window).height() - 335,
+            width: jQuery('.tab-content').width(),
+            colNames: _colNames,
+            colModel: _colModel,
+            postData: _postData,
+            jsonReader: {
+                root: "DataList",
+                total: "TotalCount",
+                page: "CurrentPage",
+                records: "TotalRecords",
+                repeatitems: false
+            },
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: _pager,
+            onSortCol: function (colName, iCol, sortorder) {
+                sortIndex = colName;
+                sortOrder = sortorder;
+            },
+            //beforeRequest: function () {
+            //    jQuery(_gridId).jqGrid('setGridParam', { postData: { 'sidx': sortIndex, 'sord': sortOrder } });
+            //},
+            altRows: true,
+            //控制多选
+            multiselect: multiselect,
+            multiboxonly: true,
+
+            loadComplete: function () {
+                var table = this;
+                var re_records = jQuery(this).getGridParam('records');
+                if (re_records == 0 || re_records == null) {
+                    Utilities.alertTip("对不起，未找到符合条件的记录！");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+                jQuery(window).resize();
+            },
+
+            autowidth: true
+
+        });
+
+    }
+    /*处理分页控件样式*/
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    };
+
+    /*设置当前页签 */
+    function SetCurrentGrid(flag) {
+        switch (flag) {
+            case 1: {
+                currentGrid = grid_selector_PactHistory;
+                currentHighSearch = '#highSearch_PactHistory';
+            }
+                break;
+            default: break;
+
+        }
+    }
+    /*加载协议确认历史列表 */
+    function LoadPactHistoryPanel() {
+        if (!jQuery(grid_selector_PactHistory))
+            return;
+        var colNames = ['<i class="hidden-480 icon-book"></i> UUID', '<i class="hidden-480 icon-book"></i> 标的编号',
+                   '<i class="hidden-480 icon-book"></i> 合同号', '<i class="hidden-480 icon-book"></i> 操作类型',
+                   '<i class="hidden-480 icon-book"></i> 操作人编号', '<i class="hidden-480 icon-user"></i> 操作员',
+                    '<i class="hidden-480 icon-tasks"></i> 部门编号', '<i class="hidden-480 icon-user"></i> 部门',
+                   '<i class="hidden-480 icon-tasks"></i> 操作时间', '<i class="hidden-480 icon-money"></i> 创建时间'
+
+        ];
+
+        var colModel = [
+            { name: 'UUID', index: 'UUID', sorttype: "int", hidden: true },
+            { name: 'BID_CODE', index: 'BID_CODE', width: "16%", sorttype: "int" },
+            { name: 'BES_ID', index: 'BES_ID', width: "16%" },
+            { name: 'CONTRACT_OP_TYPE', index: 'CONTRACT_OP_TYPE', width: "10%", sorttype: "textarea" },
+            { name: 'UPDATE_USER_CODE', index: 'UPDATE_USER_CODE',hidden: true },
+            { name: 'UPDATE_USER_NAME', index: 'UPDATE_USER_NAME', width: "12%", sorttype: "textarea" },
+            { name: 'DEPT_CODE', index: 'DEPT_CODE', hidden: true },
+            { name: 'DEPT_NAME', index: 'DEPT_NAME', width: "10%", sorttype: "textarea" },
+            { name: 'USE_DATE', index: 'USE_DATE', width: "12%", formatter: 'date', formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s' }, datefmt: 'Y-m-d H:i:s' },
+            { name: 'CREATE_DATE', index: 'CREATE_DATE', width: "9%", formatter: 'date', formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s' }, datefmt: 'Y-m-d H:i:s' }
+        ];
+        var postData = { globalSearch: 0 };
+        LoadGrid(grid_selector_PactHistory, colNames, colModel, pager_selector_AgreementAdditional, postData, false);
+    }
+    /*显示或隐藏高级查询*/
+    function showHighSearch() {
+        //jQuery(currentHighSearch).toggle(300, function () { jQuery(window).resize() });
+    }
+    /*点击搜索按钮重新搜索*/
+    function doHighSearch() {
+        jQuery("#nav_search_input").val('');
+        var para;
+        sortIndex = '';
+        sortOrder = '';
+        switch (currentGrid) {
+            case grid_selector_PactHistory:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        //useDate: escape(jQuery("#txtTimePactHistory").val().trim()),
+                        //updateUserName: escape(jQuery("#txtOperator").val().trim()),
+                        //contractOpType: escape(jQuery("#txtOperatorType").val().trim()),
+                        searchPara: escape(jQuery("#nav_search_input").val().trim()),
+                        fuzzySearch: 0/*高级查询*/
+                    }
+                } break;
+
+            default: break;
+        };
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para, /*发送数据 */
+            page: 1
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+    /*Search窗口简单查询*/
+    function doNormalSearch() {
+        jQuery(currentHighSearch).find("input[type='text']").each(function () {
+            jQuery(this).val("")
+        });
+        jQuery( currentHighSearch).find("select").each(function () {
+            jQuery(this).val("")
+        });
+        sortIndex = '';
+        sortOrder = '';
+        var para;
+        switch (currentGrid) {
+            case grid_selector_PactHistory:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        searchPara: escape(jQuery("#nav_search_input").val().trim()),
+                        page: '1',
+                        fuzzySearch: 1,/*简单查询*/
+                    }
+                } break;
+
+            default: break;
+    };
+     jQuery(currentGrid).jqGrid('setGridParam', {
+    datatype: 'json',
+    postData: para, /*发送数据 */
+    page: 1
+    }).trigger("reloadGrid"); /*重新载入  */
+    }
+    jQuery(window).resize(function () {
+        jQuery(window).unbind("onresize");
+        jQuery(grid_selector_PactHistory).setGridHeight(jQuery(window).height() - 285);
+        jQuery(grid_selector_PactHistory).setGridWidth(jQuery('.tab-content').width());
+        jQuery('.ui-jqgrid-hbox').each(function () {
+            jQuery(this).find('th').last().css('width', (jQuery(this).find('th').last().width() + 25) + 'px');
+        });
+
+        jQuery(window).bind("onresize", this);
+    });
+</script>

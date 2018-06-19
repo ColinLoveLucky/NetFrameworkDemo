@@ -1,0 +1,188 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+
+<div class="row-fluid">
+    <div>
+        <div class="widget-box">
+            <div class="widget-header widget-header-blue widget-header-flat">
+                <h4 class="lighter">在履行合同</h4>
+            </div>
+            <div class="widget-body" style="height:auto; overflow-y:auto;width:auto;">
+                <div class="widget-main">
+                    <div id="Apply_highSearch" style="display:none">
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <span class="control-label col-xs-12 col-sm-2">申请单号：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" name="txtAppNumber" id="txtAppNumber" class="col-xs-12" />
+                                </div>
+                                <span class="control-label col-xs-12 col-sm-2">办理状态：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <select name="slctStatus" id="slctStatus" class="col-xs-12">
+                                        <option value="">--选择进件状态--</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" name="txtCustomerName" id="txtCustomerName" class="col-xs-12" />
+                                </div>
+                                <span class="control-label col-xs-12 col-sm-2">客户身份证：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" name="txtCustomerIDCard" id="txtCustomerIDCard" class="col-xs-12" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <span class="control-label col-xs-12 col-sm-2">申请时间起：</span>
+                                <div class="input-group col-xs-12 col-sm-3">
+                                    <input type="text" name="txtAppDateStart" id="txtAppDateStart" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                           data-val="true" />
+                                    <span class="input-group-addon"
+                                          style="cursor:pointer;">
+                                        <i class="icon-calendar bigger-110"></i>
+                                    </span>
+                                </div>
+                                <span class="control-label col-xs-12 col-sm-2">申请时间止：</span>
+                                <div class="input-group col-xs-12 col-sm-3">
+                                    <input type="text" name="txtAppDateEnd" id="txtAppDateEnd" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                           data-val="true" />
+                                    <span class="input-group-addon"
+                                          style="cursor:pointer;">
+                                        <i class="icon-calendar bigger-110"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <span class="control-label col-xs-12 col-sm-2">客户经理：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" name="txtSales" id="txtSales" class="col-xs-12" />
+                                </div>
+                                <span class="control-label col-xs-12 col-sm-2">客服专员：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" name="txtCsac" id="txtCsac" class="col-xs-12" />
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <button class="btn btn-sm btn-success" onclick="javascript:doHighSearch();">
+                                    <i class="icon-search nav-search-icon"></i>查询
+                                </button>
+                                <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="grid-table"></table>
+
+                    <div id="grid-pager"></div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    jQuery(function () {
+        //高级查询
+        jQuery("#nav-search").removeClass("hide");
+        jQuery("<a/>").attr("href", "javascript:;").text("高级查询").attr("onclick", "javascript:showHighSearch();").addClass("label label-lg label-pink arrowed-right").attr("style", "top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+
+        LoadDataGrid();
+
+    });
+
+    /*显示高级查询 */
+    function showHighSearch() {
+        jQuery("#Apply_highSearch").toggle(300, function () { jQuery(window).resize() });
+    }
+
+    /*加载列表 */
+    function LoadDataGrid() {
+        var grid_data = [
+            { PACTNO: "YWPZ02201408050453", CUSTOMERNAME: "王俊云[20017087]", ISOVER: "是", OVERDUESTS: "1", PACTAMT: "57142.86", KINDNAME: "商易贷18期", BEGINDATE: "2014-09-04", MTRDATE: "2016-02-20", OPERATION: '<a href="/Contract/ContractingDetail">详情</a>' },
+            { PACTNO: "YWPZ02201408050453", CUSTOMERNAME: "王俊云[20017087]", ISOVER: "是", OVERDUESTS: "1", PACTAMT: "57142.86", KINDNAME: "商易贷18期", BEGINDATE: "2014-09-04", MTRDATE: "2016-02-20", OPERATION: '<a href="/Contract/ContractingDetail">详情</a>' },
+            { PACTNO: "YWPZ02201408050453", CUSTOMERNAME: "王俊云[20017087]", ISOVER: "是", OVERDUESTS: "1", PACTAMT: "57142.86", KINDNAME: "商易贷18期", BEGINDATE: "2014-09-04", MTRDATE: "2016-02-20", OPERATION: '<a href="/Contract/ContractingDetail">详情</a>' },
+            { PACTNO: "YWPZ02201408050453", CUSTOMERNAME: "王俊云[20017087]", ISOVER: "是", OVERDUESTS: "1", PACTAMT: "57142.86", KINDNAME: "商易贷18期", BEGINDATE: "2014-09-04", MTRDATE: "2016-02-20", OPERATION: '<a href="/Contract/ContractingDetail">详情</a>' },
+            { PACTNO: "YWPZ02201408050453", CUSTOMERNAME: "王俊云[20017087]", ISOVER: "是", OVERDUESTS: "1", PACTAMT: "57142.86", KINDNAME: "商易贷18期", BEGINDATE: "2014-09-04", MTRDATE: "2016-02-20", OPERATION: '<a href="/Contract/ContractingDetail">详情</a>' },
+            { PACTNO: "YWPZ02201408050453", CUSTOMERNAME: "王俊云[20017087]", ISOVER: "是", OVERDUESTS: "1", PACTAMT: "57142.86", KINDNAME: "商易贷18期", BEGINDATE: "2014-09-04", MTRDATE: "2016-02-20", OPERATION: '<a href="/Contract/ContractingDetail">详情</a>' },
+            { PACTNO: "YWPZ02201408050453", CUSTOMERNAME: "王俊云[20017087]", ISOVER: "是", OVERDUESTS: "1", PACTAMT: "57142.86", KINDNAME: "商易贷18期", BEGINDATE: "2014-09-04", MTRDATE: "2016-02-20", OPERATION: '<a href="/Contract/ContractingDetail">详情</a>' }
+        ];
+        var colNames = ['<i class="hidden-480 icon-book"></i> 合同号', '<i class="hidden-480 icon-user"></i> 客户名称',
+            '<i class="hidden-480 icon-dashboard"></i> 是否逾期', '<i class="hidden-480 icon-dashboard"></i> 逾期期数（期）',
+            '<i class="hidden-480 icon-money"></i> 合同金额（元）', '<i class="hidden-480 icon-tasks"></i> 业务品种',
+            '<i class="hidden-480 icon-calendar"></i> 发放日期', '<i class="hidden-480 icon-calendar"></i> 到期日期',
+            '<i class="hidden-480 icon-th-large"></i> 操作'];
+        var colModel = [
+            { name: 'PACTNO' },
+            { name: 'CUSTOMERNAME' },
+            { name: 'ISOVER' },
+            { name: 'OVERDUESTS' },
+            { name: 'PACTAMT' },
+            { name: 'KINDNAME' },
+            { name: 'BEGINDATE' },
+            { name: 'MTRDATE' },
+            { name: 'OPERATION' }];
+
+        LoadGrid('#grid-table', '', colNames, colModel, '#grid-pager', '', grid_data);
+    }
+
+    /*加载jqGrid */
+    function LoadGrid(grid_selector, _url, _colNames, _colModel, _pager, _postData, _data) {
+        jQuery(grid_selector).jqGrid({
+            url: _url,
+            data: _data,
+            datatype: "local",  //post
+            mtype: "POST",
+            height: jQuery(window).height() - 285,
+            width: jQuery('.tab-content').width(),
+            colNames: _colNames,
+            colModel: _colModel,
+            postData: _postData,
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: _pager,
+            altRows: true,
+            //toppager: true,
+
+            //控制多选
+            //multiselect: true,
+            //multikey: "ctrlKey",
+            //multiboxonly: true,
+
+            loadComplete: function () {
+                var table = this;
+                var re_records = jQuery(this).getGridParam('records');
+                if (re_records == 0 || re_records == null) {
+                    Utilities.alertTip("对不起，未找到符合条件的记录！");
+                };
+                setTimeout(function () {
+                    styleCheckbox(table);
+                    updateActionIcons(table);
+                    updatePagerIcons(table);
+                    enableTooltips(table);
+                }, 0);
+            },
+
+            autowidth: true
+
+        });
+
+    }
+</script>

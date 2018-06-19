@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.Title = "CityEdit";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<link href="~/Content/assets/css/chosen.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="cityEditForm" role="form" style="margin-bottom:50px">
+            <fieldset>
+                <div class="form-group" @if (ViewData["operation"].ToString() != "add") { @("style=display:none")      }>
+                    <label class="col-sm-2 control-label">使用平台：</label>
+                    <div class="col-sm-9">
+                        <select id="PLATFORM" name="PLATFORM">
+                            @foreach (KeyValuePair<string, string> kv in ViewData["UsingPlatformForCityProduct"] as Dictionary<string, string>)
+                            {
+                                if (ViewData["CurrentPlatform"].ToString() == kv.Key)
+                                {
+                                    <option value="@kv.Key"> @kv.Value </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" @if (ViewData["operation"].ToString() == "add") { @("style=display:none")    }>
+                    <label class="col-sm-2 control-label">编号：</label>
+                    <div class="col-sm-9">
+                        <input id="ID" name="ID" class="col-sm-12 col-xs-12" type="text" readonly="readonly">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">名称：</label>
+                    <div class="col-sm-9">
+                        <input id="CITY_NAME" name="CITY_NAME" class="col-sm-12 col-xs-12" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">区域：</label>
+                    <div class="col-sm-9">
+                        @*<input id="COMPANY_CODE" name="COMPANY_CODE" class="col-sm-12" type="text">*@
+                        <select id="COMPANY_CODE" name="COMPANY_CODE" class="col-sm-12 col-xs-12">
+                            @foreach (var item in ViewBag.orgRoleList)
+                            {
+                                <option value="@item.OBJECTID">@(item.COMPANYNAME + "->" + item.OBJECTNAME)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">本城市产品：</label>
+                    <div class="col-sm-9">
+                        <select multiple class="chosen-select tag-input-style" style="display: none; width: 568px;" id="PRODUCT_CODE" name="PRODUCT_CODE" data-placeholder="请选择产品...">
+                            @foreach (var item in ViewBag.productDic)
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否可用：</label>
+                    <div class="col-sm-9">
+                        <select id="ENABLE" name="ENABLE" class="col-sm-12 col-xs-12">
+                            <option value="1">可用</option>
+                            <option value="0">不可用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">区号：</label>
+                    <div class="col-sm-9">
+                        <input id="AREA_CODE" name="AREA_CODE" class="col-sm-12 col-xs-12" type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">城市编码：</label>
+                    <div class="col-sm-9">
+                        <input id="CITY_CODE" name="CITY_CODE" class="col-sm-12 col-xs-12" type="text" />
+                        <input id="OLD_CITY_CODE" name="OLD_CITY_CODE" type="hidden" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">行政省：</label>
+                    <div class="col-sm-9">
+                        <select id="AREA_PROVINCE" name="AREA_PROVINCE" class="col-sm-12 col-xs-12" disabled="disabled"><option>--暂无数据--</option></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">行政市：</label>
+                    <div class="col-sm-9">
+                        <select id="AREA_CITY" name="AREA_CITY" class="col-sm-12 col-xs-12" disabled="disabled"><option>--暂无数据--</option></select>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+        <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px;">
+            <button class="btn btn-sm" data-dismiss="modal" onclick="parent.CloseDialog();">
+                <i class="icon-remove"></i>
+                取消
+            </button>
+
+            <button class="btn btn-sm btn-primary" onclick="$('#cityEditForm').submit()">
+                <i class="icon-ok"></i>
+                保存
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/assets/js/chosen.jquery.min.js"></script>
+<script src="/Content/assets/js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.page-content').css('overflow-x', '');
+        $('#PRODUCT_CODE').css('width',$('#CITY_NAME').width()).chosen();
+
+        //加载城市信息
+        if ('@ViewData["operation"]' == 'edit') {
+            var id = Utilities.getUrlParam("id");
+            $.getJSON("/SystemConfig/GetCityEntity?id=" + id + '&d=' + new Date(), function (data) {
+                for (var i in data) {
+                    if (i == 'PRODUCT_CODE') {
+                        //var ops = $('#PRODUCT_CODE').children('option');
+                        //for (var j = 0; j < ops.length; j++) {
+                            //if (data[i].indexOf($(ops[j]).val()) >= 0) {
+                            //    $(ops[j]).attr('selected', 'true');
+                            //}
+                        //}
+                        var codes = data[i].split(',');
+                        $('#PRODUCT_CODE').val(codes);
+                        $('#PRODUCT_CODE').trigger("chosen:updated");
+                    } else {
+                        $('#' + i).val(data[i]);
+                    }
+                }
+                $('#OLD_CITY_CODE').val(data["CITY_CODE"]);
+            });
+        } else if ('@ViewData["operation"]' == 'add') {
+            $('#ID').val(-1);
+        }
+    });
+
+    //验证
+    $('#cityEditForm').validate({
+        errorElement: 'i',
+        errorPlacement: function (error, element) {
+            $(element).parent().append(error);
+        },
+        rules: {
+            CITY_NAME: { required: true, maxlength: 25 },
+            COMPANY_CODE: { required: true },
+            PRODUCT_CODE: { required: true },
+            ENABLE: { required: true },
+            AREA_CODE: { required: true, number: true, maxlength: 4 },
+            CITY_CODE: { required: true, maxlength: 4 }
+        },
+        messages: {
+            CITY_NAME: { required: '<i class="icon-info-sign red">请填写名称!</i>', maxlength: '<i class="icon-info-sign red">名称大于规定字符数！</i>' },
+            COMPANY_CODE: { required: '<i class="icon-info-sign red">请选择区域!</i>' },
+            PRODUCT_CODE: { required: '<i class="icon-info-sign red">请选择产品!</i>' },
+            ENABLE: { required: '<i class="icon-info-sign red">请选择是否可用!</i>' },
+            AREA_CODE: { required: '<i class="icon-info-sign red">请填写区号!</i>', number: '<i class="icon-info-sign red">区号格式错误!</i>', maxlength: '<i class="icon-info-sign red">区号过长!</i>' },
+            CITY_CODE: { required: '<i class="icon-info-sign red">请填写城市编码!</i>', maxlength: '<i class="icon-info-sign red">城市编码过长!</i>' }
+        },
+        invalidHandler: function (form, validator) {  //验证不通过
+            return false;
+        },
+        submitHandler: function (form) {  //验证通过
+            if (!$(form).valid()) {
+                return false;
+            }
+
+            SaveCityData();
+        }
+    });
+
+    var SaveCityData = function () {
+        $.ajax({
+            url: '/SystemConfig/UpdateOrAddCity',
+            type: 'post',
+            cache: false,
+            data: $('#cityEditForm').serialize(),
+            success: function (msg) {
+                if (msg) {
+                    Utilities.alertTip(msg);
+                } else {
+                    if (parent && parent.CloseDialog) {
+                        parent.CloseDialog();
+                        parent.Utilities.alertTip("保存成功！");
+                    }
+                }
+            }
+        });
+    };
+</script>

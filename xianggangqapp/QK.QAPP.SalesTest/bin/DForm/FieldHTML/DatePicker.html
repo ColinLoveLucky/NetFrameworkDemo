@@ -1,0 +1,70 @@
+﻿<label class="control-label col-xs-12 col-sm-2">
+    
+    $FieldType.Field_DisplayName$
+    $if(FieldType.Field_Required)$
+    <i class="icon-asterisk red smaller-80" 
+         $if(ReadOnly)$
+           style="display:none"
+        $elseif(FieldType.IsDisabled)$
+           style="display:none"
+         $endif$
+       ></i>
+    $endif$
+    ：
+</label>
+<div class="col-xs-12 col-sm-3">
+    <div class="input-group">
+        <input class="form-control date-picker" id="$FieldType.Field_Key$" name="$FieldType.Field_Key$" type="text"
+               data-date-format="$FieldType.Format$"
+               data-val="true"
+               $if(FieldType.Field_Required)$
+               data-val-required="请填写$FieldType.Field_DisplayName$!"
+               $endif$
+               $if(ReadOnly)$
+               disabled="disabled"
+               $elseif(FieldType.IsDisabled)$
+               disabled="disabled"
+               $endif$  
+               readonly="readonly"
+               />
+        <span class="input-group-addon"
+              $if(!ReadOnly)$
+              style="cursor:pointer;"
+              $elseif(FieldType.IsDisabled)$
+              style="cursor:pointer;"
+              $endif$>
+            <i class="icon-calendar bigger-110"></i>
+        </span>
+
+    </div>
+
+</div>
+$if(!FieldType.IsDisabled)$
+<script type="text/javascript">
+    jQuery(function () {
+
+        if ('$FieldType.IsReadOnly$'.toLowerCase() != 'true') {
+            jQuery('#$FieldType.Field_Key$').datepicker({
+                autoclose: true,
+                changeYear: true,
+                changeMonth: true,
+                language: 'cn',
+                beforeShow: function () {
+                    setTimeout(function () {
+                        jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                            return parseFloat(value) + 5;
+                        });
+                    }, 0);
+                }
+                $if(FieldType.IsLimitDate)$
+                ,maxDate:'+0d'
+                $endif$
+            }).next().on(ace.click_event, function () {
+                jQuery(this).prev().focus();
+            });
+        }
+       
+
+    });
+</script>
+ $endif$

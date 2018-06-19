@@ -1,0 +1,246 @@
+﻿@{
+    ViewBag.Title = "QuotaAdd";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+@Scripts.Render("~/bundles/bootbox")
+<form class="form-horizontal" id="quota_form">
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">额度大类：</span>
+        <div class="col-xs-8">
+            <select name="AMT_TYPE" id="AMT_TYPE" class="form-control">
+                <option value="">--请选择--</option>
+                @foreach (var item in ViewData["QuotaType"] as List<QK.QAPP.Entity.QbEntity.QB_V_AMT_ATTRIBUTE>)
+                {
+                    <option value="@item.PARENT_CODE">@item.PARENT_NAME</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">额度小类：</span>
+        <div class="col-xs-8">
+            <select name="AMT_THIRD_TYPE" id="AMT_THIRD_TYPE" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">额度金额：</span>
+        <div class="col-xs-8">
+            <input type="text" name="AMT" id="AMT" class="form-control" maxlength="28" />
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">拒件比例(%)：</span>
+        <div class="col-xs-8">
+            <input type="text" name="BOUNCE_RATE" id="BOUNCE_RATE" class="form-control" placeholder="仅第三方额度需要填写" maxlength="5" />
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">使用开始日期：</span>
+        <div class="input-group col-xs-8">
+            <input type="text" name="USE_START_DATE" id="USE_START_DATE" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                   data-val="true" readonly="readonly" value="@ViewData["T1Date"]" />
+            <span class="input-group-addon add-on"
+                  style="cursor:pointer;">
+                <i class="icon-calendar bigger-110"></i>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">使用结束日期：</span>
+        <div class="input-group col-xs-8">
+            <input type="text" name="USE_END_DATE" id="USE_END_DATE" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                   data-val="true" readonly="readonly" value="@ViewData["T1Date"]" />
+            <span class="input-group-addon add-on"
+                  style="cursor:pointer;">
+                <i class="icon-calendar bigger-110"></i>
+            </span>
+        </div>
+    </div>
+    <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px; z-index: 0">
+        <a class="btn btn-sm" data-dismiss="modal" onclick="CloseDialog()">
+            <i class="icon-remove"></i>
+            取消
+        </a>
+
+        <button class="btn btn-sm btn-primary" type="submit">
+            <i class="icon-ok"></i>
+            保存
+        </button>
+    </div>
+</form>
+<script src="/Content/assets/js/jquery.validate.min.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<script type="text/javascript">
+    var dept = Utilities.getUrlParam("dept");//parent.dept; //获取部门guid
+    /*拒件比例变量，用来接收标识符*/
+    var has_bounce_rate;
+    $(function () {
+        /*默认隐藏拒件比例*/
+        $("#BOUNCE_RATE").parent().parent(".form-group").hide();
+        /*日期控件加载和绑定 begin*/
+        jQuery("#USE_START_DATE").datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            numberOfMonths: 1,
+            //beforeShowDay: noWeekendsOrHolidays,//$.datepicker.noWeekends,//屏蔽周末
+            minDate: new Date(),//设置最小日期今天
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }, onClose: function (selectedDate) {
+                $("#i_start_date_err").remove(); //由于选择日期时，第一次不能够自动移除验证信息，所以此处手动移除表单验证信息
+                jQuery("#USE_END_DATE").datepicker("option", "minDate", selectedDate);//设置结束日期的最小日期为选择的开始日期
+                jQuery("#USE_END_DATE").val(selectedDate);//选择开始日期时，每次都将结束日期置为选择的开始日期
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+        jQuery("#USE_END_DATE").datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            numberOfMonths: 1,
+            //beforeShowDay: noWeekendsOrHolidays,//$.datepicker.noWeekends,//屏蔽周末
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }, onClose: function (selectedDate) {
+                $("#i_end_date_err").remove();//由于选择日期时，第一次不能够自动移除验证信息，所以此处手动移除表单验证信息
+                //jQuery("#USE_START_DATE").datepicker("option", "minDate", selectedDate);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+        //额度大类型
+        $("#AMT_TYPE").change(function () {
+            var amtType = $("#AMT_TYPE").val();
+            $("#AMT_THIRD_TYPE").html("");
+            $.ajax({
+                url: "/QuotaManage/GetQuotaTypeByParentCode",
+                type: "post",
+                data: { parentCode: amtType, dept: dept },
+                success: function (data) {
+                    $("#AMT_THIRD_TYPE").append('<option value="">--请选择--</option>')
+                    for (var i = 0; i < data.length; i++) {
+                        $("#AMT_THIRD_TYPE").append('<option HAS_BOUNCE_RATE="' + data[i].AMT_HAS_BOUNCE_RATE + '"  value="' + data[i].AMT_TYPE + '">' + data[i].AMT_NAME + '</option>')
+                    }
+                }
+            })
+        });
+        //额度小类型
+        $("#AMT_THIRD_TYPE").change(function () {
+            has_bounce_rate = $('#AMT_THIRD_TYPE option:selected').attr("HAS_BOUNCE_RATE");
+            if (has_bounce_rate == 1) {
+                $("#BOUNCE_RATE").parent().parent(".form-group").show();
+            }
+            else {
+                $("#BOUNCE_RATE").parent().parent(".form-group").hide();
+            }
+        });
+    });
+    /*jquery datepicker 过滤非工作日  以下*/
+    /*[月份，日期，"自定义字符串"] */
+    var notDays = "@ViewData["NonWorkDayJson"]";
+    var nonWorkDayArry = notDays.split(',');
+    function noWeekendsOrHolidays(date) {
+        /*特别说明：以下注释放开，日历插件会自动识别周末并屏蔽，此处注释掉，会根据数据库维护自动屏蔽非工作日*/
+       // var noWeekend = $.datepicker.noWeekends(date);
+       // if (noWeekend[0]) {
+            for (i = 0; i < nonWorkDayArry.length; i++) {
+                var nonDay = new Date(nonWorkDayArry[i]);
+                if (date.getFullYear() == nonDay.getFullYear() && date.getMonth() == nonDay.getMonth() && date.getDate() == nonDay.getDate()) {
+                    return [false, "非工作日"];
+                }
+            }
+            return [true, ''];
+        //} else {
+        //    return noWeekend;
+        //}
+    };
+    /*jquery datepicker 过滤非工作日  以上*/
+    var CloseDialog = function () {
+        parent.CloseDialog("#addQuota_dialog");  //父窗口对话框ID
+    };
+
+    /*表单验证保存额度*/
+    /*非负数验证*/
+    jQuery.validator.addMethod("numCheck", function (value, element) {
+        return Utilities.CheckNum(value);
+    }, $.validator.format("输入值必须是非负数"));
+    $('#quota_form').validate({
+        errorElement: 'i',
+        errorPlacement: function (error, element) {
+            if ($(element).attr('id') == 'USE_START_DATE' || $(element).attr('id') == 'USE_END_DATE') {
+                $(element).parent().parent().append(error);
+            } else {
+                $(element).parent().append(error);
+            }
+        },
+        rules: {
+            AMT_TYPE: { required: true },
+            AMT_THIRD_TYPE: { required: true },
+            AMT: { required: true, number: true, numCheck: true },
+            BOUNCE_RATE: { required: true, number: true ,min:0,max:100},
+            USE_START_DATE: { required: true },
+            USE_END_DATE: { required: true }
+        },
+        messages: {
+            AMT_TYPE: { required: '<i class="icon-info-sign red">请选择额度大类!</i>' },
+            AMT_THIRD_TYPE: { required: '<i class="icon-info-sign red">请选择额度小类!</i>' },
+            AMT: {
+                required: '<i class="icon-info-sign red">请输入额度金额!</i>',
+                number: '<i class="icon-info-sign red">金额格式错误!</i>',
+                numCheck: '<i class="icon-info-sign red">输入金额必须为纯数字且不能小于0!</i>'
+            },
+            BOUNCE_RATE: {
+                required: '<i class="icon-info-sign red">请输入拒件比例!</i>',
+                number: '<i class="icon-info-sign red">拒件比例格式错误!</i>',
+                min: '<i class="icon-info-sign red">拒件比例必须≥0!</i>',
+                max: '<i class="icon-info-sign red">拒件比例必须≤100!</i>'
+            },
+            USE_START_DATE: { required: '<i id="i_start_date_err" class="icon-info-sign red" style="margin-left:130px;">请选择使用开始日期!</i>' },
+            USE_END_DATE: { required: '<i id="i_end_date_err" class="icon-info-sign red" style="margin-left:130px;">请选择使用截止日期!</i>' }
+        },
+        invalidHandler: function (form, validator) {  //验证不通过
+            return false;
+        },
+        submitHandler: function (form) {  //验证通过
+            if (!$(form).valid()) {
+                return false;
+            }
+            $.ajax({
+                url: "/QuotaManage/SaveQuota",
+                type: "post",
+                data: $("#quota_form").serialize(),
+                success: function (data) {
+                    //此处需要加入异常处理，成功：关闭当前窗口，重新加载列表，失败：提示信息，停留在当前窗口
+                    if (data != "") {
+                        var result = JSON.parse(data);
+                        if (result.flag == "true") {
+                            parent.MsgTip(3000, result.errMsg, "success");
+                            CloseDialog();
+                        }
+                        else {
+                            parent.MsgTip(4000, result.errMsg, "warning");
+                        }
+                    }
+                    else {
+                        parent.MsgTip(4000, "额度新增失败", "error")
+                    }
+                }
+            });
+        }
+    });
+</script>

@@ -1,0 +1,288 @@
+﻿@model QK.QAPP.Entity.QB_JOB_CONFIG_INFO
+@{
+    ViewBag.Title = "BidJobConfigEdit";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<style>
+    .form-group { margin-bottom: 2px; }
+</style>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<script src="~/Content/assets/js/bootstrap-tooltip.js"></script>
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="frmInfo" role="form">
+            <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+            <fieldset>
+                <legend>配置信息</legend>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label no-padding-right" for="JOB_TYPE">任务类型：</label>
+                    <div class="input-group col-xs-5 col-sm-3">
+                        <select name="JOB_TYPE" id="JOB_TYPE" class="col-xs-12">
+                            <option value="">--选择任务类型--</option>
+                            @foreach (KeyValuePair<string, string> kv in @ViewBag.JobTypeInfo as Dictionary<string, string>)
+                            {
+                                if (kv.Key == @Model.JOB_TYPE)
+                                {
+                                <option value="@kv.Key" selected="selected">@kv.Value</option>
+                                }
+                                else
+                                {
+                                <option value="@kv.Key">@kv.Value</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label no-padding-right" for="JOB_NAME">任务名称：</label>
+
+                    <div class="input-group col-xs-5 col-sm-3">
+                        <input id="JOB_NAME" class="col-xs-12" name="JOB_NAME" type="text" value="@Model.JOB_NAME">
+                    </div>
+                </div>
+
+                <div class="form-group" id="divAmtType">
+                    <label class="col-xs-3 control-label no-padding-right" for="AMT_TYPE">额度类型：</label>
+                    <div class="input-group col-xs-5 col-sm-3">
+                        <select name="AMT_TYPE" id="AMT_TYPE" class="col-xs-12">
+                            <option value="">--选择额度类型--</option>
+                            @foreach (KeyValuePair<string, string> kv in @ViewBag.AmtListInfo as Dictionary<string, string>)
+                            {
+                                if (kv.Key == @Model.AMT_TYPE)
+                                {
+                                <option value="@kv.Key" selected="selected">@kv.Value</option>
+                                }
+                                else
+                                {
+                                <option value="@kv.Key">@kv.Value</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label no-padding-right" for="JOB_PLAN">任务配置方案：</label>
+                    <div class="input-group col-xs-5 col-sm-3">
+                        <select name="JOB_PLAN" id="JOB_PLAN" class="col-xs-12">
+                            <option value="">--任务配置方案--</option>
+                            <option value="1">每日定点执行</option>
+                            <option value="2">每日周期执行</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group plan1" id="divExcuteTime">
+                    <label class="col-xs-3 control-label no-padding-right" for="EXCUTE_HOUR">每天执行时间：</label>
+                    <div class="input-group col-xs-5 col-sm-3">
+                        <input id="EXCUTE_HOUR" class="col-xs-5" name="EXCUTE_HOUR" type="text" value="@Model.EXCUTE_HOUR"><span style="float:left;padding:3px">时</span>
+                        <input id="EXCUTE_MINUTE" class="col-xs-5" name="EXCUTE_MINUTE" type="text" value="@Model.EXCUTE_MINUTE"><span style="float:left;padding:3px">分</span>
+                    </div>
+                </div>
+                <div class="form-group plan2" id="divJobInteral">
+                    <label class="col-xs-3 control-label no-padding-right" for="JOB_INTERAL">任务频率(分钟)：</label>
+                    <div class="input-group col-xs-5 col-sm-3">
+                        <input id="JOB_INTERAL" class="col-xs-12" name="JOB_INTERAL" type="text" value="@Model.JOB_INTERAL">
+                    </div>
+                </div>
+                <div class="form-group plan2" id="divJobCount">
+                    <label class="col-xs-3 control-label no-padding-right" for="JOB_COUNT">执行件数：</label>
+                    <div class="input-group col-xs-5 col-sm-3">
+                        <input id="JOB_COUNT" class="col-xs-12" name="JOB_COUNT" type="text" value="@Model.JOB_COUNT">
+                    </div>
+                </div>
+                <div class="form-group plan2" id="divJobStartTime">
+                    <label class="col-xs-3 control-label no-padding-right" for="JOB_START_HOUR">任务开始时间：</label>
+                    <div class="input-group col-xs-5 col-sm-3">
+                        <input id="JOB_START_HOUR" class="col-xs-5" name="JOB_START_HOUR" type="text" value="@Model.JOB_START_HOUR"><span style="float:left;padding:3px">时</span>
+                        <input id="JOB_START_MINUTE" class="col-xs-5" name="JOB_START_MINUTE" type="text" value="@Model.JOB_START_MINUTE"><span style="float:left;padding:3px">分</span>
+                    </div>
+                </div>
+                <div class="form-group plan2" id="divJobEndTime">
+                    <label class="col-xs-3 control-label no-padding-right" for="JOB_END_HOUR">任务结束时间：</label>
+                    <div class="input-group col-xs-5 col-sm-3">
+                        <input id="JOB_END_HOUR" class="col-xs-5" name="JOB_END_HOUR" type="text" value="@Model.JOB_END_HOUR"><span style="float:left;padding:3px">时</span>
+                        <input id="JOB_END_MINUTE" class="col-xs-5" name="JOB_END_MINUTE" type="text" value="@Model.JOB_END_MINUTE"><span style="float:left;padding:3px">分</span>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<input type="hidden" value="@Model.JOB_PLAN" id="hidJOB_PLAN">
+<div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px; z-index: 1000000">
+    <button class="btn btn-sm" data-dismiss="modal" onclick="parent.CloseDialog();">
+        <i class="icon-remove"></i>
+        取消
+    </button>
+
+    <button class="btn btn-sm btn-primary" onclick="saveData();">
+        <i class="icon-ok"></i>
+        保存
+    </button>
+</div>
+
+<script type="text/javascript">
+    function saveData() {
+        // 保存检查
+        if (!checkData()) { return false; }
+        $.ajax({
+            type: "post",
+            url: "/SystemConfig/EditJobConfig",
+            data: $("#frmInfo").serialize(),
+            async: true,
+            success: function (d) {
+                if (d) {
+                    Utilities.alertTip(d);
+                    if (d.indexOf('ok') > -1) {
+                        parent.CloseDialog();
+                    }
+                }
+                else {
+                    Utilities.alertTip("保存成功!");
+                }
+            }
+        });
+    }
+
+    $(function () {
+        PageInitSet();
+        // 任务类型变更取得新的额度类型
+        $("#JOB_TYPE").change(function () {
+            $("#AMT_TYPE").find("option:gt(0)").remove();
+            //额度变更
+            $.ajax({
+                type: "POST",
+                url: "/SystemConfig/GetAmtByJobType?jobtype=" + $(this).val(),
+                data: { jobtype: $(this).val() }, //在这里可以设置需要传递的参数
+                dataType: "json",
+                success: function (msg) {
+                    var html = "";
+                    $.each(msg, function (i, item) {
+                        html += '<option value="' + i + '">' + item + '</option>';
+                    })
+                    if (html != "") {
+                        $("#AMT_TYPE").append(html);
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        });
+
+        // 任务配置方案
+        jQuery("#JOB_PLAN").change(function () {
+            jobPlanSet(jQuery(this).val());
+
+        });
+    });
+
+    // 界面输入检查
+    function checkData() {
+        // 任务类型
+        var type = jQuery("#JOB_TYPE").val();
+        if (type == "") {
+            Utilities.alertTip("请选择任务类型!");
+            return false;
+        }
+        // 任务名称
+        if (jQuery("#JOB_NAME").val() == "") {
+            Utilities.alertTip("请填写任务名称!");
+            return false;
+        }
+
+        // 任务配置方案
+        var plan = jQuery("#JOB_PLAN").val();
+        if (plan == "") {
+            Utilities.alertTip("请选择任务配置方案!");
+            return false;
+        }
+        else if (plan == "1") {
+            var hour = jQuery("#EXCUTE_HOUR").val();
+            if (hour == "" || parseInt(hour) < 0 || parseInt(hour) > 23 || parseInt(hour) != hour) {
+                Utilities.alertTip("请输入正确的时间（0-23）!");
+                return false;
+            }
+
+            var minute = jQuery("#EXCUTE_MINUTE").val();
+            if (minute == "" || parseInt(minute) < 0 || parseInt(minute) > 59 || parseInt(minute) != minute) {
+                Utilities.alertTip("请输入正确的时间（0-59）!");
+                return false;
+            }
+        }
+        else if (plan == "2") {// 定点执行计划
+            var jobInteral = jQuery("#JOB_INTERAL").val();
+            if (jobInteral == "" || jobInteral <= 0 || parseInt(jobInteral) != jobInteral) {
+                Utilities.alertTip("任务频率请输入大于0的整数!");
+                return false;
+            }
+
+            var jobCount = jQuery("#JOB_COUNT").val();
+            if (jobCount == "" || jobCount <= 0 || parseInt(jobCount) != jobCount) {
+                Utilities.alertTip("每次推送数量请输入大于0的整数!");
+                return false;
+            }
+
+            var bhour = jQuery("#JOB_START_HOUR").val();
+            if (bhour == "" || parseInt(bhour) < 0 || parseInt(bhour) > 23 || parseInt(bhour) != bhour) {
+                Utilities.alertTip("请输入正确的时间（0-23）!");
+                return false;
+            }
+
+            var bminute = jQuery("#JOB_START_MINUTE").val();
+            if (bminute == "" || parseInt(bminute) < 0 || parseInt(bminute) > 59 || parseInt(bminute) != bminute) {
+                Utilities.alertTip("请输入正确的时间（0-59）!");
+                return false;
+            }
+            var ehour = jQuery("#JOB_END_HOUR").val();
+            if (ehour == "" || parseInt(ehour) < 0 || parseInt(ehour) > 23 || parseInt(ehour) != ehour) {
+                Utilities.alertTip("请输入正确的时间（0-23）!");
+                return false;
+            }
+
+            var eminute = jQuery("#JOB_END_MINUTE").val();
+            if (eminute == "" || parseInt(eminute) < 0 || parseInt(eminute) > 59 || parseInt(eminute) != eminute) {
+                Utilities.alertTip("请输入正确的时间（0-59）!");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // 任务配置方案选择显示
+    function jobPlanSet(value) {
+        if (value == "") {
+            jQuery(".plan1").hide().find("input").val('');
+            jQuery(".plan2").hide().find("input").val('');
+        }
+        else if (value == "1") {//每日定点执行
+            jQuery(".plan1").show().find("input").val('');
+            jQuery(".plan2").hide().find("input").val('');
+
+        }
+        else if (value == "2") {//每日周期执行
+            jQuery(".plan1").hide().find("input").val('');
+            jQuery(".plan2").show().find("input").val('');
+        }
+    }
+
+    function PageInitSet() {
+        var hidValue = jQuery("#hidJOB_PLAN").val();
+        jQuery("#JOB_PLAN").val(hidValue);
+        if (hidValue == "") {
+            jQuery(".plan1").hide();
+            jQuery(".plan2").hide();
+        }
+        else if (hidValue == "1") {//每日定点执行
+            jQuery(".plan1").show();
+            jQuery(".plan2").hide();
+        }
+        else if (hidValue == "2") {//每日周期执行
+            jQuery(".plan1").hide();
+            jQuery(".plan2").show();
+        }
+    }
+</script>

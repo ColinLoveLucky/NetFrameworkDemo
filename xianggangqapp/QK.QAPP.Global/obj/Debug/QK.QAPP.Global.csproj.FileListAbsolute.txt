@@ -1,0 +1,5 @@
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.QAPP.Global\bin\Debug\QK.QAPP.Global.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.QAPP.Global\bin\Debug\QK.QAPP.Global.pdb
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.QAPP.Global\obj\Debug\QK.QAPP.Global.csprojResolveAssemblyReference.cache
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.QAPP.Global\obj\Debug\QK.QAPP.Global.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.QAPP.Global\obj\Debug\QK.QAPP.Global.pdb

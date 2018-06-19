@@ -1,0 +1,92 @@
+﻿<!-- 需要引用bootbox.min.js,jQuery -->
+$if(!ReadOnly)$
+$if(!FieldType.IsDisabled)$
+$if(!FieldType.IsReadOnly)$
+<script type="text/javascript">
+
+    jQuery(function () {
+        jQuery("#$FieldType.Field_Key$_SelectButton").click(function () {
+            var href = "/user/staffpick?roleid=$FieldType.RoleId$&companyid=$FieldType.CompanyId$&MultiSelect=$FieldType.MultiSelect$";
+            jQuery('#$FieldType.Field_Key$_iframe').attr('src', href);
+            jQuery('#$FieldType.Field_Key$_dialog').dialog({
+                title: "<h4 class='smaller'><i class='icon-user'></i> 人员选择</h4>",
+                title_html: true,
+                resizable: false,
+                width: "70%",
+                modal: true,
+                draggable: false,
+                buttons: [
+                    {
+                        text: "取消",
+                        "class": "btn btn-xs",
+                        click: function () {
+                            jQuery(this).dialog("close");
+                        }
+                    },
+                    {
+                        text: "确认",
+                        "class": "btn btn-primary btn-xs",
+                        click: function () {
+                            var staff = jQuery("#$FieldType.Field_Key$_iframe").contents().find("#div_Staff span");
+                            var value = "";
+                            var name = "";
+                            staff.each(function () {
+                                value += jQuery(this).attr("data-val") + ";";
+                                name += jQuery(this).text() + ";"
+                            });
+                            jQuery("#$FieldType.Field_Key$_hidden").val(jQuery.trim(value));
+                            jQuery("#$FieldType.Field_Key$").val(jQuery.trim(name));
+                            jQuery('#$FieldType.Field_Key$_dialog').dialog("close");
+                        }
+                    }
+                ]
+            });
+
+        });
+    });
+</script>
+$endif$
+$endif$ 
+$endif$
+<label class="control-label col-xs-12 col-sm-2">
+    
+    $FieldType.Field_DisplayName$
+    $if(FieldType.Field_Required)$
+    <i class="icon-asterisk red smaller-80" 
+         $if(ReadOnly)$
+           style="display:none"
+         $elseif(FieldType.IsDisabled)$
+           style="display:none"
+         $endif$
+       ></i>
+    $endif$
+    ：
+</label>
+<div class="col-xs-12 col-sm-3">
+    <div class="input-group">
+        <input type="hidden"
+               name="$FieldType.Field_Key$_hidden"
+               id="$FieldType.Field_Key$_hidden" />
+        <input type="text"
+               name="$FieldType.Field_Key$"
+               id="$FieldType.Field_Key$"
+               class="form-control"
+               data-val="true"
+               readonly=""
+
+
+                $if(FieldType.Field_Required)$
+                data-val-required="请选择$FieldType.Field_DisplayName$!"
+                $endif$
+                />
+        
+        <span class="input-group-addon" $if(!ReadOnly)$ $if(!FieldType.IsDisabled)$ $if(!FieldType.IsReadOnly)$ style="cursor:pointer;" $else$ style="cursor: not-allowed" $endif$ $endif$ $endif$ id="$FieldType.Field_Key$_SelectButton">
+            <i class="icon-user bigger-110"></i>
+        </span>
+       
+        
+    </div>
+</div>
+<div id="$FieldType.Field_Key$_dialog" style="display:none;height:450px">
+    <iframe id="$FieldType.Field_Key$_iframe" style="border: none; width: 100%; height: 450px;"></iframe>
+</div>

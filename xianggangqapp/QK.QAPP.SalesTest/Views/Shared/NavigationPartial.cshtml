@@ -1,0 +1,109 @@
+﻿@model IEnumerable<QK.QAPP.Entity.APP_Menu>
+<div class="sidebar" id="sidebar">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('sidebar', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <!--左侧导航顶部-->
+    <div class="sidebar-shortcuts" id="sidebar-shortcuts" style="display:none">
+        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+            <button class="btn btn-success">
+                <i class="icon-home" title="首页"></i>
+            </button>
+
+            <button class="btn btn-info">
+                <i class="icon-pencil"></i>
+            </button>
+
+            <button class="btn btn-warning">
+                <i class="icon-group"></i>
+            </button>
+
+            <button class="btn btn-danger">
+                <i class="icon-cogs"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+            <span class="btn btn-success"></span>
+
+            <span class="btn btn-info"></span>
+
+            <span class="btn btn-warning"></span>
+
+            <span class="btn btn-danger"></span>
+        </div>
+    </div><!-- #sidebar-shortcuts -->
+    <!--左侧导航导航数据-->
+    <ul class="nav nav-list">
+        @foreach (var item in Model.Where(c => c.ParentId == "0" || c.ParentId == null))
+        {
+            <li class='@(item.IsUnfold == "1"?"active":"")'>
+                <a href="#" class="dropdown-toggle">
+                    <i><img src="@item.Img" width="18" /></i>
+                    <span class="menu-text"> @item.FullName</span>
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+                <ul class="submenu">
+                    @foreach (var subitem in Model.Where(c => c.ParentId == item.MenuId))
+                    {
+                        <li>
+                            <a href="@subitem.NavigateUrl">
+                                <i class="icon-double-angle-right"></i>
+                                @subitem.FullName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+    </ul><!-- /.nav-list -->
+    <!--左侧导航收缩按钮-->
+    <div class="sidebar-collapse" id="sidebar-collapse">
+        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+    </div>
+
+    <script type="text/javascript">
+        try {
+            ace.settings.check('sidebar', 'collapsed')
+        } catch (e) {
+        }
+        // 设置左侧导航收缩当浏览器分辨率<=1024
+        function resizeNav() {
+            if (($(window).width() <= 1320)) {
+                $(".icon-double-angle-left").click();
+            }
+        }
+
+        //自动通过URL读取面包屑
+        $(function () {
+        var navLink = "";
+        var path = location.pathname;
+        var curentLink = $(".submenu>li>a[href*='" + path + "']");
+        if (curentLink.length == 1) {
+            $(".active").removeClass("active");
+            curentLink.parent().parent().parent().addClass("active");
+            var parentRootName = $.trim($(".active").find(".menu-text").text());
+            var subRootName = $.trim(curentLink.text());
+            navLink += "<li>"
+                            + $(".active").find("i").html()
+                            + "<a href='#'>" + parentRootName + "</a>"
+                      + "</li>";
+            navLink += "<li><a href='#'>" + subRootName + "</a></li>";
+        }
+
+        //设置面包屑值
+        if (navLink) {
+            $(".breadcrumb").html(navLink);
+        }
+
+        $(window).resize(function () {
+            resizeNav();
+        });
+
+    });
+        </script>
+</div>
+

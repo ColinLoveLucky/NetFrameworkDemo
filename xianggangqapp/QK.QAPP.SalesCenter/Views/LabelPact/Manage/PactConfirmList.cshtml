@@ -1,0 +1,527 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<script src="~/Content/assets/js/numeral/numeral.min.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<div>
+    <ul class="nav nav-tabs" id="tabs">
+        <li class="active" id="AgreementConfirmLabel" style="border:none;">
+            <a href="#AgreementConfirm" data-toggle="tab" onclick="javascript: SetCurrentGrid(1, this); window.setTimeout(LoadAgreementConfirmPanel, 1);">
+                协议确认
+            </a>
+        </li>
+
+        <li id="isAgreementConfirmLabel" style="border:none;">
+            <a href="#isAgreementConfirm" data-toggle="tab" onclick="javascript: SetCurrentGrid(2, this); window.setTimeout(LoadisAgreementConfirmPanel, 1);">
+                已确认协议
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" style="height:auto; overflow-y:auto;">
+        <div id="AgreementConfirm" class="tab-pane active">
+            <div id="highSearch_AgreementConfirm" style="display:none;">
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">发标编号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtPactissueNo" id="txtPactissueNo" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">发标合同号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtPactshowNo" id="txtPactshowNo" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">进件编号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber" id="txtAppNumber" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">进件城市：</span>
+                        <div class="col-xs-12 col-sm-3" id="divBidCityCode">
+                            <select name="slctBidCityCode" id="slctBidCityCode" class="col-xs-12">
+                                <option value="">-请选择-</option>
+                                @foreach (KeyValuePair<string, string> kv in ViewData["Bid_City"] as Dictionary<string, string>)
+                                {
+                                    <option value="@kv.Key">@kv.Value</option>
+                                }
+                            </select>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtCustomerName" id="txtCustomerName" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">挂标客服：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtSales" id="txtSales" class="col-xs-12" />
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <button class="btn btn-sm btn-success" onclick="javascript: doHighSearch();">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                        <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-success btn-sm" type="button" onclick="javascript: PactConfirmList();">批量协议确认</button>
+            <table id="AgreementConfirm-grid-table"></table>
+            <div id="AgreementConfirm-grid-pager"></div>
+        </div>
+        <div id="isAgreementConfirm" class="tab-pane">
+            <div id="highSearch_isAgreementConfirm" style="display:none;">
+                <div class="form-group">
+                    <div class="clearfix">
+                      <span class="control-label col-xs-12 col-sm-2">签约日期：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtBidSignedTime_isAgreementConfirm" id="txtBidSignedTime_isAgreementConfirm" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                   data-val="true" />
+                            <span class="input-group-addon"
+                                  style="cursor:pointer;">
+                                <i class="icon-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">渠道：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <select name="slctBidChannel_isAgreementConfirm" id="slctBidChannel_isAgreementConfirm" class="col-xs-12">
+                                <option value="">-请选择-</option>
+                                @foreach (KeyValuePair<string, string> kv in ViewData["Bid_Channel"] as Dictionary<string, string>)
+                                {
+                                    <option value="@kv.Key">@kv.Value</option>
+                                }
+                            </select>
+                        </div>
+                      </div>
+                    </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">发标编号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtPactissueNo_isAgreementConfirm" id="txtPactissueNo_isAgreementConfirm" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">发标合同号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtPactshowNo_isAgreementConfirm" id="txtPactshowNo_isAgreementConfirm" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">进件编号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber_isAgreementConfirm" id="txtAppNumber_isAgreementConfirm" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtCustomerName_isAgreementConfirm" id="txtCustomerName_isAgreementConfirm" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">挂标客服：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtSales_isAgreementConfirm" id="txtSales_isAgreementConfirm" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <button class="btn btn-sm btn-success" onclick="javascript: doHighSearch();">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                        <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                    </div>
+                </div>
+            </div>
+            <table id="isAgreementConfirm-grid-table"></table>
+            <div id="isAgreementConfirm-grid-pager"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var grid_selector_AgreementConfirm = '#AgreementConfirm-grid-table';
+    var grid_selector_isAgreementConfirm = '#isAgreementConfirm-grid-table';
+
+    var pager_selector_AgreementConfirm = '#AgreementConfirm-grid-pager';
+    var pager_selector_isAgreementConfirm = '#isAgreementConfirm-grid-pager';
+
+    var currentHighSearch = '#highSearch_AgreementConfirm';
+    var currentGrid = grid_selector_AgreementConfirm;
+    var sortIndex = "";
+    var sortOrder = "";
+    jQuery(function () {
+        /*禁用页面回车键 */
+        document.onkeypress = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
+                return false;
+            }
+        }
+        /*为Search窗口窗口添加搜索功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function () { doNormalSearch(); });
+        jQuery(".input-icon").children("input[type='text']").keypress(function (e) { e = e || event; if (e.keyCode == 13) { jQuery(".input-icon").children("i").click(); }; });
+        jQuery("<a/>").attr("href", "javascript:;").text("高级查询").attr("onclick", "javascript:showHighSearch();").addClass("label label-lg label-pink arrowed-right").attr("style", "top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function () {
+            jQuery(window).resize();
+        });
+        /*页面加载时如果没有指定锚点则显示第一个页签*/
+        var hs = window.location.hash;
+        if (!hs) {
+            hs = "#AgreementConfirm";
+        }
+        jQuery('#tabs').find('a[href="' + hs + '"]').click();
+        jQuery('.date-picker').datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+
+    });
+    var PactConfirmList = function () {
+        var ids = $('#AgreementConfirm-grid-table').jqGrid().getGridParam("selarrrow");
+        if (ids.length > 0) {
+            var bidCode = new Array();
+
+            $.each(ids, function (n, value) {
+                bidCode.push($('#AgreementConfirm-grid-table').jqGrid().getRowData(value).BID_CODE);
+            })
+
+            var strData = { bidCode: bidCode.join(",") };
+            if (bidCode != null) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Pact/PactConfirmSubmit",
+                    data: strData, //在这里可以设置需要传递的参数
+                    //contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    traditional: true,
+                    success: function (msg) {
+                        if (msg[0].Sucess) {
+                            Utilities.alertTip(msg[0].TipMsg);
+                            jQuery('#AgreementConfirm-grid-table').jqGrid('setGridParam').trigger("reloadGrid");
+                        }
+                        else {
+                            Utilities.alertTip(msg[0].TipMsg);
+                        }
+                        
+                    },
+                    error: function () {
+                        Utilities.alertTip("协议确认失败！");
+                    }
+
+                });
+            }
+        }
+        else {
+            Utilities.alertTip("请选择数据");
+        }
+    }
+    /*加载jqGrid */
+    function LoadGrid(grid_selector, _colNames, _colModel, _pager, _postData, multiselect) {
+        jQuery(grid_selector).jqGrid({
+            url: "/Pact/GetPactConfirmList",
+            datatype: "json",
+            mtype: "POST",
+            height: jQuery(window).height() - 335,
+            width: jQuery('.tab-content').width(),
+            colNames: _colNames,
+            colModel: _colModel,
+            postData: _postData,
+            jsonReader: {
+                root: "DataList",
+                total: "TotalCount",
+                page: "CurrentPage",
+                records: "TotalRecords",
+                repeatitems: false
+            },
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: _pager,
+            onSortCol: function (colName, iCol, sortorder) {
+                sortIndex = colName;
+                sortOrder = sortorder;
+            },
+            //beforeRequest: function () {
+            //    jQuery(_gridId).jqGrid('setGridParam', { postData: { 'sidx': sortIndex, 'sord': sortOrder } });
+            //},
+            altRows: true,
+            //控制多选
+            multiselect: multiselect,
+            multiboxonly: true,
+            loadComplete: function () {
+                var table = this;
+                var re_records = jQuery(this).getGridParam('records');
+                if (re_records == 0 || re_records == null) {
+                    Utilities.alertTip("对不起，未找到符合条件的记录！");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+                jQuery(window).resize();
+            },
+
+            autowidth: true
+
+        });
+
+    }
+    /*处理分页控件样式*/
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    };
+
+    /*设置当前页签 */
+    function SetCurrentGrid(flag) {
+        switch (flag) {
+            case 1: {
+                currentGrid = grid_selector_AgreementConfirm;
+                currentHighSearch = '#highSearch_AgreementConfirm';
+            }
+                break;
+            case 2: {
+                currentGrid = grid_selector_isAgreementConfirm;
+                currentHighSearch = '#highSearch_isAgreementConfirm';
+            }
+                break;
+            default: break;
+
+        }
+    }
+    /*加载协议确认列表 */
+    function LoadAgreementConfirmPanel() {
+        if (!jQuery(grid_selector_AgreementConfirm))
+            return;
+        var colNames = ['<i class="hidden-480 icon-book"></i> 进件ID', '<i class="hidden-480 icon-book"></i> 产品logo',
+            '<i class="hidden-480 icon-book"></i> 发标编号', '<i class="hidden-480 icon-book"></i> 发标合同号',
+            '<i class="hidden-480 icon-book"></i> 进件编号','<i class="hidden-480 icon-book"></i> 进件城市',
+            '<i class="hidden-480 icon-user"></i> 客户姓名', '<i class="hidden-480 icon-tasks"></i> 业务品种',
+            '<i class="hidden-480 icon-tasks"></i> 固定还款日(号)',
+            '<i class="hidden-480 icon-tasks"></i> 发生类型', '<i class="hidden-480 icon-money"></i> 发标金额',
+            '<i class="hidden-480 icon-user"></i> 挂标客服', '<i class="hidden-480 icon-time"></i> 协议上传时间',
+            '<i class="hidden-480 icon-cogs"></i> 操作'
+        ];
+        var colModel = [
+            { name: 'BID_APP_ID', index: 'BID_APP_ID', sorttype: "int", hidden: true },
+            { name: 'BID_BUS_LOGO', index: 'BID_BUS_LOGO', sorttype: "int", hidden: true },
+            { name: 'BID_CODE', index: 'BID_CODE', width: "16%", sorttype: "int" },
+            { name: 'BID_CONTRACT_NO', index: 'BID_CONTRACT_NO', width: "16%", sorttype: "int" },
+            {
+                name: 'BID_APP_CODE', index: 'BID_APP_CODE', width: "14%", sorttype: "int",
+                formatter: function (cellvalue, options, rowObject) {
+                    var re = "<a style='text-decoration:underline;'  href='/LoanApplication/Application?dformCode=" + rowObject.BID_BUS_LOGO + "&operation=3&appid=" + rowObject.BID_APP_ID + "'>" + rowObject.BID_APP_CODE + "</a>";
+                    return re;
+                }
+            },
+             { name: 'BID_CITY_NAME', index: 'BID_CITY_NAME', width: "10%", sorttype: "textarea" },
+            { name: 'BID_CUSTOMER_NAME', index: 'BID_CUSTOMER_NAME', width: "10%", sorttype: "textarea" },
+            { name: 'BID_BUS_NAME', index: 'BID_BUS_NAME', width: "15%", sorttype: "textarea" },
+            { name: 'BID_FIX_REPAY', index: 'BID_FIX_REPAY', width: "6%", sorttype: "textarea" },
+            { name: 'OCCUR_TYPENAME', index: 'OCCUR_TYPENAME', width: "10%", sorttype: "textarea" },
+            {
+                name: 'BID_AMT', index: 'BID_AMT', width: "10%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0,0.00');
+                }
+            },
+            { name: 'BID_HANG_USER_NAME', index: 'BID_HANG_USER_NAME', width: "9%" },
+            { name: 'BID_SIGNED_TIME', index: 'BID_SIGNED_TIME', width: "14%", formatter: 'date', formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s' }, datefmt: 'Y-m-d H:i:s' },
+             {
+                 name: 'chaozuo', index: 'chaozuo', sortable: false, width: "8%",
+                 formatter: function (cellvalue, options, rowObject) {
+                     return "<a style='text-decoration:underline;' href='/Pact/PactConfirm?bidCode=" + rowObject.BID_CODE + "&operation=3&logo=" + rowObject.BID_BUS_LOGO + "&appid=" + rowObject.BID_APP_ID + "'> 详情</a>";
+                 }
+             }
+        ];
+        var postData = { bidState: "@(ViewBag.SBS_XY_YSC)", globalSearch: 0 };
+        LoadGrid(grid_selector_AgreementConfirm, colNames, colModel, pager_selector_AgreementConfirm, postData, true);
+    }
+    /*加载已确认协议列表 */
+    function LoadisAgreementConfirmPanel() {
+
+        var colNames = ['<i class="hidden-480 icon-book"></i> 进件ID', '<i class="hidden-480 icon-book"></i> 产品logo',
+            '<i class="hidden-480 icon-book"></i> 发标编号', '<i class="hidden-480 icon-book"></i> 发标合同号',
+            '<i class="hidden-480 icon-book"></i> 进件编号', '<i class="hidden-480 icon-user"></i> 客户姓名',
+             '<i class="hidden-480 icon-tasks"></i> 业务品种', '<i class="hidden-480 icon-user"></i> 固定还款日(号)',
+            '<i class="hidden-480 icon-tasks"></i> 发生类型', '<i class="hidden-480 icon-money"></i> 发标金额',
+           '<i class="hidden-480 icon-time"></i> 协议状态', '<i class="hidden-480 icon-time"></i> 渠道',
+           '<i class="hidden-480 icon-time"></i> 标的类型', '<i class="hidden-480 icon-time"></i> 推送状态',
+           '<i class="hidden-480 icon-time"></i> 签约日期', '<i class="hidden-480 icon-user"></i> 挂标客服',
+            '<i class="hidden-480 icon-cogs"></i> 操作'
+        ];
+        var colModel = [
+            { name: 'BID_APP_ID', index: 'BID_APP_ID', sorttype: "int", hidden: true },
+            { name: 'BID_BUS_LOGO', index: 'BID_BUS_LOGO', sorttype: "int", hidden: true },
+            { name: 'BID_CODE', index: 'BID_CODE', width: "16%", sorttype: "int" },
+            { name: 'BID_CONTRACT_NO', index: 'BID_CONTRACT_NO', width: "16%", sorttype: "int" },
+            {
+                name: 'BID_APP_CODE', index: 'BID_APP_CODE', width: "14%", sorttype: "int",
+                formatter: function (cellvalue, options, rowObject) {
+                    var re = "<a style='text-decoration:underline;'  href='/LoanApplication/Application?dformCode=" + rowObject.BID_BUS_LOGO + "&operation=3&appid=" + rowObject.BID_APP_ID + "'>" + rowObject.BID_APP_CODE + "</a>";
+                    return re;
+                }
+            },
+            { name: 'BID_CUSTOMER_NAME', index: 'BID_CUSTOMER_NAME', width: "10%", sorttype: "textarea" },
+            { name: 'BID_BUS_NAME', index: 'BID_BUS_NAME', width: "15%", sorttype: "textarea" },
+            { name: 'BID_FIX_REPAY', index: 'BID_FIX_REPAY', width: "12%", sorttype: "textarea" },
+            { name: 'OCCUR_TYPENAME', index: 'OCCUR_TYPENAME', width: "10%", sorttype: "textarea" },
+            {
+                name: 'BID_AMT', index: 'BID_AMT', width: "9%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0,0.00');
+                }
+            },
+            { name: 'BID_STATENAME', index: 'BID_STATENAME', width: "10%", sorttype: "textarea" },
+            { name: 'BID_CHANNELNAME', index: 'BID_CHANNELNAME', width: "12%", sorttype: "textarea" },
+            { name: 'BID_TYPE', index: 'BID_TYPE', width: "9%", sorttype: "textarea" },
+            { name: 'BID_THIRD_STATENAME', index: 'BID_THIRD_STATENAME', width: "12%", sorttype: "textarea" },
+            { name: 'BID_SIGNED_TIME', index: 'BID_SIGNED_TIME', width: "10%", formatter: 'date', formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' }, datefmt: 'Y-m-d' },
+            { name: 'BID_HANG_USER_NAME', index: 'BID_HANG_USER_NAME', width: "11%" },
+             {
+                 name: 'chaozuo', index: 'chaozuo', sortable: false, width: "8%",
+                 formatter: function (cellvalue, options, rowObject) {
+                     return "<a style='text-decoration:underline;' href='/Pact/PactDetail?bidCode=" + rowObject.BID_CODE + "&operation=3&logo=" + rowObject.BID_BUS_LOGO + "&appid=" + rowObject.BID_APP_ID + "'> 详情</a>";
+                 }
+             }
+        ];
+        var postData = { bidState: "@(ViewBag.SBS_XY_YQR)", globalSearch: 0 };
+        LoadGrid(grid_selector_isAgreementConfirm, colNames, colModel, pager_selector_isAgreementConfirm, postData, false);
+    }
+    /*显示或隐藏高级查询*/
+    function showHighSearch() {
+        jQuery(currentHighSearch).toggle(300, function () { jQuery(window).resize() });
+    }
+    /*点击搜索按钮重新搜索*/
+    function doHighSearch() {
+        jQuery("#nav_search_input").val('');
+        var para;
+        sortIndex = '';
+        sortOrder = '';
+        switch (currentGrid) {
+            case grid_selector_AgreementConfirm:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        bidCode: escape(jQuery("#txtPactissueNo").val().trim()),
+                        bidContractNo: escape(jQuery("#txtPactshowNo").val().trim()),
+                        bidAppCode: escape(jQuery("#txtAppNumber").val().trim()),
+                        bidCustomerName: escape(jQuery("#txtCustomerName").val().trim()),
+                        bidCustomerManager: escape(jQuery("#txtSales").val().trim()),
+                        bidCityCode: escape(jQuery("#slctBidCityCode").val().trim()),
+                        fuzzySearch: 0/*高级查询*/
+                    }
+                } break;
+            case grid_selector_isAgreementConfirm:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        bidSignedTime: escape(jQuery("#txtBidSignedTime_isAgreementConfirm").val()),
+                        bidChannel: escape(jQuery("#slctBidChannel_isAgreementConfirm").val()),
+                        bidCode: escape(jQuery("#txtPactissueNo_isAgreementConfirm").val()),
+                        bidContractNo: escape(jQuery("#txtPactshowNo_isAgreementConfirm").val()),
+                        bidAppCode: escape(jQuery("#txtAppNumber_isAgreementConfirm").val()),
+                        bidCustomerName: jQuery("#txtCustomerName_isAgreementConfirm").val(),
+                        bidCustomerManager: jQuery("#txtBidCsac_isAgreementConfirm").val(),
+                        fuzzySearch: 0,/*高级查询*/
+                    }
+                } break;
+
+            default: break;
+        };
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para, /*发送数据 */
+            page: 1
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+    /*Search窗口简单查询*/
+    function doNormalSearch() {
+        jQuery(currentHighSearch).find("input[type='text']").each(function () {
+            jQuery(this).val("")
+        });
+        jQuery(currentHighSearch).find("select").each(function () {
+            jQuery(this).val("")
+        });
+        sortIndex = '';
+        sortOrder = '';
+        var para;
+        switch (currentGrid) {
+            case grid_selector_AgreementConfirm:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        searchPara: escape(jQuery("#nav_search_input").val()),                      
+                        page: '1',
+                        fuzzySearch: 1,/*简单查询*/
+                    }
+                } break;
+            case grid_selector_isAgreementConfirm:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        searchPara: escape(jQuery("#nav_search_input").val()),
+                        page: '1',
+                        fuzzySearch: 1,/*简单查询*/
+    }
+    } break;
+
+            default: break;
+    };
+        jQuery(currentGrid).jqGrid('setGridParam', {
+    datatype: 'json',
+    postData: para, /*发送数据 */
+    page: 1
+    }).trigger("reloadGrid"); /*重新载入  */
+    }
+    jQuery(window).resize(function () {
+        jQuery(window).unbind("onresize");
+        jQuery(grid_selector_AgreementConfirm).setGridHeight(jQuery(window).height() - 335);
+        jQuery(grid_selector_isAgreementConfirm).setGridHeight(jQuery(window).height() - 300);
+        jQuery(grid_selector_AgreementConfirm).setGridWidth(jQuery('.tab-content').width() );
+        jQuery(grid_selector_isAgreementConfirm).setGridWidth(jQuery('.tab-content').width()+350);
+        jQuery('.ui-jqgrid-hbox').each(function () {
+            jQuery(this).find('th').last().css('width', (jQuery(this).find('th').last().width() + 25) + 'px');
+        });
+
+        jQuery(window).bind("onresize", this);
+    });
+</script>

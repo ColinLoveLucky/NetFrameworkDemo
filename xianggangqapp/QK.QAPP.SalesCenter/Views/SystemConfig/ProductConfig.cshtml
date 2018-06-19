@@ -1,0 +1,159 @@
+﻿@{
+    ViewBag.Title = "ProductConfig";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<link href="~/Content/assets/css/chosen.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="productConfigForm" role="form" style="margin-bottom:50px">
+            <fieldset>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">菜单：</label>
+                    <div class="col-sm-9">
+                        <select id="MENU_GROUP" name="MENU_GROUP">
+                            @foreach (var kv in ViewBag.MenuGroups)
+                            {
+                                <option value="@kv.Key"> @kv.Key </option>
+                            }
+                        </select>
+                    </div>
+
+                    <label class="col-sm-2 control-label">城市名称：</label>
+                    <div class="col-sm-9">
+                        <input id="CITY_NAME" name="CITY_NAME" class="col-sm-12 col-xs-12" type="text" value="@ViewBag.AppCity.CITY_NAME" readonly="readonly">
+                    </div>
+
+                    <label class="col-sm-2 control-label">城市编码：</label>
+                    <div class="col-sm-9">
+                        <input id="CITY_CODE" name="CITY_CODE" class="col-sm-12 col-xs-12" type="text" value="@ViewBag.AppCity.CITY_CODE" readonly="readonly">
+                    </div>
+                </div>
+
+
+                <ul class="nav nav-list"><li class="divider"></li></ul>
+
+                <input id="ID" name="ID" type="hidden">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否可用：</label>
+                    <div class="col-sm-9">
+                        <select id="ENABLE" name="ENABLE" class="col-sm-12 col-xs-12">
+                            <option value="">--请选择--</option>
+                            <option value="1">可用</option>
+                            <option value="0">不可用</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">本城市产品：</label>
+                    <div class="col-sm-9">
+                        <select multiple class="chosen-select tag-input-style" style="display: none; width: 568px;" id="PRODUCT_CODE" name="PRODUCT_CODE" data-placeholder="请选择产品...">
+                            @foreach (var item in ViewBag.productDic)
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+        <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px;">
+            <button class="btn btn-sm" data-dismiss="modal" onclick="parent.CloseProductConfigDialog();">
+                <i class="icon-remove"></i>
+                取消
+            </button>
+
+            <button class="btn btn-sm btn-primary" onclick="$('#productConfigForm').submit();">
+                <i class="icon-ok"></i>
+                保存
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="/Content/assets/js/chosen.jquery.min.js"></script>
+<script src="/Content/assets/js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.page-content').css('overflow-x', '');
+        $('#PRODUCT_CODE').css('width', $('#CITY_NAME').width()).chosen();
+
+        var cityCode = $('#CITY_CODE').val();
+
+        $('#MENU_GROUP').change(function () {
+            ResetForm();
+            var menuGroup = $(this).val();
+            $.getJSON("/SystemConfig/GetCityProduct?cityCode=" + cityCode + '&menuGroup=' + menuGroup, function (data) {
+                for (var i in data) {
+                    if (i == 'PRODUCT_CODE') {
+                        //var ops = $('#PRODUCT_CODE').children('option');
+                        //for (var j = 0; j < ops.length; j++) {
+                        //    var codes = data[i].split(',');
+                        //    $('#PRODUCT_CODE').val(codes);
+                        //    $('#PRODUCT_CODE').trigger("chosen:updated");
+                        //}
+                        var codes = data[i].split(',');
+                            $('#PRODUCT_CODE').val(codes);
+                            $('#PRODUCT_CODE').trigger("chosen:updated");
+                    } else {
+                        $('#' + i).val(data[i]);
+                    }
+                }
+            });
+        }).change();
+
+        //验证
+        $('#productConfigForm').validate({
+            errorElement: 'i',
+            errorPlacement: function (error, element) {
+                $(element).parent().append(error);
+            },
+            rules: {
+                MENU_GROUP: {required: true},
+                PRODUCT_CODE: { required: true },
+                ENABLE: { required: true }
+            },
+            messages: {
+                MENU_GROUP: {required: '<i class="icon-info-sign red">请选择菜单!</i>'},
+                PRODUCT_CODE: { required: '<i class="icon-info-sign red">请选择产品!</i>' },
+                ENABLE: { required: '<i class="icon-info-sign red">请选择是否可用!</i>' }
+            },
+            invalidHandler: function (form, validator) {  //验证不通过
+                return false;
+            },
+            submitHandler: function (form) {  //验证通过
+                if (!$(form).valid()) {
+                    return false;
+                }
+
+                SaveCityProductData();
+            }
+        });
+
+    });
+
+    var ResetForm = function () {
+        $('#ID').val('-1');
+        $('#ENABLE').val('');
+        $('#PRODUCT_CODE').val('');
+        $('#PRODUCT_CODE').trigger("chosen:updated");
+    }
+
+    var SaveCityProductData = function () {
+        $.ajax({
+            url: '/SystemConfig/UpdateOrAddCityProduct',
+            type: 'post',
+            cache: false,
+            data: $('#productConfigForm').serialize(),
+            success: function (msg) {
+                if (msg) {
+                    Utilities.alertTip(msg);
+                } else {
+                    parent.Utilities.alertTip("保存成功！");
+                }
+            }
+        });
+    };
+</script>

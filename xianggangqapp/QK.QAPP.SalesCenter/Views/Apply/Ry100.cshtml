@@ -1,0 +1,468 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<script src="~/Content/assets/js/bootstrap-tooltip.js"></script>
+<div class="row-fluid">
+    <div>
+        <div class="widget-box">
+            <div class="widget-header widget-header-blue widget-header-flat">
+                <h4 class="lighter">申请管理</h4>
+                @foreach (QK.QAPP.Entity.APP_Button item in ViewData["Permission_Buttons_listObj"] as List<QK.QAPP.Entity.APP_Button>)
+                {
+                    if (item.Control_ID == "loan_apply")
+                    {
+                        <a class="btn btn-info" href="/ProductApplication/RyApplication" style="float:right;">
+                            申请贷款
+                        </a>
+                    }
+                }
+            </div>
+            <div class="widget-body" style="height:auto; overflow-y:auto;width:auto;">
+                <div class="widget-main">
+                    <div id="Apply_highSearch" style="display:none">
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <span class="control-label col-xs-12 col-sm-2">申请单号：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" name="txtAppNumber" id="txtAppNumber" class="col-xs-12" />
+                                </div>
+                                <span class="control-label col-xs-12 col-sm-2">办理状态：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <select name="slctStatus" id="slctStatus" class="col-xs-12">
+                                        <option value="">--选择进件状态--</option>
+                                        @foreach (KeyValuePair<string, string> kv in ViewData["Order_ExceptSD_Status_Ry100"] as Dictionary<string, string>)
+                                        {
+                                            string[] statuName = kv.Value.Split(',');
+                                            <option value="@kv.Key">@statuName[0].ToString()</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" name="txtCustomerName" id="txtCustomerName" class="col-xs-12" />
+                                </div>
+                                <span class="control-label col-xs-12 col-sm-2">客户身份证：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" name="txtCustomerIDCard" id="txtCustomerIDCard" class="col-xs-12" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <span class="control-label col-xs-12 col-sm-2">申请时间起：</span>
+                                <div class="input-group col-xs-12 col-sm-3">
+                                    <input type="text" name="txtAppDateStart" id="txtAppDateStart" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                           data-val="true" />
+                                    <span class="input-group-addon"
+                                          style="cursor:pointer;">
+                                        <i class="icon-calendar bigger-110"></i>
+                                    </span>
+                                </div>
+                                <span class="control-label col-xs-12 col-sm-2">申请时间止：</span>
+                                <div class="input-group col-xs-12 col-sm-3">
+                                    <input type="text" name="txtAppDateEnd" id="txtAppDateEnd" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                           data-val="true" />
+                                    <span class="input-group-addon"
+                                          style="cursor:pointer;">
+                                        <i class="icon-calendar bigger-110"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <span class="control-label col-xs-12 col-sm-2">客户经理：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" name="txtSales" id="txtSales" class="col-xs-12" />
+                                </div>
+                                <span class="control-label col-xs-12 col-sm-2">客服专员：</span>
+                                <div class="col-xs-12 col-sm-3">
+                                    <input type="text" name="txtCsac" id="txtCsac" class="col-xs-12" />
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <button class="btn btn-sm btn-success" onclick="javascript:doHighSearch();">
+                                    <i class="icon-search nav-search-icon"></i>查询
+                                </button>
+                                <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="grid-table"></table>
+
+                    <div id="grid-pager"></div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var permissionButtons = @System.Web.Mvc.MvcHtmlString.Create(ViewData["Permission_Buttons"].ToString());
+    var sortIndex="";
+    var sortOrder="";
+
+    //截止时间不能小于起始时间，起始时间不能大于截止时间
+    $(function() {
+        $( "#txtAppDateStart" ).datepicker({
+            defaultDate: "+1w",
+            changeYear: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            onClose: function( selectedDate ) {
+                $( "#txtAppDateEnd" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+
+        $( "#txtAppDateEnd" ).datepicker({
+            defaultDate: "+1w",
+            changeYear: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            onClose: function( selectedDate ) {
+                $( "#txtAppDateStart" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+    });
+
+
+    jQuery(function () {
+        //禁用页面回车键
+        document.onkeypress = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
+                return false;
+            }
+        }
+
+        /*为Search窗口添加搜索功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function () { doNormalSearch(); });
+        jQuery(".input-icon").children("#nav_search_input").keydown(function (e) {
+            e=e||window.event;
+            if (e.keyCode == 13) { jQuery(".input-icon").children("i").click()};
+        });
+        jQuery("<a/>").attr("href", "javascript:;").text("高级查询").attr("onclick", "javascript:showHighSearch();").addClass("label label-lg label-pink arrowed-right").attr("style","top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function(){
+            jQuery(window).resize();
+        });
+
+        jQuery('.date-picker').datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            //language: 'cn',
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+
+    });
+
+    /*页面加载时按所有查询条件列出进件*/
+    jQuery(grid_selector).jqGrid({
+        url: "/Apply/GetApplyTableListRy?logo="+ Utilities.getUrlParam('logo'),
+        datatype: "json",
+        height: jQuery(window).height() - 293,
+        width:jQuery('.widget-main').width(),
+        autowidth: true,
+        shrinkToFit: true,
+        mtype: "POST",
+        altRows: true,
+        colNames: ['<i class="hidden-480 icon-book"></i> 申请号', '<i class="hidden-480 icon-book"></i> 产品', '<i class="hidden-480 icon-user"></i> 姓名',
+            '<i class="hidden-480 icon-user"></i> 客户身份证', '<i class="hidden-480 icon-calendar"></i> 申请时间',
+            '<i class="hidden-480 icon-money"></i> 申请金额', '<i class="hidden-480 icon-money"></i> 合同金额',
+            '<i class="hidden-480 icon-time"></i> 办理状态', '<i class="hidden-480 icon-user"></i> 客户经理',
+            '<i class="hidden-480 icon-user"></i> 客服专员', '<i class="hidden-480 icon-cogs"></i> 业务办理'],
+
+        colModel: [
+            { name: 'APPCODE', index: 'APPCODE', width: "11%", sorttype: "int" },
+            { name: 'PRODUCTNAME', index: 'PRODUCTNAME', width: "12%", sorttype: "textarea" },
+            { name: 'CUSTOMERNAME', index: 'CUSTOMERNAME', width: "6%", sorttype: "textarea" },
+            { name: 'CUSTOMERIDCARD', index: 'CUSTOMERIDCARD', width: "11%", sorttype: "textarea" },
+            { name: 'CREATEDTIME', index: 'CREATEDTIME', width: "8%", sorttype: "data", formatter: "date", formatoptions: { newformat: 'Y-m-d' } },
+            { name: 'APPLYAMT', index: 'APPLYAMT', width: "7%" },
+            { name: 'LOANAMTOFCONTRACT', LoanAmtOfContract: 'ship', width: "7%" },
+            { name: 'SORTING', index: 'SORTING', width: "8%" ,
+                formatter: function(cellvalue, options, rowObject) {
+                    return rowObject.APPSTATUSNAME;
+                }
+            },
+            { name: 'SALESNAME', index: 'SALESNAME', width: "9%" },
+            { name: 'CSADNAME', index: 'CSADNAME', width: "9%" },
+            {
+                name: 'LOGO', index: 'LOGO', width: "10%", sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    var re = "";
+                    var status = rowObject.APPSTATUS;
+                    var appId=rowObject.APPID;
+                    var canEdit=true;
+                    var canEditInfo=true;
+                    for(i=0;i< permissionButtons.length;i++)
+                    {
+                        re += "<a style='margin-right:5px;' ";
+                        if(status == "PENDING")
+                        {
+                            if (permissionButtons[i].Control_ID == "edit"&&canEdit)
+                            {
+                                re += "title='编辑申请信息' href='/ProductApplication/RyApplication?app_id=" + appId + "&isEdit=true' >";
+                                canEdit=false;
+                            }
+                            if (permissionButtons[i].Control_ID == "addInfoButton"&&canEditInfo)
+                            {
+                                re += "title='完善申请单' href='/LoanApplication/RyApplication?dformCode=" + cellvalue + "&operation=1&appid=" + appId + "' >";
+                                canEditInfo=false;
+                            }
+                            if (permissionButtons[i].Control_ID == "Delete")
+                            {
+                                re += "title='废弃' href='javascript:;' onclick='javascript:DiscardApllyTb(" + appId +",\""+ cellvalue + "\", this);'>";
+                            }
+                            if(permissionButtons[i].Control_ID == "APPLICATION_ENTRY"&&canEdit)
+                            {
+                                re += "title='查看申请信息' href='/ProductApplication/RyApplication?app_id=" + appId + "' >";
+                                canEdit=false;
+                            }
+                            if (permissionButtons[i].Control_ID == "browse"&&canEditInfo)
+                            {
+                                re += "title='查看申请单明细' href='/LoanApplication/RyApplication?dformCode=" + cellvalue + "&operation=3&appid=" + appId + "'  >";
+                                canEditInfo=false;
+                            }
+                        }
+                        else
+                        {
+                            if(permissionButtons[i].Control_ID == "APPLICATION_ENTRY")
+                            {
+                                re += "title='查看申请信息' href='/ProductApplication/RyApplication?app_id=" + appId + "' >";
+                            }
+                            if (permissionButtons[i].Control_ID == "browse")
+                            {
+                                re += "title='查看申请单明细' href='/LoanApplication/RyApplication?dformCode=" + cellvalue + "&operation=3&appid=" + appId + "'  >";
+                            }
+                        }
+                        re += "<img src='" + permissionButtons[i].Img + "' />";
+                        re += "</a>";
+                    }
+                    return re;
+
+                }
+            }
+        ],
+        jsonReader: {
+            root: "ListEnter",
+            total: "TotalPages",
+            page: "CurrentPage",
+            records: "TotalRecords",
+            repeatitems: false
+        },
+        viewrecords: true,
+        rowNum: 20,
+        rowList: [10, 20, 30],
+        pager: pager_selector,
+        onSortCol:function (colName,iCol,sortorder) {
+            sortIndex=colName;
+            sortOrder=sortorder;
+        },
+        beforeRequest:function () {
+            jQuery(grid_selector).jqGrid('setGridParam', {postData:{'sidx':sortIndex,'sord':sortOrder}} );},
+        loadComplete: function () {
+            var table = this;
+            var re_records = jQuery(this).getGridParam('records');
+            if(re_records == 0 || re_records == null){
+                Utilities.alertTip("对不起，未找到符合条件的记录！");
+            };
+            setTimeout(function () {
+                updatePagerIcons(table);
+                jQuery('.ui-jqgrid-bdiv').css("overflow-x","hidden");
+            }, 0);
+
+            jQuery(window).resize();
+            /*描述：给办理状态是拒绝贷款的，添加鼠标悬停提示信息
+             时间：2015-03-11
+             修改者：leiz*/
+            //移除拒贷状态下title属性
+            $(".refuseLoanStatus").parent("td").each(function() {
+                $(this).removeAttr("title");
+                $(this).children(".refuseLoanStatus").css("cursor","pointer");
+            });
+            $('.refuseLoanStatus').mouseover(function() {
+                var refuseLoan = $(this);
+                var appid = refuseLoan.data('appid');
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/GetRefsueLoanInfo",
+                    data: { appid: appid },
+                    cache: false,
+                    global: false,//屏蔽ajax全局事件
+                    beforeSend:function() {
+                        refuseLoan.attr("data-toggle","tooltip");
+                        refuseLoan.attr("data-placement","right");
+                        refuseLoan.attr("title","loading...");
+                        refuseLoan.tooltip('show');
+                        refuseLoan.unbind("mouseover");
+                    },
+                    success: function (data) {
+                        refuseLoan.tooltip('destroy');//隐藏并销毁元素的提示工具
+                        refuseLoan.attr("data-toggle","tooltip");
+                        refuseLoan.attr("data-placement","right");
+                        refuseLoan.attr("title",data?data:"无");
+                        refuseLoan.tooltip('show');
+                    }
+                });
+            });
+        },
+    });
+
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function() {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        });
+    };
+
+    /*废弃进件*/
+    function DiscardApllyTb(appId,cellvalue, obj) {
+        var choice=confirm("您确认要废弃该申请单吗？", function() { }, null);
+        if(choice){
+            //废弃动作
+            $.ajax({
+                type: "POST",
+                url: "/Apply/DiscardEnterOrder",
+                data: { appId: appId}, //在这里可以设置需要传递的参数
+                //contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var td=jQuery(obj).parent().parent();
+                    var re = "";
+                    for(i=0;i< permissionButtons.length;i++)
+                    {
+                        re += '<a style="margin-left:8px;" ';
+                        if(permissionButtons[i].Control_ID == "APPLICATION_ENTRY")
+                        {
+                            re += 'title="查看申请信息" href="/ProductApplication/Application?app_id=' + appId + '" >';
+                        }
+                        if (permissionButtons[i].Control_ID == "browse")
+                        {
+                            re += 'title="查看申请单明细" href="/LoanApplication/Application?dformCode=' + cellvalue + '&operation=3&appid=' + appId + '"  >';
+                        }
+                        re += '<img src="' + permissionButtons[i].Img + '" />';
+                        re += '</a>';
+                    }
+                    td.find('td[aria-describedby="grid-table_LOGO"]').html(re);
+                    td.find("td[aria-describedby='grid-table_SORTING']").html('<span class="label label-grey">废弃</span>');
+                },
+                error: function () {
+                }
+
+            });
+        }
+    }
+
+    /* 显示或隐藏高级搜索块*/
+    function showHighSearch() {
+        jQuery("#Apply_highSearch").toggle(300,function(){jQuery(window).resize()});
+    };
+
+    /*Search窗口模糊查询*/
+    function doNormalSearch() {
+        sortIndex='';
+        sortOrder='';
+
+        jQuery("#Apply_highSearch").find("input[type='text']").each(function () {
+            jQuery(this).val("")
+        });
+        jQuery("#Apply_highSearch").find("select").each(function () {
+            jQuery(this).val("")
+        });
+
+        para = {
+            sidx:sortIndex,
+            appCode: escape(jQuery("#nav_search_input").val()),
+            customerName: escape(jQuery("#nav_search_input").val()),
+            applyStart: '',
+            applyEnd: '',
+            enterStasus: '',
+            sales: '',
+            csac: '',
+            fuzzySearch: 1,/*模糊查询*/
+            needTag:0
+        };
+        jQuery(grid_selector).jqGrid('setGridParam', {
+            datatype: 'json',
+            page:1,
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    /*点击搜索按钮重新搜索*/
+    function doHighSearch() {
+        sortOrder="";
+        sortIndex="";
+        jQuery("#nav_search_input").val('');
+        para = {
+            sidx:sortIndex,
+            appCode: escape(jQuery("#txtAppNumber").val()),
+            customerName: escape(jQuery("#txtCustomerName").val()),
+            customerIDCard:jQuery("#txtCustomerIDCard").val(),
+            applyStart: jQuery("#txtAppDateStart").val(),
+            applyEnd: jQuery("#txtAppDateEnd").val(),
+            enterStasus: jQuery("#slctStatus").val(),
+            sales: escape(jQuery("#txtSales").val()),
+            csac: escape(jQuery("#txtCsac").val()),
+            fuzzySearch: 0,/*取消模糊查询*/
+            needTag:0
+        };
+        jQuery(grid_selector).jqGrid('setGridParam', {
+            datatype: 'json',
+            page:1,
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+
+    }
+
+    jQuery(window).resize(function(){
+        jQuery(window).unbind("onresize");
+        jQuery(grid_selector).setGridHeight(jQuery(window).height() - 293);
+        jQuery(grid_selector).setGridWidth(jQuery('.widget-main').width());
+
+        jQuery(grid_selector).setGridHeight(jQuery(window).height() - 293);
+        jQuery(grid_selector).setGridWidth(jQuery('.widget-main').width());
+
+        jQuery('.ui-jqgrid-hbox').each(function(){
+            jQuery(this).find('th').last().css('width',(jQuery(this).find('th').last().width()+ 25) + 'px');
+        });
+        jQuery(window).bind("onresize", this);
+    });
+</script>

@@ -1,0 +1,126 @@
+﻿<label class="control-label col-xs-12 col-sm-2">
+    
+    $FieldType.Field_DisplayName$
+    $if(FieldType.Field_Required)$
+    <i class="icon-asterisk red smaller-80" 
+    $if(ReadOnly)$
+       style="display:none"
+    $elseif(FieldType.IsDisabled)$
+       style="display:none"
+    $endif$
+        ></i>
+    $endif$
+    ：
+</label>
+<div class="col-xs-12 col-sm-5">
+    <div class="input-group col-xs-12 no-padding">
+    <input type="hidden"
+           name="$FieldType.Field_Key$_AEOCode"
+           id="$FieldType.Field_Key$_AEOCode" />
+    <input type="text"
+           name="$FieldType.Field_Key$"
+           id="$FieldType.Field_Key$"
+           class="form-control col-xs-12"
+           data-val="true"
+           readonly="readonly"
+           $if(FieldType.Field_Required)$
+            data-val-required="请填写$FieldType.Field_DisplayName$!"
+           $endif$
+           maxlength="$FieldType.MaxLength$"
+
+           $if(FieldType.HasRegular)$
+            data-val-regex-pattern="$FieldType.Regular$"
+            data-val-regex="请填写正确的$FieldType.Field_DisplayName$！"
+           $endif$
+        />
+        <span class="input-group-addon" $if(!ReadOnly)$style="cursor:pointer;"   $elseif(!FieldType.IsDisabled)$ style="cursor:pointer;" $endif$  id="$FieldType.Field_Key$_SelectButton">
+            <i class="icon-search bigger-110"></i>
+        </span>
+     </div>
+</div>
+<div class="col-xs-12 col-sm-3">
+    <select class="col-xs-12" id="$FieldType.Field_Key$_AEOType" name="$FieldType.Field_Key$_AEOType" $if(ReadOnly)$ disabled="disabled"  $elseif(FieldType.IsDisabled)$ disabled="disabled" $endif$ data-val="true" data-val-required="请选择类型!">
+        <option value="">----请选择-----</option>
+        $DIC:
+        {
+        <option value="$it.DATA_CODE$" data-text="$it.DATA_NAME$">$it.DATA_NAME$</option>
+        }$
+    </select>
+</div>
+<div id="$FieldType.Field_Key$_dialog" style="display:none;height:450px">
+    <iframe id="$FieldType.Field_Key$_iframe" style="border: none; width: 100%; height: 450px;"></iframe>
+</div>
+
+$if(!ReadOnly)$
+$if(!FieldType.IsDisabled)$
+<script type="text/javascript">
+
+    jQuery(function () {
+        jQuery('#$FieldType.Field_Key$_SelectButton').click(function () {
+            var $FieldType.Field_Key$_TypeVal = jQuery("#$FieldType.Field_Key$_AEOType").val();
+
+            if ($FieldType.Field_Key$_TypeVal == '$FieldType.OtherType$') {
+                Utilities.alertTip('请手动输入公司名称');
+            } else if ($FieldType.Field_Key$_TypeVal == '') {
+                Utilities.alertTip('请先选择企业类型');
+            } else {
+                //弹出选择对话框
+                var companyFuc = '$FieldType.CompanyFunc$';
+                var href = "/Company/CompanyPick?aeoType=" + jQuery("#$FieldType.Field_Key$_AEOType").val() + "&aeoTypeName=" + escape(jQuery("#$FieldType.Field_Key$_AEOType :selected").text());
+                href = href + "&companyFunc=" + companyFuc;
+                href = href + "&tipMsg=" + escape("$FieldType.TipMessage$");
+                jQuery('#$FieldType.Field_Key$_iframe').attr('src', href);
+                jQuery('#$FieldType.Field_Key$_dialog').dialog({
+                    title: "<h4 class='smaller'><i class='icon-globe'></i> 企业选择</h4>",
+                    title_html: true,
+                    resizable: false,
+                    width: "70%",
+                    modal: true,
+                    draggable: false,
+                    buttons: [
+                        {
+                            text: "取消",
+                            "class": "btn btn-xs",
+                            click: function() {
+                                jQuery(this).dialog("close");
+                            }
+                        },
+                        {
+                            text: "确认",
+                            "class": "btn btn-primary btn-xs",
+                            click: function() {
+                                var aeoCode = jQuery("#$FieldType.Field_Key$_iframe").contents().find("#aeoCode");
+                                var aeoName = jQuery("#$FieldType.Field_Key$_iframe").contents().find("#aeoName");
+                                jQuery("#$FieldType.Field_Key$_AEOCode").val(aeoCode.text());
+                                jQuery("#$FieldType.Field_Key$").val(aeoName.text());
+                                jQuery(this).dialog("close");
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+
+        jQuery("#$FieldType.Field_Key$_AEOType").change(function (e) {
+            if (!e.isTrigger) {
+                //先清空文本框和Code中的值
+                jQuery('#$FieldType.Field_Key$').val('');
+                jQuery('#$FieldType.Field_Key$_AEOCode').val('').removeAttr('disabled');;
+            }
+
+            if (jQuery(this).val() == '$FieldType.OtherType$') {
+                //文本框可输入
+                jQuery('#$FieldType.Field_Key$').removeAttr('readonly');
+                jQuery('#$FieldType.Field_Key$').focus();
+                jQuery('#$FieldType.Field_Key$_AEOCode').attr('disabled','disabled');
+
+            } else {
+                //设置只读
+                jQuery('#$FieldType.Field_Key$').attr('readonly', 'readonly');
+            }
+        });
+
+    });
+</script>
+$endif$
+$endif$

@@ -1,0 +1,226 @@
+﻿@Scripts.Render("~/bundles/bootbox")
+<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+
+<div class="widget-box">
+    <div class="widget-header widget-header-small">
+        <h5 class="lighter">黑名单配置列表</h5>
+        <button class="btn btn-purple" id="addExtendConfig" onclick="EditForbiden()" style="float:right">添加黑名单配置</button>
+    </div>
+    <div class="widget-body" style="height:auto; overflow-y:auto;width:auto;">
+        <div class="widget-main">
+            <table id="grid-table"></table>
+            <div id="grid-pager"></div>
+        </div>
+    </div>
+</div>
+<div id="EditExtend_Dialog" style="display:none;height:500px">
+    <iframe id="EditExtend_iframe" style="border: none; width: 100%; height: 500px;"></iframe>
+</div>
+<script type="text/javascript">
+    var sortIndex = "";
+    var sortOrder = "";
+    var proList = undefined;
+
+    $(function () {
+        /*省份城市*/
+        if(proList == undefined){
+            $.ajax({
+                url: '/DataDIC/GetDICByParentID?PARENT_ID=' + 10038,
+                type: 'post',
+                cache: true,
+                async: false,
+                success: function (data) {
+                    if(data){
+                        proList = data;
+                    }
+                }
+            })
+        };
+
+        /*展现列表*/
+        jQuery("#grid-table").jqGrid({
+            url: "/SystemConfig/GetForbidenConfigList",
+            datatype: "json",
+            height: jQuery(window).height() - 293,
+            width: jQuery('.widget-main').width(),
+            autowidth: true,
+            shrinkToFit: true,
+            mtype: "POST",
+            altRows: true,
+            colNames: ['<i class="hidden-480 icon-wrench"></i> 编号', '<i class="hidden-480 icon-archive"></i> 开业城市名  ',
+                '<i class="hidden-480 icon-building"></i> 屏蔽地区', '<i class="hidden-480 icon-archive"></i> 身份证前6位',
+                '<i class="hidden-480 icon-book"></i> 适用产品', '<i class="hidden-480 icon-edit"></i> 适用范围',
+                '<i class="hidden-480 icon-edit"></i>  修改人', '<i class="hidden-480 icon-cogs"></i> 业务办理'],
+
+            colModel: [
+                { name: 'ID', index: 'ID', width: "5%" },
+                { name: 'CITY_CODE', index: 'CITY_CODE', width: "10%" },
+                {
+                    name: 'FORBIDEN_AREA', index: 'PRPVINCE_CITY', width: "25%",
+                    formatter: function (cellvalue, options, rowObject) {
+                        var h = "--";
+                        if(proList){
+                            if(rowObject.PROVINCE_CODE)
+                            {
+                                for (var i = 0; i < proList.length; i++) {
+                                    if (proList[i].DATA_CODE == rowObject.PROVINCE_CODE) {
+                                        h = jQuery.trim(proList[i].DATA_NAME);
+                                        break;
+                                    }
+                                }
+                                if (rowObject.PRPVINCE_CITY) {
+                                    h += "-" + rowObject.PRPVINCE_CITY + "（<a href='javascript:;' onclick=\"LoadCityName('" + rowObject.PROVINCE_CODE + "','" + rowObject.PRPVINCE_CITY + "')\">刷新</a>）";
+                                }
+                                if (rowObject.FORBIDEN_AREA) {
+                                    h += "-" + rowObject.FORBIDEN_AREA;
+                                }
+                            }
+                        }
+                        return h + "";
+                    }
+                },
+                { name: 'FORBIDEN_ID_START', index: 'FORBIDEN_ID_START', width: "10%" },
+                { name: 'PRODUCT_LOGO', index: 'PRODUCT_LOGO', width: "10%" },
+                {
+                    name: 'JUST_FOR_CITY', index: 'JUST_FOR_CITY', width: "15%",
+                    formatter: function (cellvalue, options, rowObject) {
+                        return (cellvalue.toLowerCase() == "true" ? "仅本城市的进件" : "全国有效");
+                    }
+                },
+                { name: 'CHANGED_USER', index: 'CHANGED_USER', width: "10%" },
+                {
+                    width: "15%", align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var htmlEdit = '<a class="blue" href="javascript:void(0);" onclick="EditForbiden(' + rowObject.ID + ')" title="编辑" data-toggle="modal" data-target="#myModal"><i class="icon-edit bigger-130"></i></a>';
+                        var htmlDelete = '<a class="red" href="javascript:void(0);" onclick="DeleteExtend(' + rowObject.ID + ')" title="删除"><i class="icon-trash bigger-130"></i></a>';
+                        return htmlEdit + "  " + htmlDelete;
+
+                    }
+                }
+            ],
+            jsonReader: {
+                root: "ViewList",
+                total: "TotalPages",
+                page: "CurrentPage",
+                records: "TotalRecords",
+                repeatitems: false
+            },
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: "#grid-pager",
+            onSortCol: function (colName, iCol, sortorder) {
+                sortIndex = colName;
+                sortOrder = sortorder;
+            },
+            beforeRequest: function () {
+                jQuery("#grid-table").jqGrid('setGridParam', { postData: { 'sidx': sortIndex, 'sord': sortOrder } });
+            },
+            loadComplete: function () {
+                var table = this;
+                var reRecords = jQuery(this).getGridParam('records');
+                if (reRecords == 0 || reRecords == null) {
+                    Utilities.alertTip("对不起，未找到符合条件的记录！");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+
+                jQuery(window).resize();
+            },
+        });
+
+        function updatePagerIcons(table) {
+            var replacement =
+            {
+                'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+                'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+                'ui-icon-seek-next': 'icon-angle-right bigger-140',
+                'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+            };
+            $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                var icon = $(this);
+                var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+                if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+            });
+        };
+    });
+    function EditForbiden(id) {
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                var $title = this.options.title || '&nbsp;';
+                if (("title_html" in this.options) && this.options.title_html == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+
+        $("#EditExtend_iframe").attr("src", "/SystemConfig/ForbidenConfigEdit?id=" + id);
+        jQuery('#EditExtend_Dialog').dialog({
+            title: "<h3 class='smaller'><i class='icon-edit'></i>编辑黑名单配置信息</h3>",
+            title_html: true,
+            resizable: false,
+            width: "50%",
+            modal: true,
+            draggable: false,
+            close: function (event, ui) {
+                jQuery("#grid-table").trigger("reloadGrid");
+            }
+        });
+    }
+
+    function DeleteExtend(id) {
+        bootbox.confirm("确定要删除吗？", function (data) {
+            if (data) {
+                $.ajax({
+                    url: '/SystemConfig/DeleteForbidenConfig',
+                    type: 'post',
+                    data: { id: id },
+                    success: function (msg) {
+                        if (msg) {
+                            Utilities.alertTip(msg);
+                        } else {
+                            Utilities.alertTip("删除成功！");
+                            jQuery("#grid-table").trigger("reloadGrid");
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function CloseDialog() {
+        jQuery('#EditExtend_Dialog').dialog("close");
+    };
+
+    function LoadCityName(proCode,cityCode) {
+        $.ajax({
+            url: '/DataDIC/GetDICByParentCode?DATA_CODE=' + proCode,
+            type: 'post',
+            cache: true,
+            async: false,
+            success: function (data) {
+                var c = cityCode;
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].DATA_CODE == cityCode) {
+                        c = jQuery.trim(data[i].DATA_NAME);
+                        break;
+                    }
+                }
+                jQuery('#grid-table').find('td[aria-describedby="grid-table_FORBIDEN_AREA"]').each(function () {
+                    var t = jQuery(this).text();
+                    if (t.indexOf(cityCode) > -1) {
+                        jQuery(this).text(jQuery(this).text().replace(cityCode, c).replace('（刷新）',''));
+                    }
+                })
+            }
+        })
+    }
+</script>

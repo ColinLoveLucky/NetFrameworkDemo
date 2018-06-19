@@ -1,0 +1,143 @@
+﻿@{
+    ViewBag.Title = "CarAgencyPicker";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<div class="widget-box">
+    <div class="widget-header header-color-blue">
+        <h4 class="lighter smaller">已选择经销商</h4>
+    </div>
+    <div class="widget-body" style="min-height:39px;">
+        <div class="widget-main padding-8">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12" id="divCompany">
+                    <span id="motoName" class="label label-success"></span>
+                    <span id="motoCode" class="label label-grey" ></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="widget-box">
+    <div class="widget-header header-color-blue">
+        <h4 id="CarAgencySelect" class="lighter smaller"></h4>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main padding-8">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <div id="seach">
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="input-group">
+                                <input class="form-control search-query" id="txt_keyword" placeholder="关键字" type="text">
+                                <span class="input-group-btn">
+                                    <button type="button" id="btn_seach" class="btn btn-purple btn-sm">
+                                        Search
+                                        <i class="icon-search icon-on-right bigger-110"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="table-responsive">
+                                <table id="grid-table"></table>
+                                <div id="grid-pager"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/assets/js/library/golbal.js"></script>
+<script type="text/javascript">
+    var aeoType, aeoTypeName;
+    $(function () {
+        var product = Utilities.getParentUrlParam('dformCode');  //取产品logo
+        //设置经销商选择Title
+        $("#CarAgencySelect").empty().text("经销商选择");
+        $("#grid-table").jqGrid({
+            url: "/CarAgency/GetCarAgencyList",
+            datatype: "json",
+            mtype: "POST",
+            postData: { product: product },
+            altRows: true,
+            colNames: [
+                '<i class="hidden-480"></i> 经销商编号 ',
+                '<i class="hidden-480"></i> 经销商名称'
+            ],
+            colModel: [
+                { name: 'MOTO_NO', index: 'MOTO_NO', hidden: true },
+                { name: 'MOTO_NAME', index: 'MOTO_NAME', sortable: false }
+            ],
+            jsonReader: {
+                root: "ViewList",
+                total: "TotalPages",
+                page: "CurrentPage",
+                records: "TotalRecords",
+                repeatitems: false
+            },
+            viewrecords: true,
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            pager: $("#grid-pager"),
+            loadComplete: function () {
+                var table = this;
+                var reRecords = jQuery(this).getGridParam('records');
+                if (reRecords == 0 || reRecords == null) {
+                    $("#grid-table tbody").text("对不起，未找到符合条件的记录！");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+
+                jQuery(window).resize();
+            },
+            onSelectRow: function (rowid) {
+                //var rowid = $("#grid-table").jqGrid('getGridParam', 'selrow');
+                var rowData = $("#grid-table").getRowData(rowid);
+                $("#motoCode").empty().text(rowData.MOTO_NO);
+                $("#motoName").empty().text(rowData.MOTO_NAME);
+            },
+            autowidth: true
+        });
+        //查询事件
+        $("#btn_seach").click(function () {
+            var keyWord = $("#txt_keyword").val();
+            jQuery("#grid-table").jqGrid('setGridParam', {
+                datatype: 'json',
+                page: 1,
+                postData: { keyWord: keyWord, product: product }
+            }).trigger("reloadGrid");
+
+        });
+        $("#txt_keyword").keydown(function (event) {
+            if (event.keyCode == 13) {
+                $("#btn_seach").click();
+            }
+        });
+    });
+
+    /*处理分页控件样式*/
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        });
+    }
+
+</script>

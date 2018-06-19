@@ -1,0 +1,288 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+@Scripts.Render("~/bundles/bootbox")
+<div>
+    <ul class="nav nav-tabs" id="rpTabs">
+        <li class="active" id="raisingPlanList" style="border:none;">
+            <a href="#rpList" data-toggle="tab" onclick="javascript:SetCurrentGrid(1);">
+                募集计划列表
+            </a>
+        </li>
+        <li id="raisingPlanHistory" style="border:none;">
+            <a href="#rpHistory" data-toggle="tab" onclick="javascript:SetCurrentGrid(2);">
+                操作历史
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" style="height:auto; overflow-y:auto;">
+        <div id="rpList" class="tab-pane active">
+            <table id="rpList-grid-list"></table>
+            <div id="rpList-grid-pager"></div>
+        </div>
+        <div id="rpHistory" class="tab-pane">
+            <table id="rpHistory-grid-list"></table>
+            <div id="rpHistory-grid-pager"></div>
+        </div>
+
+    </div>
+</div>
+<!--查看详情-->
+<div id="viewDetail_dialog" style="display:none;height:550px">
+    <iframe id="viewDetail_iframe" style="border: none; width: 100%; height: 550px;"></iframe>
+</div>
+<script type="text/javascript">
+    jQuery(function () {
+       
+        var hs = window.location.hash;
+        if (!hs) {
+            hs = "#rpList";
+        }
+        jQuery('#rpTabs').find('a[href="' + hs + '"]').click();
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function () {
+            jQuery(window).resize();
+        });
+
+        //override dialog's title function to allow for HTML titles
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                var $title = this.options.title || '&nbsp;';
+                if (("title_html" in this.options) && this.options.title_html == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+
+        /*为额度列表添加智能查询功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function () { IntelligentQuery(); });
+        jQuery(".input-icon").children("input[type='text']").keypress(function (e) { e = e || event; if (e.keyCode == 13) { jQuery(".input-icon").children("i").click(); }; });
+        jQuery("<a/>").attr("href", "javascript:;").text("智能查询").attr("onclick", "javascript:IntelligentQuery();").addClass("label label-lg label-pink arrowed-right").attr("style", "top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+    });
+
+    var rpList_grid_list = "#rpList-grid-list";
+    var rpList_grid_pager = "#rpList-grid-pager";
+    var rpHistory_grid_list = "#rpHistory-grid-list";
+    var rpHistory_grid_pager = "#rpHistory-grid-pager";
+    var currentGrid = rpList_grid_list;
+    /*设置当前页签 */
+    function SetCurrentGrid(flag) {
+        $("#nav_search_input").val('');//清空智能查询框
+        switch (flag) {
+            case 1: {
+                currentGrid = rpList_grid_list;
+                //加载额度列表
+                LoadRaisingPlanList();
+            }
+                break;
+            case 2: {
+                currentGrid = rpHistory_grid_list;
+                //加载历史列表
+                LoadRaisingPlanHistoryList({});
+            }
+                break;
+            default: break;
+
+        }
+    }
+    //加载额度列表
+    function LoadRaisingPlanList() {
+        var url = "/RaisingPlan/GetRaisingPlanList"; //请求地址
+        var colNames = ['<i class="hidden-480 icon-book"></i> 募集计划编号',
+            '<i class="hidden-480 icon-book"></i> 募集计划名称', '<i class="hidden-480 icon-money"></i> 募集计划金额(元)',
+             '<i class="hidden-480 icon-calendar"></i> 起息日期', '<i class="hidden-480 icon-money"></i> 拒件比例(%)',
+             '<i class="hidden-480 icon-calendar"></i> 创建时间', '<i class="hidden-480 icon-cogs"></i> 业务办理'];
+        var colModel = [
+            { name: 'RAISE_FUND_NO', index: 'RAISE_FUND_NO', width: '15%', sorttype: 'text' },
+            { name: 'RAISE_FUND_NAME', index: 'RAISE_FUND_NAME', width: '20%' },
+            { name: 'RAISE_FUND_AMT', index: 'RAISE_FUND_AMT', width: '10%', formatter: 'number', formatoptions: { thousandsSeparator: ',' } },
+            { name: 'QX_DATE', index: 'QX_DATE', width: '15%' },
+            { name: 'RAISE_FUND_REJECT_PER', index: 'RAISE_FUND_REJECT_PER', width: '10%' },
+            { name: 'CREATE_DATE', index: 'CREATE_DATE', width: '15%' },
+            {
+                width: '10%',
+                formatter: function (cellvalue, options, rowObject) {
+
+                    var re = "";
+                    re += "<a style='margin-right:5px;cursor:pointer;' title='详情' onclick=\"ViewDetail('" + rowObject.ID + "');\">详情</a>";
+                    re += "<a style='margin-right:5px;cursor:pointer;' title='查看历史' onclick=\"ViewHistory('" + rowObject.RAISE_FUND_NO + "');\">查看历史</a>";
+                    return re;
+                }
+            }
+        ];
+        var postData = { keyWord: $("#nav_search_input").val()};
+        LoadGrid(rpList_grid_list, rpList_grid_pager, url, colNames, colModel, postData)
+    }
+    //加载额度历史列表
+    function LoadRaisingPlanHistoryList(postData) {
+        var url = "/RaisingPlan/GetRaisingPlanHistory"; //请求地址
+        var colNames = ['<i class="hidden-480 icon-book"></i> 募集计划编号',
+            '<i class="hidden-480 icon-book"></i> 业务编号', '<i class="hidden-480 icon-money"></i> 合同金额(元)',
+            '<i class="hidden-480 icon-money"></i> 放款金额(元)', '<i class="hidden-480 icon-money"></i> 返回合同金额(元)',
+            '<i class="hidden-480 icon-money"></i> 返回放款金额(元)', '<i class="hidden-480 icon-book"></i> 审批结果',
+            '<i class="hidden-480 icon-calendar"></i> 审核完成时间', '<i class="hidden-480 icon-calendar"></i> 记录时间'];
+        var colModel = [
+            { name: 'RAISE_FUND_NO', index: 'RAISE_FUND_NO', width: '10%', sorttype: 'text' },
+            { name: 'APPNO', index: 'APPNO', width: '10%' },
+            { name: 'CONTRACT_AMT', index: 'CONTRACT_AMT', width: '8%' },
+            { name: 'PUTOUT_AMT', index: 'PUTOUT_AMT', width: '8%', formatter: 'number', formatoptions: { thousandsSeparator: ',' } },
+            { name: 'RETURN_CONTRACT_AMT', index: 'RETURN_CONTRACT_AMT', width: '9%', formatter: 'number', formatoptions: { thousandsSeparator: ',' } },
+            { name: 'RETURN_PUTOUT_AMT', index: 'RETURN_PUTOUT_AMT', width: '10%', formatter: 'number', formatoptions: { thousandsSeparator: ',' } },
+            { name: 'AUDIT_STATUS', index: 'AUDIT_STATUS', width: '8%' },
+            { name: 'AUDIT_DATE', index: 'AUDIT_DATE', width: '10%' },
+            { name: 'CREATE_DATE', index: 'CREATE_DATE', width: '10%' }
+        ];
+        LoadGrid(rpHistory_grid_list, rpHistory_grid_pager, url, colNames, colModel, postData)
+    }
+    /****************jQuery jqGrid Begin****************/
+    function LoadGrid(_gridId, _pager, _url, _colNames, _colModel, _postData) {
+        jQuery(_gridId).jqGrid({
+            url: _url,
+            datatype: "json",
+            mtype: "POST",
+            height: jQuery(window).height() - 293,
+            width: jQuery('.tab-content').width(),
+            colNames: _colNames,
+            colModel: _colModel,
+            postData: _postData,
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: _pager,
+            loadui: "disable",  //禁用loading...默认值:enable,enable-显示 “Loading”信息,disable–jqGrid的指示信息不可用;block–可以显示“Loading”信息，同时阻止grid的所有操作直到ajax请求完成。注意，这会禁止所有的排序、导航或者任何工具条的操作
+            //onSortCol: function (colName, iCol, sortorder) {
+            //    sortIndex = colName;
+            //    sortOrder = sortorder;
+            //},
+            //beforeRequest: function () {
+            //    jQuery(_gridId).jqGrid('setGridParam', { postData: { 'sidx': sortIndex, 'sord': sortOrder } });
+            //},
+            altRows: true,
+            jsonReader: {
+                root: "DataList",
+                total: "TotalRecords",
+                page: "CurrentPage",
+                records: "TotalCount",
+                repeatitems: false
+            },
+            loadComplete: function () {
+                var table = this;
+                var re_records = jQuery(this).getGridParam('records');
+                if (re_records == 0 || re_records == null) {
+                    //Utilities.alertTip("对不起，未找到符合条件的记录！");
+                    Utilities.ShowMsg(3000, "对不起，未找到符合条件的记录！", 300, "warning");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+                jQuery(window).resize();
+            },
+            autowidth: true
+
+        });
+
+    }
+    /*处理分页控件样式*/
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    };
+    jQuery(window).resize(function () {
+        jQuery(window).unbind("onresize");
+        jQuery(rpList_grid_list).setGridHeight(jQuery(window).height() - 293);
+        jQuery(rpList_grid_list).setGridWidth(jQuery('.tab-content').width());
+        jQuery(rpHistory_grid_list).setGridHeight(jQuery(window).height() - 293);
+        jQuery(rpHistory_grid_list).setGridWidth(jQuery('.tab-content').width());
+        jQuery('.ui-jqgrid-hbox').each(function () {
+            jQuery(this).find('th').last().css('width', (jQuery(this).find('th').last().width() + 25) + 'px');
+        });
+        jQuery(window).bind("onresize", this);
+    });
+    /****************jQuery jqGrid End****************/
+
+    //查看募集计划详情
+    function ViewDetail(key) {
+        jQuery("#viewDetail_iframe").attr("src", "/RaisingPlan/RaisingPlanDetail?id=" + key);//修改参数
+        jQuery("#viewDetail_dialog").dialog({
+            title: "<h4 class=''><i class='icon-reorder'></i> 募集计划详情</h4>",
+            title_html: true,
+            resizable: false,
+            width: "60%",
+            modal: true,
+            draggable: true//,
+            //close: function (event, ui) {
+            //    Utilities.alertTip("ViewDetail—RP");
+            //}
+        });
+    }
+
+    //查看历史
+    function ViewHistory(key) {
+        $("#raisingPlanList").removeClass("active");
+        $("#rpList").removeClass("active");
+        $("#raisingPlanHistory").addClass("active");
+        $("#rpHistory").addClass("active");
+        
+        currentGrid = rpHistory_grid_list;
+        //重新加载 额度历史列表
+        var para = {
+            raiseFundNo: key
+        };
+        LoadRaisingPlanHistoryList(para);
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    //智能查询
+    function IntelligentQuery() {
+        var keyword = $("#nav_search_input").val();
+        var para;
+        switch (currentGrid) {
+            case rpList_grid_list:
+                {
+                    para = {
+                        keyWord: keyword
+                    }
+                }
+                break;
+            case rpHistory_grid_list:
+                {
+                    para = {
+                        keyWord: keyword
+                    }
+                }
+            default:
+                break;
+        }
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            page: 1,
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    /*关闭Dialog 子窗口调用*/
+    function CloseDialog(e) {
+        jQuery(e).dialog("close");
+    }
+</script>

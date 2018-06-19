@@ -1,0 +1,369 @@
+﻿@section scripts{
+    <script src="/Content/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="/Content/assets/js/jquery.ui.touch-punch.min.js"></script>
+
+    <script src="/Content/assets/js/jquery.slimscroll.min.js"></script>
+
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+
+
+        <div>
+            <div id="user-profile-1" class="user-profile row">
+                <div class="col-xs-12 col-sm-4 center">
+                    <div>
+                        @*用户图片*@
+
+
+                        <div class="space-4"></div>
+                        @*用户名*@
+                        <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right" style="display:none">
+                            <div class="inline position-relative">
+                                <a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icon-circle light-green middle"></i>
+                                    &nbsp;
+                                    <span class="white">app</span>
+                                </a>
+
+                                <ul class="align-left dropdown-menu dropdown-caret dropdown-lighter">
+                                    <li class="dropdown-header">改变状态</li>
+
+                                    <li>
+                                        <a href="#">
+                                            <i class="icon-circle green"></i>
+                                            &nbsp;
+                                            <span class="green">Available</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#">
+                                            <i class="icon-circle red"></i>
+                                            &nbsp;
+                                            <span class="red">Busy</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#">
+                                            <i class="icon-circle grey"></i>
+                                            &nbsp;
+                                            <span class="grey">Invisible</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-6"></div>
+                    @*基本信息*@
+                    <div class="profile-contact-info">
+
+                        <div class="hr hr12 dotted"></div>
+
+                        @*按钮*@
+                        <div>
+                            <span class="btn btn-app btn-xs btn-pink no-hover">
+                                <span class="line-height-1 bigger-170 data_shenqing"> 0 </span>
+
+                                <br>
+                                <span class="line-height-1 smaller-80"> 总申请 </span>
+                            </span>
+                            <span class="btn btn-app btn-xs btn-success no-hover">
+                                <span class="line-height-1 bigger-170 data_hetong "> 0 </span>
+
+                                <br>
+                                <span class="line-height-1 smaller-80"> 已签合同 </span>
+                            </span>
+                            <span class="btn btn-app btn-xs btn-yellow no-hover ">
+                                <span class="line-height-1 bigger-170 data_bujian"> 0 </span>
+
+                                <br>
+                                <span class="line-height-1 smaller-80"> 待补件 </span>
+                            </span>
+                            <span class="btn btn-app btn-xs btn-light no-hover">
+                                <span class="line-height-1 bigger-170 blue data_feiqi"> 0 </span>
+
+                                <br>
+                                <span class="line-height-1 smaller-80"> 已废弃 </span>
+                            </span>
+
+                        </div>
+
+                        <div class="space-6"></div>
+
+                        <div class="profile-contact-links align-left">
+
+                            <span class="width-100 center" style="display:none;">
+                                <img class="editable img-responsive editable-click editable-empty" style="margin-left: auto; margin-right: auto; max-width: 60%;" alt="Alex's Avatar" src="/Content/assets/avatars/profile-pic.jpg" onerror="this.src='/Content/assets/avatars/avatar2.png'">
+                            </span>
+                            <a class="btn btn-link" style="font-size:13px">
+                                <i class="icon-user bigger-120 green"></i>
+                                姓名：<span class="data_UserName"></span>
+                            </a>
+                            <br />
+                            <a class="btn btn-link" style="font-size:13px">
+                                <i class="icon-home bigger-120 green"></i>
+                                公司：<span class="data_CompanyName">0</span>
+                            </a>
+                            <br />
+                            <a class="btn btn-link" style="font-size:13px">
+                                <i class="icon-group bigger-120 green"></i>
+                                部门：<span class="data_DepName">0</span>
+                            </a>
+                            <br />
+                            <a class="btn btn-link" style="font-size:13px">
+                                <i class="icon-credit-card bigger-120 green"></i>
+                                职位：<span class="data_Title">0</span>
+                            </a>
+                            <br />
+                            <a class="btn btn-link" style="font-size:13px">
+                                <i class="icon-key bigger-120 green"></i>
+                                角色：<span class="data_Role">0</span>
+                            </a>
+                            <br />
+                            <a class="btn btn-link" style="font-size:13px">
+                                <i class="icon-flag bigger-120 green"></i>
+                                城市：<span class="data_City">0</span>
+                            </a>
+
+                        </div>
+                        <div class="hr hr16 dotted"></div>
+                        <div class="space-6"></div>
+
+                        <div class="clearfix">
+                            <div class="grid2">
+                                <span class="bigger-175 blue data_shenqing"></span>
+                                <br>
+                                条申请
+                            </div>
+
+                            <div class="grid2">
+                                <span class="bigger-175 blue data_bujian">12</span>
+
+                                <br>
+                                待补件
+                            </div>
+                        </div>
+                        <div class="hr hr16 dotted"></div>
+                    </div>
+
+
+
+                </div>
+
+                <div class="col-xs-12 col-sm-8">
+
+
+                    <div class="space-12"></div>
+
+                    <div class="row">
+                        <div class="widget-box transparent col-xs-12 col-sm-5">
+                            <div class="widget-header widget-header-small">
+                                <h4 class="blue smaller">
+                                    <i class="icon-key orange"></i>
+                                    您的权限
+                                </h4>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main padding-8" id="roleList">
+                                    <div class="dd dd-draghandle">
+                                        <ol class="dd-list">
+                                            @foreach (var item in ((List<QK.QAPP.Entity.APP_Menu>)ViewData["Role"]).Where(c => c.ParentId == "0" || c.ParentId == null))
+                                            {
+
+                                            <li class="dd-item dd2-item">
+                                                <div class="dd-handle dd2-handle">
+                                                    <img src="@item.Img" width="18" />
+                                                </div>
+                                                <div class="dd2-content">@item.FullName</div>
+                                            </li>
+                                            <ol class="dd-list">
+                                                @foreach (var subitem in ((List<QK.QAPP.Entity.APP_Menu>)ViewData["Role"]).Where(c => c.ParentId == item.MenuId))
+                                                    {
+                                                    <li class="dd-item dd2-item">
+                                                        <div class="dd-handle dd2-handle">
+                                                            <img src="@subitem.Img" width="18" />
+                                                        </div>
+                                                        <div class="dd2-content">
+                                                            @subitem.FullName
+                                                            @foreach (var buttonitem in subitem.Button)
+                                                                {
+                                                                <a data-original-title="@buttonitem.FullName" data-rel="tooltip" data-placement="left" title="" href="#" class="badge badge-transparent radius-5 tooltip-info pull-right white no-hover-underline">
+                                                                    <img src="@buttonitem.Img" width="18" />
+                                                                </a>
+                                                                }
+                                                        </div>
+                                                    </li>
+                                                    }
+                                            </ol>
+                                            }
+                                        </ol>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="widget-box transparent col-xs-12 col-sm-7">
+                            <div class="widget-header widget-header-small">
+                                <h4 class="blue smaller">
+                                    <i class="icon-envelope-alt orange"></i>
+                                    您的信息
+                                </h4>
+                                <div class="widget-toolbar action-buttons">
+                                    <span class="badge badge-warning badge-left">@Model.Count</span>
+                                </div>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main padding-8">
+                                    <div id="profile-feed-1" class="profile-feed">
+
+                                        @foreach (var item in Model)
+                                        {
+                                            <div class="profile-activity clearfix">
+                                                <div>
+                                                    <img class="pull-left" alt="Alex Doe's avatar" src="/Content/assets/images/tip2.png">
+                                                    <a class="user" href="@item.URL">
+                                                        <button class="btn btn-minier btn-purple">@item.CATEGORY</button>
+                                                        @item.CONTENT
+
+                                                    </a>
+
+
+                                                    <div class="time">
+                                                        @if (ViewData["UserAccount"]+"" != item.USERNAME)
+                                                        {
+                                                            <i class="icon-user"></i>
+                                                            <span>客服:</span><span class="blue">@item.USERNAME</span>
+                                                        }
+                                                        <i class="icon-time bigger-110"></i>
+                                                        <span>时间：@item.CREATETITME.ToString("MM/dd hh:ss")</span>
+                                                        <i class="icon-flag bigger-110 red"></i>
+                                                       <span> 优先级:
+                                                        @{
+                                            string x = item.PRIORTYLEVEL;
+                                            switch (x)
+                                            {
+                                                case "LOW":
+                                                    <button class='btn btn-minier btn-yellow'>低</button>
+                                                    break;
+                                                case "MIDDLE":
+                                                <button class='btn btn-minier'>中</button>
+                                                    break;
+                                                case "HIGHT":
+                                                <button class='btn btn-minier btn-danger'>高</button>
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                                        }
+                                                    </span>
+                                                     
+                                                        </div>
+                                                </div>
+
+                                                <div class="tools action-buttons">
+                                                    <a href="@item.URL" class="blue">
+                                                        <i class="icon-pencil bigger-125"></i>
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="hr hr2 hr-double"></div>
+
+                    <div class="space-6"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div><!-- /.row -->
+
+<script>
+    var scrollHeight; 
+
+    // 初始化滚动条
+    var initSlimScroll = function () {
+        $('#roleList').slimScroll({
+            height: scrollHeight + "px",
+            alwaysVisible: true
+        });
+
+        $('#profile-feed-1').slimScroll({
+            height: $('#roleList').parent().height() + "px",
+            alwaysVisible: true
+        });
+    };
+
+    // 重置滚动条的滚动区域当窗体大小改变的时候
+    function resizeHanlder()
+    {
+        scrollHeight = ($(window).height() - $("#roleList").offset().top) * 0.85;
+
+        $("#roleList").css("height", scrollHeight + 'px');
+        $("#roleList").closest(".slimScrollDiv").css("height", scrollHeight + 'px');
+
+        $('#profile-feed-1').css("height", $('#roleList').parent().height() + "px");
+        $('#profile-feed-1').closest(".slimScrollDiv").css("height", scrollHeight + 'px');
+
+    }
+
+    $(function () {
+
+
+        GUser.AllApplyCount = '@ViewBag.AllApplyCount';
+        GUser.BuJianApply = '@ViewBag.BuJianApply';
+        GUser.FeiQiApply = '@ViewBag.FeiQiApply';
+        GUser.HeTongAllApply = '@ViewBag.HeTongAllApply';
+
+
+        // 初始化滚动条
+        scrollHeight = ($(window).height() - $("#roleList").offset().top) * 0.85;
+        initSlimScroll();
+        $(window).resize(function () {
+            resizeHanlder();
+        });
+        
+       
+        $(".data_shenqing").text(GUser.AllApplyCount);
+        $(".data_CompanyName").text(GUser.Company);
+        $(".data_DepName").text(GUser.Deparment);
+        $(".data_Title").text(GUser.Title);
+        $(".data_City").text(GUser.City);
+        $(".data_bujian").text(GUser.BuJianApply);
+        $(".data_shenqing").text(GUser.AllApplyCount);
+        $(".data_hetong").text(GUser.HeTongAllApply);
+        $(".data_feiqi").text(GUser.FeiQiApply);
+        $(".data_Role").text(GUser.RoleList);
+        $(".data_UserName").text(GUser.UserName);
+        $(".img-responsive").attr("src", GUser.UserImage);
+
+        $('[data-rel="tooltip"]').tooltip();
+
+        ////将图片居中
+        //var h = $(".profile-picture").width();
+
+        //$(".profile-picture").height(h);
+        //$(".profile-picture>img").load(function () {
+        //    var img_h = $(".profile-picture>img").height();
+        //    $(this).css("margin-top", (h - img_h) / 2)
+        //});
+    });
+
+</script>

@@ -1,0 +1,510 @@
+﻿<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<script src="/Content/assets/js/jquery.validate.min.js"></script>
+<script src="/Content/assets/js/jquery.validate.unobtrusive.min.js"></script>
+<script src="/Content/assets/js/additional-methods.min.js"></script>
+<script src="/Content/assets/js/jquery.maskedinput.min.js"></script>
+<script src="/Content/assets/js/date-time/bootstrap-datepicker.min.js"></script>
+<script src="/Content/assets/js/select2.min.js"></script>
+<script src="/Content/assets/js/bootbox.min.js"></script>
+<script src="/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<script src="/Content/assets/js/library/golbal.js"></script>
+<script src="/Content/assets/js/fuelux/qb.agreement.Customer.js"></script>
+<style type="text/css">
+    .clearfix div {
+        margin-bottom: 0;
+        margin-top: 0;
+        padding-top: 7px;
+    }
+</style>
+<div>
+    <ul class="nav nav-tabs" id="sdOrderTab">
+        <li class="nav nav-tabs" style="border:none;">
+            <a href="#labelInfo" onclick="javascript:setCurrentGrid(1,this);">
+                发标信息
+            </a>
+        </li>
+        <li style="float:right;">
+            <button class="btn btn-sm" onclick="javascript: goBack();">
+                <i class="icon-reply nav-search-icon"></i>返回
+            </button>
+        </li>
+    </ul>
+</div>
+
+    <div class="tab-content" style="height:auto; overflow-y:auto;">
+        <form id="formlabelInfo" class="form-horizontal" novalidate="novalidate">
+            <div id="labelInfo">
+                <input type="hidden" id="bidCode" name="bidCode" value="@{if(ViewData["bidCode"]!=null){@ViewData["bidCode"]}}" />
+                <input type="hidden" id="bidContractNo" name="bidContractNo" value="@{if(ViewData["bidContractNo"]!=null){@ViewData["bidContractNo"]}}" />
+                <input type="hidden" id="bidAppCode" name="bidAppCode" value="@{if (ViewData["bidAppCode"] != null){@ViewData["bidAppCode"]}}" />
+
+                <div>
+                    @MvcHtmlString.Create(ViewBag.CreateBidInfo == null ? "未找到数据" : ViewBag.CreateBidInfo)
+                </div>                    
+                <div class="form-group">
+                    <div class="clearfix">
+                        <label class="control-label col-xs-12 col-sm-2">驳回原因：</label>
+                        <div id="bidRejectReason" class="col-xs-12 col-sm-3">
+                            <select name="slctbidRejectReason" id="slctbidRejectReason" class="col-xs-12" data-val="true" data-val-required="请选择驳回原因!">
+                                <option value="">-请选择-</option>
+                                @foreach (KeyValuePair<string, string> kv in ViewData["Bid_Reject_Reason"] as Dictionary<string, string>)
+                                {
+                                    <option value="@kv.Key">@kv.Value</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="row" style="text-align:center">
+                <button class="btn btn-success btn-sm" id="btn_save" data-submitaction="/Pact/PactConfirmSubmit" value="/Pact/PactConfirmList">
+                    <i class="icon-ok nav-search-icon"></i>确认
+                </button>
+                <button class="btn btn-prev btn-sm" id="btn_cancelBid" type="submit" onclick="javascript: rejectInvitation();">
+                    <i class="icon-reply nav-search-icon"></i>驳回
+                </button>
+                <button class="btn btn-prev btn-sm" id="btn_cancel" onclick="javascript: cancel();">
+                    <i class="icon-remove nav-search-icon"></i>取       消
+                </button>
+        </div>
+        <div class="step-pane">
+            <form action="" method="post" class="form-horizontal" id="form_upload_file">
+                <fieldset>
+                    <div class="form-group">
+                        <div class="clearfix">
+                            <!-- 需要引用jQuery -->
+                            <style type="text/css">
+                                .fileviewerfieldset {
+                                    border: 1px solid #e5e5e5;
+                                    padding: 5px;
+                                    -moz-border-radius: 4px;
+                                    -webkit-brder-radius: 4px;
+                                    border-radius: 4px;
+                                }
+
+                                    .fileviewerfieldset legend {
+                                        border: none;
+                                        margin: 0;
+                                        padding: 0 5px;
+                                        width: auto;
+                                        font-size: 1.1em;
+                                    }
+
+                                .fileviewercolumn {
+                                    border: 1px solid #eee;
+                                    box-shadow: 6px 6px 6px -1px #abbac3;
+                                    display: table;
+                                    float: left;
+                                    width: 112px;
+                                    margin: 8px;
+                                    background-color: #FFF;
+                                    height: 127px;
+                                    position: relative;
+                                }
+
+                                    .fileviewercolumn:hover, .fileviewercolumn:active, .fileviewercolumn:focus {
+                                        background-color: #eee;
+                                        box-shadow: 2px 2px 5px 0 #6fb3e0;
+                                    }
+
+                                    .fileviewercolumn .SmallImg {
+                                        padding: 6px;
+                                        width: inherit;
+                                        height: inherit;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        -o-text-overflow: ellipsis;
+                                        -webkit-text-overflow: ellipsis;
+                                        -moz-text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                    }
+
+                                        .fileviewercolumn .SmallImg a {
+                                            display: block;
+                                        }
+
+                                        .fileviewercolumn .SmallImg img {
+                                            width: 100px;
+                                            height: 100px;
+                                        }
+
+                                .alert-with-direction ::after {
+                                    content: "";
+                                    display: block;
+                                    background-color: #dff0d8;
+                                    border: none;
+                                    border-left: solid #d6e9c6 2px;
+                                    border-bottom: solid #d6e9c6 2px;
+                                    height: 12px;
+                                    width: 12px;
+                                    transform: rotate(-45deg);
+                                    -webkit-transform: rotate(-45deg);
+                                    position: absolute;
+                                    left: 15px;
+                                    bottom: -8px;
+                                    -webkit-box-sizing: content-box;
+                                    box-sizing: content-box;
+                                }
+                            </style>
+                            <fieldset class="fileviewerfieldset">
+                                <legend id="protocolFile_legend">
+                                    <div class="btn-group">
+                                        <button class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown">
+                                            签署文件
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-info">
+                                            <li id="protocolFile_SelectButton">
+                                                <label class="btn btn-xs btn-info" style="width:100%">上传或编辑</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </legend>
+                                <div id="protocolFile" class="FileViewerKeyNames"></div>
+                                <div class="col-protocolFile" id="protocolFile_checkFieldset">
+                                    <input type="text" style="padding: 0; margin: 0; height: 15px; width: 2px; background-color: transparent !important; border: none; color: transparent !important; "
+                                           id="protocolFile_hidden"
+                                           name="protocolFile_hidden"
+                                           readonly="readonly"
+                                           data-val="true"
+                                           data-val-required="请上传文件!" class="valid has-error" />
+
+                                </div>
+                            </fieldset>
+                            <div id="protocolFile_dialog" style="display:none;height:100%;">
+                                <iframe id="protocolFile_iframe" style="border:none;width:100%;height:100%;"></iframe>
+                            </div>
+                            <div id="/AgreementFileupload/CheckFileType" class="FileViewerCheckSDUrl"></div>
+                            <div id="/AgreementFileupload/FileList" class="FileViewerFileGetUrl"></div>
+                            <div id="/AgreementFileupload/index" class="FileViewerFileUploadUrl"></div>
+                        </div>
+                    </div>
+
+
+                </fieldset>
+            </form>
+        </div>
+
+    </div>
+<script type="text/javascript">
+    var step = 0;
+    jQuery(function () {
+        /*禁用页面回车键 */
+        document.onkeypress = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
+                return false;
+            }
+        }
+        /*页面加载时如果没有指定锚点则显示第一个页签*/
+        var hs = window.location.hash;
+        if (!hs) {
+            hs = "#labelInfo";
+        }
+        jQuery('#sdOrderTab').find('a[href="' + hs + '"]').click();
+
+        jQuery('#protocolFile_iframe').css('height', jQuery(window).height() - 100 + 'px');
+        /*选择驳回原因其他显示输入框*/
+        jQuery("#slctbidRejectReason").change(function () {
+            var t = jQuery(this);
+            if (t.val() != "") {
+                if (jQuery("#bidRejectReasonOther").length == 0) {
+                    t.parent().append(
+                        "<div class='col-xs-12'>" +
+                            "" +
+                               "<textarea class='form-control'  id='bidRejectReasonOther' name='bidRejectReasonOther' maxlength='1000'/>" +
+                            "" +
+                        "</div>"
+                        );
+                    t.closest("form").validate().settings.rules["bidRejectReasonOther"] = { __dummy__: true, required: true };
+                    t.closest("form").validate().settings.messages["bidRejectReasonOther"] = { required: "请填写其他!" };
+                }
+                else {
+                    jQuery("#bidRejectReasonOther").show();
+                }
+
+            }
+            else {
+                jQuery("#bidRejectReasonOther").parent().remove();
+            }
+        });
+
+    });
+
+    /*设置当前页签 */
+    function setCurrentGrid(flag, obj) {
+        var hs = window.location.hash;
+        if (hs) {
+            var hs1 = jQuery(obj).attr('href');
+            if (hs == hs1)
+                return;
+        }
+        jQuery(".tab-pane").hide();
+        jQuery(jQuery(obj).attr('href') + "-1").show();
+        jQuery(obj).parent().parent().find("li.active").removeClass('active');
+        jQuery(obj).parent().addClass('active');
+        step--;
+    }
+
+    function goBack() {
+        window.history.go(step);
+    }
+    var rejectInvitation = function () {
+        var reject = $("#formlabelInfo");
+        if (reject.valid())
+        {
+            var bidCode = $("#bidCode").val();
+            var rejectCode = $("#slctbidRejectReason").val();
+            var rejectRemark = $("#slctbidRejectReason option:selected").text();
+            if (rejectCode != "") {
+                rejectRemark += $("#bidRejectReasonOther").val();
+            }
+            if (bidCode != null || bidCode != "" || bidCode != "undefined") {
+                $.ajax({
+                    url: "/Pact/PactReject",   // 提交的页面
+                    data: { "bidCode": bidCode, "rejectCode": rejectCode, "rejectRemark": rejectRemark }, // 从表单中获取数据
+                    //async: false,
+                    type: "POST",                   // 设置请求类型为"POST"，默认为"GET"
+                    cache: false,
+                    beforeSend: function () {
+                        //$("#loading").modal('show');
+                    },
+                    error: function (request) {      // 设置表单提交出错
+                        //$("#loading").modal('hide');
+                        bootbox.alert("提交出错，请稍候再试或者联系管理员");
+                    },
+                    success: function (msg) {
+                        var reslut = JSON.parse(msg);
+                        if (reslut.Sucess) {
+                            Utilities.alertTip("协议驳回成功！");
+                            window.location.href = "/Pact/PactConfirmList";
+                        }
+                        else if (reslut.TipMsg != "undefined"&&reslut.TipMsg!=null) {
+                            Utilities.alertTip(reslut.TipMsg);
+                        }
+                        else
+                        {
+                            Utilities.alertTip("协议驳回失败！");
+                        }
+                    }
+                });
+            }
+        }
+    }
+    var cancel = function () {
+        window.location.href = '/Pact/PactConfirmList';
+    }
+    
+    jQuery(window.parent).resize(function () {
+        jQuery('#protocolFile_iframe').css('height', jQuery(window).height() - 100 + 'px');
+    });
+    /**内部无ajax请求**/
+    function protocolFile_ViewOrEdit(href, edit, bidContractNo) {
+        /**可以上传或者编辑**/
+        if (edit) {
+            var v = '<div class="btn-group">';
+            v += '<button class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown">签署文件';
+            v += '<span class="icon-caret-down icon-on-right"></span></button>';
+            v += '<ul class="dropdown-menu dropdown-info"><li id="protocolFile_SelectButton"><lable class="btn btn-xs btn-info" style="width:100%;">上传或编辑</lable></li></ul></div>';
+            jQuery('#protocolFile_legend').html(v);
+        } else {
+            var v = '<div class="btn-group">';
+            v += '<label class="btn btn btn-xs dropdown-toggle" data-toggle="dropdown">签署文件<span class="icon-caret-down icon-on-right"></span></label>';
+            v += '<ul class="dropdown-menu dropdown-info"><li id="protocolFile_SelectButton"><a href="javascript:void(0);">查看详细</a></li></ul></div>';
+            jQuery('#protocolFile_legend').html(v);
+
+            /*不验证必须上传*/
+            jQuery('#protocolFile_checkFieldset').remove();
+        }
+
+        jQuery('#protocolFile_SelectButton').click(function () {
+            jQuery('#protocolFile_iframe').html('');
+            jQuery('#protocolFile_iframe').attr('src', href);
+            jQuery('#protocolFile_dialog').dialog({
+                resizable: false,
+                width: '95%',
+                title: "<h4 class='smaller'><i class='icon-ok'></i> 签署文件</h4>",
+                title_html: true,
+                modal: true,
+                draggable: false,
+                close:
+                    function () {
+                        /*如果是ADD或者Edit，关闭窗口时刷新缩略图*/
+                        if (edit) {
+                            protocolFile_loadExists(bidContractNo, bidAppCode);
+                        }
+                    }
+            });
+        });
+    };
+
+    /**内部有ajax请求，仅控件内调用**/
+    function protocolFile_loadExists(bidContractNo, bidAppCode) {
+        jQuery.ajax({
+            type: "post",
+            url: '/AgreementFileupload/FileList',
+            data: { bidContractNo: bidContractNo, FileType: 'protocolFile' },
+            beforeSend: function () {
+                jQuery('#protocolFile').html("正在加载“签署文件”信息...");
+            },
+            success: function (msg) { protocolFile_showExistsBy(msg, bidContractNo, bidAppCode); },
+            error: function () { protocolFile_showLoadError(bidContractNo); }
+        });
+    }
+
+    /**内部无ajax请求，供外部调用**/
+    function protocolFile_showExistsBy(data, bidContractNo, bidAppCode) {
+        if (data.Status) {
+            if (data.ReturnObj.FILE_LIST.FILES.length == 0) {
+                jQuery('#protocolFile').html("暂无");
+                protocolFile_Verify(-2, 0, bidContractNo);
+            } else {
+                var fileSum = 0;
+                var dt = data.ReturnObj.FILE_LIST.FILES;
+                jQuery('#protocolFile').html("");
+
+                var h = '<div class="fileviewercolumn">';
+                h += '      <div class="SmallImg">';
+                var hh = '</div></div>';
+                $.each(dt, function (n, files) {
+                    if (files != null) {
+                        $.each(files, function (s, value) {
+                            var imgName = "";
+                            if (value.E_AUTO) {
+                                fileSum = fileSum + 1;
+                                imgName = value.E_AUTO.FILE_TITLE + "." + value.E_AUTO.FILE_TYPE;
+                                if (value.E_AUTO.FILE_TYPE.toUpperCase() == "PDF") {
+                                    /*修改为本地图片，加快图片加载效率*/
+                                    var img = '<img src="../Content/images/pdf.png" title="' + imgName + '" /><br />';
+                                }
+                                else if (value.E_AUTO.FILE_TYPE.toUpperCase().indexOf("DOC") == 0) {
+                                    /*修改为本地图片，加快图片加载效率*/
+                                    var img = '<img src="../Content/images/docx.png" title="' + imgName + '" /><br />';
+
+                                }
+                                else {
+                                    var img = '<img src="' + value.E_AUTO.FILE_PATH + '" title="' + imgName + '" /><br />';
+                                }
+                                img += imgName;
+                                jQuery('#protocolFile').append(h + img + hh);
+                            }
+                            if (value.E_MANUAL_FINAL) {
+                                fileSum = fileSum + 1;
+                                imgName = value.E_MANUAL_FINAL.FILE_TITLE + "." + value.E_MANUAL_FINAL.FILE_TYPE;
+                                if (value.E_MANUAL_FINAL.FILE_TYPE.toUpperCase() == "PDF") {
+                                    /*修改为本地图片，加快图片加载效率*/
+                                    var img = '<img src="../Content/images/pdf.png" title="' + imgName + '" /><br />';
+                                }
+                                else if (value.E_MANUAL_FINAL.FILE_TYPE.toUpperCase().indexOf("DOC") == 0) {
+                                    /*修改为本地图片，加快图片加载效率*/
+                                    var img = '<img src="../Content/images/docx.png" title="' + imgName + '" /><br />';
+
+                                }
+                                else {
+                                    var img = '<img src="' + value.E_MANUAL_FINAL.FILE_PATH + '" title="' + imgName + '" /><br />';
+                                }
+                                img += imgName;
+                                jQuery('#protocolFile').append(h + img + hh);
+                            }
+                            if (value.P_MANUAL_FINAL) {
+                                fileSum = fileSum + 1;
+                                imgName = value.P_MANUAL_FINAL.FILE_TITLE + "." + value.P_MANUAL_FINAL.FILE_TYPE;
+                                if (value.P_MANUAL_FINAL.FILE_TYPE.toUpperCase() == "PDF") {
+                                    /*修改为本地图片，加快图片加载效率*/
+                                    var img = '<img src="../Content/images/pdf.png" title="' + imgName + '" /><br />';
+                                }
+                                else if (value.P_MANUAL_FINAL.FILE_TYPE.toUpperCase().indexOf("DOC") == 0) {
+                                    /*修改为本地图片，加快图片加载效率*/
+                                    var img = '<img src="../Content/images/docx.png" title="' + imgName + '" /><br />';
+
+                                }
+                                else {
+                                    var img = '<img src="' + value.P_MANUAL_FINAL.FILE_PATH + '" title="' + imgName + '" /><br />';
+                                }
+                                img += imgName;
+                                jQuery('#protocolFile').append(h + img + hh);
+                            }
+                            //if (value.P_NON_SEAL) {
+                            //    fileSum = fileSum + 1;
+                            //    imgName = value.P_NON_SEAL.FILE_TITLE + "." + value.P_NON_SEAL.FILE_TYPE;
+                            //    if (value.P_NON_SEAL.FILE_TYPE.toUpperCase() == "PDF") {
+                            //        /*修改为本地图片，加快图片加载效率*/
+                            //        var img = '<img src="../Content/images/pdf.png" title="' + imgName + '" /><br />';
+                            //    }
+                            //    else if (value.P_NON_SEAL.FILE_TYPE.toUpperCase().indexOf("DOC") == 0) {
+                            //        /*修改为本地图片，加快图片加载效率*/
+                            //        var img = '<img src="../Content/images/docx.png" title="' + imgName + '" /><br />';
+
+                            //    }
+                            //    else {
+                            //        var img = '<img src="' + value.P_NON_SEAL.FILE_PATH + '" title="' + imgName + '" /><br />';
+                            //    }
+                            //    img += imgName;
+                            //    jQuery('#protocolFile').append(h + img + hh);
+                            //}
+                        });
+                    }
+                });
+                protocolFile_Verify(2, fileSum);
+
+            }
+        }
+        else {
+            jQuery('#protocolFile').html("“签署文件”信息加载失败！");
+            protocolFile_Verify(-2, 0, bidContractNo);
+        }
+    }
+
+    /**内部无ajax请求**/
+    function protocolFile_showLoadError(bidContractNo) {
+        jQuery('#protocolFile').html("“签署文件”信息加载失败！");
+        protocolFile_Verify(-2, 0, bidContractNo);
+    }
+
+    /*控制验证是否上传。内部无ajax请求，这是一个private方法，被showExists和showLoadError调用。
+    localFireFlag：
+    undefined 表单提交时触发的验证；
+    2 本控件触发，有文件；
+    -2 本控件触发，没有文件；  */
+    function protocolFile_Verify(localFireFlag, fileAmt, bidContractNo) {
+        /*非只读时需要控制表单验证*/
+
+        /*更改提示信息*/
+        //var showText = jQuery('#protocolFile_hidden').attr("data-val-required");
+        //if(showText)
+        //{
+        //    showText = showText.replace("#NUMBER#",jQuery('#protocolFile_leastFiles').val());
+        //    jQuery('#protocolFile_hidden').attr("data-val-required",showText);
+        //    jQuery('#protocolFile_checkFieldset').find('i').attr('title',showText);
+        //    jQuery('#protocolFile_checkFieldset').find('i').text(showText);
+        //}
+
+        if (localFireFlag == -2) {
+            jQuery('#protocolFile_hidden').val('').change();
+            jQuery('#protocolFile_hidden').show();
+
+
+            var needIfAmout = 0;
+            if (needIfAmout > 0) {
+                var actualAmount = DFormAction.GetLoanValue(bidContractNo);
+                if (actualAmount < needIfAmout) {
+                    jQuery('#protocolFile_legend').find('i').remove();
+
+                    jQuery('#protocolFile_hidden').val('1').change();
+                    jQuery('#protocolFile_hidden').hide();
+                    jQuery('.col-protocolFile').children('i').remove();
+                }
+            }
+        }
+        else if (localFireFlag == 2) {
+            /*如果有文件，则将值设置为文件个数*/
+            jQuery('#protocolFile_hidden').val(fileAmt).change();
+            //jQuery('#protocolFile_hidden').hide();
+            jQuery('.col-protocolFile').children('i').remove();
+        }
+
+    }
+</script>

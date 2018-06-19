@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "DFormBuilderEdit";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="dformBuilderInfo" role="form">
+            <input id="ID" name="ID" type="hidden" value="@ViewBag.DFormBuilder.ID"/>
+            @*表单名称*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="NAME"> 表单名称：</label>
+
+                <div class="col-sm-9">
+                    <input id="NAME" name="NAME" class="col-xs-10 col-sm-5" type="text" value="@ViewBag.DFormBuilder.NAME" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*表单版本*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="VERSION"> 表单版本：</label>
+
+                <div class="col-sm-9">
+                    <input id="VERSION" name="VERSION" class="col-xs-10 col-sm-5" type="text" value="@ViewBag.DFormBuilder.VERSION" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*表单代码*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="CODE"> 表单代码：</label>
+
+                <div class="col-sm-9">
+                    <input id="CODE" name="CODE" class="col-xs-10 col-sm-5" type="text" value="@ViewBag.DFormBuilder.CODE" />
+                </div>
+            </div>
+        </form>
+
+        <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px;">
+            <button class="btn btn-sm" data-dismiss="modal" onclick="parent.CloseBuilderDialog();">
+                <i class="icon-remove"></i>
+                取消
+            </button>
+
+            <button class="btn btn-sm btn-primary" onclick="SaveData();">
+                <i class="icon-ok"></i>
+                保存
+            </button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function SaveData() {
+        var jsonData = $('#dformBuilderInfo').serialize();
+        $.ajax({
+            type: "post",
+            url: "/SystemConfig/UpdateBuilderEntity",
+            data: jsonData,
+            success: function (d) {
+                if (d) {
+                    Utilities.alertTip("<strong>数据保存出错</strong>：" + d + "<br />");
+                } else {
+                    Utilities.alertTip("保存成功！");
+                }
+            }
+        });
+    }
+</script>
+

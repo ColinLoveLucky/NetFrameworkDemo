@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<PaymentConfig>
+
+	<!--机构的的签名证书和口令-->
+	<MyKeystoreFilename>quark.pfx</MyKeystoreFilename>
+	<MyKeystorePassword>12345678</MyKeystorePassword>
+	
+	<!--支付平台的公钥证书-->
+	<PaymentCertificateFilename>payment.cer</PaymentCertificateFilename>
+	
+	<!--支付平台支付接口地址-->
+	<PaymentUrl>https://www.china-clearing.com/Gateway/InterfaceI</PaymentUrl>
+	
+	<!--支付平台交易接口地址-->
+	<TxUrl>https://www.china-clearing.com/Gateway/InterfaceII</TxUrl>
+	
+	
+</PaymentConfig>

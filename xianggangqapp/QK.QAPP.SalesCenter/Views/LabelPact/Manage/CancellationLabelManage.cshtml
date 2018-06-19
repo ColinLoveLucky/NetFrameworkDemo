@@ -1,0 +1,753 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<script src="~/Content/assets/js/numeral/numeral.min.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+
+<div>
+    <ul class="nav nav-tabs" id="tabs">
+        <li class="active" id="cancellationLabel" style="border:none;">
+            <a href="#cancelLabel" data-toggle="tab" onclick="javascript: SetCurrentGrid(1, this); window.setTimeout(LoadCancelLabelPanel, 1);">
+                进行流标列表
+            </a>
+        </li>
+
+        <li id="gatherLabel" style="border:none;">
+            <a href="#gather" data-toggle="tab" onclick="javascript: SetCurrentGrid(2, this); window.setTimeout(LoadGatherPanel, 1);">
+                已流标列表
+            </a>
+        </li>
+        <li id="fullscaleLabel" style="border:none;">
+            <a href="#fullscale" data-toggle="tab" onclick="javascript: SetCurrentGrid(3, this); window.setTimeout(LoadFullScalePanel, 1); ">
+                已满标列表
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" style="height:auto; overflow-y:auto;">
+        <div id="cancelLabel" class="tab-pane active">
+            <div id="highSearch_cancelLabel" style="display:none;">
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">发标编号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtPactissueNo" id="txtPactissueNo" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">发标合同号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtPactshowNo" id="txtPactshowNo" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">进件编号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber" id="txtAppNumber" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtCustomerName" id="txtCustomerName" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+
+                        <span class="control-label col-xs-12 col-sm-2">发生类型：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtOccurType" id="txtOccurType" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客服姓名：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtCsac" id="txtCsac" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">挂标客服：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtSales" id="txtSales" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">划标类型：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtDivideType" id="txtDivideType" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2" id="lblSearchStatus">划标情况：</span>
+                        <div class="col-xs-12 col-sm-3" id="divSearchStatus">
+                            <select name="slctBidState" id="slctBidState" class="col-xs-12">
+                                <option value="">-请选择-</option>
+                                @if (ViewData["Bid_MarkingState"]!=null)
+                                { 
+                                        foreach (KeyValuePair<string, string> kv in ViewData["Bid_MarkingState"] as Dictionary<string, string>)
+                                        {
+                                            <option value="@kv.Key">@kv.Value</option>
+                                        }
+                                }
+                            </select>
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2" id="lblZhState">审核结果：</span>
+                        <div class="col-xs-12 col-sm-3" id="divZhState">
+                            <select name="slctZhState" id="slctZhState" class="col-xs-12">
+                                <option value="">-请选择-</option>
+                                @if (ViewData["Bid_ZH_MarkingState"]!=null)
+                                { 
+                                    foreach (KeyValuePair<string, string> kv in ViewData["Bid_ZH_MarkingState"] as Dictionary<string, string>)
+                                    {
+                                        <option value="@kv.Key">@kv.Value</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <button class="btn btn-sm btn-success" onclick="javascript: doHighSearch();">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                        <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-success btn-sm"  type="button" onclick="javascript: CancelLabelBid();">撤销所选标(合同)</button>          
+            <table id="cancelLabel-grid-table"></table>
+            <div id="cancelLabel-grid-pager"></div>
+            <div class="form-group">
+                    <label class="control-label col-xs-1 col-sm-1">流标原因：</label>
+                    <div id="bidCancelbidReson" class="col-xs-1 col-sm-2">
+                        <select name="slctCancelbidReson" id="slctCancelbidReson" class="col-xs-12" data-val="true" data-val-required="请选择流标原因!">
+                            <option value="">-请选择-</option>
+                            @foreach (KeyValuePair
+                            <string, string>
+                                kv in ViewData["BidUndoReason"] as Dictionary<string, string>
+                                    )
+                            {
+                                <option value="@kv.Key">@kv.Value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+        </div>
+        <div id="gather" class="tab-pane">
+            <div id="highSearch_gather" style="display:none;">
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">发标编号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtPactissueNo_gather" id="txtPactissueNo_gather" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">发标合同号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtPactshowNo_gather" id="txtPactshowNo_gather" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">进件编号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber_gather" id="txtAppNumber_gather" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtCustomerName_gather" id="txtCustomerName_gather" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">发生类型：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtOccurType_gather" id="txtOccurType_gather" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">挂标客服：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtBidCsac_gather" id="txtBidCsac_gather" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <button class="btn btn-sm btn-success" onclick="javascript: doHighSearch();">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                        <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                    </div>
+                </div>
+            </div>
+            <table id="gather-grid-table"></table>
+            <div id="gather-grid-pager"></div>
+        </div>
+        <div id="fullscale" class="tab-pane">
+            <div id="highSearch_fullscale" style="display:none;">
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">发标编号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtPactissueNo_fullscale" id="txtPactissueNo_fullscale" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">发标合同号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtPactshowNo_fullscale" id="txtPactshowNo_fullscale" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">进件编号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber_fullscale" id="txtAppNumber_fullscale" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtCustomerName_fullscale" id="txtCustomerName_fullscale" class="col-xs-12" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">发生类型：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtOccurType_fullscale" id="txtOccurType_fullscale" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">挂标客服：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtBidCsac_fullscale" id="txtBidCsac_fullscale" class="col-xs-12" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <button class="btn btn-sm btn-success" onclick="javascript: doHighSearch();">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                        <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                    </div>
+                </div>
+            </div>
+            <table id="fullscale-grid-table"></table>
+            <div id="fullscale-grid-pager"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var grid_selector_cancelLabel = '#cancelLabel-grid-table';
+    var grid_selector_gather = '#gather-grid-table';
+    var grid_selector_fullscale = '#fullscale-grid-table';
+
+    var pager_selector_cancelLabel = '#cancelLabel-grid-pager';
+    var pager_selector_gather = '#gather-grid-pager';
+    var pager_selector_fullscale = '#fullscale-grid-pager';
+
+    var currentHighSearch = '#highSearch_cancelLabel';
+    var currentGrid = grid_selector_cancelLabel;
+    var sortIndex = "";
+    var sortOrder = "";
+    jQuery(function () {
+        /*禁用页面回车键 */
+        document.onkeypress = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
+                return false;
+            }
+        }
+        /*为Search窗口窗口添加搜索功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function () { doNormalSearch(); });
+        jQuery(".input-icon").children("input[type='text']").keypress(function (e) { e = e || event; if (e.keyCode == 13) { jQuery(".input-icon").children("i").click(); }; });
+        jQuery("<a/>").attr("href", "javascript:;").text("高级查询").attr("onclick", "javascript:showHighSearch();").addClass("label label-lg label-pink arrowed-right").attr("style", "top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function () {
+            jQuery(window).resize();
+        });
+        /*页面加载时如果没有指定锚点则显示第一个页签*/
+        var hs = window.location.hash;
+        if (!hs) {
+            hs = "#cancelLabel";
+        }
+        jQuery('#tabs').find('a[href="' + hs + '"]').click();
+        /*选择流标原因其他显示输入框*/
+        jQuery("#slctCancelbidReson").change(function () {
+            var t = jQuery(this);
+            if (t.val() == "BUR_7") {
+                if (jQuery("#bidCancelbidResonOther").length == 0) {
+                    t.parent().append(
+                        "<textarea class='form-control'  placeholder='请输入流标原因'  id='bidCancelbidResonOther' name='bidCancelbidResonOther' maxlength='100'/>" 
+                        );
+                }
+                else {
+                    jQuery("#bidCancelbidResonOther").show();
+                }
+
+            }
+            else {
+                jQuery("#bidCancelbidResonOther").remove();
+            }
+        });
+    });
+    /*加载jqGrid */
+    function LoadGrid(grid_selector, _colNames, _colModel, _pager, _postData, multiselect) {
+        jQuery(grid_selector).jqGrid({
+            url: "/CancelLabel/CancelLabelList",
+            datatype: "json",
+            mtype: "POST",
+            height: jQuery(window).height() - 335,
+            width: jQuery('.tab-content').width()+200,
+            colNames: _colNames,
+            colModel: _colModel,
+            postData: _postData,
+            jsonReader: {
+                root: "DataList",
+                total: "TotalCount",
+                page: "CurrentPage",
+                records: "TotalRecords",
+                repeatitems: false
+            },
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: _pager,
+            onSortCol: function (colName, iCol, sortorder) {
+                sortIndex = colName;
+                sortOrder = sortorder;
+            },
+            //beforeRequest: function () {
+            //    jQuery(_gridId).jqGrid('setGridParam', { postData: { 'sidx': sortIndex, 'sord': sortOrder } });
+            //},
+            altRows: true,
+            //控制多选
+            multiselect: multiselect,
+            multiboxonly: true,
+
+            loadComplete: function () {
+                var table = this;
+                var re_records = jQuery(this).getGridParam('records');
+                if (re_records == 0 || re_records == null) {
+                    Utilities.alertTip("对不起，未找到符合条件的记录！");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+                jQuery(window).resize();
+            },
+
+            autowidth: true
+
+        });
+
+    }
+    /*处理分页控件样式*/
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    };
+
+    /*流标操作*/
+    function CancelLabelBid() {
+        var ids = $('#cancelLabel-grid-table').jqGrid().getGridParam("selarrrow");
+        if (ids.length > 0) {
+            var bidCode = new Array();
+
+            $.each(ids, function (n, value) {
+                bidCode.push($('#cancelLabel-grid-table').jqGrid().getRowData(value).BID_CODE);
+            })
+            var unDoResonCode = $("#slctCancelbidReson").val();
+            var unDoReson = $("#slctCancelbidReson option:selected").text();
+            if (unDoResonCode == "BUR_7")
+            {
+                var  txtResonOther=$("#bidCancelbidResonOther");
+                if (txtResonOther.val().trim().length == 0)
+                {
+                    txtResonOther.focus();
+                    return false;
+                }
+                unDoReson = txtResonOther.val().trim();
+            }
+            if (unDoResonCode == "")
+            {
+
+                return false;
+            }
+            var strData = { bidCode: bidCode.join(","), unDoResonCode: unDoResonCode, unDoReson: unDoReson };
+            if (bidCode != null)
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "/CancelLabel/CancelSendBid",
+                    data: strData, //在这里可以设置需要传递的参数
+                    //contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    traditional :true,
+                    success: function (msg) {
+                        Utilities.alertTip(msg);
+                        $("#slctCancelbidReson option:first").prop("selected", true).trigger("change");
+                        jQuery('#cancelLabel-grid-table').jqGrid('setGridParam').trigger("reloadGrid");
+                    },
+                    error: function () {
+                        Utilities.alertTip("流标操作失败！");
+                    }
+
+                });
+            }
+        }
+        else
+        {
+            Utilities.alertTip("请选择数据");
+        }
+    }
+    /*设置当前页签 */
+    function SetCurrentGrid(flag) {
+        switch (flag) {
+            case 1: {
+                currentGrid = grid_selector_cancelLabel;
+                currentHighSearch = '#highSearch_cancelLabel';
+            }
+                break;
+            case 2: {
+                currentGrid = grid_selector_gather;
+                currentHighSearch = '#highSearch_gather';
+            }
+                break;
+            case 3: {
+                currentGrid = grid_selector_fullscale;
+                currentHighSearch = '#highSearch_fullscale';
+            }
+                break;
+            default: break;
+
+        }
+    }
+    /*加载进行流标列表 */
+    function LoadCancelLabelPanel() {
+        if (!jQuery(grid_selector_cancelLabel))
+            return;
+
+
+        var colNames = ['<i class="hidden-480 icon-book"></i> 进件ID', '<i class="hidden-480 icon-book"></i> 产品logo',
+                        '<i class="hidden-480 icon-book"></i> 发标编号', '<i class="hidden-480 icon-book"></i> 发标合同号',
+                        '<i class="hidden-480 icon-book"></i> 进件编号',
+                        '<i class="hidden-480 icon-user"></i> 客户姓名', '<i class="hidden-480 icon-tasks"></i> 业务品种',
+                        '<i class="hidden-480 icon-tasks"></i> 发生类型', '<i class="hidden-480 icon-money"></i> 发标金额',
+                        '<i class="hidden-480 icon-money"></i> 到手金额', '<i class="hidden-480 icon-calendar"></i> 贷款期限',
+                        '<i class="hidden-480 icon-money"></i> 申请金额', '<i class="hidden-480 icon-user"></i> 客服姓名',
+                        '<i class="hidden-480 icon-user"></i> 挂标客服', '<i class="hidden-480 icon-tasks"></i> 划标类型',
+                        '<i class="hidden-480 icon-time"></i> 划标情况', '<i class="hidden-480 icon-time"></i> 审核结果',
+        ];
+        var colModel = [
+            { name: 'BID_APP_ID', index: 'BID_APP_ID', sorttype: "int", hidden: true },
+            { name: 'BID_BUS_LOGO', index: 'BID_BUS_LOGO', sorttype: "int", hidden: true },
+            { name: 'BID_CODE', index: 'BID_CODE', width: "17%", sorttype: "int" },
+            { name: 'BID_CONTRACT_NO', index: 'BID_CONTRACT_NO', width: "17%", sorttype: "int" },
+            {
+                name: 'BID_APP_CODE', index: 'BID_APP_CODE', width: "14%", sorttype: "int",
+                formatter: function (cellvalue, options, rowObject) {
+                    var re = "<a style='text-decoration:underline;'  href='/LoanApplication/Application?dformCode=" + rowObject.BID_BUS_LOGO + "&operation=3&appid=" + rowObject.BID_APP_ID + "'>" + rowObject.BID_APP_CODE + "</a>";
+                    return re;
+                }
+            },
+            { name: 'BID_CUSTOMER_NAME', index: 'BID_CUSTOMER_NAME', width: "10%", sorttype: "textarea" },
+            { name: 'BID_BUS_NAME', index: 'BID_BUS_NAME', width: "15%", sorttype: "textarea" },
+            { name: 'OCCUR_TYPENAME', index: 'OCCUR_TYPENAME', width: "10%", sorttype: "textarea" },
+            {
+                name: 'BID_AMT', index: 'BID_AMT', width: "10%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0,0.00');
+                }
+            },
+            {
+                name: 'BID_HAND_AMT', index: 'BID_HAND_AMT', width: "10%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0,0.00');
+                }
+            },
+            {
+                name: 'BID_LOAN_DEADLINE', index: 'BID_LOAN_DEADLINE', width: "10%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return cellvalue + "月";
+                }
+            },
+            {
+                name: 'BID_APPLY_AMT', index: 'BID_APPLY_AMT', width: "11%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0.00');
+                }
+            },
+            { name: 'BID_SERVICE_NAME', index: 'BID_SERVICE_NAME', width: "10%" },
+            { name: 'BID_HANG_USER_NAME', index: 'BID_HANG_USER_NAME', width: "10%" },
+            { name: 'BID_DIVIDE_TYPENAME', index: 'BID_DIVIDE_TYPENAME', width: "10%" },
+            { name: 'BID_STATENAME', index: 'BID_STATENAME', width: "10%", align: "center" },
+            { name: 'BID_THIRD_STATENAME', index: 'BID_THIRD_STATENAME', width: "10%" }
+        ];
+        var postData = { bidStep: "@(ViewBag.SBid_Step_NotSendBid)", globalSearch: 0 };
+        LoadGrid(grid_selector_cancelLabel, colNames, colModel, pager_selector_cancelLabel, postData, true);
+    }
+    /*加载已流标列表 */
+    function LoadGatherPanel() {
+        var colNames = ['<i class="hidden-480 icon-book"></i> 进件ID', '<i class="hidden-480 icon-book"></i> 产品logo',
+            '<i class="hidden-480 icon-book"></i> 发标编号', '<i class="hidden-480 icon-book"></i> 发标合同号',
+            '<i class="hidden-480 icon-book"></i> 进件编号 ',
+            '<i class="hidden-480 icon-user"></i> 客户姓名', '<i class="hidden-480 icon-tasks"></i> 业务品种',
+            '<i class="hidden-480 icon-tasks"></i> 发生类型', '<i class="hidden-480 icon-tasks"></i> 资金类型',
+            '<i class="hidden-480 icon-money"></i> 发标金额',
+            '<i class="hidden-480 icon-money"></i> 凑标金额', '<i class="hidden-480 icon-calendar"></i> 凑标进度(%)',
+            '<i class="hidden-480 icon-money"></i> 凑标人数(人)', '<i class="hidden-480 icon-user"></i> 挂标客服',
+            '<i class="hidden-480 icon-tasks"></i> 划标类型','<i class="hidden-480 icon-tasks"></i> 流标原因',
+            '<i class="hidden-480 icon-cogs"></i> 操作'
+        ];
+        var colModel = [
+			{ name: 'BID_APP_ID', index: 'BID_APP_ID', sorttype: "int", hidden: true },
+            { name: 'BID_BUS_LOGO', index: 'BID_BUS_LOGO',  sorttype: "int", hidden: true },
+            { name: 'BID_CODE', index: 'BID_CODE', width: "12%", sorttype: "int" },
+            { name: 'BID_CONTRACT_NO', index: 'BID_CONTRACT_NO', width: "12%", sorttype: "int" },
+            {
+                name: 'BID_APP_CODE', index: 'BID_APP_CODE', width: "11%", sorttype: "int",
+                formatter: function (cellvalue, options, rowObject) {
+                    var re = "<a style='text-decoration:underline;'  href='/LoanApplication/Application?dformCode=" + rowObject.BID_BUS_LOGO + "&operation=3&appid=" + rowObject.BID_APP_ID + "'>" + rowObject.BID_APP_CODE + "</a>";
+                    return re;
+                }
+            },
+            { name: 'BID_CUSTOMER_NAME', index: 'BID_CUSTOMER_NAME', width: "8%", sorttype: "textarea" },
+            { name: 'BID_BUS_NAME', index: 'BID_BUS_NAME', width: "12%", sorttype: "textarea" },
+            { name: 'OCCUR_TYPENAME', index: 'OCCUR_TYPENAME', width: "8%", sorttype: "textarea" },
+            { name: 'BID_CHANNELNAME', index: 'BID_CHANNELNAME', width: "10%", sorttype: "textarea" },
+
+            {
+                name: 'BID_AMT', index: 'BID_AMT', width: "8%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0,0.00');
+                }
+            },
+            {
+                name: 'BID_COLLECT_AMT', index: 'BID_COLLECT_AMT', width: "8%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0,0.00');
+                }
+            },
+            {
+                name: 'BID_COLLECT_PRO', index: 'BID_COLLECT_PRO', width: "8%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0.0');
+                }
+            },
+            { name: 'BID_COLLECT_PEO_NUR', index: 'BID_COLLECT_PEO_NUR', width: "9%" },
+            { name: 'BID_HANG_USER_NAME', index: 'BID_HANG_USER_NAME', width: "8%" },
+            { name: 'BID_DIVIDE_TYPENAME', index: 'BID_DIVIDE_TYPENAME', width: "10%" },
+            { name: 'BID_UNDO_MSG', index: 'BID_UNDO_MSG', width: "8%" },
+            {
+                name: 'chaozuo', index: 'chaozuo', sortable: false, width: "6%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return "<a style='text-decoration:underline;' href='/LabelPact/LabelDetail?bidCode=" + rowObject.BID_CODE + "&logo=" + rowObject.BID_BUS_LOGO + "&appid=" + rowObject.BID_APP_ID + "'> 详情</a>";
+                }
+            }
+        ];
+        var postData = { bidStep: "@(ViewBag.SBid_Step_FailBid)", globalSearch: 0 };
+        LoadGrid(grid_selector_gather, colNames, colModel, pager_selector_gather, postData, false);
+    }
+    /*加载满标列表*/
+    function LoadFullScalePanel() {
+
+
+        var colNames = ['<i class="hidden-480 icon-book"></i> 进件ID', '<i class="hidden-480 icon-book"></i> 产品logo',
+                        '<i class="hidden-480 icon-book"></i> 发标编号', '<i class="hidden-480 icon-book"></i> 发标合同号',
+                        '<i  class="hidden-480 icon-book"></i>  进件编号',
+                        '<i class="hidden-480 icon-user"></i> 客户姓名', '<i class="hidden-480 icon-tasks"></i> 业务品种',
+                        '<i class="hidden-480 icon-tasks"></i> 发生类型', '<i class="hidden-480 icon-tasks"></i> 资金类型',
+                        '<i class="hidden-480 icon-money"></i> 发标金额',
+                        '<i class="hidden-480 icon-money"></i> 凑标金额', '<i class="hidden-480 icon-calendar"></i> 凑标进度(%)',
+                        '<i class="hidden-480 icon-money"></i> 凑标人数(人)', '<i class="hidden-480 icon-user"></i> 挂标客服',
+                        '<i class="hidden-480 icon-tasks"></i> 划标类型',
+                         '<i class="hidden-480 icon-cogs"></i> 操作'
+        ];
+        var colModel = [
+             { name: 'BID_APP_ID', index: 'BID_APP_ID', sorttype: "int", hidden: true },
+            { name: 'BID_BUS_LOGO', index: 'BID_BUS_LOGO', sorttype: "int", hidden: true },
+            { name: 'BID_CODE', index: 'BID_CODE', width: "12%", sorttype: "int" },
+            { name: 'BID_CONTRACT_NO', index: 'BID_CONTRACT_NO', width: "12%", sorttype: "int" },
+            {
+                name: 'BID_APP_CODE', index: 'BID_APP_CODE', width: "11%", sorttype: "int",
+                formatter: function (cellvalue, options, rowObject) {
+                    var re = "";
+                    re += "<a style='text-decoration:underline;'  href='/LoanApplication/Application?dformCode=" + rowObject.BID_BUS_LOGO + "&operation=3&appid=" + rowObject.BID_APP_ID + "'>" + rowObject.BID_APP_CODE + "</a>";
+                    return re;
+                }
+            },
+            { name: 'BID_CUSTOMER_NAME', index: 'BID_CUSTOMER_NAME', width: "8%", sorttype: "textarea" },
+            { name: 'BID_BUS_NAME', index: 'BID_BUS_NAME', width: "12%", sorttype: "textarea" },
+            { name: 'OCCUR_TYPENAME', index: 'OCCUR_TYPENAME', width: "8%", sorttype: "textarea" },
+            { name: 'BID_CHANNELNAME', index: 'BID_CHANNELNAME', width: "10%", sorttype: "textarea" },
+            {
+                name: 'BID_AMT', index: 'BID_AMT', width: "8%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0,0.00');
+                }
+            },
+            {
+                name: 'BID_COLLECT_AMT', index: 'BID_COLLECT_AMT', width: "8%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0,0.00');
+                }
+            },
+            {
+                name: 'BID_COLLECT_PRO', index: 'BID_COLLECT_PRO', width: "8%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return numeral(cellvalue).format('0.0');
+                }
+            },
+            { name: 'BID_COLLECT_PEO_NUR', index: 'BID_COLLECT_PEO_NUR', width: "9%" },
+            { name: 'BID_HANG_USER_NAME', index: 'BID_HANG_USER_NAME', width: "8%" },
+            { name: 'BID_DIVIDE_TYPENAME', index: 'BID_DIVIDE_TYPENAME', width: "10%" },
+            {
+                name: 'chaozuo', index: 'chaozuo', sortable: false, width: "6%",
+                formatter: function (cellvalue, options, rowObject) {
+                    return "<a style='text-decoration:underline;' href='/LabelPact/LabelDetail?bidCode=" + rowObject.BID_CODE + "&logo=" + rowObject.BID_BUS_LOGO + "&appid=" + rowObject.BID_APP_ID + "'> 详情</a>";
+                }
+            }
+        ];
+        var postData = { bidStep: "@(ViewBag.SBid_Step_FullBid)", globalSearch: 0 };
+        LoadGrid(grid_selector_fullscale, colNames, colModel, pager_selector_fullscale, postData, false);
+    }
+    /*显示或隐藏高级查询*/
+    function showHighSearch() {
+        jQuery(currentHighSearch).toggle(300, function () { jQuery(window).resize() });
+    }
+    /*点击搜索按钮重新搜索*/
+    function doHighSearch() {
+        jQuery("#nav_search_input").val('');
+        var para;
+        sortIndex = '';
+        sortOrder = '';
+        switch (currentGrid) {
+            case grid_selector_cancelLabel:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        bidCode: escape(jQuery("#txtPactissueNo").val()),
+                        bidContractNo: escape(jQuery("#txtPactshowNo").val()),
+                        bidAppCode: escape(jQuery("#txtAppNumber").val()),
+                        bidServiceName: escape(jQuery("#txtCsac").val()),
+                        bidCustomerName: escape(jQuery("#txtCustomerName").val()),
+                        bidCustomerNamager: escape(jQuery("#txtSales").val()),
+                        bidDivideType: escape(jQuery("#txtDivideType").val()),
+                        bidState: escape(jQuery("#slctBidState").val()),
+                        bidZHState: escape(jQuery("#slctZhState").val()),
+                        bidOccurType: escape(jQuery("#txtOccurType").val()),
+                        fuzzySearch: 0/*高级查询*/
+                    }
+                } break;
+            case grid_selector_gather:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        bidCode: escape(jQuery("#txtPactissueNo_gather").val()),
+                        bidContractNo: escape(jQuery("#txtPactshowNo_gather").val()),
+                        bidAppCode: escape(jQuery("#txtAppNumber_gather").val()),
+                        bidCustomerName: escape(jQuery("#txtCustomerName_gather").val()),
+                        bidCustomerNamager: escape(jQuery("#txtBidCsac_gather").val()),
+                        bidOccurType: escape(jQuery("#txtOccurType_gather").val()),
+                        fuzzySearch: 0,/*高级查询*/
+                    }
+                } break;
+            case grid_selector_fullscale:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        bidCode: escape(jQuery("#txtPactissueNo_fullscale").val()),
+                        bidContractNo: escape(jQuery("#txtPactshowNo_fullscale").val()),
+                        bidAppCode: escape(jQuery("#txtAppNumber_fullscale").val()),
+                        bidCustomerName: escape(jQuery("#txtCustomerName_fullscale").val()),
+                        bidOccurType: escape(jQuery("#txtOccurType_fullscale").val()),
+                        bidCustomerNamager: escape(jQuery("#txtBidCsac_fullscale").val()),
+                        fuzzySearch: 0,/*高级查询*/
+                    }
+                } break;
+            default: break;
+        };
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+    /*Search窗口简单查询*/
+    function doNormalSearch() {
+        jQuery(currentHighSearch).find("input[type='text']").each(function () {
+            jQuery(this).val("")
+        });
+        jQuery(currentHighSearch).find("select").each(function () {
+            jQuery(this).val("")
+        });
+        sortIndex = '';
+        sortOrder = '';
+        var para;
+        switch (currentGrid) {
+            case grid_selector_cancelLabel:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        searchPara: escape(jQuery("#nav_search_input").val()),
+                        page: '1',                       
+                        fuzzySearch: 1,/*简单查询*/
+                    }
+                } break;
+            case grid_selector_gather:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        searchPara: escape(jQuery("#nav_search_input").val()),                        
+                        page: '1',                      
+                        fuzzySearch: 1,/*简单查询*/
+                    }
+                } break;
+            case grid_selector_fullscale:
+                {
+                    para = {
+                        sidx: sortIndex,
+                        searchPara: escape(jQuery("#nav_search_input").val()),                      
+                        page: '1',                      
+                        fuzzySearch: 1,/*简单查询*/
+                    }
+                } break;
+            default: break;
+        };
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+    jQuery(window).resize(function () {
+        jQuery(window).unbind("onresize");
+        jQuery(grid_selector_cancelLabel).setGridHeight(jQuery(window).height() - 369);
+        jQuery(grid_selector_gather).setGridHeight(jQuery(window).height() - 335);
+        jQuery(grid_selector_fullscale).setGridHeight(jQuery(window).height() - 335);
+        jQuery(grid_selector_cancelLabel).setGridWidth(jQuery('.tab-content').width() + 300);
+        jQuery(grid_selector_gather).setGridWidth(jQuery('.tab-content').width()+350);
+        jQuery(grid_selector_fullscale).setGridWidth(jQuery('.tab-content').width()+250);
+        jQuery('.ui-jqgrid-hbox').each(function () {
+            jQuery(this).find('th').last().css('width', (jQuery(this).find('th').last().width() + 25) + 'px');
+        });
+
+        jQuery(window).bind("onresize", this);
+    });
+</script>

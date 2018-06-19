@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewBag.Title = "DFormInfoEdit";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="dformFormInfo" role="form">
+            <input id="ID" name="ID" type="hidden" value=""/>
+            @*子表单名称*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="NAME"> 子表单名称：</label>
+
+                <div class="col-sm-9">
+                    <input id="NAME" name="NAME" class="col-xs-10 col-sm-5" type="text" value="" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*子表单版本*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="VERSION"> 子表单版本：</label>
+
+                <div class="col-sm-9">
+                    <input id="VERSION" name="VERSION" class="col-xs-10 col-sm-5" type="text" value="" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*是否只读*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="READONLY"> 是否只读：</label>
+
+                <div class="col-sm-9">
+                    <select id="READONLY" name="READONLY" class="col-xs-10 col-sm-5" >
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="space-1"></div>
+            @*编辑URL*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="ACTION_EDIT"> 编辑URL：</label>
+
+                <div class="col-sm-9">
+                    <input id="ACTION_EDIT" name="ACTION_EDIT" class="col-xs-10 col-sm-5" type="text" value="" />
+                </div>
+            </div>
+            
+            <div class="space-1"></div>
+            @*读取URL*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="ACTION_READ"> 读取URL：</label>
+
+                <div class="col-sm-9">
+                    <input id="ACTION_READ" name="ACTION_READ" class="col-xs-10 col-sm-5" type="text" value="" />
+                </div>
+            </div>
+            
+            <div class="space-1"></div>
+            @*排序*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="Sort"> 排序：</label>
+
+                <div class="col-sm-9">
+                    <input id="Sort" name="Sort" class="col-xs-10 col-sm-5" type="text" value=""/>
+                </div>
+            </div>
+            @*添加窗口关键字*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="Sort"> 窗口关键字：</label>
+
+                <div class="col-sm-9">
+                    <input id="ADDMOREKEYWORD" name="ADDMOREKEYWORD" class="col-xs-10 col-sm-5" type="text" value=""/>
+                </div>
+            </div>
+        </form>
+
+        <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px;">
+            <button class="btn btn-sm" data-dismiss="modal" onclick="parent.CloseInfoDialog();">
+                <i class="icon-remove"></i>
+                取消
+            </button>
+
+            <button class="btn btn-sm btn-primary" onclick="SaveData();">
+                <i class="icon-ok"></i>
+                保存
+            </button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        //全局设置 同步
+        $.ajaxSetup({
+            async: false
+        });
+        loadInfoData();
+    });
+
+    function loadInfoData() {
+        var id = Utilities.getUrlParam("id");
+        $.getJSON("/SystemConfig/GetFormInfoEntity?infoId=" + id, function (data) {
+            for (var i in data) {
+                $("#" + i).val(data[i]).change();
+            }
+        });
+    }
+
+    function SaveData() {
+        var jsonData = $('#dformFormInfo').serialize();
+        $.ajax({
+            type: "post",
+            url: "/SystemConfig/UpdateInfoEntity",
+            data: jsonData,
+            success: function (d) {
+                if (d) {
+                    Utilities.alertTip("<strong>数据保存出错</strong>：" + d + "<br />");
+                } else {
+                    Utilities.alertTip("保存成功！");
+                }
+            }
+        });
+    }
+</script>

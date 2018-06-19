@@ -1,0 +1,28 @@
+﻿
+<script type="text/javascript">
+    jQuery(function () {
+        jQuery("#$FieldType.Trigger_ID$").change(function () {
+            var t = jQuery(this);
+            if (t.val() == "$FieldType.Trigger_Value$") {
+                if (jQuery("#$FieldType.Field_Key$").length == 0) {
+                    t.parent().append(
+                        "<div class='input-group'>" +
+                            "" +
+                               "$FieldType.Prefix$<input type='text' $if(ReadOnly)$ disabled='disabled'$endif$ id='$FieldType.Field_Key$' name='$FieldType.Field_Key$' maxlength='$FieldType.MaxLength$'/>$FieldType.Suffix$" +
+                            ""+
+                        "</div>"
+                        );
+                    t.closest("form").validate().settings.rules["$FieldType.Field_Key$"] = { __dummy__: true, required: true $if(FieldType.HasRegular)$, regex: '$FieldType.Regular$' $endif$};
+                    t.closest("form").validate().settings.messages["$FieldType.Field_Key$"] = { required: "请填写$FieldType.Field_DisplayName$!" $if(FieldType.HasRegular)$, regex: '请填写正确的$FieldType.Field_DisplayName$！' $endif$};
+                }
+                else {
+                    jQuery("#$FieldType.Field_Key$").show();
+                }
+
+            }
+            else {
+                jQuery("#$FieldType.Field_Key$").parent().remove();
+            }
+        });
+    });
+</script>

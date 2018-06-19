@@ -1,0 +1,404 @@
+﻿@Scripts.Render("~/bundles/bootbox")
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">选择表单</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <form class="form-horizontal" id="form_formCopy">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-1">表单</label>
+                                <div class="col-xs-12 col-sm-6">
+                                    <select class="form-control" multiple="multiple" style="height: 180px" id="productCode" name="productCode"></select>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-1">
+                                    <div class="form-group">
+                                        <button class="btn btn-purple" type="button" id="deleteDForm">删除表单</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-purple" type="button" id="editDFormBuilder">编辑表单</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="DFormInfo" style="display:none">
+    <input type="hidden" id="formBuilderID" value="" />
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">配置子表单</h5>
+                <button class="btn btn-purple" id="add_DFormInfo_btn" style="float:right">添加子表单</button>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="table-responsive">
+                        <table id="formInfo_table" class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>是否只读</th>
+                                    <th>编辑URL</th>
+                                    <th>读取URL</th>
+                                    <th>排序</th>
+                                    <th>是否有添加窗口</th>
+                                    <th>添加窗口关键字</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="formInfo_table_body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="DFormField" style="display:none">
+    <input type="hidden" id="formInfoID" value="" />
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">配置字段</h5>
+                <button class="btn btn-purple" id="add_DFormField_btn" style="float:right">添加字段</button>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="table-responsive">
+                        <table id="formField_table" class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>字段主键</th>
+                                    <th>字段显示名</th>
+                                    <th>字段类型</th>
+                                    <th>字段占用列数</th>
+                                    <th>匹配的表格</th>
+                                    <th>匹配表格的字段</th>
+                                    <th>分组</th>
+                                    <th>字段排序</th>
+                                    <th>是否必填</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="formField_table_body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editField_dialog" style="display:none;height:500px">
+    <iframe id="editField_iframe" style="border: none; width: 100%; height: 500px;"></iframe>
+</div>
+
+<div id="editDFormBuilder_dialog" style="display:none;height:300px">
+    <iframe id="editDFormBuilder_iframe" style="border: none; width: 100%; height: 300px;"></iframe>
+</div>
+
+<div id="editDFormInfo_dialog" style="display:none;height:400px">
+    <iframe id="editDFormInfo_iframe" style="border: none; width: 100%; height: 400px;"></iframe>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+
+        //加载产品列表
+        LoadProductList();
+
+        //删除表单
+        $('#deleteDForm').click(function () {
+            var productId = $('#productCode').val();
+            if (productId != '' && productId != null) {
+                bootbox.confirm('确定要删除表单吗？', function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/SystemConfig/DeleteDFormBuilder',
+                            type: 'post',
+                            data: 'id=' + productId,
+                            success: function (msg) {
+                                $('#DFormInfo').slideUp();
+                                $('#DFormField').slideUp();
+                                window.location.reload();
+                                //bootbox.alert(msg);
+                            }
+                        });
+                    }
+                });
+            } else {
+                bootbox.alert('请选择要删除的表单！');
+            }
+        });
+
+        //编辑表单
+        $('#editDFormBuilder').click(function() {
+            var productId = $('#productCode').val();
+            if (productId != '' && productId != null) {
+                //override dialog's title function to allow for HTML titles
+                $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+                    _title: function (title) {
+                        var $title = this.options.title || '&nbsp;';
+                        if (("title_html" in this.options) && this.options.title_html == true)
+                            title.html($title);
+                        else title.text($title);
+                    }
+                }));
+                $("#editDFormBuilder_iframe").attr("src", "/SystemConfig/DFormBuilderEdit?id=" + productId);
+                jQuery('#editDFormBuilder_dialog').dialog({
+                    title: "<h4 class='smaller'><i class='icon-edit'></i> 编辑表单</h4>",
+                    title_html: true,
+                    resizable: false,
+                    width: "45%",
+                    modal: true,
+                    draggable: false,
+                    close: function (event, ui) {
+                        ReLoadPage();
+                    }
+                });
+            } else {
+                bootbox.alert('请选择要编辑的表单！');
+            }
+        });
+
+        //添加表单字段
+        $('#add_DFormField_btn').click(function () {
+            $.ajax({
+                url: '/SystemConfig/AddDFormField',
+                type: 'post',
+                dataType: 'json',
+                data: 'formInfoID=' + $('#formInfoID').val(),
+                success: function (result) {
+                    if (result != null) {
+                        EditDFormField(result.ID, result.FORMINFO_ID);
+                    }
+                }
+            });
+        });
+
+        //添加子表单
+        $('#add_DFormInfo_btn').click(function() {
+            $.ajax({
+                url: '/SystemConfig/AddDFormInfo',
+                type: 'post',
+                dataType: 'json',
+                data: 'formBuilderID=' + $('#formBuilderID').val(),
+                success: function(result) {
+                    if (result != null) {
+                        EditDFormInfo(result.ID, result.FB_ID);
+                    }
+                }
+            });
+        });
+
+        //加载FormInfo信息
+        $('#productCode').change(function () {
+            var fb_id = $(this).val();
+            LoadDFormInfo(fb_id);
+        });
+
+    });
+
+    //加载FormInfo信息
+    var LoadDFormInfo = function (builderID) {
+        $('#formBuilderID').val(builderID);
+        var param = 'FB_ID=' + builderID;
+        $.ajax({
+            url: '/SystemConfig/GetDFormInfoList',
+            type: 'post',
+            dataType: 'json',
+            data: param,
+            success: function (result) {
+                var infoBody = $('#formInfo_table_body');
+                infoBody.empty();
+                $(result).each(function (index, item) {
+                    var tr = $('<tr></tr>').appendTo(infoBody);
+                    $('<td>' + item.NAME + '</td>').appendTo(tr);
+                    $('<td>' + item.READONLY + '</td>').appendTo(tr);
+                    $('<td>' + (item.ACTION_EDIT == null ? '' : item.ACTION_EDIT) + '</td>').appendTo(tr);
+                    $('<td>' + (item.ACTION_READ == null ? '' : item.ACTION_READ) + '</td>').appendTo(tr);
+                    $('<td>' + item.Sort + '</td>').appendTo(tr);
+                    $('<td>' + (item.ADDMORE == null ? '' : item.ADDMORE) + '</td>').appendTo(tr);
+                    $('<td>' + (item.ADDMOREKEYWORD == null ? '' : item.ADDMOREKEYWORD) + '</td>').appendTo(tr);
+                    $('<td><div class="visible-md visible-lg hidden-sm hidden-xs action-buttons"><a class="blue" href="javascript:void(0);" onclick="EditDFormInfo(' + item.ID + ',' + item.FB_ID + ')" title="编辑" data-toggle="modal" data-target="#myModal"><i class="icon-edit bigger-130"></i></a><a class="green" href="javascript:void(0);" onclick="LoadDFormField(' + item.ID + ');" title="配置子表单字段"><i class="icon-cogs bigger-130"></i></a><a class="red" href="javascript:void(0);" onclick="DeleteDFormInfo(' + item.ID + ',' + item.FB_ID + ')" title="删除"><i class="icon-trash bigger-130"></i></a></div></td>').appendTo(tr);
+                });
+                //显示
+                $('#DFormInfo').slideDown();
+                //隐藏
+                $('#DFormField').slideUp();
+            }
+        });
+    };
+
+    //加载FormField信息
+    var LoadDFormField = function (infoID) {
+        $('#formInfoID').val(infoID);
+        $.ajax({
+            url: '/SystemConfig/GetDFormFieldList',
+            type: 'post',
+            dataType: 'json',
+            data: 'formInfoID=' + infoID,
+            success: function (result) {
+                var fieldBody = $('#formField_table_body');
+                fieldBody.empty();
+                $(result).each(function (index, item) {
+                    var tr = $('<tr></tr>').appendTo(fieldBody);
+                    $('<td>' + item.FIELD_KEY + '</td>').appendTo(tr);
+                    $('<td>' + item.FIELD_DISPLAYNAME + '</td>').appendTo(tr);
+                    $('<td>' + item.FIELD_TYPE + '</td>').appendTo(tr);
+                    $('<td>' + item.FIELD_ROWSPAN + '</td>').appendTo(tr);
+                    $('<td>' + item.MAPPER_TABLE + '</td>').appendTo(tr);
+                    $('<td>' + item.MAPPER_TABLEFIELD + '</td>').appendTo(tr);
+                    $('<td>' + item.FIELD_GROUP + '</td>').appendTo(tr);
+                    $('<td>' + item.FIELD_SORT + '</td>').appendTo(tr);
+                    $('<td>' + item.FIELD_REQUIRED + '</td>').appendTo(tr);
+                    $('<td><div class="visible-md visible-lg hidden-sm hidden-xs action-buttons"><a class="blue" href="javascript:void(0);" onclick="EditDFormField(' + item.ID + ',' + item.FORMINFO_ID + ');" title="编辑"><i class="icon-edit bigger-130"></i></a><a class="red" href="javascript:void(0);" onclick="DeleteDFormField(' + item.ID + ',' + item.FORMINFO_ID + ');" title="删除"><i class="icon-trash bigger-130"></i></a></div></td>').appendTo(tr);
+                });
+                //显示
+                $('#DFormField').slideDown(500);
+            }
+        });
+        return false;
+    };
+
+    //编辑DFormField
+    var EditDFormField = function (fieldID, infoID) {
+        //override dialog's title function to allow for HTML titles
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                var $title = this.options.title || '&nbsp;';
+                if (("title_html" in this.options) && this.options.title_html == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+        $("#editField_iframe").attr("src", "/SystemConfig/DFormFieldEdit?id=" + fieldID);
+        jQuery('#editField_dialog').dialog({
+            title: "<h4 class='smaller'><i class='icon-edit'></i> 动态表单字段配置</h4>",
+            title_html: true,
+            resizable: false,
+            width: "70%",
+            modal: true,
+            draggable: false,
+            close: function (event, ui) {
+                LoadDFormField(infoID);
+            }
+        });
+
+    };
+
+    //编辑DFormInfo
+    var EditDFormInfo = function(infoID,builderID) {
+        //override dialog's title function to allow for HTML titles
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                var $title = this.options.title || '&nbsp;';
+                if (("title_html" in this.options) && this.options.title_html == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+        $('#editDFormInfo_iframe').attr("src", "/SystemConfig/DFormInfoEdit?id=" + infoID);
+        jQuery('#editDFormInfo_dialog').dialog({
+            title: "<h4 class='smaller'><i class='icon-edit'></i> 动态表单子表单配置</h4>",
+            title_html: true,
+            resizable: false,
+            width: "60%",
+            modal: true,
+            draggable: false,
+            close: function (event, ui) {
+                LoadDFormInfo(builderID);
+            }
+        });
+
+    }
+
+    //删除DFormField以及相应的属性(DFormAttr)
+    var DeleteDFormField = function (fieldID, infoID) {
+        //提示
+        bootbox.confirm("确定要删除吗？（注意：此操作将会删除本条数据以及相关的属性信息）", function (result) {
+            if (result) {
+                $.ajax({
+                    url: '/SystemConfig/DeleteDFormField',
+                    type: 'post',
+                    data: 'id=' + fieldID,
+                    success: function (result) {
+                        LoadDFormField(infoID);
+                    }
+                });
+            }
+        });
+
+    };
+
+    //删除DFormInfo以及相应的字段和属性
+    var DeleteDFormInfo = function(infoID, builderID) {
+        //提示
+        bootbox.confirm("确定要删除吗？（注意：此操作将会删除本条数据以及相关的字段和属性信息）", function (result) {
+            if (result) {
+                $.ajax({
+                    url: '/SystemConfig/DeleteDFormInfo',
+                    type: 'post',
+                    data: 'id=' + infoID,
+                    success: function (result) {
+                        LoadDFormInfo(builderID);
+                    }
+                });
+            }
+        });
+    }
+
+    //加载产品列表
+    var LoadProductList = function () {
+
+        $.getJSON('/SystemConfig/GetDFormBuilderList', function (result) {
+            var productCode = $('#productCode');
+            productCode.empty();
+            $(result.formBuilderList).each(function (index, item) {
+                if (item.VERSION == result.dicVers[item.CODE]) {
+                    $(productCode).append('<option value="' + item.ID + '">' + item.NAME + '_' + item.CODE + '_' + item.VERSION + '（使用中）</option>');
+                } else {
+                    $(productCode).append('<option value="' + item.ID + '">' + item.NAME + '_' + item.CODE + '_' + item.VERSION + '</option>');
+                }
+
+            });
+
+        });
+    };
+
+    function CloseDialog() {
+        jQuery('#editField_dialog').dialog("close");
+    }
+
+    function CloseBuilderDialog() {
+        jQuery('#editDFormBuilder_dialog').dialog("close");
+        ReLoadPage();
+    }
+
+    function CloseInfoDialog() {
+        jQuery('#editDFormInfo_dialog').dialog("close");
+    }
+
+    //重新加载
+    function ReLoadPage() {
+        LoadProductList();
+        //隐藏
+        $('#DFormInfo').slideUp();
+        //隐藏
+        $('#DFormField').slideUp();
+    }
+</script>

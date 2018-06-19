@@ -1,0 +1,18 @@
+﻿@*输出表单JS*@
+@Scripts.Render("~/bundles/form")
+@Scripts.Render("~/bundles/Utilities")
+@Scripts.Render("~/bundles/bootbox")
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+@section css
+{
+    @Styles.Render("~/Content/assets/css/form")
+}
+@*创建HTML*@
+@MvcHtmlString.Create(ViewBag.CreateCount)
+@*表单绑定自定义*@
+@section scripts{
+    <script src="~/Content/assets/js/fuelux/dform.wizard.Customer.js"></script>
+}
+

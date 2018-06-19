@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <title>夸客金融贷款申请系统</title>
+    <meta name="keywords" content="夸客金融贷款申请系统" />
+    <meta name="description" content="夸客金融贷款申请系统" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    @Styles.Render("~/Content/assets/css/pushmessage")
+    <!-- basic styles -->
+    @Styles.Render("~/Content/assets/css/basic")
+
+    <!--[if IE 7]>
+      <link rel="stylesheet" href="../Content/assets/css/font-awesome-ie7.min.css" />
+    <![endif]-->
+    <!-- page specific plugin styles -->
+    <!-- ace styles -->
+    @Styles.Render("~/Content/assets/css/ace")
+
+    <!--[if lte IE 8]>
+      <link rel="stylesheet" href="../Content/assets/css/ace-ie.min.css" />
+    <![endif]-->
+    <!-- inline styles related to this page -->
+    <!-- ace settings handler -->
+    <script src="../Content/assets/js/ace-extra.min.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../Content/assets/js/html5shiv.js"></script>
+    <script src="../Content/assets/js/respond.min.js"></script>
+    <![endif]-->
+    @RenderSection("css", required: false)
+
+    <!-- basic scripts -->
+    <!--[if !IE]> -->
+    <script src="../Content/assets/js/jquery-2.0.3.min.js"></script>
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script src="../Content/assets/js/jquery-1.10.2.min.js"></script>
+    <![endif]-->
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='../Content/assets/js/jquery-2.0.3.min.js'>" + "<" + "script>");
+    </script>
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script type="text/javascript">
+    window.jQuery || document.write("<script src='../Content/assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+    </script>
+    <![endif]-->
+
+    <script type="text/javascript">
+        if ("ontouchend" in document)
+            document.write("<script src='../Content/assets/js/jquery.mobile.custom.min.js'>" + "<" + "script>");
+    </script>
+
+    <!-- page specific plugin scripts -->
+    <!--[if lte IE 8]>
+          <script src="../Content/assets/js/excanvas.min.js"></script>
+    <![endif]-->
+    <!-- ace scripts -->
+    @Scripts.Render("~/bundles/basic")
+    @Scripts.Render("~/bundles/Utilities")
+</head>
+<body>
+    <div class="navbar navbar-default" id="navbar">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('navbar', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <!--顶部导航-->
+        <div class="navbar-container" id="navbar-container">
+            <!--Logo导航-->
+            <div class="navbar-header pull-left">
+                <a href="/Home/Index" class="navbar-brand">
+                    @*<small>
+                            <i class="icon-leaf"></i>
+                            夸客金融服务申请
+                        </small>*@
+                    <img src="~/Content/assets/images/logo.png" height="35" />
+                </a><!-- /.brand -->
+            </div><!-- /.navbar-header -->
+            @{ Html.RenderAction("UserMessagePartial", "Home");}
+
+        </div><!-- /.container -->
+    </div>
+
+    <div class="main-container" id="main-container">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('main-container', 'fixed')
+            } catch (e) {
+            }
+        </script>
+
+        <div class="main-container-inner">
+            <a class="menu-toggler" id="menu-toggler" href="#">
+                <span class="menu-text"></span>
+            </a>
+
+
+            @{ Html.RenderAction("NavigationPartial", "Home");}
+            <div class="main-content">
+                <div class="breadcrumbs" id="breadcrumbs">
+                    <script type="text/javascript">
+                        try {
+                            ace.settings.check('breadcrumbs', 'fixed')
+                        } catch (e) {
+                        }
+                    </script>
+                    <!--站点地图 面包屑-->
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="icon-home home-icon"></i>
+                            <a href="/Home/Index">首页</a>
+                        </li>
+                    </ul><!-- .breadcrumb -->
+                    <!--全局搜索-->
+                    <div class="nav-search hide" id="nav-search">
+                        <div class="form-search">
+                            <span class="input-icon">
+                                <input type="text" placeholder="关键字 ..." class="nav-search-input" id="nav_search_input" autocomplete="off" />
+                                <i class="icon-search nav-search-icon"></i>
+                            </span>
+                        </div>
+                    </div><!-- #nav-search -->
+                </div>
+                <!--主体内容-->
+                <div class="page-content">
+                    @RenderBody()
+                </div><!-- /.page-content -->
+            </div><!-- /.main-content -->
+            <!--皮肤选择区域-->
+            <div class="ace-settings-container" id="ace-settings-container" style="display:none">
+                <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+                    <i class="icon-cog bigger-150"></i>
+                </div>
+                <div class="ace-settings-box" id="ace-settings-box">
+                    <div>
+                        <div class="pull-left">
+                            <select id="skin-colorpicker" class="hide">
+                                <option data-skin="default" value="#438EB9">#438EB9</option>
+                                <option data-skin="skin-1" value="#222A2D">#222A2D</option>
+                                <option data-skin="skin-2" value="#C6487E">#C6487E</option>
+                                <option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+                            </select>
+                        </div>
+                        <span>&nbsp; 选择皮肤</span>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
+                        <label class="lbl" for="ace-settings-navbar"> 固定导航条</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
+                        <label class="lbl" for="ace-settings-sidebar"> 固定滑动条</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
+                        <label class="lbl" for="ace-settings-breadcrumbs">固定面包屑</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
+                        <label class="lbl" for="ace-settings-rtl">切换到左边</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
+                        <label class="lbl" for="ace-settings-add-container">
+                            切换窄屏
+                            <b></b>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!-- /#ace-settings-container -->
+            @*</div><!-- /.main-container-inner -->*@
+            <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+                <i class="icon-double-angle-up icon-only bigger-110"></i>
+            </a>
+        </div><!-- /.main-container -->
+        <!--载入中图片-->
+        <div id="loading" >
+            <img height="32" src="~/Content/assets/images/loading.gif"
+                 style="padding-bottom: 4px; vertical-align: middle;" />&nbsp;系统准备中,请稍候..&nbsp;
+        </div>
+       
+    </div>
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $(function () {
+            //固定导航栏，面包屑
+            ace.settings.navbar_fixed(true);
+            ace.settings.sidebar_fixed(true);
+            ace.settings.breadcrumbs_fixed(true);
+        });
+
+    </script>
+    <!--Push Message-->
+    @Scripts.Render("~/bundles/pushmessage")
+    <script src="/signalr/hubs" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            //window.onerror = function () { return true; }
+
+        })
+    </script>
+
+
+
+</body>
+</html>
+
+

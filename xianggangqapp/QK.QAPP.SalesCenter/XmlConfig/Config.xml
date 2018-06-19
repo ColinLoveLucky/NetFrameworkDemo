@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<appSettings>
+  <add key="webpages:Version" value="3.0.0.0" />
+  <add key="webpages:Enabled" value="false" />
+  <add key="ClientValidationEnabled" value="true" />
+  <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+
+
+  <!--是否禁用登录系统 选项值:OPEN,CLOSE:禁用-->
+  <add key="AllowLogin" value="OPEN"/>
+  <!--禁用登录系统时允许登陆的账户，多个账户中间用“;”分割-->
+  <add key="AllowAcount" value="app;dekinsq"/>
+  <!--禁用登录系统时提示信息-->
+  <add key="TipInfo" value="当前系统正在升级或者维护，您暂时无法登录系统，请稍候再试！"/>
+  
+  <!--1、外部数据相关配置-->
+  <!--权限系统菜单获取地址-->
+  <add key="AuthInterfaceURL" value="http://qf-dekins-02:8888/api/BPMS_Interface/"/>
+
+  <!--用户相片-->
+  <add key="UserImageUrl" value="http://qf-dekins-02:1212/{account}.png"/>
+  <!--跟菜单编码-->
+  <add key="RootMenuCode" value="app"/>
+  <!--文件上传接口地址 POST方式-->
+  <add key="FileUploadUrl" value="http://qf-appuat-01:8080/fileUpload/file/uploadService.json" />
+  <!--文件读取接口地址 Get方式，后接?id=...-->
+  <add key="FileReadUrl" value="http://qf-appuat-01:8080/fileViewer/fileViewer/getImage" />
+  <!--文件列表读取接口地址 POST方式-->
+  <add key="FileListReadUrl" value="http://qf-appuat-01:8080/fileViewer/fileViewer/readLinkFromService.json" />
+  <!--文件排序接口地址-->
+  <add key="FileSortUrl" value="http://qf-appuat-01:8080/fileUpload/file/sortService.json" />
+  <!--文件删除接口地址 GET方式，后接?fileId=...&loginUser=...-->
+  <add key="FileRemoveUrl" value="http://qf-appuat-01:8080/fileUpload/file/deleteService.json" />
+
+  <!--2、菜单权限相关配置-->
+  <!--用户存储的Session-->
+  <add key="AuthSaveKey" value="SESSION_USER"/>
+  <!--菜单保存的Session-->
+  <add key="MenuSaveKey" value="SESSION_MENU"/>
+  <!--登录页面的URL-->
+  <add key="AuthUrl" value="/Home/Login"/>
+  <!--用户保存的位置-->
+  <add key="AuthSaveType" value="Session" />
+  <!--AdminCode-->
+  <add key="AdminCode" value="APP_ADMIN" />
+
+  <!--3、日志监控相关配置-->
+  <!--是否开启底层数据库语句 选项值:OPEN,CLOSE-->
+  <add key="SqlTraceing" value="CLOSE"/>
+  <!--页面性能监测  选项值：OPEN,CLOSE-->
+  <add key="PageTraceing" value="CLOSE"/>
+  <add key="PageTraceAdminUser" value="app"/>
+
+  <!--4.缓存相关配置-->
+  <!--redis0:6380,redis1:6380,allowAdmin=true-->
+  <add key="CacheSeverConfiguration" value="qf-dekins-02:6379,allowAdmin=true"/>
+  <!--缓存服务器地址-->
+  <add key="CacheServer" value="qf-dekins-02"/>
+  <!--缓存服务器端口-->
+  <add key="CacheServerPort" value="6379"/>
+
+  <!--5、业务相关配置-->
+  <!--动态表单使用版本-->
+  <add key="DFormVersion" value="productCodesyd:V_20141027_test|productCodexyd:V_20141027_test|productCodessd:V_20141024"/>
+  <!--动态表单路径-->
+  <add key="DFormPath" value="bin\DForm\FieldHTML" />
+  <!--动态表单错误提示-->
+  <add key="DFormErrorTemp" value="【{0}=>{1}】{2}!" />
+  <!--申请号规则中的产品编码-->
+  <add key="ApplySequenceProductCode" value="productCodesyd:01|productCodexyd:02|productCodessd:03" />
+  <!--默认的申请号生成格式-->
+  <add key="ApplySequenceFormat" value="[YY][MM][DD][CCCC][PP][TT][XXXX]" />
+  <!--产品Logo-->
+  <add key="WeiCheDaiLogo" value="productCodessd" />
+  <add key="ShangYiDaiLogo" value="productCodesyd" />
+  <add key="XinYiDaiLogo" value="productCodexyd" />
+  <!--客户类型经营类-->
+  <add key="CustomerJYCategory" value="CUSTOMER_JY" />
+  <!--客户类型授薪类-->
+  <add key="CustomerSXCategory" value="CUSTOMER_SX" />
+  <!--微车贷所属父表单名字-->
+  <add key="WeiCheDaiCustomerCategoryParent" value="申请人信息" />
+  <!--客户类型经营人群所属组-->
+  <add key="CustomerJYGroup" value="经营信息" />
+  <!--客户类型授薪人群所属组-->
+  <add key="CustomerSXGroup" value="职业信息" />
+
+  <!--6.文件上传相关配置-->
+  <!--上传格式-->
+  <add key="UploadFileFormat" value="jpg,gif,png,pdf"/>
+  <!--允许上传的最大文件（单位：KB）-->
+  <add key="UploadMaxSize" value="10240"/>
+  <!--分块上传时每块大小（单位：KB）-->
+  <add key="UploadChunkSize" value="10240"/>
+  <!--允许下载的最大文件（单位：KB）-->
+  <add key="DownloadMaxSize" value="10240"/>
+  <!--分块下载时每块大小（单位：KB）-->
+  <add key="DownloadChunkSize" value="5120"/>
+  <!--JavaScriptSerializer的最大MaxJsonLength  20971520-->
+  <add key="MaxJsonLength" value="20971520"></add>
+
+  <!--7.产品信息获取相关配置-->
+  <!--产品服务接口获取地址-->
+  <add key="ProductInfoInterfaceURL" value="http://qf-qcredit-01:8787/qf-product/productinfo/{account}"/>
+  <!--主数据-->
+  <add key="MainDataBasenameOrConnectionString" value="name=APPEntities"/>
+
+  <!--8.MQ服务器相关配置信息-->
+  <!--MQ服务器分布式配置地址-->
+  <!--<add key="MQMultipleServer" value="failover:(tcp://172.16.1.104:61616,tcp://172.16.1.104:61627)?randomize=false"/>-->
+  <add key="MQMultipleServer" value="failover:(tcp://qf-qcredit-01:61616)?randomize=false"/>
+  <!--MQ服务器登录用户-->
+  <add key="MQUserName" value=""/>
+  <!--MQ服务器登录密码-->
+  <add key="MQUserPassword" value=""/>
+  <!--补件列表-->
+  <add key="APPLICATION_NR" value=" APPLICATION_NR"/>
+  <!-- 补件消息通知模板 -->
+  <add key="APPLICATION_NR_CONTENT" value="客户:'{0}'需要补件,请及时处理."/>
+  <!--开启补件队列监听:TRUE,FALSE-->
+  <add key="NR_Listener_Enable" value="TRUE"/>
+  <!--申请进件队列-->
+  <add key="APPLICATION_PEN" value="APPLICATION_PEN"/>
+  <!--消息类型-->
+  <add key="APP_MSGBOXCATEGORY" value="SupplementStart:补件通知" />
+
+  <!--9.进件逻辑处理相关配置-->
+  <!--补件申请的有效天数-->
+  <add key="Order_SD_AbidanceDay" value="7" />
+  <!--待补件状态-->
+  <add key="Order_SD_Status_Need" value="SDAPPRWT:初审待补件|SDAPPRING:初审补件中|SDENTRYWT:录入待补件|SDENTRYING:录入补件中" />
+  <!--已补件状态-->
+  <add key="Order_SD_Status_Had" value="SDAPPROK:初审补件完成|SDENTRYOK:录入补件完成" />
+  <!--补件失效状态-->
+  <add key="Order_SD_Status_Cancel" value="SYSCANCEL,SDAPPROT,SDENTRYOT:超时系统自动取消" />
+  <!--所有非补件状态-->
+  <add key="Order_ExcSD_Status" value="PENDING:申请未提交,warning|SUBMIT:申请已提交,purple|DISUSED:废弃,grey|FAPPROK:终审通过,success|CONTRACT:已签合同,success|CONTRACT_CONFIRM:协议确认,success|MADELOAN:已放款,success|ENTRYDISPWT,ENTRYDISPED,ENTRYING,ENTRYOK,APPRDISPED,APPROK,FAPPRDISPED,FAPPRBACK,FRAUDING,FFRAUDING,APPRING,FAPPRING,APPRDEC,FAPPRDISPWT,FFRAUDBACK,FFRAUDDISPED,FFRAUDDISPWT,FRAUDBACK,FRAUDDISPED,FRAUDDISPWT:审核中,yellow|FFRAUDOK,FAPPRDEC,FRAUDOK,SYSCANCEL,FAPPRDEC:拒绝贷款,info|MADELOANCOMPLETED:已完成放款,success"/>
+  <!--补件状态对应APP_QUEUE的DO_ACTION动作-->
+  <add key="SD_DO_ACTION" value="SDENTRYWT:toApplyEntrySD|SDENTRYING:toApplyEntrySDOK|SDAPPRWT:toApplyApprSD|SDAPPRING:toApplyApprSDOK" />
+  
+  <!--是否调用中金验证，1：调用，0：不调用-->
+  <add key="IsCFCA" value="1"/>
+  <!--中金认证API接口地址-->
+  <add key="CFCAPaymentURL" value="http://172.16.11.44:2014/api/CFCA_Payment/"/>
+</appSettings>

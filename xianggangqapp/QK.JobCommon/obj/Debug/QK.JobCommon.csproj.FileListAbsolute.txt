@@ -1,0 +1,4 @@
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.JobCommon\bin\Debug\QK.JobCommon.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.JobCommon\bin\Debug\QK.JobCommon.pdb
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.JobCommon\obj\Debug\QK.JobCommon.dll
+D:\SourceCode\Q-ApplicationLegacy\branches\QAPP_v4.6_20160603\QK.JobCommon\obj\Debug\QK.JobCommon.pdb

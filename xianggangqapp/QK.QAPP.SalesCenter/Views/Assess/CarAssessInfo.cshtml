@@ -1,0 +1,94 @@
+﻿@model QK.QAPP.Entity.PAD_CARJUDGE
+@{
+    ViewBag.Title = "CarAssessInfo";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<script src="~/Content/assets/js/date-time/bootstrap-timepicker.min.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/bootstrap-timepicker.css" rel="stylesheet" />
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="formInfo" role="form">
+
+            @*申请单号*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="APP_CODE"> 申请单号：</label>
+
+                <div class="col-sm-9">
+                    <input id="APP_CODE" name="APP_CODE" class="col-xs-10 col-sm-5" type="text" value="@Model.APP_CODE" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*外观得分*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="SURFACE_SCORE"> 外观得分：</label>
+
+                <div class="col-sm-9">
+                    <input id="SURFACE_SCORE" name="SURFACE_SCORE" class="col-xs-10 col-sm-5" type="text" value="@Model.SURFACE_SCORE" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*骨架得分*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="CARCASE_SCORE"> 骨架得分：</label>
+
+                <div class="col-sm-9">
+                    <input id="CARCASE_SCORE" name="CARCASE_SCORE" class="col-xs-10 col-sm-5" type="text" value="@Model.CARCASE_SCORE" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*内饰得分*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="INNERTRIM_SCORE"> 内饰得分：</label>
+
+                <div class="col-sm-9">
+                    <input id="INNERTRIM_SCORE" name="INNERTRIM_SCORE" class="col-xs-10 col-sm-5" type="text" value="@Model.INNERTRIM_SCORE" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*设备得分*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="SALES_NAME"> 设备得分：</label>
+
+                <div class="col-sm-9">
+                    <input id="SALES_NAME" name="SALES_NAME" class="col-xs-10 col-sm-5" type="text" value="@Model.CARDEVICE_SCORE" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*车辆评估价*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="JUDGE_PRICE"> 车辆评估价：</label>
+
+                <div class="col-sm-9">
+                    <input id="JUDGE_PRICE" name="JUDGE_PRICE" class="col-xs-10 col-sm-5" type="text" value="@Model.JUDGE_PRICE" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*整体描述*@
+            <div class="form-group" style="padding-bottom:40px;">
+                <label class="col-sm-3 control-label no-padding-right" for="WHOLE_DESCRIPTION"> 整体描述：</label>
+
+                <div class="col-sm-9">
+                    <textarea id="WHOLE_DESCRIPTION" name="WHOLE_DESCRIPTION" class="col-xs-10 col-sm-7" rows="4" disabled="disabled" maxlength="200">@Model.WHOLE_DESCRIPTION</textarea>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px;">
+            <button class="btn btn-sm" data-dismiss="modal" onclick="javascript: parent.CloseInfoDialog3();">
+                <i class="icon-remove"></i>
+                关闭
+            </button>
+        </div>
+    </div>
+</div>

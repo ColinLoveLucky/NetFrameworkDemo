@@ -1,0 +1,82 @@
+﻿@using StackExchange.Profiling
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title 夸客金融贷款申请系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- basic styles -->
+    @Styles.Render("~/Content/assets/css/basic")
+
+    <!--[if IE 7]>
+      <link rel="stylesheet" href="../Content/assets/css/font-awesome-ie7.min.css" />
+    <![endif]-->
+    <!-- page specific plugin styles -->
+    <!-- ace styles -->
+    @Styles.Render("~/Content/assets/css/ace")
+
+    <!--[if lte IE 8]>
+      <link rel="stylesheet" href="../Content/assets/css/ace-ie.min.css" />
+    <![endif]-->
+    <!-- inline styles related to this page -->
+    <!-- ace settings handler -->
+    <script src="../Content/assets/js/ace-extra.min.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../Content/assets/js/html5shiv.js"></script>
+    <script src="../Content/assets/js/respond.min.js"></script>
+    <![endif]-->
+    @RenderSection("css", required: false)
+
+    <!-- basic scripts -->
+    <!--[if !IE]> -->
+    <script src="../Content/assets/js/jquery-2.0.3.min.js"></script>
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script src="../Content/assets/js/jquery-1.10.2.min.js"></script>
+    <![endif]-->
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='../Content/assets/js/jquery-2.0.3.min.js'>" + "<" + "script>");
+    </script>
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script type="text/javascript">
+    window.jQuery || document.write("<script src='../Content/assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+    </script>
+    <![endif]-->
+
+    <script type="text/javascript">
+        if ("ontouchend" in document)
+            document.write("<script src='../Content/assets/js/jquery.mobile.custom.min.js'>" + "<" + "script>");
+    </script>
+
+
+    <script src=""></script>
+
+    <!-- page specific plugin scripts -->
+    <!--[if lte IE 8]>
+          <script src="../Content/assets/js/excanvas.min.js"></script>
+    <![endif]-->
+    <!-- ace scripts -->
+    @Scripts.Render("~/bundles/basic")
+    @Scripts.Render("~/bundles/Utilities")
+</head>
+<body>
+    @MiniProfiler.RenderIncludes()
+    <div class="main-container" id="main-container">
+        <!--主体内容-->
+        <div class="page-content" style="padding:2px;overflow-x:hidden;">
+            @RenderBody()
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+    @RenderSection("scripts", required: false)
+
+    <div id="loading" style="display:none">
+        <img height="32" src="~/Content/assets/images/loading.gif"
+             style="padding-bottom: 4px; vertical-align: middle;" />&nbsp;系统准备中,请稍候..&nbsp;
+    </div>
+
+</body>
+</html>
+
+

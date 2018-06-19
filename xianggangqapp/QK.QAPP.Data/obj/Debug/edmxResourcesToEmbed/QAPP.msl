@@ -1,0 +1,1203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="QKQAPPEntityStoreContainer" CdmEntityContainer="APPEntities">
+    <EntitySetMapping Name="APP_BANKCARD">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_BANKCARD">
+        <MappingFragment StoreEntitySet="APP_BANKCARD">
+          <ScalarProperty Name="BANK_MOBILE" ColumnName="BANK_MOBILE" />
+          <ScalarProperty Name="DATE_SIGNATURE" ColumnName="DATE_SIGNATURE" />
+          <ScalarProperty Name="MAIL_ADDRESS" ColumnName="MAIL_ADDRESS" />
+          <ScalarProperty Name="MAIL_CITY" ColumnName="MAIL_CITY" />
+          <ScalarProperty Name="MAIL_PROVINCE" ColumnName="MAIL_PROVINCE" />
+          <ScalarProperty Name="MAIL_ADDRESS_TYPE" ColumnName="MAIL_ADDRESS_TYPE" />
+          <ScalarProperty Name="BANK_SUB" ColumnName="BANK_SUB" />
+          <ScalarProperty Name="BANK_CITY" ColumnName="BANK_CITY" />
+          <ScalarProperty Name="BANK_PROVINCE" ColumnName="BANK_PROVINCE" />
+          <ScalarProperty Name="BANK_ACCOUNT" ColumnName="BANK_ACCOUNT" />
+          <ScalarProperty Name="BANK_NAME" ColumnName="BANK_NAME" />
+          <ScalarProperty Name="BANK_CODE" ColumnName="BANK_CODE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_JOB">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_JOB">
+        <MappingFragment StoreEntitySet="APP_JOB">
+          <ScalarProperty Name="WORKING_YEARS" ColumnName="WORKING_YEARS" />
+          <ScalarProperty Name="COM_PROFESSION_DETAIL" ColumnName="COM_PROFESSION_DETAIL" />
+          <ScalarProperty Name="COM_PROFESSION" ColumnName="COM_PROFESSION" />
+          <ScalarProperty Name="AEO_CODE" ColumnName="AEO_CODE" />
+          <ScalarProperty Name="AEO_TYPE" ColumnName="AEO_TYPE" />
+          <ScalarProperty Name="STATION2_COM_OTHER" ColumnName="STATION2_COM_OTHER" />
+          <ScalarProperty Name="SHARE_RATIO" ColumnName="SHARE_RATIO" />
+          <ScalarProperty Name="STATION2_COM" ColumnName="STATION2_COM" />
+          <ScalarProperty Name="DATE_JOIN" ColumnName="DATE_JOIN" />
+          <ScalarProperty Name="COM_POSITION_OTHER" ColumnName="COM_POSITION_OTHER" />
+          <ScalarProperty Name="COM_POSITION" ColumnName="COM_POSITION" />
+          <ScalarProperty Name="COM_DEPT" ColumnName="COM_DEPT" />
+          <ScalarProperty Name="COM_PERSONS" ColumnName="COM_PERSONS" />
+          <ScalarProperty Name="COM_REGISTER_CAPITAL_AMT" ColumnName="COM_REGISTER_CAPITAL_AMT" />
+          <ScalarProperty Name="DATE_COM_REGISTER" ColumnName="DATE_COM_REGISTER" />
+          <ScalarProperty Name="COM_ADDRESS" ColumnName="COM_ADDRESS" />
+          <ScalarProperty Name="COM_CITY" ColumnName="COM_CITY" />
+          <ScalarProperty Name="COM_PROVICE" ColumnName="COM_PROVICE" />
+          <ScalarProperty Name="COM_TEL_EXT" ColumnName="COM_TEL_EXT" />
+          <ScalarProperty Name="COM_TEL_NO" ColumnName="COM_TEL_NO" />
+          <ScalarProperty Name="COM_TEL_AREA_CODE" ColumnName="COM_TEL_AREA_CODE" />
+          <ScalarProperty Name="COM_TYPE_OTHER" ColumnName="COM_TYPE_OTHER" />
+          <ScalarProperty Name="COM_TYPE" ColumnName="COM_TYPE" />
+          <ScalarProperty Name="COM_PROPERTY_OTHER" ColumnName="COM_PROPERTY_OTHER" />
+          <ScalarProperty Name="COM_PROPERTY" ColumnName="COM_PROPERTY" />
+          <ScalarProperty Name="COM_NAME" ColumnName="COM_NAME" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_LOAN">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_LOAN">
+        <MappingFragment StoreEntitySet="APP_LOAN">
+          <ScalarProperty Name="CAR_DECISION_AMT" ColumnName="CAR_DECISION_AMT" />
+          <ScalarProperty Name="CHANNEL_EXPENSE_RATIO" ColumnName="CHANNEL_EXPENSE_RATIO" />
+          <ScalarProperty Name="CAR_DOWN_PAYMENT" ColumnName="CAR_DOWN_PAYMENT" />
+          <ScalarProperty Name="CAR_PRICE_ADVISE" ColumnName="CAR_PRICE_ADVISE" />
+          <ScalarProperty Name="CAR_CHARACTERISTIC" ColumnName="CAR_CHARACTERISTIC" />
+          <ScalarProperty Name="EXTEND_AMT_OF_CONTRACT" ColumnName="EXTEND_AMT_OF_CONTRACT" />
+          <ScalarProperty Name="RISK_AMT" ColumnName="RISK_AMT" />
+          <ScalarProperty Name="RISK_RATIO" ColumnName="RISK_RATIO" />
+          <ScalarProperty Name="RESERVES_AMT" ColumnName="RESERVES_AMT" />
+          <ScalarProperty Name="CONSULTATION_CHARGE_AMT" ColumnName="CONSULTATION_CHARGE_AMT" />
+          <ScalarProperty Name="SERVICE_CHARGE_AMT" ColumnName="SERVICE_CHARGE_AMT" />
+          <ScalarProperty Name="RESERVES_RATIO" ColumnName="RESERVES_RATIO" />
+          <ScalarProperty Name="CURRENCY" ColumnName="CURRENCY" />
+          <ScalarProperty Name="PAYTYPE" ColumnName="PAYTYPE" />
+          <ScalarProperty Name="RATE" ColumnName="RATE" />
+          <ScalarProperty Name="TERMS" ColumnName="TERMS" />
+          <ScalarProperty Name="RATE_TYPE" ColumnName="RATE_TYPE" />
+          <ScalarProperty Name="CONSULTATION_CHARGE_RATIO" ColumnName="CONSULTATION_CHARGE_RATIO" />
+          <ScalarProperty Name="SERVICE_CHARGE_RATIO" ColumnName="SERVICE_CHARGE_RATIO" />
+          <ScalarProperty Name="PREPAYMENT_RATIO" ColumnName="PREPAYMENT_RATIO" />
+          <ScalarProperty Name="LATE_FEE_RATIO" ColumnName="LATE_FEE_RATIO" />
+          <ScalarProperty Name="DEFAULT_INTEREST_RATIO" ColumnName="DEFAULT_INTEREST_RATIO" />
+          <ScalarProperty Name="PAY_AMT_MONTHLY" ColumnName="PAY_AMT_MONTHLY" />
+          <ScalarProperty Name="PAY_AMT_LAST_MONTHLY" ColumnName="PAY_AMT_LAST_MONTHLY" />
+          <ScalarProperty Name="PAY_AMT_FIRST_MONTHLY" ColumnName="PAY_AMT_FIRST_MONTHLY" />
+          <ScalarProperty Name="PAY_AMT_MONTHLY_ACCEPTABLE" ColumnName="PAY_AMT_MONTHLY_ACCEPTABLE" />
+          <ScalarProperty Name="LOAN_AMT_OF_CONTRACT" ColumnName="LOAN_AMT_OF_CONTRACT" />
+          <ScalarProperty Name="LOAN_AMT" ColumnName="LOAN_AMT" />
+          <ScalarProperty Name="CREDITLIMITADVICE" ColumnName="CREDITLIMITADVICE" />
+          <ScalarProperty Name="APPLY_AMT" ColumnName="APPLY_AMT" />
+          <ScalarProperty Name="CAR_PRICE_BUYING" ColumnName="CAR_PRICE_BUYING" />
+          <ScalarProperty Name="CAR_MODEL_BUYING" ColumnName="CAR_MODEL_BUYING" />
+          <ScalarProperty Name="CAR_BRAND_BUYING" ColumnName="CAR_BRAND_BUYING" />
+          <ScalarProperty Name="MEMO_OF_LOAN_PURPOSE_OTHER" ColumnName="MEMO_OF_LOAN_PURPOSE_OTHER" />
+          <ScalarProperty Name="LOAN_PURPOSE" ColumnName="LOAN_PURPOSE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_SALES">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_SALES">
+        <MappingFragment StoreEntitySet="APP_SALES">
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="MEMO" ColumnName="MEMO" />
+          <ScalarProperty Name="SALES_NAME" ColumnName="SALES_NAME" />
+          <ScalarProperty Name="SALES_CODE" ColumnName="SALES_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_STAFF_ONLY">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_STAFF_ONLY">
+        <MappingFragment StoreEntitySet="APP_STAFF_ONLY">
+          <ScalarProperty Name="PUSH_CODE" ColumnName="PUSH_CODE" />
+          <ScalarProperty Name="BUSINESS_DEPARTMENT" ColumnName="BUSINESS_DEPARTMENT" />
+          <ScalarProperty Name="CREDIT_NAME" ColumnName="CREDIT_NAME" />
+          <ScalarProperty Name="CREDIT_CODE" ColumnName="CREDIT_CODE" />
+          <ScalarProperty Name="SALES_MOBILE" ColumnName="SALES_MOBILE" />
+          <ScalarProperty Name="MOTO_NAME" ColumnName="MOTO_NAME" />
+          <ScalarProperty Name="MOTO_NO" ColumnName="MOTO_NO" />
+          <ScalarProperty Name="NR_MEMO_FROM_SALES" ColumnName="NR_MEMO_FROM_SALES" />
+          <ScalarProperty Name="NR_MEMO_FROM_DECISION" ColumnName="NR_MEMO_FROM_DECISION" />
+          <ScalarProperty Name="MEMO" ColumnName="MEMO" />
+          <ScalarProperty Name="CSAD_NAME" ColumnName="CSAD_NAME" />
+          <ScalarProperty Name="CSAD_CODE" ColumnName="CSAD_CODE" />
+          <ScalarProperty Name="SALES_SIGNATURE" ColumnName="SALES_SIGNATURE" />
+          <ScalarProperty Name="SALES_CODE" ColumnName="SALES_CODE" />
+          <ScalarProperty Name="SALES_NAME" ColumnName="SALES_NAME" />
+          <ScalarProperty Name="RECOMMEND_PERSON_TEL" ColumnName="RECOMMEND_PERSON_TEL" />
+          <ScalarProperty Name="RECOMMEND_PERSON_NAME" ColumnName="RECOMMEND_PERSON_NAME" />
+          <ScalarProperty Name="RECOMMEND_PERSON_CODE" ColumnName="RECOMMEND_PERSON_CODE" />
+          <ScalarProperty Name="CHANNEL_NAME" ColumnName="CHANNEL_NAME" />
+          <ScalarProperty Name="CHANNEL_CODE" ColumnName="CHANNEL_CODE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_DFORM_FIELDATTRIBUTE">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_DFORM_FIELDATTRIBUTE">
+        <MappingFragment StoreEntitySet="APP_DFORM_FIELDATTRIBUTE">
+          <ScalarProperty Name="ATTRIBUTE_VALUE" ColumnName="ATTRIBUTE_VALUE" />
+          <ScalarProperty Name="ATTRIBUTE_KEY" ColumnName="ATTRIBUTE_KEY" />
+          <ScalarProperty Name="FORMFIELD_ID" ColumnName="FORMFIELD_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_DFORM_FORMBUILDER">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_DFORM_FORMBUILDER">
+        <MappingFragment StoreEntitySet="APP_DFORM_FORMBUILDER">
+          <ScalarProperty Name="CODE" ColumnName="CODE" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="ACTION_READ" ColumnName="ACTION_READ" />
+          <ScalarProperty Name="ACTION_EDIT" ColumnName="ACTION_EDIT" />
+          <ScalarProperty Name="PRODUCT_ID" ColumnName="PRODUCT_ID" />
+          <ScalarProperty Name="VERSION" ColumnName="VERSION" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_DFORM_FORMFIELD">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_DFORM_FORMFIELD">
+        <MappingFragment StoreEntitySet="APP_DFORM_FORMFIELD">
+          <ScalarProperty Name="ENABLE" ColumnName="ENABLE" />
+          <ScalarProperty Name="ISDISABLED" ColumnName="ISDISABLED" />
+          <ScalarProperty Name="FIELD_REQUIRED" ColumnName="FIELD_REQUIRED" />
+          <ScalarProperty Name="FIELD_SORT" ColumnName="FIELD_SORT" />
+          <ScalarProperty Name="FIELD_GROUP" ColumnName="FIELD_GROUP" />
+          <ScalarProperty Name="MAPPER_TABLEFIELD" ColumnName="MAPPER_TABLEFIELD" />
+          <ScalarProperty Name="MAPPER_TABLE" ColumnName="MAPPER_TABLE" />
+          <ScalarProperty Name="FIELD_ROWSPAN" ColumnName="FIELD_ROWSPAN" />
+          <ScalarProperty Name="FIELD_TYPE" ColumnName="FIELD_TYPE" />
+          <ScalarProperty Name="FIELD_DISPLAYNAME" ColumnName="FIELD_DISPLAYNAME" />
+          <ScalarProperty Name="FIELD_KEY" ColumnName="FIELD_KEY" />
+          <ScalarProperty Name="FORMINFO_ID" ColumnName="FORMINFO_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_DFORM_FORMINFO">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_DFORM_FORMINFO">
+        <MappingFragment StoreEntitySet="APP_DFORM_FORMINFO">
+          <ScalarProperty Name="ENABLE" ColumnName="ENABLE" />
+          <ScalarProperty Name="ADDMOREKEYWORD" ColumnName="ADDMOREKEYWORD" />
+          <ScalarProperty Name="ADDMORE" ColumnName="ADDMORE" />
+          <ScalarProperty Name="Sort" ColumnName="Sort" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="ACTION_READ" ColumnName="ACTION_READ" />
+          <ScalarProperty Name="ACTION_EDIT" ColumnName="ACTION_EDIT" />
+          <ScalarProperty Name="READONLY" ColumnName="READONLY" />
+          <ScalarProperty Name="VERSION" ColumnName="VERSION" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="FB_ID" ColumnName="FB_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_CONTACT">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_CONTACT">
+        <MappingFragment StoreEntitySet="APP_CONTACT">
+          <ScalarProperty Name="REGISTER_ADDRESS" ColumnName="REGISTER_ADDRESS" />
+          <ScalarProperty Name="REGISTER_CITY" ColumnName="REGISTER_CITY" />
+          <ScalarProperty Name="REGISTER_PROVINCE" ColumnName="REGISTER_PROVINCE" />
+          <ScalarProperty Name="RESIDENT_ADDRESS" ColumnName="RESIDENT_ADDRESS" />
+          <ScalarProperty Name="RESIDENT_CITY" ColumnName="RESIDENT_CITY" />
+          <ScalarProperty Name="RESIDENT_PROVINCE" ColumnName="RESIDENT_PROVINCE" />
+          <ScalarProperty Name="CONTACT_PROPERTY" ColumnName="CONTACT_PROPERTY" />
+          <ScalarProperty Name="CON_ID_TYPE" ColumnName="CON_ID_TYPE" />
+          <ScalarProperty Name="CON_ID_NO" ColumnName="CON_ID_NO" />
+          <ScalarProperty Name="COM_ADDRESS" ColumnName="COM_ADDRESS" />
+          <ScalarProperty Name="COM_CITY" ColumnName="COM_CITY" />
+          <ScalarProperty Name="COM_PROVICE" ColumnName="COM_PROVICE" />
+          <ScalarProperty Name="COM_POSITION" ColumnName="COM_POSITION" />
+          <ScalarProperty Name="COM_DEPT" ColumnName="COM_DEPT" />
+          <ScalarProperty Name="COM_NAME" ColumnName="COM_NAME" />
+          <ScalarProperty Name="MOBILE" ColumnName="MOBILE" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="RELATIONSHIP_MEMO" ColumnName="RELATIONSHIP_MEMO" />
+          <ScalarProperty Name="RELATIONSHIP" ColumnName="RELATIONSHIP" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_MAIN">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_MAIN">
+        <MappingFragment StoreEntitySet="APP_MAIN">
+          <ScalarProperty Name="FUND_STATUS" ColumnName="FUND_STATUS" />
+          <ScalarProperty Name="NETBANK_STATUS" ColumnName="NETBANK_STATUS" />
+          <ScalarProperty Name="PBOC_STATUS" ColumnName="PBOC_STATUS" />
+          <ScalarProperty Name="CONTRACT_IS_CREATE" ColumnName="CONTRACT_IS_CREATE" />
+          <ScalarProperty Name="MOBILE_HISTORY_STATUS" ColumnName="MOBILE_HISTORY_STATUS" />
+          <ScalarProperty Name="OVERDUE_STATUS" ColumnName="OVERDUE_STATUS" />
+          <ScalarProperty Name="SUBMIT_TIME" ColumnName="SUBMIT_TIME" />
+          <ScalarProperty Name="OPENID" ColumnName="OPENID" />
+          <ScalarProperty Name="CREDIT_CHANNEL_CODE" ColumnName="CREDIT_CHANNEL_CODE" />
+          <ScalarProperty Name="HAS_EXTEND" ColumnName="HAS_EXTEND" />
+          <ScalarProperty Name="BACK_LOAN_TIME" ColumnName="BACK_LOAN_TIME" />
+          <ScalarProperty Name="GIVE_LOAN_TIME" ColumnName="GIVE_LOAN_TIME" />
+          <ScalarProperty Name="PRE_APP_ID" ColumnName="PRE_APP_ID" />
+          <ScalarProperty Name="APPLY_AREA_CODE" ColumnName="APPLY_AREA_CODE" />
+          <ScalarProperty Name="DECISION_MODEL" ColumnName="DECISION_MODEL" />
+          <ScalarProperty Name="DECISION_SCORE" ColumnName="DECISION_SCORE" />
+          <ScalarProperty Name="PROD_VERSION" ColumnName="PROD_VERSION" />
+          <ScalarProperty Name="STATUS_PHASE" ColumnName="STATUS_PHASE" />
+          <ScalarProperty Name="IS_AUDIT_APPROVE_FLAG" ColumnName="IS_AUDIT_APPROVE_FLAG" />
+          <ScalarProperty Name="IS_AUDIT_FLAG" ColumnName="IS_AUDIT_FLAG" />
+          <ScalarProperty Name="NR_SEQ" ColumnName="NR_SEQ" />
+          <ScalarProperty Name="CUSTOMERTYPE" ColumnName="CUSTOMERTYPE" />
+          <ScalarProperty Name="APP_APPR1_SD_STATUS" ColumnName="APP_APPR1_SD_STATUS" />
+          <ScalarProperty Name="APP_NR_SD_STATUS" ColumnName="APP_NR_SD_STATUS" />
+          <ScalarProperty Name="PRODUCT_SUIT_CROUD" ColumnName="PRODUCT_SUIT_CROUD" />
+          <ScalarProperty Name="IS_REPEAT" ColumnName="IS_REPEAT" />
+          <ScalarProperty Name="IS_VIP" ColumnName="IS_VIP" />
+          <ScalarProperty Name="ENTRY_ORG_NAME" ColumnName="ENTRY_ORG_NAME" />
+          <ScalarProperty Name="ENTRY_ORG_CODE" ColumnName="ENTRY_ORG_CODE" />
+          <ScalarProperty Name="APPLY_CITY_CODE" ColumnName="APPLY_CITY_CODE" />
+          <ScalarProperty Name="ENTRYNAME" ColumnName="ENTRYNAME" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="APP_STATUS" ColumnName="APP_STATUS" />
+          <ScalarProperty Name="ENTRY_NO" ColumnName="ENTRY_NO" />
+          <ScalarProperty Name="STORE_NAME" ColumnName="STORE_NAME" />
+          <ScalarProperty Name="STORE_CODE" ColumnName="STORE_CODE" />
+          <ScalarProperty Name="AREA_NAME" ColumnName="AREA_NAME" />
+          <ScalarProperty Name="AREA_CODE" ColumnName="AREA_CODE" />
+          <ScalarProperty Name="PRODUCT_NAME" ColumnName="PRODUCT_NAME" />
+          <ScalarProperty Name="PRODUCT_CODE" ColumnName="PRODUCT_CODE" />
+          <ScalarProperty Name="LOGO" ColumnName="LOGO" />
+          <ScalarProperty Name="APP_CODE" ColumnName="APP_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FL_BIZ">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.FL_BIZ">
+        <MappingFragment StoreEntitySet="FL_BIZ">
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="FILE_NUM" ColumnName="FILE_NUM" />
+          <ScalarProperty Name="USER_NAME" ColumnName="USER_NAME" />
+          <ScalarProperty Name="ID_TYPE" ColumnName="ID_TYPE" />
+          <ScalarProperty Name="ID_NO" ColumnName="ID_NO" />
+          <ScalarProperty Name="BIZ_CODE" ColumnName="BIZ_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FL_LIST">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.FL_LIST">
+        <MappingFragment StoreEntitySet="FL_LIST">
+          <ScalarProperty Name="SL_FL_PATH" ColumnName="SL_FL_PATH" />
+          <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+          <ScalarProperty Name="FL_SEQ" ColumnName="FL_SEQ" />
+          <ScalarProperty Name="FL_NAME" ColumnName="FL_NAME" />
+          <ScalarProperty Name="FL_MEMO" ColumnName="FL_MEMO" />
+          <ScalarProperty Name="FL_PATH" ColumnName="FL_PATH" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="FL_HEIGHTH" ColumnName="FL_HEIGHTH" />
+          <ScalarProperty Name="FL_WIDTH" ColumnName="FL_WIDTH" />
+          <ScalarProperty Name="FL_SIZE" ColumnName="FL_SIZE" />
+          <ScalarProperty Name="FL_TYPE" ColumnName="FL_TYPE" />
+          <ScalarProperty Name="FL_ID" ColumnName="FL_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="P_APP_APPLYNUMBER" FunctionName="QK.QAPP.Entity.Store.P_APP_APPLYNUMBER" />
+    <EntitySetMapping Name="APP_FILE_CHECK">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_FILE_CHECK">
+        <MappingFragment StoreEntitySet="APP_FILE_CHECK">
+          <ScalarProperty Name="FILE_IS_UPLOADED" ColumnName="FILE_IS_UPLOADED" />
+          <ScalarProperty Name="FILE_TYPE" ColumnName="FILE_TYPE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="V_APPMAIN">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.V_APPMAIN">
+        <MappingFragment StoreEntitySet="V_APPMAIN">
+          <ScalarProperty Name="BUSINESSDEPARTMENT" ColumnName="BUSINESSDEPARTMENT" />
+          <ScalarProperty Name="PRODUCTNAME" ColumnName="PRODUCTNAME" />
+          <ScalarProperty Name="EXTENDAMTOFCONTRACT" ColumnName="EXTENDAMTOFCONTRACT" />
+          <ScalarProperty Name="CUSTOMERIDCARD" ColumnName="CUSTOMERIDCARD" />
+          <ScalarProperty Name="CREATEDUSER" ColumnName="CREATEDUSER" />
+          <ScalarProperty Name="APPAPPR1SDSTATUS" ColumnName="APPAPPR1SDSTATUS" />
+          <ScalarProperty Name="APPNRSDSTATUS" ColumnName="APPNRSDSTATUS" />
+          <ScalarProperty Name="SORTING" ColumnName="SORTING" />
+          <ScalarProperty Name="UPDATETIME" ColumnName="UPDATETIME" />
+          <ScalarProperty Name="CREATEDTIME" ColumnName="CREATEDTIME" />
+          <ScalarProperty Name="APPSTATUSNAME" ColumnName="APPSTATUSNAME" />
+          <ScalarProperty Name="APPSTATUS" ColumnName="APPSTATUS" />
+          <ScalarProperty Name="CSADNO" ColumnName="CSADNO" />
+          <ScalarProperty Name="CSADNAME" ColumnName="CSADNAME" />
+          <ScalarProperty Name="SALESNO" ColumnName="SALESNO" />
+          <ScalarProperty Name="SALESNAME" ColumnName="SALESNAME" />
+          <ScalarProperty Name="LOANAMTOFCONTRACT" ColumnName="LOANAMTOFCONTRACT" />
+          <ScalarProperty Name="APPLYAMT" ColumnName="APPLYAMT" />
+          <ScalarProperty Name="CUSTOMERNAME" ColumnName="CUSTOMERNAME" />
+          <ScalarProperty Name="PRODUCTCODE" ColumnName="PRODUCTCODE" />
+          <ScalarProperty Name="LOGO" ColumnName="LOGO" />
+          <ScalarProperty Name="APPCODE" ColumnName="APPCODE" />
+          <ScalarProperty Name="APPID" ColumnName="APPID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_NR_LIST">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_NR_LIST">
+        <MappingFragment StoreEntitySet="APP_NR_LIST">
+          <ScalarProperty Name="NR_SEQ" ColumnName="NR_SEQ" />
+          <ScalarProperty Name="NR_DATE_APPLY" ColumnName="NR_DATE_APPLY" />
+          <ScalarProperty Name="NR_DATE_UPDATE" ColumnName="NR_DATE_UPDATE" />
+          <ScalarProperty Name="NR_DATE_SUBMIT_FIRST" ColumnName="NR_DATE_SUBMIT_FIRST" />
+          <ScalarProperty Name="NR_STATUS" ColumnName="NR_STATUS" />
+          <ScalarProperty Name="NR_CODE" ColumnName="NR_CODE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_QUEUE">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_QUEUE">
+        <MappingFragment StoreEntitySet="APP_QUEUE">
+          <ScalarProperty Name="CHANNEL_COOPERATION" ColumnName="CHANNEL_COOPERATION" />
+          <ScalarProperty Name="CAR_DECISION_AMT" ColumnName="CAR_DECISION_AMT" />
+          <ScalarProperty Name="HAVE_DONE" ColumnName="HAVE_DONE" />
+          <ScalarProperty Name="IS_IMAGE_SYNC" ColumnName="IS_IMAGE_SYNC" />
+          <ScalarProperty Name="IS_LIST_SYNC" ColumnName="IS_LIST_SYNC" />
+          <ScalarProperty Name="IMAGE_MESSAGE" ColumnName="IMAGE_MESSAGE" />
+          <ScalarProperty Name="LIST_MESSAGE" ColumnName="LIST_MESSAGE" />
+          <ScalarProperty Name="APPL_SEQ" ColumnName="APPL_SEQ" />
+          <ScalarProperty Name="APPL_CDE" ColumnName="APPL_CDE" />
+          <ScalarProperty Name="ASSESS_NAME" ColumnName="ASSESS_NAME" />
+          <ScalarProperty Name="ASSESS_NO" ColumnName="ASSESS_NO" />
+          <ScalarProperty Name="PBOC_STATUS" ColumnName="PBOC_STATUS" />
+          <ScalarProperty Name="DCIN_REFUSE_CODE" ColumnName="DCIN_REFUSE_CODE" />
+          <ScalarProperty Name="APPLY_TERMS" ColumnName="APPLY_TERMS" />
+          <ScalarProperty Name="APPLY_PRODUCT_NAME" ColumnName="APPLY_PRODUCT_NAME" />
+          <ScalarProperty Name="APPLY_PRODUCT_CODE" ColumnName="APPLY_PRODUCT_CODE" />
+          <ScalarProperty Name="APPLY_LOGO" ColumnName="APPLY_LOGO" />
+          <ScalarProperty Name="PRODUCT_TYPE" ColumnName="PRODUCT_TYPE" />
+          <ScalarProperty Name="BANK_CARD_NUMBER" ColumnName="BANK_CARD_NUMBER" />
+          <ScalarProperty Name="DECISION_NO_ASSESS_HIST" ColumnName="DECISION_NO_ASSESS_HIST" />
+          <ScalarProperty Name="DECISION_NO_ASSESS_NAME" ColumnName="DECISION_NO_ASSESS_NAME" />
+          <ScalarProperty Name="DECISION_NO_ASSESS_NO" ColumnName="DECISION_NO_ASSESS_NO" />
+          <ScalarProperty Name="DECISION_NO_FIELD_HIST" ColumnName="DECISION_NO_FIELD_HIST" />
+          <ScalarProperty Name="DECISION_NO_FIELD_NAME" ColumnName="DECISION_NO_FIELD_NAME" />
+          <ScalarProperty Name="DECISION_NO_FIELD_NO" ColumnName="DECISION_NO_FIELD_NO" />
+          <ScalarProperty Name="COMPLETE_IMAGE" ColumnName="COMPLETE_IMAGE" />
+          <ScalarProperty Name="VEHICLE_NO" ColumnName="VEHICLE_NO" />
+          <ScalarProperty Name="BILLING_AMT" ColumnName="BILLING_AMT" />
+          <ScalarProperty Name="IS_RE_APPLICATION" ColumnName="IS_RE_APPLICATION" />
+          <ScalarProperty Name="DEALER_NAME" ColumnName="DEALER_NAME" />
+          <ScalarProperty Name="DEALER_CODE" ColumnName="DEALER_CODE" />
+          <ScalarProperty Name="MOBILE_PHONE_NO" ColumnName="MOBILE_PHONE_NO" />
+          <ScalarProperty Name="APPLY_CITY_NAME" ColumnName="APPLY_CITY_NAME" />
+          <ScalarProperty Name="VERSION" ColumnName="VERSION" />
+          <ScalarProperty Name="APP_TYPE" ColumnName="APP_TYPE" />
+          <ScalarProperty Name="PROCESS_TEMPLATE" ColumnName="PROCESS_TEMPLATE" />
+          <ScalarProperty Name="DISP_STATUS" ColumnName="DISP_STATUS" />
+          <ScalarProperty Name="TASK_ID" ColumnName="TASK_ID" />
+          <ScalarProperty Name="PROC_INS_ID" ColumnName="PROC_INS_ID" />
+          <ScalarProperty Name="DECISION_NO_ENTRY_CHK_HIST" ColumnName="DECISION_NO_ENTRY_CHK_HIST" />
+          <ScalarProperty Name="ENTRY_CHK_NAME" ColumnName="ENTRY_CHK_NAME" />
+          <ScalarProperty Name="ENTRY_CHK_NO" ColumnName="ENTRY_CHK_NO" />
+          <ScalarProperty Name="IS_FRAUD_LOCK" ColumnName="IS_FRAUD_LOCK" />
+          <ScalarProperty Name="IS_FINAL_LOCK" ColumnName="IS_FINAL_LOCK" />
+          <ScalarProperty Name="IS_FIRST_LOCK" ColumnName="IS_FIRST_LOCK" />
+          <ScalarProperty Name="IS_LOCK" ColumnName="IS_LOCK" />
+          <ScalarProperty Name="ENTRYORGNAME" ColumnName="ENTRYORGNAME" />
+          <ScalarProperty Name="ENTRY_ORG_CODE" ColumnName="ENTRY_ORG_CODE" />
+          <ScalarProperty Name="APPLY_CITY_CODE" ColumnName="APPLY_CITY_CODE" />
+          <ScalarProperty Name="STATUS_PHASE" ColumnName="STATUS_PHASE" />
+          <ScalarProperty Name="IS_AUDO_FINAL" ColumnName="IS_AUDO_FINAL" />
+          <ScalarProperty Name="IS_AUDIT_APPROVE_FLAG" ColumnName="IS_AUDIT_APPROVE_FLAG" />
+          <ScalarProperty Name="IS_AUDIT_FLAG" ColumnName="IS_AUDIT_FLAG" />
+          <ScalarProperty Name="IS_FINAL" ColumnName="IS_FINAL" />
+          <ScalarProperty Name="DECISION_NO_FIRST_HIST" ColumnName="DECISION_NO_FIRST_HIST" />
+          <ScalarProperty Name="CUSTOMERTYPE" ColumnName="CUSTOMERTYPE" />
+          <ScalarProperty Name="DCOUT_IS_AUTO_FINAL" ColumnName="DCOUT_IS_AUTO_FINAL" />
+          <ScalarProperty Name="FRAUD_NAME" ColumnName="FRAUD_NAME" />
+          <ScalarProperty Name="APPROVE_NAME" ColumnName="APPROVE_NAME" />
+          <ScalarProperty Name="DECISION_NO_HIST" ColumnName="DECISION_NO_HIST" />
+          <ScalarProperty Name="LATEST_ACTION" ColumnName="LATEST_ACTION" />
+          <ScalarProperty Name="LATEST_APP_STATUS" ColumnName="LATEST_APP_STATUS" />
+          <ScalarProperty Name="DECISION_CODE" ColumnName="DECISION_CODE" />
+          <ScalarProperty Name="TERMS" ColumnName="TERMS" />
+          <ScalarProperty Name="LOAN_AMT" ColumnName="LOAN_AMT" />
+          <ScalarProperty Name="STATUS_ORDER" ColumnName="STATUS_ORDER" />
+          <ScalarProperty Name="QUEUE_ORDER" ColumnName="QUEUE_ORDER" />
+          <ScalarProperty Name="FRAUD_NO" ColumnName="FRAUD_NO" />
+          <ScalarProperty Name="DECISION_NO_FINAL" ColumnName="DECISION_NO_FINAL" />
+          <ScalarProperty Name="DES_RUNNING_TAG" ColumnName="DES_RUNNING_TAG" />
+          <ScalarProperty Name="APP_APPR1_SD_STATUS" ColumnName="APP_APPR1_SD_STATUS" />
+          <ScalarProperty Name="APP_NR_SD_STATUS" ColumnName="APP_NR_SD_STATUS" />
+          <ScalarProperty Name="APP_STATUS_DONE" ColumnName="APP_STATUS_DONE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="DO_ACTION" ColumnName="DO_ACTION" />
+          <ScalarProperty Name="CONTRACT_AMT" ColumnName="CONTRACT_AMT" />
+          <ScalarProperty Name="CSAD_NAME" ColumnName="CSAD_NAME" />
+          <ScalarProperty Name="CSAD_NO" ColumnName="CSAD_NO" />
+          <ScalarProperty Name="DECISION_NAME" ColumnName="DECISION_NAME" />
+          <ScalarProperty Name="ENTRY_NAME" ColumnName="ENTRY_NAME" />
+          <ScalarProperty Name="IS_REPEAT" ColumnName="IS_REPEAT" />
+          <ScalarProperty Name="DCOUT_VIP" ColumnName="DCOUT_VIP" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="APP_STATUS" ColumnName="APP_STATUS" />
+          <ScalarProperty Name="ES_DECISION" ColumnName="ES_DECISION" />
+          <ScalarProperty Name="MANUAL_DECISION" ColumnName="MANUAL_DECISION" />
+          <ScalarProperty Name="DECISION_NO_FIRST" ColumnName="DECISION_NO_FIRST" />
+          <ScalarProperty Name="ENTRY_NO" ColumnName="ENTRY_NO" />
+          <ScalarProperty Name="STORE_NAME" ColumnName="STORE_NAME" />
+          <ScalarProperty Name="STORE_CODE" ColumnName="STORE_CODE" />
+          <ScalarProperty Name="AREA_NAME" ColumnName="AREA_NAME" />
+          <ScalarProperty Name="AREA_CODE" ColumnName="AREA_CODE" />
+          <ScalarProperty Name="SALES_NAME" ColumnName="SALES_NAME" />
+          <ScalarProperty Name="SALES_NO" ColumnName="SALES_NO" />
+          <ScalarProperty Name="DATE_APPLY" ColumnName="DATE_APPLY" />
+          <ScalarProperty Name="PAY_TYPE" ColumnName="PAY_TYPE" />
+          <ScalarProperty Name="APPLY_AMT" ColumnName="APPLY_AMT" />
+          <ScalarProperty Name="COM_NAME" ColumnName="COM_NAME" />
+          <ScalarProperty Name="PRODUCT_NAME" ColumnName="PRODUCT_NAME" />
+          <ScalarProperty Name="PRODUCT_CODE" ColumnName="PRODUCT_CODE" />
+          <ScalarProperty Name="LOGO" ColumnName="LOGO" />
+          <ScalarProperty Name="ID_TYPE" ColumnName="ID_TYPE" />
+          <ScalarProperty Name="ID_NO" ColumnName="ID_NO" />
+          <ScalarProperty Name="AGE" ColumnName="AGE" />
+          <ScalarProperty Name="GENDER" ColumnName="GENDER" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="APP_CODE" ColumnName="APP_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_CITY">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_CITY">
+        <MappingFragment StoreEntitySet="APP_CITY">
+          <ScalarProperty Name="PLATFORM" ColumnName="PLATFORM" />
+          <ScalarProperty Name="AREA_CODE" ColumnName="AREA_CODE" />
+          <ScalarProperty Name="CACHE_FLAG" ColumnName="CACHE_FLAG" />
+          <ScalarProperty Name="PRODUCT_CODE" ColumnName="PRODUCT_CODE" />
+          <ScalarProperty Name="CITY_CODE" ColumnName="CITY_CODE" />
+          <ScalarProperty Name="UPDATE_TIME" ColumnName="UPDATE_TIME" />
+          <ScalarProperty Name="CREATE_TIME" ColumnName="CREATE_TIME" />
+          <ScalarProperty Name="ENABLE" ColumnName="ENABLE" />
+          <ScalarProperty Name="AREA_CITY" ColumnName="AREA_CITY" />
+          <ScalarProperty Name="AREA_PROVINCE" ColumnName="AREA_PROVINCE" />
+          <ScalarProperty Name="COMPANY_CODE" ColumnName="COMPANY_CODE" />
+          <ScalarProperty Name="CITY_NAME" ColumnName="CITY_NAME" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_MSGBOX_USER">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_MSGBOX_USER">
+        <MappingFragment StoreEntitySet="APP_MSGBOX_USER">
+          <ScalarProperty Name="MACHINENAME" ColumnName="MACHINENAME" />
+          <ScalarProperty Name="ENABLE" ColumnName="ENABLE" />
+          <ScalarProperty Name="LASTUPDATETIME" ColumnName="LASTUPDATETIME" />
+          <ScalarProperty Name="USERBROWSERVERSION" ColumnName="USERBROWSERVERSION" />
+          <ScalarProperty Name="USERBROWSER" ColumnName="USERBROWSER" />
+          <ScalarProperty Name="USERIP" ColumnName="USERIP" />
+          <ScalarProperty Name="CREATETIME" ColumnName="CREATETIME" />
+          <ScalarProperty Name="USERNAME" ColumnName="USERNAME" />
+          <ScalarProperty Name="CONNECTIONID" ColumnName="CONNECTIONID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_MSGBOX">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_MSGBOX">
+        <MappingFragment StoreEntitySet="APP_MSGBOX">
+          <ScalarProperty Name="APPCODE" ColumnName="APPCODE" />
+          <ScalarProperty Name="URL" ColumnName="URL" />
+          <ScalarProperty Name="CATEGORY" ColumnName="CATEGORY" />
+          <ScalarProperty Name="PRIORTYLEVEL" ColumnName="PRIORTYLEVEL" />
+          <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+          <ScalarProperty Name="CREATETITME" ColumnName="CREATETITME" />
+          <ScalarProperty Name="CONTENT" ColumnName="CONTENT" />
+          <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+          <ScalarProperty Name="USERNAME" ColumnName="USERNAME" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_CUSTOMER">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_CUSTOMER">
+        <MappingFragment StoreEntitySet="APP_CUSTOMER">
+          <ScalarProperty Name="CUSTOMER_GROUP" ColumnName="CUSTOMER_GROUP" />
+          <ScalarProperty Name="APPLICANT_IDENTITY" ColumnName="APPLICANT_IDENTITY" />
+          <ScalarProperty Name="INCOME_MONTHLY_DATADIC" ColumnName="INCOME_MONTHLY_DATADIC" />
+          <ScalarProperty Name="MAX_CREDITLIMIT_DATADIC" ColumnName="MAX_CREDITLIMIT_DATADIC" />
+          <ScalarProperty Name="CREDIT_CARD_TIME" ColumnName="CREDIT_CARD_TIME" />
+          <ScalarProperty Name="CREDIT_CARD_PAYBACK" ColumnName="CREDIT_CARD_PAYBACK" />
+          <ScalarProperty Name="HAS_CHILDREN" ColumnName="HAS_CHILDREN" />
+          <ScalarProperty Name="DRIVING_LICENSE_OWNER" ColumnName="DRIVING_LICENSE_OWNER" />
+          <ScalarProperty Name="BRITHDAY" ColumnName="BRITHDAY" />
+          <ScalarProperty Name="MARRAGE_OTHER" ColumnName="MARRAGE_OTHER" />
+          <ScalarProperty Name="NUMS_OF_PROVIDE" ColumnName="NUMS_OF_PROVIDE" />
+          <ScalarProperty Name="MEMO_OF_INCOME_FROM_OTHER" ColumnName="MEMO_OF_INCOME_FROM_OTHER" />
+          <ScalarProperty Name="INCOME_MONTHLY_FROM_OTHER" ColumnName="INCOME_MONTHLY_FROM_OTHER" />
+          <ScalarProperty Name="INCOME_MONTHLY_FROM_JOB" ColumnName="INCOME_MONTHLY_FROM_JOB" />
+          <ScalarProperty Name="INCOME_ANNUAL" ColumnName="INCOME_ANNUAL" />
+          <ScalarProperty Name="QQ" ColumnName="QQ" />
+          <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+          <ScalarProperty Name="NUMS_OF_CCC" ColumnName="NUMS_OF_CCC" />
+          <ScalarProperty Name="MAX_CREDITLIMIT_OF_CCC" ColumnName="MAX_CREDITLIMIT_OF_CCC" />
+          <ScalarProperty Name="REGISTER_ADDRESS" ColumnName="REGISTER_ADDRESS" />
+          <ScalarProperty Name="REGISTER_CITY" ColumnName="REGISTER_CITY" />
+          <ScalarProperty Name="REGISTER_PROVINCE" ColumnName="REGISTER_PROVINCE" />
+          <ScalarProperty Name="REGISTER_ADDR_TYPE" ColumnName="REGISTER_ADDR_TYPE" />
+          <ScalarProperty Name="MOBILE2" ColumnName="MOBILE2" />
+          <ScalarProperty Name="MOBILE1" ColumnName="MOBILE1" />
+          <ScalarProperty Name="RELATIONSHIP_OF_RESIDENT_TEL" ColumnName="RELATIONSHIP_OF_RESIDENT_TEL" />
+          <ScalarProperty Name="RESIDENT_TEL_NO" ColumnName="RESIDENT_TEL_NO" />
+          <ScalarProperty Name="RESIDENT_TEL_AREA_CODE" ColumnName="RESIDENT_TEL_AREA_CODE" />
+          <ScalarProperty Name="YEARS_IN_LOCAL" ColumnName="YEARS_IN_LOCAL" />
+          <ScalarProperty Name="POSTCODE" ColumnName="POSTCODE" />
+          <ScalarProperty Name="RESIDENT_ADDRESS" ColumnName="RESIDENT_ADDRESS" />
+          <ScalarProperty Name="RESIDENT_CITY" ColumnName="RESIDENT_CITY" />
+          <ScalarProperty Name="RESIDENT_PROVINCE" ColumnName="RESIDENT_PROVINCE" />
+          <ScalarProperty Name="RESIDENTOTHERS" ColumnName="RESIDENTOTHERS" />
+          <ScalarProperty Name="RESIDENT_STATUS" ColumnName="RESIDENT_STATUS" />
+          <ScalarProperty Name="CAR_MODEL_OWNED" ColumnName="CAR_MODEL_OWNED" />
+          <ScalarProperty Name="CAR_BRAND_OWNED" ColumnName="CAR_BRAND_OWNED" />
+          <ScalarProperty Name="HASCARS" ColumnName="HASCARS" />
+          <ScalarProperty Name="MORTGAGE_AMT_BY_MONTH" ColumnName="MORTGAGE_AMT_BY_MONTH" />
+          <ScalarProperty Name="HAS_LOCAL_HOUSE" ColumnName="HAS_LOCAL_HOUSE" />
+          <ScalarProperty Name="MARRAGE" ColumnName="MARRAGE" />
+          <ScalarProperty Name="EDUCATION" ColumnName="EDUCATION" />
+          <ScalarProperty Name="ID_TYPE" ColumnName="ID_TYPE" />
+          <ScalarProperty Name="ID_NO" ColumnName="ID_NO" />
+          <ScalarProperty Name="AGE" ColumnName="AGE" />
+          <ScalarProperty Name="GENDER" ColumnName="GENDER" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_APPLY_SEQUENCE">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_APPLY_SEQUENCE">
+        <MappingFragment StoreEntitySet="APP_APPLY_SEQUENCE">
+          <ScalarProperty Name="CITY_CODE" ColumnName="CITY_CODE" />
+          <ScalarProperty Name="OPE_TYPE" ColumnName="OPE_TYPE" />
+          <ScalarProperty Name="PREFIX" ColumnName="PREFIX" />
+          <ScalarProperty Name="IS_RUNNING" ColumnName="IS_RUNNING" />
+          <ScalarProperty Name="LAST_DATE" ColumnName="LAST_DATE" />
+          <ScalarProperty Name="RESET_TYPE" ColumnName="RESET_TYPE" />
+          <ScalarProperty Name="INIT_VALUE" ColumnName="INIT_VALUE" />
+          <ScalarProperty Name="LENGTH" ColumnName="LENGTH" />
+          <ScalarProperty Name="DATA_FORMAT" ColumnName="DATA_FORMAT" />
+          <ScalarProperty Name="EDIT_TIME" ColumnName="EDIT_TIME" />
+          <ScalarProperty Name="CREATE_TIME" ColumnName="CREATE_TIME" />
+          <ScalarProperty Name="CURRENT_SEQVALUE" ColumnName="CURRENT_SEQVALUE" />
+          <ScalarProperty Name="DESCR" ColumnName="DESCR" />
+          <ScalarProperty Name="SEQ_CODE" ColumnName="SEQ_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_GLOBALCONFIG">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_GLOBALCONFIG">
+        <MappingFragment StoreEntitySet="APP_GLOBALCONFIG">
+          <ScalarProperty Name="PLATFORM" ColumnName="PLATFORM" />
+          <ScalarProperty Name="PARENT" ColumnName="PARENT" />
+          <ScalarProperty Name="SORT" ColumnName="SORT" />
+          <ScalarProperty Name="REMARK" ColumnName="REMARK" />
+          <ScalarProperty Name="CATEGORY" ColumnName="CATEGORY" />
+          <ScalarProperty Name="VALUE" ColumnName="VALUE" />
+          <ScalarProperty Name="KEY" ColumnName="KEY" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_AEO">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_AEO">
+        <MappingFragment StoreEntitySet="APP_AEO">
+          <ScalarProperty Name="ENABLE" ColumnName="ENABLE" />
+          <ScalarProperty Name="VERSION" ColumnName="VERSION" />
+          <ScalarProperty Name="AEO_CATEGORY" ColumnName="AEO_CATEGORY" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="AEO_TYPE" ColumnName="AEO_TYPE" />
+          <ScalarProperty Name="AEO_NAME" ColumnName="AEO_NAME" />
+          <ScalarProperty Name="AEO_CODE" ColumnName="AEO_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_AUTH">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_AUTH">
+        <MappingFragment StoreEntitySet="APP_AUTH">
+          <ScalarProperty Name="MENUCODE" ColumnName="MENUCODE" />
+          <ScalarProperty Name="BUSINESS_DEPARTMENT" ColumnName="BUSINESS_DEPARTMENT" />
+          <ScalarProperty Name="HEADQUARTER" ColumnName="HEADQUARTER" />
+          <ScalarProperty Name="AREA" ColumnName="AREA" />
+          <ScalarProperty Name="COMPANY" ColumnName="COMPANY" />
+          <ScalarProperty Name="PARENT_ORGANIZATION" ColumnName="PARENT_ORGANIZATION" />
+          <ScalarProperty Name="ACCOUNT" ColumnName="ACCOUNT" />
+          <ScalarProperty Name="APP_CODE" ColumnName="APP_CODE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="P_APP_APPLYNUMBER_EXTEND" FunctionName="QK.QAPP.Entity.Store.P_APP_APPLYNUMBER_EXTEND" />
+    <EntitySetMapping Name="APP_EXTEND_CONFIG">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_EXTEND_CONFIG">
+        <MappingFragment StoreEntitySet="APP_EXTEND_CONFIG">
+          <ScalarProperty Name="TARGET_LOGO" ColumnName="TARGET_LOGO" />
+          <ScalarProperty Name="TARGET_DFORM_VERSION" ColumnName="TARGET_DFORM_VERSION" />
+          <ScalarProperty Name="TARGET_PRODUCT_CODE" ColumnName="TARGET_PRODUCT_CODE" />
+          <ScalarProperty Name="CONSULT_CHARGE" ColumnName="CONSULT_CHARGE" />
+          <ScalarProperty Name="CONSULT_CHARGE_TYPE" ColumnName="CONSULT_CHARGE_TYPE" />
+          <ScalarProperty Name="SERVICE_CHARGE" ColumnName="SERVICE_CHARGE" />
+          <ScalarProperty Name="SERVICE_CHARGE_TYPE" ColumnName="SERVICE_CHARGE_TYPE" />
+          <ScalarProperty Name="SETTLEMENT_AMOUNT" ColumnName="SETTLEMENT_AMOUNT" />
+          <ScalarProperty Name="SETTLEMENT_TYPE" ColumnName="SETTLEMENT_TYPE" />
+          <ScalarProperty Name="PERIOD_AMOUNT" ColumnName="PERIOD_AMOUNT" />
+          <ScalarProperty Name="PERIOD_AMOUNT_TOTAL" ColumnName="PERIOD_AMOUNT_TOTAL" />
+          <ScalarProperty Name="CITY_CODE" ColumnName="CITY_CODE" />
+          <ScalarProperty Name="PRODUCT_CODE" ColumnName="PRODUCT_CODE" />
+          <ScalarProperty Name="ACTION_GROUP" ColumnName="ACTION_GROUP" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_EXTEND_RELATION">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_EXTEND_RELATION">
+        <MappingFragment StoreEntitySet="APP_EXTEND_RELATION">
+          <ScalarProperty Name="TIMES_NUMBER_USED" ColumnName="TIMES_NUMBER_USED" />
+          <ScalarProperty Name="EXP_FLOAT_RATE" ColumnName="EXP_FLOAT_RATE" />
+          <ScalarProperty Name="EXP_RATE" ColumnName="EXP_RATE" />
+          <ScalarProperty Name="INIT_APP_CODE" ColumnName="INIT_APP_CODE" />
+          <ScalarProperty Name="INIT_CONTRACTID" ColumnName="INIT_CONTRACTID" />
+          <ScalarProperty Name="CONTRACT_ID" ColumnName="CONTRACT_ID" />
+          <ScalarProperty Name="PARENT_CONTRACT_ID" ColumnName="PARENT_CONTRACT_ID" />
+          <ScalarProperty Name="ACTION_GROUP" ColumnName="ACTION_GROUP" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="PERIOD_STATUS" ColumnName="PERIOD_STATUS" />
+          <ScalarProperty Name="PERIOD_AMOUNT_USED" ColumnName="PERIOD_AMOUNT_USED" />
+          <ScalarProperty Name="PERIOD_AMOUNT" ColumnName="PERIOD_AMOUNT" />
+          <ScalarProperty Name="SETTLEMENT_AMOUNT" ColumnName="SETTLEMENT_AMOUNT" />
+          <ScalarProperty Name="PARENT_APP_CODE" ColumnName="PARENT_APP_CODE" />
+          <ScalarProperty Name="APP_CODE" ColumnName="APP_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_CARPRICE">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_CARPRICE">
+        <MappingFragment StoreEntitySet="APP_CARPRICE">
+          <ScalarProperty Name="WELL_RETAIL_PRICE" ColumnName="WELL_RETAIL_PRICE" />
+          <ScalarProperty Name="WELL_WHOLESALE_PRICE" ColumnName="WELL_WHOLESALE_PRICE" />
+          <ScalarProperty Name="AVG_RETAIL_PRICE" ColumnName="AVG_RETAIL_PRICE" />
+          <ScalarProperty Name="AVG_WHOLESALE_PRICE" ColumnName="AVG_WHOLESALE_PRICE" />
+          <ScalarProperty Name="STYLE_YEAR" ColumnName="STYLE_YEAR" />
+          <ScalarProperty Name="SWEPT_VOLUME" ColumnName="SWEPT_VOLUME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="ENABLED" ColumnName="ENABLED" />
+          <ScalarProperty Name="NEW_PRICE" ColumnName="NEW_PRICE" />
+          <ScalarProperty Name="SHAPE" ColumnName="SHAPE" />
+          <ScalarProperty Name="GEAR" ColumnName="GEAR" />
+          <ScalarProperty Name="TRANSMISSION_KIND" ColumnName="TRANSMISSION_KIND" />
+          <ScalarProperty Name="STYLE" ColumnName="STYLE" />
+          <ScalarProperty Name="YEAR" ColumnName="YEAR" />
+          <ScalarProperty Name="SERIES" ColumnName="SERIES" />
+          <ScalarProperty Name="BRAND" ColumnName="BRAND" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_FORBIDEN_AREA">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_FORBIDEN_AREA">
+        <MappingFragment StoreEntitySet="APP_FORBIDEN_AREA">
+          <ScalarProperty Name="PRPVINCE_CITY" ColumnName="PRPVINCE_CITY" />
+          <ScalarProperty Name="PROVINCE_CODE" ColumnName="PROVINCE_CODE" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="JUST_FOR_CITY" ColumnName="JUST_FOR_CITY" />
+          <ScalarProperty Name="PRODUCT_LOGO" ColumnName="PRODUCT_LOGO" />
+          <ScalarProperty Name="FORBIDEN_ID_START" ColumnName="FORBIDEN_ID_START" />
+          <ScalarProperty Name="FORBIDEN_AREA" ColumnName="FORBIDEN_AREA" />
+          <ScalarProperty Name="CITY_CODE" ColumnName="CITY_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_CARINFO">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_CARINFO">
+        <MappingFragment StoreEntitySet="APP_CARINFO">
+          <ScalarProperty Name="CAR_MODEL" ColumnName="CAR_MODEL" />
+          <ScalarProperty Name="MANUFACTURE_DATE" ColumnName="MANUFACTURE_DATE" />
+          <ScalarProperty Name="CARINFO_TYPE" ColumnName="CARINFO_TYPE" />
+          <ScalarProperty Name="CAR_SELLINGPRICE" ColumnName="CAR_SELLINGPRICE" />
+          <ScalarProperty Name="CAR_SERIES" ColumnName="CAR_SERIES" />
+          <ScalarProperty Name="CAR_PRICE" ColumnName="CAR_PRICE" />
+          <ScalarProperty Name="VEHICLE_MILES" ColumnName="VEHICLE_MILES" />
+          <ScalarProperty Name="OTHERCAR_FACTORY" ColumnName="OTHERCAR_FACTORY" />
+          <ScalarProperty Name="OTHERCAR_BRAND" ColumnName="OTHERCAR_BRAND" />
+          <ScalarProperty Name="USE_NATURE" ColumnName="USE_NATURE" />
+          <ScalarProperty Name="PAPER_NO" ColumnName="PAPER_NO" />
+          <ScalarProperty Name="RELATION_OWNER" ColumnName="RELATION_OWNER" />
+          <ScalarProperty Name="PERMITTED_OWNER" ColumnName="PERMITTED_OWNER" />
+          <ScalarProperty Name="DRIVE_OWNER" ColumnName="DRIVE_OWNER" />
+          <ScalarProperty Name="VIN_NO" ColumnName="VIN_NO" />
+          <ScalarProperty Name="ENGINE_NO" ColumnName="ENGINE_NO" />
+          <ScalarProperty Name="VEHICLE_NO" ColumnName="VEHICLE_NO" />
+          <ScalarProperty Name="CAR_COLOR" ColumnName="CAR_COLOR" />
+          <ScalarProperty Name="PRODUCT_DATE" ColumnName="PRODUCT_DATE" />
+          <ScalarProperty Name="CAR_KIND" ColumnName="CAR_KIND" />
+          <ScalarProperty Name="CAR_FACTORY" ColumnName="CAR_FACTORY" />
+          <ScalarProperty Name="CAR_BRAND" ColumnName="CAR_BRAND" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PAD_CARJUDGE">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.PAD_CARJUDGE">
+        <MappingFragment StoreEntitySet="PAD_CARJUDGE">
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="JUDGE_PRICE_BACKGROUND" ColumnName="JUDGE_PRICE_BACKGROUND" />
+          <ScalarProperty Name="VALUATOR_BACKGROUND" ColumnName="VALUATOR_BACKGROUND" />
+          <ScalarProperty Name="SUBMIT_STATUS" ColumnName="SUBMIT_STATUS" />
+          <ScalarProperty Name="ENTOURAGE_DESCRIPTION" ColumnName="ENTOURAGE_DESCRIPTION" />
+          <ScalarProperty Name="ENTOURAGE" ColumnName="ENTOURAGE" />
+          <ScalarProperty Name="JUDGE_PRICE" ColumnName="JUDGE_PRICE" />
+          <ScalarProperty Name="WHOLE_DESCRIPTION" ColumnName="WHOLE_DESCRIPTION" />
+          <ScalarProperty Name="CARDEVICE_SCORE" ColumnName="CARDEVICE_SCORE" />
+          <ScalarProperty Name="INNERTRIM_SCORE" ColumnName="INNERTRIM_SCORE" />
+          <ScalarProperty Name="CARCASE_SCORE" ColumnName="CARCASE_SCORE" />
+          <ScalarProperty Name="SURFACE_SCORE" ColumnName="SURFACE_SCORE" />
+          <ScalarProperty Name="APP_CODE" ColumnName="APP_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_CARVALUATORS">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_CARVALUATORS">
+        <MappingFragment StoreEntitySet="APP_CARVALUATORS">
+          <ScalarProperty Name="VALUATOR_NAME" ColumnName="VALUATOR_NAME" />
+          <ScalarProperty Name="VALUATOR_CODE" ColumnName="VALUATOR_CODE" />
+          <ScalarProperty Name="CITY_NAME" ColumnName="CITY_NAME" />
+          <ScalarProperty Name="CITY_CODE" ColumnName="CITY_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_QUEUE_ASSESS">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_QUEUE_ASSESS">
+        <MappingFragment StoreEntitySet="APP_QUEUE_ASSESS">
+          <ScalarProperty Name="VALUATOR_NAME" ColumnName="VALUATOR_NAME" />
+          <ScalarProperty Name="CUSTOMER_PHONE" ColumnName="CUSTOMER_PHONE" />
+          <ScalarProperty Name="REMARK" ColumnName="REMARK" />
+          <ScalarProperty Name="VERSION" ColumnName="VERSION" />
+          <ScalarProperty Name="APP_CODE" ColumnName="APP_CODE" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="ASSESS_STATUS" ColumnName="ASSESS_STATUS" />
+          <ScalarProperty Name="PRODUCT_LOGO" ColumnName="PRODUCT_LOGO" />
+          <ScalarProperty Name="VALUATOR" ColumnName="VALUATOR" />
+          <ScalarProperty Name="SALES_PHONE" ColumnName="SALES_PHONE" />
+          <ScalarProperty Name="SALES_NAME" ColumnName="SALES_NAME" />
+          <ScalarProperty Name="SALES_CODE" ColumnName="SALES_CODE" />
+          <ScalarProperty Name="VEHICLE_NO" ColumnName="VEHICLE_NO" />
+          <ScalarProperty Name="CUSTOMER_NAME" ColumnName="CUSTOMER_NAME" />
+          <ScalarProperty Name="CUSTOMER_ARRIVE_TIME" ColumnName="CUSTOMER_ARRIVE_TIME" />
+          <ScalarProperty Name="CUSTOMER_BOOK_TIME" ColumnName="CUSTOMER_BOOK_TIME" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_CARAGENCY">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_CARAGENCY">
+        <MappingFragment StoreEntitySet="APP_CARAGENCY">
+          <ScalarProperty Name="IS_USE" ColumnName="IS_USE" />
+          <ScalarProperty Name="MOTO_NAME" ColumnName="MOTO_NAME" />
+          <ScalarProperty Name="MOTO_NO" ColumnName="MOTO_NO" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="MOTO_PRODUCT" ColumnName="MOTO_PRODUCT" />
+          <ScalarProperty Name="MOTO_LEVEL" ColumnName="MOTO_LEVEL" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRE_APP_AUTH">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.PRE_APP_AUTH">
+        <MappingFragment StoreEntitySet="PRE_APP_AUTH">
+          <ScalarProperty Name="HEADQUARTER" ColumnName="HEADQUARTER" />
+          <ScalarProperty Name="AREA" ColumnName="AREA" />
+          <ScalarProperty Name="COMPANY" ColumnName="COMPANY" />
+          <ScalarProperty Name="PARENT_ORGANIZATION" ColumnName="PARENT_ORGANIZATION" />
+          <ScalarProperty Name="ACCOUNT" ColumnName="ACCOUNT" />
+          <ScalarProperty Name="APP_CODE" ColumnName="APP_CODE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRE_APP_BANKCARD">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.PRE_APP_BANKCARD">
+        <MappingFragment StoreEntitySet="PRE_APP_BANKCARD">
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="BANK_CODE" ColumnName="BANK_CODE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRE_APP_CUSTOMER">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.PRE_APP_CUSTOMER">
+        <MappingFragment StoreEntitySet="PRE_APP_CUSTOMER">
+          <ScalarProperty Name="HOME_TEL_NO" ColumnName="HOME_TEL_NO" />
+          <ScalarProperty Name="NEED_LOAN_AMT" ColumnName="NEED_LOAN_AMT" />
+          <ScalarProperty Name="ADDED_LOAN_NUMBER" ColumnName="ADDED_LOAN_NUMBER" />
+          <ScalarProperty Name="LONGEST_LOAN_TIME" ColumnName="LONGEST_LOAN_TIME" />
+          <ScalarProperty Name="LAST_LOAN_TIME" ColumnName="LAST_LOAN_TIME" />
+          <ScalarProperty Name="FIRST_LOAN_TIME" ColumnName="FIRST_LOAN_TIME" />
+          <ScalarProperty Name="MARRAGE_OTHER" ColumnName="MARRAGE_OTHER" />
+          <ScalarProperty Name="OVERDUE_TIMES" ColumnName="OVERDUE_TIMES" />
+          <ScalarProperty Name="CREDIT_CARD_PAYBACK" ColumnName="CREDIT_CARD_PAYBACK" />
+          <ScalarProperty Name="CREDIT_CARD_TIME" ColumnName="CREDIT_CARD_TIME" />
+          <ScalarProperty Name="NUMS_OF_PROVIDE" ColumnName="NUMS_OF_PROVIDE" />
+          <ScalarProperty Name="AGE" ColumnName="AGE" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="NUMS_OF_CCC" ColumnName="NUMS_OF_CCC" />
+          <ScalarProperty Name="MAX_CREDITLIMIT_OF_CCC" ColumnName="MAX_CREDITLIMIT_OF_CCC" />
+          <ScalarProperty Name="MOBILE2" ColumnName="MOBILE2" />
+          <ScalarProperty Name="MOBILE1" ColumnName="MOBILE1" />
+          <ScalarProperty Name="RESIDENTOTHERS" ColumnName="RESIDENTOTHERS" />
+          <ScalarProperty Name="RESIDENT_STATUS" ColumnName="RESIDENT_STATUS" />
+          <ScalarProperty Name="MORTGAGE_AMT_TOTAL" ColumnName="MORTGAGE_AMT_TOTAL" />
+          <ScalarProperty Name="HAS_LOCAL_HOUSE" ColumnName="HAS_LOCAL_HOUSE" />
+          <ScalarProperty Name="EDUCATION" ColumnName="EDUCATION" />
+          <ScalarProperty Name="MARRAGE" ColumnName="MARRAGE" />
+          <ScalarProperty Name="ID_TYPE" ColumnName="ID_TYPE" />
+          <ScalarProperty Name="ID_NO" ColumnName="ID_NO" />
+          <ScalarProperty Name="GENDER" ColumnName="GENDER" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRE_APP_JOB">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.PRE_APP_JOB">
+        <MappingFragment StoreEntitySet="PRE_APP_JOB">
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="STATION2_COM_OTHER" ColumnName="STATION2_COM_OTHER" />
+          <ScalarProperty Name="SHARE_RATIO" ColumnName="SHARE_RATIO" />
+          <ScalarProperty Name="STATION2_COM" ColumnName="STATION2_COM" />
+          <ScalarProperty Name="DATE_JOIN" ColumnName="DATE_JOIN" />
+          <ScalarProperty Name="COM_TEL_NO" ColumnName="COM_TEL_NO" />
+          <ScalarProperty Name="COM_NAME" ColumnName="COM_NAME" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRE_APP_LOAN">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.PRE_APP_LOAN">
+        <MappingFragment StoreEntitySet="PRE_APP_LOAN">
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="TERMS" ColumnName="TERMS" />
+          <ScalarProperty Name="APPLY_AMT" ColumnName="APPLY_AMT" />
+          <ScalarProperty Name="MEMO_OF_LOAN_PURPOSE_OTHER" ColumnName="MEMO_OF_LOAN_PURPOSE_OTHER" />
+          <ScalarProperty Name="LOAN_PURPOSE" ColumnName="LOAN_PURPOSE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRE_APP_MAIN">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.PRE_APP_MAIN">
+        <MappingFragment StoreEntitySet="PRE_APP_MAIN">
+          <ScalarProperty Name="PROCESSING" ColumnName="PROCESSING" />
+          <ScalarProperty Name="ID_NO" ColumnName="ID_NO" />
+          <ScalarProperty Name="HAS_APPLY" ColumnName="HAS_APPLY" />
+          <ScalarProperty Name="DFORM_VERSION" ColumnName="DFORM_VERSION" />
+          <ScalarProperty Name="APP_REASON" ColumnName="APP_REASON" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="PROD_VERSION" ColumnName="PROD_VERSION" />
+          <ScalarProperty Name="APPLY_CITY_CODE" ColumnName="APPLY_CITY_CODE" />
+          <ScalarProperty Name="APPLY_AREA_CODE" ColumnName="APPLY_AREA_CODE" />
+          <ScalarProperty Name="CUSTOMERTYPE" ColumnName="CUSTOMERTYPE" />
+          <ScalarProperty Name="APP_STATUS" ColumnName="APP_STATUS" />
+          <ScalarProperty Name="PRODUCT_NAME" ColumnName="PRODUCT_NAME" />
+          <ScalarProperty Name="PRODUCT_CODE" ColumnName="PRODUCT_CODE" />
+          <ScalarProperty Name="LOGO" ColumnName="LOGO" />
+          <ScalarProperty Name="APP_CODE" ColumnName="APP_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRE_APP_STAFF_ONLY">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.PRE_APP_STAFF_ONLY">
+        <MappingFragment StoreEntitySet="PRE_APP_STAFF_ONLY">
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="SALES_CODE" ColumnName="SALES_CODE" />
+          <ScalarProperty Name="SALES_NAME" ColumnName="SALES_NAME" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="V_PRE_APPMAIN">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.V_PRE_APPMAIN">
+        <MappingFragment StoreEntitySet="V_PRE_APPMAIN">
+          <ScalarProperty Name="SALESCODE" ColumnName="SALESCODE" />
+          <ScalarProperty Name="SALESNAME" ColumnName="SALESNAME" />
+          <ScalarProperty Name="CUSTOMERMOBILE2" ColumnName="CUSTOMERMOBILE2" />
+          <ScalarProperty Name="CUSTOMERMOBILE1" ColumnName="CUSTOMERMOBILE1" />
+          <ScalarProperty Name="CHANGEDTIME" ColumnName="CHANGEDTIME" />
+          <ScalarProperty Name="CREATEDTIME" ColumnName="CREATEDTIME" />
+          <ScalarProperty Name="APPSTATUSNAME" ColumnName="APPSTATUSNAME" />
+          <ScalarProperty Name="SORTING" ColumnName="SORTING" />
+          <ScalarProperty Name="APPSTATUS" ColumnName="APPSTATUS" />
+          <ScalarProperty Name="APPLYAMT" ColumnName="APPLYAMT" />
+          <ScalarProperty Name="APPCITYNAME" ColumnName="APPCITYNAME" />
+          <ScalarProperty Name="PRODUCTNAME" ColumnName="PRODUCTNAME" />
+          <ScalarProperty Name="PRODUCTCODE" ColumnName="PRODUCTCODE" />
+          <ScalarProperty Name="CUSTOMERIDCARD" ColumnName="CUSTOMERIDCARD" />
+          <ScalarProperty Name="CUSTOMERNAME" ColumnName="CUSTOMERNAME" />
+          <ScalarProperty Name="HAS_APPLY" ColumnName="HAS_APPLY" />
+          <ScalarProperty Name="LOGO" ColumnName="LOGO" />
+          <ScalarProperty Name="APPCODE" ColumnName="APPCODE" />
+          <ScalarProperty Name="APPID" ColumnName="APPID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_HOUSE">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_HOUSE">
+        <MappingFragment StoreEntitySet="APP_HOUSE">
+          <ScalarProperty Name="HOUSE_TYPE_OTHER" ColumnName="HOUSE_TYPE_OTHER" />
+          <ScalarProperty Name="COLLATERAL_STATUS_OTHER" ColumnName="COLLATERAL_STATUS_OTHER" />
+          <ScalarProperty Name="ASSESSMENT_VALUE" ColumnName="ASSESSMENT_VALUE" />
+          <ScalarProperty Name="REMAIN_PRINCIPAL" ColumnName="REMAIN_PRINCIPAL" />
+          <ScalarProperty Name="LOAN_BANK" ColumnName="LOAN_BANK" />
+          <ScalarProperty Name="PROPERTYRIGHT_PERSONS" ColumnName="PROPERTYRIGHT_PERSONS" />
+          <ScalarProperty Name="COMPLETE_AGE" ColumnName="COMPLETE_AGE" />
+          <ScalarProperty Name="COVERED_AREA" ColumnName="COVERED_AREA" />
+          <ScalarProperty Name="LIVING_QUARTER_NAME" ColumnName="LIVING_QUARTER_NAME" />
+          <ScalarProperty Name="HOUSE_ADDRESS" ColumnName="HOUSE_ADDRESS" />
+          <ScalarProperty Name="HOUSE_CITY" ColumnName="HOUSE_CITY" />
+          <ScalarProperty Name="HOUSE_PROVINCE" ColumnName="HOUSE_PROVINCE" />
+          <ScalarProperty Name="HOUSE_TYPE" ColumnName="HOUSE_TYPE" />
+          <ScalarProperty Name="COLLATERAL_STATUS" ColumnName="COLLATERAL_STATUS" />
+          <ScalarProperty Name="COLLATERAL_TYPE" ColumnName="COLLATERAL_TYPE" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRE_APP_CARINFO">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.PRE_APP_CARINFO">
+        <MappingFragment StoreEntitySet="PRE_APP_CARINFO">
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CHANGED_USER" ColumnName="CHANGED_USER" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="CREATED_USER" ColumnName="CREATED_USER" />
+          <ScalarProperty Name="VEHICLE_AGE" ColumnName="VEHICLE_AGE" />
+          <ScalarProperty Name="PARCEL_DATE" ColumnName="PARCEL_DATE" />
+          <ScalarProperty Name="ENGINE_NO" ColumnName="ENGINE_NO" />
+          <ScalarProperty Name="VIN_NO" ColumnName="VIN_NO" />
+          <ScalarProperty Name="VEHICLE_NO" ColumnName="VEHICLE_NO" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="V_APP_CONTRACT">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.V_APP_CONTRACT">
+        <MappingFragment StoreEntitySet="V_APP_CONTRACT">
+          <ScalarProperty Name="CAR_SELLINGPRICE" ColumnName="CAR_SELLINGPRICE" />
+          <ScalarProperty Name="BANK_SUB" ColumnName="BANK_SUB" />
+          <ScalarProperty Name="REGISTER_ADDRESS" ColumnName="REGISTER_ADDRESS" />
+          <ScalarProperty Name="REGISTER_CITY" ColumnName="REGISTER_CITY" />
+          <ScalarProperty Name="REGISTER_PROVINCE" ColumnName="REGISTER_PROVINCE" />
+          <ScalarProperty Name="RESIDENT_TEL_NO" ColumnName="RESIDENT_TEL_NO" />
+          <ScalarProperty Name="POSTCODE" ColumnName="POSTCODE" />
+          <ScalarProperty Name="HOUSE_TYPE_OTHER" ColumnName="HOUSE_TYPE_OTHER" />
+          <ScalarProperty Name="COLLATERAL_STATUS_OTHER" ColumnName="COLLATERAL_STATUS_OTHER" />
+          <ScalarProperty Name="ASSESSMENT_VALUE" ColumnName="ASSESSMENT_VALUE" />
+          <ScalarProperty Name="REMAIN_PRINCIPAL" ColumnName="REMAIN_PRINCIPAL" />
+          <ScalarProperty Name="LOAN_BANK" ColumnName="LOAN_BANK" />
+          <ScalarProperty Name="PROPERTYRIGHT_PERSONS" ColumnName="PROPERTYRIGHT_PERSONS" />
+          <ScalarProperty Name="COMPLETE_AGE" ColumnName="COMPLETE_AGE" />
+          <ScalarProperty Name="COVERED_AREA" ColumnName="COVERED_AREA" />
+          <ScalarProperty Name="HOUSE_ADDRESS" ColumnName="HOUSE_ADDRESS" />
+          <ScalarProperty Name="HOUSE_CITY" ColumnName="HOUSE_CITY" />
+          <ScalarProperty Name="HOUSE_PROVINCE" ColumnName="HOUSE_PROVINCE" />
+          <ScalarProperty Name="HOUSE_TYPE" ColumnName="HOUSE_TYPE" />
+          <ScalarProperty Name="COLLATERAL_STATUS" ColumnName="COLLATERAL_STATUS" />
+          <ScalarProperty Name="COLLATERAL_TYPE" ColumnName="COLLATERAL_TYPE" />
+          <ScalarProperty Name="CHANNEL_EXPENSE_RATIO" ColumnName="CHANNEL_EXPENSE_RATIO" />
+          <ScalarProperty Name="RISK_AMT" ColumnName="RISK_AMT" />
+          <ScalarProperty Name="RISK_RATIO" ColumnName="RISK_RATIO" />
+          <ScalarProperty Name="RESERVES_AMT" ColumnName="RESERVES_AMT" />
+          <ScalarProperty Name="CONSULTATION_CHARGE_AMT" ColumnName="CONSULTATION_CHARGE_AMT" />
+          <ScalarProperty Name="SERVICE_CHARGE_AMT" ColumnName="SERVICE_CHARGE_AMT" />
+          <ScalarProperty Name="RESERVES_RATIO" ColumnName="RESERVES_RATIO" />
+          <ScalarProperty Name="CURRENCY" ColumnName="CURRENCY" />
+          <ScalarProperty Name="RATE_TYPE" ColumnName="RATE_TYPE" />
+          <ScalarProperty Name="CONSULTATION_CHARGE_RATIO" ColumnName="CONSULTATION_CHARGE_RATIO" />
+          <ScalarProperty Name="SERVICE_CHARGE_RATIO" ColumnName="SERVICE_CHARGE_RATIO" />
+          <ScalarProperty Name="PREPAYMENT_RATIO" ColumnName="PREPAYMENT_RATIO" />
+          <ScalarProperty Name="LATE_FEE_RATIO" ColumnName="LATE_FEE_RATIO" />
+          <ScalarProperty Name="DEFAULT_INTEREST_RATIO" ColumnName="DEFAULT_INTEREST_RATIO" />
+          <ScalarProperty Name="PAY_AMT_MONTHLY" ColumnName="PAY_AMT_MONTHLY" />
+          <ScalarProperty Name="PAY_AMT_LAST_MONTHLY" ColumnName="PAY_AMT_LAST_MONTHLY" />
+          <ScalarProperty Name="PAY_AMT_FIRST_MONTHLY" ColumnName="PAY_AMT_FIRST_MONTHLY" />
+          <ScalarProperty Name="PAY_AMT_MONTHLY_ACCEPTABLE" ColumnName="PAY_AMT_MONTHLY_ACCEPTABLE" />
+          <ScalarProperty Name="LOAN_AMT_OF_CONTRACT" ColumnName="LOAN_AMT_OF_CONTRACT" />
+          <ScalarProperty Name="LOAN_AMT" ColumnName="LOAN_AMT" />
+          <ScalarProperty Name="CREDITLIMITADVICE" ColumnName="CREDITLIMITADVICE" />
+          <ScalarProperty Name="APPLY_AMT" ColumnName="APPLY_AMT" />
+          <ScalarProperty Name="CAR_PRICE_BUYING" ColumnName="CAR_PRICE_BUYING" />
+          <ScalarProperty Name="CAR_MODEL_BUYING" ColumnName="CAR_MODEL_BUYING" />
+          <ScalarProperty Name="CAR_BRAND_BUYING" ColumnName="CAR_BRAND_BUYING" />
+          <ScalarProperty Name="MEMO_OF_LOAN_PURPOSE_OTHER" ColumnName="MEMO_OF_LOAN_PURPOSE_OTHER" />
+          <ScalarProperty Name="PAYTYPE" ColumnName="PAYTYPE" />
+          <ScalarProperty Name="RATE" ColumnName="RATE" />
+          <ScalarProperty Name="LOAN_PURPOSE" ColumnName="LOAN_PURPOSE" />
+          <ScalarProperty Name="TERMS" ColumnName="TERMS" />
+          <ScalarProperty Name="VIN_NO" ColumnName="VIN_NO" />
+          <ScalarProperty Name="ENGINE_NO" ColumnName="ENGINE_NO" />
+          <ScalarProperty Name="CAR_COLOR" ColumnName="CAR_COLOR" />
+          <ScalarProperty Name="CAR_FACTORY" ColumnName="CAR_FACTORY" />
+          <ScalarProperty Name="CAR_BRAND" ColumnName="CAR_BRAND" />
+          <ScalarProperty Name="VEHICLE_NO" ColumnName="VEHICLE_NO" />
+          <ScalarProperty Name="BANK_NAME" ColumnName="BANK_NAME" />
+          <ScalarProperty Name="BANK_ACCOUNT" ColumnName="BANK_ACCOUNT" />
+          <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+          <ScalarProperty Name="RESIDENT_ADDRESS" ColumnName="RESIDENT_ADDRESS" />
+          <ScalarProperty Name="RESIDENT_CITY" ColumnName="RESIDENT_CITY" />
+          <ScalarProperty Name="RESIDENT_PROVINCE" ColumnName="RESIDENT_PROVINCE" />
+          <ScalarProperty Name="MOBILE1" ColumnName="MOBILE1" />
+          <ScalarProperty Name="ID_NO" ColumnName="ID_NO" />
+          <ScalarProperty Name="ID_TYPE" ColumnName="ID_TYPE" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="APP_CODE" ColumnName="APP_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_CITY_PRODUCT">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_CITY_PRODUCT">
+        <MappingFragment StoreEntitySet="APP_CITY_PRODUCT">
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="ENABLE" ColumnName="ENABLE" />
+          <ScalarProperty Name="MENU_GROUP" ColumnName="MENU_GROUP" />
+          <ScalarProperty Name="PRODUCT_CODE" ColumnName="PRODUCT_CODE" />
+          <ScalarProperty Name="CITY_CODE" ColumnName="CITY_CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_QUANT">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_QUANT">
+        <MappingFragment StoreEntitySet="APP_QUANT">
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="FAIL_REASON" ColumnName="FAIL_REASON" />
+          <ScalarProperty Name="HAS_LENDING" ColumnName="HAS_LENDING" />
+          <ScalarProperty Name="LENDING_DATE" ColumnName="LENDING_DATE" />
+          <ScalarProperty Name="SUBMIT_DATE" ColumnName="SUBMIT_DATE" />
+          <ScalarProperty Name="REPAYMENT_PLAN" ColumnName="REPAYMENT_PLAN" />
+          <ScalarProperty Name="CREDIT_SCORE" ColumnName="CREDIT_SCORE" />
+          <ScalarProperty Name="CONTRACT_ID" ColumnName="CONTRACT_ID" />
+          <ScalarProperty Name="APP_ID" ColumnName="APP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="APP_QUANT_TEMP">
+      <EntityTypeMapping TypeName="QK.QAPP.Entity.APP_QUANT_TEMP">
+        <MappingFragment StoreEntitySet="APP_QUANT_TEMP">
+          <ScalarProperty Name="HANDLE_STATUS" ColumnName="HANDLE_STATUS" />
+          <ScalarProperty Name="CHANGED_TIME" ColumnName="CHANGED_TIME" />
+          <ScalarProperty Name="CREATED_TIME" ColumnName="CREATED_TIME" />
+          <ScalarProperty Name="FAIL_REASON" ColumnName="FAIL_REASON" />
+          <ScalarProperty Name="HAS_LENDING" ColumnName="HAS_LENDING" />
+          <ScalarProperty Name="LENDING_DATE" ColumnName="LENDING_DATE" />
+          <ScalarProperty Name="SUBMIT_DATE" ColumnName="SUBMIT_DATE" />
+          <ScalarProperty Name="REPAYMENT_PLAN" ColumnName="REPAYMENT_PLAN" />
+          <ScalarProperty Name="CREDIT_SCORE" ColumnName="CREDIT_SCORE" />
+          <ScalarProperty Name="TERMS" ColumnName="TERMS" />
+          <ScalarProperty Name="APPLY_AMT" ColumnName="APPLY_AMT" />
+          <ScalarProperty Name="BANK_CITY" ColumnName="BANK_CITY" />
+          <ScalarProperty Name="BANK_PROVINCE" ColumnName="BANK_PROVINCE" />
+          <ScalarProperty Name="BANK_CARD" ColumnName="BANK_CARD" />
+          <ScalarProperty Name="BANK" ColumnName="BANK" />
+          <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+          <ScalarProperty Name="MOBILE" ColumnName="MOBILE" />
+          <ScalarProperty Name="ID_NO" ColumnName="ID_NO" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="CONTRACT_ID" ColumnName="CONTRACT_ID" />
+          <ScalarProperty Name="APPLY_NUMBER" ColumnName="APPLY_NUMBER" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8DFEB18E-3F96-48F3-BFC8-8DCEDA19D2E2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QK.QAPP.MvcScaffold</RootNamespace>
+    <AssemblyName>QK.QAPP.MvcScaffold</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.3.0.7239, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\01.Depends\Antlr3\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.StringTemplate">
+      <HintPath>..\01.Depends\Antlr3\Antlr3.StringTemplate.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\01.Depends\Practices\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Code\RMS.WebService\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DForm\DFormCreater.cs" />
+    <Compile Include="DForm\DFormDBReader.cs" />
+    <Content Include="DForm\FieldHTML\Adress.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\CarAgencyPicker.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\CarPicker.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\CompanyPicker.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\DatePicker.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\DFromContainer\FieldContainer_AddMore.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\DFromContainer\GroupContainer.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="DForm\DFormHandler.cs" />
+    <Compile Include="DForm\DFormHelper.cs" />
+    <Content Include="DForm\FieldHTML\FileViewer.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\Number.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\Other.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\PrimaryKey.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\StaffPicker.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\TelNumber.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="DForm\Field\CarAgencyPicker.cs" />
+    <Compile Include="DForm\Field\CarPicker.cs" />
+    <Compile Include="DForm\Field\CompanyPicker.cs" />
+    <Compile Include="DForm\Field\DatePicker.cs" />
+    <Compile Include="DForm\Field\FileViewer.cs" />
+    <Compile Include="DForm\Field\Number.cs" />
+    <Compile Include="DForm\Field\Other.cs" />
+    <Compile Include="DForm\Field\PrimaryKey.cs" />
+    <Compile Include="DForm\Field\StaffPicker.cs" />
+    <Compile Include="DForm\Field\TelNumber.cs" />
+    <Compile Include="DForm\Field\Select.cs" />
+    <Compile Include="DForm\Field\TextArea.cs" />
+    <Compile Include="DForm\FileReader.cs" />
+    <Compile Include="DForm\Field\Adress.cs" />
+    <Compile Include="DForm\Field\AFieldType.cs" />
+    <Compile Include="DForm\FieldTypeFactory.cs" />
+    <Compile Include="DForm\Field\Radio.cs" />
+    <Compile Include="DForm\Field\Text.cs" />
+    <Compile Include="DForm\DFormSubform.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="DForm\FieldHTML\TextArea.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QK.APP.Entity\QK.QAPP.Entity.csproj">
+      <Project>{ba44676a-cc87-4e0b-9050-a6e88c589515}</Project>
+      <Name>QK.QAPP.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Global\QK.QAPP.Global.csproj">
+      <Project>{6c5277ae-2aa1-4390-b536-0979bc8c30b1}</Project>
+      <Name>QK.QAPP.Global</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Infrastructure.Data\QK.QAPP.Infrastructure.Data.csproj">
+      <Project>{c7f1c949-84e1-48c2-92f7-11546eeb0748}</Project>
+      <Name>QK.QAPP.Infrastructure.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Infrastructure\QK.QAPP.Infrastructure.csproj">
+      <Project>{007c5112-f4a6-496d-a425-a3ba554ab48c}</Project>
+      <Name>QK.QAPP.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.IServices\QK.QAPP.IServices.csproj">
+      <Project>{790990fa-2043-48ef-bf78-bfb696be36ad}</Project>
+      <Name>QK.QAPP.IServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Services\QK.QAPP.Services.csproj">
+      <Project>{56657c46-1227-4b08-9956-55c7e68c0c7d}</Project>
+      <Name>QK.QAPP.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DForm\FieldHTML\DFromContainer\FieldContainer.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\DFromContainer\FormInfoContainer.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\Radio.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\Select.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DForm\FieldHTML\Text.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

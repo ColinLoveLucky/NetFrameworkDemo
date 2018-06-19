@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<system.diagnostics>
+  <trace autoflush="false" indentsize="5">
+    <listeners>
+      <clear/>
+      <!--清除默认监听器-->
+      <!--添加自定义监听器 initializeData 就是初始化参数-->
+      <add name="LogTextTraceListener" 
+           type="QK.QAPP.Infrastructure.LogTextTraceListener, QK.QAPP.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" 
+           />
+    </listeners>    
+  </trace>
+  <switches>
+    <!--这里可以设定监听级别,0-off, 1-error, 2-warn, 3-info, 4-verbose -->
+    <add name="LogTextTraceListener" value="3"/>
+  </switches>
+</system.diagnostics>

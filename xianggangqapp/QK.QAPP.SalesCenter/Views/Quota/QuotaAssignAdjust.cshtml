@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "QuotaAssignAdjust";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+    var item = ViewBag.QuotaAssignInfo as QK.QAPP.Entity.QB_AMT_LIMIT_ASSIGN;
+    var amtAssign = item.AMT_ASSIGN.HasValue ? string.Format("{0:N}", item.AMT_ASSIGN) : "0.00";
+    var useDate = !string.IsNullOrEmpty(item.AMT_ASSIGN_USE_DATE) ? string.Format("{0:yyyy-MM-dd}", Convert.ToDateTime(item.AMT_ASSIGN_USE_DATE)) : "";
+}
+<form class="form-horizontal" id="quota_form">
+    <input type="hidden" id="ID" name="ID" value="@item.ID" />
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">区域：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static">@item.AMT_ASSIGN_AREA_NM</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">分配金额：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static">@amtAssign 元</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">全国剩余挂标额度：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static">@ViewBag.GlobalAvailableAmt 元</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">使用日期：</span>
+        <div class="col-xs-8">
+            <p class="form-control-static">@useDate</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">调整类型：</span>
+        <div class="col-xs-8">
+            <select name="adjustType" id="adjustType" class="form-control">
+                <option value="">请选择</option>
+                <option value="1">增加</option>
+                <option value="0">减少</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-3 text-right">调整金额：</span>
+        <div class="col-xs-8">
+            <input type="text" name="txtAssignMoney" id="txtAssignMoney" class="form-control" maxlength="28" />
+        </div>
+    </div>
+    <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px; z-index: 0">
+        <a class="btn btn-sm" data-dismiss="modal" onclick="CloseDialog()">
+            <i class="icon-remove"></i>
+            取消
+        </a>
+
+        <button class="btn btn-sm btn-primary" type="submit">
+            <i class="icon-ok"></i>
+            保存
+        </button>
+    </div>
+</form>
+<script src="/Content/assets/js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    var CloseDialog = function () {
+        parent.CloseDialog("#adjustAssign_dialog");  //父窗口对话框ID
+    }
+    /*非负数验证*/
+    jQuery.validator.addMethod("numCheck", function (value, element) {
+        return Utilities.CheckNum(value);
+    }, $.validator.format("输入值必须是非负数"));
+    /*表单验证保存额度*/
+    $('#quota_form').validate({
+        errorElement: 'i',
+        errorPlacement: function (error, element) {
+            $(element).parent().append(error);
+        },
+        rules: {
+            adjustType: { required: true },
+            txtAssignMoney: { required: true, number: true ,numCheck:true}
+        },
+        messages: {
+            adjustType: { required: '<i class="icon-info-sign red">请选择调整类型!</i>' },
+            txtAssignMoney: {
+                required: '<i class="icon-info-sign red">请输入调整金额!</i>',
+                number: '<i class="icon-info-sign red">金额格式错误!</i>',
+                numCheck: '<i class="icon-info-sign red">输入金额必须为纯数字且不能小于0!</i>'
+            }
+        },
+        invalidHandler: function (form, validator) {  //验证不通过
+            return false;
+        },
+        submitHandler: function (form) {  //验证通过
+            if (!$(form).valid()) {
+                return false;
+            }
+            $.ajax({
+                url: "/QuotaAssign/AdjustQuotaAssign",
+                type: "post",
+                data: { id: $("#ID").val(), adjustType: $("#adjustType").val(), assignAmt: $("#txtAssignMoney").val() },
+                success: function (data) {
+                    //此处需要加入异常处理，成功：关闭当前窗口，重新加载列表，失败：提示信息，停留在当前窗口
+                    if (data != "") {
+                        var result = JSON.parse(data);
+                        if (result.flag == "true") {
+                            parent.MsgTip(3000, result.errMsg, "success");
+                            CloseDialog();
+                        }
+                        else {
+                            parent.MsgTip(4000, result.errMsg, "warning");
+                        }
+                    }
+                    else {
+                        parent.MsgTip(4000, "额度分配调整失败,请重试！", "error");
+                    }
+                }
+            });
+        }
+    });
+</script>

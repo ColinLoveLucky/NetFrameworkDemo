@@ -1,0 +1,76 @@
+﻿<label class="control-label col-xs-12 col-sm-2">
+    
+    $FieldType.Field_DisplayName$
+    $if(FieldType.Field_Required)$
+    <i class="icon-asterisk red smaller-80" 
+         $if(ReadOnly)$
+           style="display:none"
+         $elseif(FieldType.IsDisabled)$
+           style="display:none"
+         $endif$
+       ></i>
+    $endif$
+    ：
+</label>
+<div class="col-xs-12 col-sm-3 ">
+    <span class="input-icon block ">
+        $if(FieldType.PhoneNumber)$
+        <i class="icon-mobile-phone bigger-110"></i>  
+        
+        $else$
+         <i class="icon-phone bigger-110"></i>
+        $endif$
+          
+           
+    </span>
+        <input type="text" id="$FieldType.Field_Key$" name="$FieldType.Field_Key$"  class="col-xs-12" 
+               style="padding-left:24px;"
+           data-val="true"
+
+            $if(FieldType.Field_Required)$
+            data-val-required="请填写$FieldType.Field_DisplayName$!"
+           $endif$
+
+           $if(ReadOnly)$
+           disabled="disabled"
+           $elseif(FieldType.IsDisabled)$
+           disabled="disabled"
+           $endif$
+           >
+    
+    
+</div>
+
+<script type="text/javascript">
+
+    jQuery(function () {
+        var isMobile = "$FieldType.PhoneNumber$".toLowerCase();
+        var hasFormat = "$FieldType.HasFormat$".toLowerCase();
+        if (isMobile == "true") {
+            if (hasFormat === "true") {
+                jQuery('#$FieldType.Field_Key$').inputmask({mask:"$FieldType.NumberFormat$"});
+            } else {
+                jQuery('#$FieldType.Field_Key$').inputmask({ mask: '99999999999' });
+            }
+        }
+        else {
+            if (hasFormat === "true") {
+                jQuery('#$FieldType.Field_Key$').inputmask({
+                    mask:"$FieldType.NumberFormat$",
+                    placeholder:""
+                });
+            } else {
+                jQuery('#$FieldType.Field_Key$').inputmask({
+                    mask: "~~~~~~~~~~~~~",
+                    definitions: {
+                      '~': {
+                        validator: "[0-9\-]",
+                        cardinality: 1
+                      }
+                    },
+                    placeholder:""
+                })};
+            }
+        }
+        );
+</script>

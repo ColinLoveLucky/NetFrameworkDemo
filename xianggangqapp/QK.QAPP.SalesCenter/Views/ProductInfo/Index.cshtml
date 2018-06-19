@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div>
+    产品：   @Html.DropDownList("productList")<br />
+    <label>@ViewData["productName"]:</label><br />
+    品牌代码： @ViewData["productLogoName"]<br />
+    品牌名字：@ViewData["productLogoCode"]<br />
+    期数：@Html.DropDownList("termsList")<br />
+    还款方式：@Html.DropDownList("rePayType")<br/>
+    服务费率：    @Html.TextBox("serviceChargeRatio")<br />
+    咨询费率：    @Html.TextBox("consultationChargeRatio")<br />
+    罚息：    @Html.TextBox("defaultInterestRatio")<br />
+    利率类型：    @Html.TextBox("rateType")<br />
+    利率：    @Html.TextBox("rate")<br />
+</div>
+

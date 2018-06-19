@@ -1,0 +1,98 @@
+﻿<div class="address" data-name="$FieldType.Field_DisplayName$">
+    <label class="control-label col-xs-12 col-sm-2">
+    
+    $FieldType.Field_DisplayName$
+    $if(FieldType.Field_Required)$
+    <i class="icon-asterisk red smaller-80" 
+         $if(ReadOnly)$
+           style="display:none"
+       $elseif(FieldType.IsDisabled)$
+           style="display:none"
+         $endif$
+       ></i>
+    $endif$
+    ：
+</label>
+    <div class="col-xs-12 col-sm-2">
+        <select class="col-xs-12" id="$FieldType.Province$" name="$FieldType.Province$"
+                data-val="true"
+                $if(FieldType.Field_Required)$
+                data-val-required="请填写$FieldType.Field_DisplayName$!"
+                $endif$
+                $if(ReadOnly)$
+                disabled="disabled"
+                $elseif(FieldType.IsDisabled)$
+                disabled="disabled"
+                $endif$ />
+        <option value="">选择省份</option>
+        $DIC:
+        {
+        <option value="$it.DATA_CODE$" data-text="$it.DATA_NAME$">$it.DATA_NAME$</option>
+        }$
+        </select>
+    </div>
+    <div class="col-xs-12 col-sm-2">
+        <select class="col-xs-12" id="$FieldType.City$" name="$FieldType.City$"
+                data-val="true"
+                $if(FieldType.Field_Required)$
+                data-val-required="请填写$FieldType.Field_DisplayName$!"
+                $endif$
+                $if(ReadOnly)$
+                disabled="disabled"
+                $elseif(FieldType.IsDisabled)$
+                disabled="disabled"
+                $endif$ />
+        <option value="">选择市</option>
+        </select>
+    </div>
+    <div class="col-xs-12 col-sm-4 input-group">
+        <input class="col-xs-12" id="$FieldType.Detail$" name="$FieldType.Detail$" value="" type="text"
+               data-val="true"
+               $if(FieldType.Field_Required)$
+               data-val-required="请填写$FieldType.Field_DisplayName$!"
+               $endif$
+               $if(ReadOnly)$
+               disabled="disabled"
+               $elseif(FieldType.IsDisabled)$
+               disabled="disabled"
+               $endif$ 
+               
+               maxlength="$FieldType.DetialLength$"
+               data-val-length-max="$FieldType.DetialLength$"
+               data-val-length="可输入字符数不超过$FieldType.DetialLength$!"
+               />        
+        <span class="input-group-addon" name="Address_Select" style="cursor:pointer;$if(FieldType.IsHiddenSearch)$display:none$endif$">
+            <i class="icon-search icon-bigger-200"></i>
+        </span>
+    </div>
+</div>
+
+<script>
+    jQuery('#$FieldType.Province$').change(function () {
+        var selectedValue = jQuery(this).val();
+        jQuery.ajax({
+            url: '$FieldType.Action_Adress$?DATA_CODE=' + selectedValue,   // 提交的页面
+            type: "GET",                   // 设置请求类型为"POST"，默认为"GET"
+            cache: true,
+            async: false,
+            success: function (result) {
+                var cities = jQuery('#$FieldType.City$');
+                var temp_code = jQuery(cities).val();
+
+                cities.empty().append('<option value="">选择市</option>');
+                jQuery.each(result, function (i, item) {
+                    if (temp_code != item.DATA_CODE) {
+                        cities.append('<option value="' + item.DATA_CODE + '" data-text="' + item.DATA_NAME + '">' + item.DATA_NAME + '</option>');
+                    } else {
+                        cities.append('<option value="' + item.DATA_CODE + '" selected="selected" data-text="' + item.DATA_NAME + '">' + item.DATA_NAME + '</option>');
+                    }
+                });
+
+            }
+        });
+
+
+    });
+
+</script>
+

@@ -1,0 +1,90 @@
+﻿<label class="control-label col-xs-12 col-sm-2">
+
+    $FieldType.Field_DisplayName$
+    $if(FieldType.Field_Required)$
+    <i class="icon-asterisk red smaller-80"
+       $if(ReadOnly)$
+       style="display:none"
+       $elseif(FieldType.IsDisabled)$
+       style="display:none"
+       $endif$></i>
+    $endif$
+    ：
+</label>
+<div class="col-xs-12 col-sm-3">
+    <!--<div class="input-group">-->
+    <input type="text"
+           name="$FieldType.Field_Key$"
+           id="$FieldType.Field_Key$"
+           class="form-control"
+           data-val="true"
+           readonly="readonly"
+           $if(FieldType.Field_Required)$
+           data-val-required="请填写$FieldType.Field_DisplayName$!"
+           $endif$
+           maxlength="$FieldType.MaxLength$"
+           $if(FieldType.HasRegular)$
+           data-val-regex-pattern="$FieldType.Regular$"
+           data-val-regex="请填写正确的$FieldType.Field_DisplayName$！"
+           $endif$/>
+    <!--</div>-->
+</div>
+<label class="control-label col-xs-12 col-sm-2">
+    经销商编码
+    ：
+</label>
+<div class="col-xs-12 col-sm-3 input-group">
+    <input type="text"
+           name="$FieldType.Field_Key$_MOTOCode"
+           id="$FieldType.Field_Key$_MOTOCode" readonly="readonly" class="form-control" />
+    <span class="input-group-addon" $if(!readonly)$style="cursor:pointer;" $elseif(!fieldtype.isdisabled)$ style="cursor:pointer;" $endif$ id="$FieldType.Field_Key$_SelectButton">
+        <i class="icon-search bigger-110"></i>
+    </span>
+</div>
+
+<div id="$FieldType.Field_Key$_dialog" style="display:none;height:450px">
+    <iframe id="$FieldType.Field_Key$_iframe" style="border: none; width: 100%; height: 450px;"></iframe>
+</div>
+
+$if(!ReadOnly)$
+$if(!FieldType.IsDisabled)$
+<script type="text/javascript">
+
+    jQuery(function () {
+        jQuery('#$FieldType.Field_Key$_SelectButton').click(function () {
+            //弹出选择对话框
+            var href = "/CarAgency/CarAgencyPicker";
+            jQuery('#$FieldType.Field_Key$_iframe').attr('src', href);
+            jQuery('#$FieldType.Field_Key$_dialog').dialog({
+                title: "<h4 class='smaller'><i class='icon-globe'></i> 经销商选择</h4>",
+                title_html: true,
+                resizable: false,
+                width: "70%",
+                modal: true,
+                draggable: false,
+                buttons: [
+                    {
+                        text: "取消",
+                        "class": "btn btn-xs",
+                        click: function () {
+                            jQuery(this).dialog("close");
+                        }
+                    },
+                    {
+                        text: "确认",
+                        "class": "btn btn-primary btn-xs",
+                        click: function () {
+                            var motoCode = jQuery("#$FieldType.Field_Key$_iframe").contents().find("#motoCode");
+                            var motoName = jQuery("#$FieldType.Field_Key$_iframe").contents().find("#motoName");
+                            jQuery("#$FieldType.Field_Key$_MOTOCode").val(motoCode.text());
+                            jQuery("#$FieldType.Field_Key$").val(motoName.text());
+                            jQuery(this).dialog("close");
+                        }
+                    }
+                ]
+            });
+        });
+    });
+</script>
+$endif$
+$endif$

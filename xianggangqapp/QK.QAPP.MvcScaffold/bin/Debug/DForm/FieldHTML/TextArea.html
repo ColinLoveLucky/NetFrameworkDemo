@@ -1,0 +1,37 @@
+﻿<label class="control-label col-xs-12 col-sm-2">
+
+    $FieldType.Field_DisplayName$
+    $if(FieldType.Field_Required)$
+    <i class="icon-asterisk red smaller-80"></i>
+    $endif$
+    ：
+</label>
+<div class='col-xs-12
+    $if(!FieldType.Field_DoubleCol)$
+      col-sm-3
+    $else$
+      col-sm-8
+    $endif$
+     '>
+    <textarea type="text"
+           name="$FieldType.Field_Key$"
+           id="$FieldType.Field_Key$"
+           class="col-xs-12"
+           data-val="true"
+           $if(FieldType.HasRegular)$
+           data-val-regex-pattern="$FieldType.Regular$"
+           data-val-regex="请填写正确的$FieldType.Field_DisplayName$！"
+           $endif$
+           $if(FieldType.Field_Required)$
+           data-val-required="请填写$FieldType.Field_DisplayName$!"
+           $endif$
+           $if(ReadOnly)$
+           disabled="disabled"
+           $elseif(FieldType.IsDisabled)$
+           disabled="disabled"
+           $endif$
+           maxlength="$FieldType.MaxLength$"
+           data-val-length-max="$FieldType.MaxLength$" 
+           data-val-length="可输入字符数不能超过$FieldType.MaxLength$！"
+           rows="5"></textarea>
+</div>

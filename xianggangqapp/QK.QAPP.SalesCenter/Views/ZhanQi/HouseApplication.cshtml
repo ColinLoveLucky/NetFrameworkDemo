@@ -1,0 +1,903 @@
+﻿@using QK.QAPP.Infrastructure
+@Scripts.Render("~/bundles/bootbox")
+<script type="text/javascript">
+    var appPermission_msg = '@ViewData["noPermission"]';
+    if (appPermission_msg != '') {
+        bootbox.alert(appPermission_msg, function () { $(window).unbind('beforeunload'); window.location.href = '/'; });
+    }
+</script>
+@if (@ViewData["noPermission"] == null || string.IsNullOrEmpty(@ViewData["noPermission"] + string.Empty))
+{
+    string disabledStr = "disabled=\"disabled\"";
+    <!--表单开始-->
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-header widget-header-blue widget-header-flat">
+                    <h4 class="lighter">
+                        展期申请
+                        <button class="btn btn-prev" type="button" onclick=" history.go(-1); " style="float: right">
+                            <i class="icon-arrow-left"></i>
+                            返回
+                        </button>
+                    </h4>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <form id="applyInfoForm" action="#" method="post" class="form-horizontal">
+                            <div class="step-content row-fluid position-relative" id="step-container">
+                                <div id="step1">
+                                    <!--描述：是否显示拒绝进件信息，true:显示，false:不显示，添加时间：2015-03-06，添加人：leiz-->
+                                    @if (ViewData["IsDisplayRefuseLoan"] != null && ViewData["IsDisplayRefuseLoan"].ToString().ToLower() == "true")
+                                    {
+                                        @Html.Action("RefuseLoanDiscriptionCar", "Home")
+                                    }
+                                    <fieldset>
+                                        <legend>申请信息</legend>
+                                        @*用于查询展期历史，不参与表单提交*@
+                                        <input type="hidden" id="appCode"
+                                               value="@if (ViewData["appCode"] != null){@ViewData["appCode"]}" />
+                                        @*申请展期时为被展单子的ID，编辑和只读时为当前单子的ID*@
+                                        <input type="hidden" name="appId" id="appId"
+                                               value="@if(ViewData["appId"] != null){@ViewData["appId"]}" />
+                                        @*申请展期时为被展单子的LOGO，编辑和只读时为当前单子的LOGO*@
+                                        <input type="hidden" name="logo" id="logo"
+                                               value="@if(ViewData["logo"] != null){@ViewData["logo"]}" />
+                                        @*原申请单的合同金额*@
+                                        <input type="hidden" id="OriContactAmt"
+                                               value="@if(ViewData["OriContactAmt"] != null){@ViewData["OriContactAmt"]}" />
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    客户名称
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <input type="text" name="customerName" id="customerName" class="col-xs-12"
+                                                           value="@if (ViewData["customerName"] != null){@ViewData["customerName"]}"
+                                                           disabled="disabled" />
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    身份证号码
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <input type="text" name="customerIDCard" id="customerIDCard" class="col-xs-12"
+                                                           value="@if (ViewData["customerCardID"] != null){@ViewData["customerCardID"]}"
+                                                           disabled="disabled" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    业务开办城市
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <select class="col-xs-12" id="applyCity" name="applyCity" @if (ViewBag.IsDisabled) { @disabledStr   }>
+                                                        @if (ViewBag.IsDisabled)
+                                                        {
+                                                            <option value="@if(ViewData["edit_cityCode"]!=null){@ViewData["edit_cityCode"]}" selected="selected">
+                                                                @if (ViewData["edit_city"] != null)
+                                                                {@ViewData["edit_city"]}
+                                                            </option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="">--选择城市--</option>
+                                                            foreach (var city in ViewBag.CityList)
+                                                            {
+                                                                if (ViewData["edit_cityCode"] != null && city.CITY_CODE == ViewData["edit_cityCode"].ToString())
+                                                                {
+                                                                    <option value="@city.CITY_CODE" selected="selected">@city.CITY_NAME</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@city.CITY_CODE">@city.CITY_NAME</option>
+                                                                }
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">申请金额：</label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="applyAmount" id="applyAmount" class="col-xs-12"
+                                                           value="@if (ViewData["applyAmt"] != null){@ViewData["applyAmt"]}"
+                                                           readonly="readonly" />
+                                                    <span class="input-group-addon">元</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    业务品种
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <select class="col-xs-12" id="productCode" name="productCode" @if (ViewBag.IsDisabled) { @disabledStr   }>
+                                                        @if (ViewBag.IsDisabled)
+                                                        {
+                                                            <option value="@if(ViewData["proCode"] != null){@ViewData["proCode"]}" selected="selected">
+                                                                @if (ViewData["proName"] != null)
+                                                                {@ViewData["proName"]}
+                                                            </option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="">--选择品种--</option>
+                                                            foreach (var product in ViewBag.ProductList)
+                                                            {
+                                                                if (ViewData["proCode"] != null && ViewData["proCode"].ToString() == product.productCode)
+                                                                {
+                                                                    <option value="@product.productCode" selected="selected">@product.productName</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@product.productCode">@product.productName</option>
+                                                                }
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <input type="hidden" id="productName" name="productName" />
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    申请期限
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <select class="col-xs-12" id="productTerm" name="productTerm" @if (ViewBag.IsDisabled) { @disabledStr   }>
+                                                        @if (ViewBag.IsDisabled)
+                                                        {
+                                                            <option value="@if(ViewData["terms"] != null){@ViewData["terms"]}" selected="selected">
+                                                                @if (ViewData["terms"] != null)
+                                                                {@ViewData["terms"]}
+                                                            </option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="">--选择期限--</option>
+                                                            foreach (var term in ViewBag.TermList)
+                                                            {
+                                                                if (ViewData["terms"] != null && ViewData["terms"].ToString() == term.ToString())
+                                                                {
+                                                                    <option value="@term" selected="selected">@term</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@term">@term</option>
+                                                                }
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    合作渠道
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <select class="col-xs-12" id="platform" name="platform" @if (ViewBag.IsDisabled) { @disabledStr   }>
+                                                        @if (ViewBag.IsDisabled)
+                                                        {
+                                                            <option value="@if (ViewData["channelColde"] != null) {@ViewData["channelColde"]}" selected="selected">
+                                                                @if (ViewData["channel"] != null)
+                                                                {@ViewData["channel"]}
+                                                            </option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="">--选择渠道--</option>
+                                                            foreach (var item in ViewBag.Plantform)
+                                                            {
+                                                                if (ViewData["channelColde"] != null && ViewData["channelColde"].ToString() == item.DATA_CODE)
+                                                                {
+                                                                    <option value="@item.DATA_CODE" selected="selected">@item.DATA_NAME</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@item.DATA_CODE">@item.DATA_NAME</option>
+                                                                }
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                                
+                                                <label class="control-label col-xs-12 col-sm-2">还款方式：</label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <select class="col-xs-12" id="repaymentType" name="repaymentType" @if (ViewBag.IsDisabled) { @disabledStr   }>
+                                                        @foreach (var repayType in ViewBag.RePayTypeList)
+                                                        {
+                                                            if (ViewData["repayTypeCode"] != null && ViewData["repayTypeCode"].ToString() == repayType.dataCode)
+                                                            {
+                                                                <option value="@repayType.dataCode" selected="selected">@repayType.dataName</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@repayType.dataCode">@repayType.dataName</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">申请月利率：</label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="rate" id="rate" class="col-xs-12"
+                                                           value="@if (ViewData["rate"] != null){@((decimal)ViewData["rate"] / 12 * 100)}" disabled="disabled" />
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">罚息利率：</label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="defaultInterestRatio" id="defaultInterestRatio" class="col-xs-12"
+                                                           value="@if (ViewData["interestRatio"] != null){@((decimal) ViewData["interestRatio"]*1000)}" disabled="disabled" />
+                                                    <span class="input-group-addon">‰</span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    客户类型
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <div class="input-group">
+                                                        @foreach (var item in ViewBag.CustomerType)
+                                                        {
+                                                            <label class="radio-inline">
+                                                                @if (item.DATA_CODE.ToString() == (ViewData["customerKind"] == null ? string.Empty : ViewData["customerKind"].ToString()))
+                                                                {
+                                                                    <input name="customerType" type="radio" class="ace" value="@item.DATA_CODE" id="@item.DATA_CODE" checked="checked"
+                                                                            @if (ViewBag.IsDisabled) { @disabledStr   } />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input name="customerType" type="radio" class="ace" value="@item.DATA_CODE" id="@item.DATA_CODE"
+                                                                            @if (ViewBag.IsDisabled) { @disabledStr   } />
+                                                                }
+                                                                <span class="lbl control-label">@item.DATA_NAME</span>
+                                                            </label>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                                                                          
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    借款用途
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="input-group col-xs-12 col-sm-8">
+                                                    @foreach (var item in ViewBag.LoanPurpose)
+                                                    {
+                                                        <label class="radio-inline">
+                                                            @if (item.DATA_CODE.ToString() == (ViewData["loanPur"] == null ? string.Empty : ViewData["loanPur"].ToString()))
+                                                            {
+                                                                <input name="loanPurpose" type="radio" class="ace" value="@item.DATA_CODE" id="@item.DATA_CODE" checked="checked"
+                                                                       @if (ViewBag.IsDisabled) { @disabledStr   }>
+                                                            }
+                                                            else
+                                                            {
+                                                                <input name="loanPurpose" type="radio" class="ace" value="@item.DATA_CODE" id="@item.DATA_CODE"
+                                                                       @if (ViewBag.IsDisabled) { @disabledStr   }>
+                                                            }
+
+                                                            <span class="lbl control-label">@item.DATA_NAME</span>
+                                                            @if (item.DATA_CODE.ToString() == "LoanPurposeOther")
+                                                            {
+                                                                if (item.DATA_CODE.ToString() == (ViewData["loanPur"] == null ? string.Empty : ViewData["loanPur"].ToString()))
+                                                                {
+                                                                    <input type="text" name="memoOfLoanPurposeOther" id="memoOfLoanPurposeOther" value="@ViewData["memoOfLoanPurposeOther"]"
+                                                                           @if (ViewBag.IsDisabled) { @disabledStr   } />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input type="text" name="memoOfLoanPurposeOther" id="memoOfLoanPurposeOther" style="display: none"
+                                                                           @if (ViewBag.IsDisabled) { @disabledStr   } />
+                                                                }
+                                                            }
+                                                        </label>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    合同金额
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <div class="input-group">
+
+                                                        <input type="text" name="contractValue" id="contractValue" class="col-xs-12" @if (ViewBag.IsEdit ^ ViewBag.IsDisabled) { @disabledStr   }
+                                                               value="@{if (ViewData["contractAmt"] != null){@ViewData["contractAmt"]}}" />
+                                                        <span class="input-group-addon">元</span>
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    可接受月还款：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <div class="input-group">
+                                                        <input type="text" name="payAmtMonthly" id="payAmtMonthly" class="col-xs-12" @if (ViewBag.IsEdit ^ ViewBag.IsDisabled) { @disabledStr   }
+                                                               value="@if (ViewData["payAmtMonthly"] != null){@ViewData["payAmtMonthly"]}" />
+                                                        <span class="input-group-addon">元</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" id="BillAndLoanRatio">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    评估价值
+                                                    <i class="icon-asterisk red smaller-80"></i>
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <div class="input-group">
+                                                        <input type="text" name="assessmentPrice" id="assessmentPrice" class="col-xs-12" @if (ViewBag.IsEdit ^ ViewBag.IsDisabled) { @disabledStr   }
+                                                                value="@if (ViewData["assessmentPrice"] != null){@ViewData["assessmentPrice"]}" />
+                                                        <span class="input-group-addon">元</span>
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    申请抵押率：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <div class="input-group">
+                                                        <input type="text" name="loanRatio" id="loanRatio" class="col-xs-12" readonly="readonly" />
+                                                        <span class="input-group-addon">%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                    <fieldset>
+                                        <legend>展期信息</legend>
+                                        <div class="form-group">
+                                            <div class="clearfix">
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    剩余可展期期数
+                                                    ：
+                                                </label>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <div class="input-group">
+                                                        <input type="text" name="periodRemain" id="periodRemain" class="col-xs-12"
+                                                               value="@if (ViewData["periodRemain"]!=null) { @ViewData["periodRemain"] }" disabled="disabled" />
+                                                        <span class="input-group-addon">期</span>
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">
+                                                    续展期数
+                                                    ：
+                                                </label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="periodAmt" id="periodAmt" class="col-xs-12"
+                                                           value="@if (ViewData["periodAmt"]!=null) { @ViewData["periodAmt"] }" disabled="disabled" />
+                                                    <span class="input-group-addon">期</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <legend>费用信息</legend>
+
+                                        <div class="form-group">
+                                            <div class="clearfix">
+
+                                                <label class="control-label col-xs-12 col-sm-2">借款咨询费(含风险金)：</label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="consultationCharge" id="consultationCharge" class="col-xs-12"
+                                                           value="@if (ViewData["consultationCharge"] != null){@ViewData["consultationCharge"]}" disabled="disabled" />
+                                                    <input type="hidden" name="consultationChargeRate" id="consultationChargeRate"
+                                                           value="@if (ViewData["consultationChargeRatio"] != null){@ViewData["consultationChargeRatio"]}" />
+                                                    <span class="input-group-addon">元</span>
+                                                </div>
+
+                                                <label class="control-label col-xs-12 col-sm-2">借款服务费：</label>
+                                                <div class="input-group col-xs-12 col-sm-3">
+                                                    <input type="text" name="serviceCharge" id="serviceCharge" class="col-xs-12"
+                                                           value="@if (ViewData["serviceCharge"] != null){@ViewData["serviceCharge"]}" disabled="disabled" />
+                                                    <input type="hidden" name="serviceChargeRate" id="serviceChargeRate"
+                                                           value="@if (ViewData["serviceChargeRatio"] != null){@ViewData["serviceChargeRatio"]}" />
+                                                    <span class="input-group-addon">元</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+                                <hr />
+                                <div class="row-fluid wizard-actions">
+                                    @if (ViewBag.IsAdd)
+                                    {
+                                        <button class="btn btn-success" type="submit" id="submitBtn">
+                                            下一步
+                                            <i class="icon-arrow-right icon-on-right"></i>
+                                        </button>
+                                    }
+                                    else if (ViewBag.IsEdit)
+                                    {
+                                        @*这里的保存用的Action为：/ProductApplication/ApplicationEdit*@
+                                        <button class="btn btn-primary btn-next" type="submit" id="btn_save">
+                                            <i class="icon-save"></i>
+                                            保存
+                                        </button>
+                                        <button class="btn btn-success btn-next" onclick="PerfectInfo();" id="btn_perfect" type="button">
+                                            <i class="icon-edit"></i>
+                                            完善资料
+                                        </button>
+                                    }
+                                    else if (ViewBag.IsDisabled)
+                                    {
+                                        <a class="btn btn-success btn-next" href="/LoanApplication/ExtendApplication?dformCode=@ViewData["logo"]&appid=@ViewData["appId"]&operation=3">
+                                            <i class="icon-edit"></i>
+                                            查看申请单明细
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </form>
+                        <!-- /widget-main -->
+                    </div>
+                    <!-- /widget-body -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Content/assets/js/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        //**ready函数开始**
+        $(function () {
+            //限制输入，只能输入数字及小数点
+            $('#contractValue').focus(function () {
+                $(this).keyup(function () {
+                    //输入限制
+                    AmtInputLimit.apply(this);
+                    //输入合同金额计算申请金额
+                    CalcuApplyAmtValue.apply(this);
+                    //计算申请抵押率
+                    CalcuLoanRatio.apply(this);
+                });
+            }).blur(function() {
+                $(this).unbind('keyup');
+            });
+
+            //限制输入，只能输入数字及小数点
+            $('#payAmtMonthly').focus(function () {
+                $(this).keyup(function () {
+                    //输入限制
+                    AmtInputLimit.apply(this);
+                });
+            }).blur(function() {
+                $(this).unbind('keyup');
+            });
+
+            //输入评估价值后计算申请抵押率
+            $('#assessmentPrice').focus(function () {
+                $(this).keyup(function () {
+                    //输入限制
+                    AmtInputLimit.apply(this);
+                    //计算申请抵押率
+                    CalcuLoanRatio.apply(this);
+                });
+            }).blur(function() {
+                $(this).unbind('keyup');
+            });
+
+            //加载展期历史列表
+            //var proCode = $('#appCode').val();
+            //openZhanQiHistroy(proCode, '');
+
+            $.validator.addMethod("checkIfGreatThen", function (value, element) {
+                return value <= parseFloat($('#applyAmount').val());
+            }, "数值过大！");
+
+            //计算申请抵押率
+            CalcuLoanRatio.apply($('#assessmentPrice'));
+        });
+        //**ready函数结束**
+
+        //原单申请金额
+        var oriContactAMT = $('#OriContactAmt').val() || 9999999999;
+        if (oriContactAMT) {
+            oriContactAMT = parseFloat(oriContactAMT);
+        }
+        /* 申请抵押率，从系统配置中读取 */
+        var loanRatio = parseInt(GlobalConfig.GetGlobalSetting('HouseLoanRatio'));
+    </script>
+
+    @*页面状态是IsAdd时注册*@
+    if (ViewBag.IsAdd)
+    {
+        <script type="text/javascript">
+
+            $(function () {
+                //借款用途change事件
+                $('[name=loanPurpose]').change(function () {
+                    var loanOtherText = $('#memoOfLoanPurposeOther');
+                    if ($('#LoanPurposeOther').is(':checked')) {
+                        $(loanOtherText).css('display', 'inline-block');
+                    } else {
+                        $(loanOtherText).css('display', 'none');
+                    }
+                });
+
+                //选择产品后加载期数，费率,logo, 及还款方式
+                $('#productCode').change(function () {
+                    var proCode = $(this).val();
+                    //期数
+                    InitTerm();
+                    //费率归零
+                    InitRate();
+
+                    $.getJSON('/ProductApplication/GetProductInfo?proCode=' + proCode + '&d=' + new Date(), function (data) {
+                        //期数
+                        var term = InitTerm();
+                        $(data.termList).each(function (index, item) {
+                            if (data.termList.length == 1) {
+                                $(term).append('<option value="' + item + '" selected="selected">' + item + '</option>');
+                            } else {
+                                $(term).append('<option value="' + item + '">' + item + '</option>');
+                            }
+                        });
+                        if (data.chargeList != null) {
+                            //申请利率
+                            $('#rate').val(Utilities.MoveDecimalPoint(data.chargeList.rate, 2));
+                            //罚息利率
+                            $('#defaultInterestRatio').val(Utilities.MoveDecimalPoint(data.chargeList.defaultInterestRatio, 3));
+                            $('#serviceChargeRate').val(data.chargeList.serviceChargeRatio); //借款服务费
+                            $('#rateType').val(data.chargeList.rateType); //利率类型
+                        }
+
+                        $('#consultationChargeRate').val(data.consultationChargeRatio); //借款咨询费
+
+                        //还款方式 修改时间2015-10-10，支持多种还款方式
+                        //if (data.repayType != null) {
+                        //    $('#repaymentType').empty().append('<option value="' + result.repayType.dataCode + '">' + result.repayType.dataName + '</option>');
+                        //}
+                        if (data.repayType != null) {
+                            var repaymentType = $('#repaymentType').empty();
+                            $(data.repayType).each(function(index, item) {
+                                repaymentType.append('<option value="' + item.dataCode + '">' + item.dataName + '</option>');
+                            });
+                        }
+
+                        CalcuApplyAmtValue.apply($('#contractValue'));
+            
+                    });
+                });
+
+                //如果是ADD操作，则先归零金额信息的显示，重置费用信息
+                ResetInfo();
+
+                //表单验证
+                $('#applyInfoForm').validate({
+                    errorElement: 'i',
+                    errorPlacement: function(error, element) {
+                        //$(element).attr('id') == 'applyAmount' || $(element).attr('id') == 'payAmtMonthly' ||
+                        if ($(element).attr('id') == 'contractValue' || $(element).attr('id') == 'payAmtMonthly'
+                            || $(element).attr('id') == 'loanRatio' || $(element).attr('id') == 'assessmentPrice') {
+                            $(element).parent().parent().append(error);
+                        } else if ($(element).attr('name') == 'loanPurpose' || $(element).attr('name') == 'customerType') {
+                            $(element).parent().parent().parent().append(error);
+                        } else {
+                            $(element).parent().append(error);
+                        }
+                    },
+                    rules: {
+                        //customerName: { required: true, maxlength: 25 },
+                        //customerIDCard: { required: true, isIdCard: true },
+                        applyCity: { required: true },
+                        productCode: { required: true },
+                        productTerm: { required: true },
+                        contractValue: { required: true, number: true, min: 10000, max: oriContactAMT },
+                        applyAmount: { required: true, number: true },
+                        payAmtMonthly: { number: true, checkIfGreatThen: true },
+                        loanPurpose: { required: true },
+                        customerType: { required: true },
+                        memoOfLoanPurposeOther: { required: true },
+                        platform: { required: true },
+                        assessmentPrice: { required: true, number: true },
+                        loanRatio: { required: true, number: true, min: 1, max: loanRatio }
+                    },
+                    messages: {
+                        //customerName: { required: '<i class="icon-info-sign red">请填写客户名称!</i>', maxlength: '<i class="icon-info-sign red">客户名称大于规定字符数！</i>' },
+                        //customerIDCard: { required: '<i class="icon-info-sign red">请输入身份证号!</i>', isIdCard: '<i class="icon-info-sign red">不是合法的身份证号!</i>' },
+                        applyCity: { required: '<i class="icon-info-sign red">请选择开办城市!</i>' },
+                        productCode: { required: '<i class="icon-info-sign red">请选择业务品种!</i>' },
+                        productTerm: { required: '<i class="icon-info-sign red">请选择申请期限!</i>' },
+                        contractValue: {
+                            required: '<i class="icon-info-sign red">请填写合同金额!</i>', number: '<i class="icon-info-sign red">合同金额格式错误!</i>',
+                            digits: '<i class="icon-info-sign red">合同金额只能为整数</i>',
+                            min: '<i class="icon-info-sign red">请保证合同金额不小于{0}!</i>',
+                            max: '<i class="icon-info-sign red">请保证合同金额不大于{0}!</i>'
+                        },
+                        applyAmount: {
+                            required: '<i class="icon-info-sign red">请填写申请金额!</i>', number: '<i class="icon-info-sign red">合同金额格式错误!</i>'
+                        },
+                        payAmtMonthly: { number: '<i class="icon-info-sign red">月还款金额格式错误!</i>', checkIfGreatThen: '<i class="icon-info-sign red">月还款金额不能大于申请金额!</i>' },
+                        loanPurpose: { required: '<i class="icon-info-sign red">请选择借款用途!</i>' },
+                        customerType: { required: '<i class="icon-info-sign red">请选择客户类型!</i>' },
+                        memoOfLoanPurposeOther: { required: '<i class="icon-info-sign red" style="font-size:12px">请填写借款用途其他!</i>' },
+                        platform: { required: '<i class="icon-info-sign red" style="font-size:12px">请选择合作渠道!</i>' },
+                        assessmentPrice: {
+                            required: '<i class="icon-info-sign red" style="font-size:12px">请输入评估价值!</i>',
+                            number: '<i class="icon-info-sign red">金额格式错误!</i>'
+                        },
+                        loanRatio: {
+                            required: '<i class="icon-info-sign red" style="font-size:12px">评估价值不能为空!</i>',
+                            min: '<i class="icon-info-sign red">评估价值不能为0</i>',
+                            max: '<i class="icon-info-sign red">合同金额不能大于评估价值的{0}%</i>'
+                        }
+                    },
+                    invalidHandler: function(form, validator) { //验证不通过
+                        return false;
+                    },
+                    submitHandler: function(form) { //验证通过
+                        if (!$(form).valid()) {
+                            return false;
+                        }
+
+                        var param = $("#applyInfoForm").serialize();
+                        $.ajax({
+                            url: "/ZhanQi/HouseApplication",
+                            type: "post",
+                            dataType: "text",
+                            data: param,
+                            success: function(result) {
+                                eval('var data = ' + result);
+                                if (data.isRedirect != 'true') {
+                                    Utilities.alertTip(data.resultMsg);
+                                } else {
+                                    window.location.href = data.resultMsg;
+                                }
+                            }
+                        });
+
+                        //为了防止多次点击生成多余的申请单，所以在点击一次后禁用
+                        $('#submitBtn').attr('disabled', 'disabled');
+                        return true;
+                    }
+                });
+            });
+        </script>
+    }
+
+    @*页面状态是IsEdit时注册*@
+    if (ViewBag.IsEdit)
+    {
+        <script type="text/javascript">
+            //是否更改的标志
+            var changeFlag = false;
+
+            $(function () {
+                $('input[type=text]').change(function () {
+                    changeFlag = true;
+                });
+                //计算贷款比例
+                CalcuLoanRatio();
+                //表单验证
+                $('#applyInfoForm').validate({
+                    errorElement: 'i',
+                    errorPlacement: function (error, element) {
+                        if ($(element).attr('id') == 'contractValue' || $(element).attr('id') == 'payAmtMonthly'
+                            || $(element).attr('id') == 'loanRatio' || $(element).attr('id') == 'assessmentPrice') {
+                            $(element).parent().parent().append(error);
+                        } else {
+                            $(element).parent().append(error);
+                        }
+                    },
+                    rules: {
+                        contractValue: { required: true, number: true, min: 10000, max: oriContactAMT },
+                        applyAmount: { required: true, number: true },
+                        payAmtMonthly: { number: true },
+                        assessmentPrice: { required: true, number: true },
+                        loanRatio: { required: true, number: true, min: 1, max: loanRatio }
+                    },
+                    messages: {
+                        contractValue: {
+                            required: '<i class="icon-info-sign red">请填写合同金额!</i>', number: '<i class="icon-info-sign red">合同金额格式错误!</i>',
+                            digits: '<i class="icon-info-sign red">合同金额只能为整数</i>',
+                            min: '<i class="icon-info-sign red">请保证合同金额不小于{0}!</i>',
+                            max: '<i class="icon-info-sign red">请保证合同金额不大于{0}!</i>'
+                        },
+                        applyAmount: {
+                            required: '<i class="icon-info-sign red">请填写申请金额!</i>', number: '<i class="icon-info-sign red">合同金额格式错误!</i>'
+                        },
+                        payAmtMonthly: { number: '<i class="icon-info-sign red">月还款金额格式错误!</i>' },
+                        assessmentPrice: {
+                            required: '<i class="icon-info-sign red" style="font-size:12px">请输入评估价值!</i>',
+                            number: '<i class="icon-info-sign red">金额格式错误!</i>'
+                        },
+                        loanRatio: {
+                            required: '<i class="icon-info-sign red" style="font-size:12px">评估价值不能为空!</i>',
+                            min: '<i class="icon-info-sign red">评估价值不能为0</i>',
+                            max: '<i class="icon-info-sign red">合同金额不能大于评估价值的{0}%</i>'
+                        }
+                    },
+                    invalidHandler: function (form, validator) {  //验证不通过
+                        return false;
+                    },
+                    submitHandler: function (form) {  //验证通过
+                        if (!$(form).valid()) {
+                            return false;
+                        }
+                        var param = $("#applyInfoForm").serialize();
+                        $.ajax({
+                            url: "/ProductApplication/HouseApplicationEdit",
+                            type: "post",
+                            dataType: "text",
+                            data: param,
+                            success: function (result) {
+                                if (result) {
+                                    Utilities.alertTip(result);
+                                } else {
+                                    Utilities.alertTip('保存成功！');
+                                    changeFlag = false;
+                                }
+                            }
+                        });
+                        return true;
+                    }
+                });
+            });
+
+            //保存时提示框
+            function PerfectInfo() {
+                var h = '/LoanApplication/ExtendApplication?dformCode=@ViewData["logo"]&operation=1&appid=@ViewData["appId"]';
+                if (changeFlag) {
+                    bootbox.dialog({
+                        message: "<span class='bigger-110'>是否保存您刚才修改的数据？</span>",
+                        buttons:
+                        {
+                            "success":
+                            {
+                                "label": "<i class='icon-ok'></i>是",
+                                "className": "btn-sm btn-success",
+                                "callback": function () {
+                                    if ($('#applyInfoForm').valid()) {
+                                        $('#applyInfoForm').submit();
+                                        location.href = h;
+                                    }
+                                }
+                            },
+                            "click":
+                            {
+                                "label": "否",
+                                "className": "btn-sm btn-primary",
+                                "callback": function () {
+                                    location.href = h;
+                                }
+                            },
+                            "button":
+                            {
+                                "label": "取消",
+                                "className": "btn-sm btn-default"
+                            }
+                        }
+                    });
+                } else {
+                    location.href = h;
+                }
+            }
+        </script>
+    }
+
+    @*页面用到的函数*@
+    <script type="text/javascript">
+        //清空合同金额，可接受月还款；重置费用信息
+        var ResetInfo = function () {
+            $('#contractAmt').val('');
+            $('#payAmtMonthly').val('');
+            $('#productCode').change();
+        };
+
+        //费率归零
+        var InitRate = function () {
+            $('#rate').val(0);
+            $('#defaultInterestRatio').val(0);
+            $('#serviceChargeRate').val(0);
+            $('#consultationChargeRate').val(0);
+            $('#rateType').val(0);
+        };
+        //初始化期限
+        var InitTerm = function () {
+            return $('#productTerm').empty().append('<option value="">--选择期限--</option>');
+        };
+        //初始化品种
+        var InitProduct = function () {
+            return $('#productCode').empty().append('<option value="">--选择品种--</option>');
+        };
+
+        //计算申请金额，咨询费，服务费
+        var CalcuApplyAmtValue = function () {
+            var contractAmt = parseFloat($(this).val());
+            if (!contractAmt) {
+                contractAmt = 0;
+            }
+            //申请金额
+            var applyAmount = contractAmt * (1 - parseFloat($('#consultationChargeRate').val()));
+            //保留百位
+            applyAmount = (applyAmount / 100).toFixed(0) * 100;
+            //咨询费
+            var consultationCharge = contractAmt - applyAmount;
+            if (consultationCharge < 0) {
+                consultationCharge = 0;
+            }
+            //服务费
+            var serviceCharge = contractAmt * parseFloat($('#serviceChargeRate').val());
+
+            $('#serviceCharge').val(serviceCharge.toFixed(2));
+            $('#consultationCharge').val(consultationCharge.toFixed(2));
+            $('#applyAmount').val(applyAmount.toFixed(0));
+        
+        };
+
+        /* 计算申请抵押率 */
+        var CalcuLoanRatio = function () {
+            var assessmentPrice = $('#assessmentPrice').val();
+            var contractAmt = $('#contractValue').val();
+            if (assessmentPrice && contractAmt && assessmentPrice != 0) {
+                $('#loanRatio').val(((contractAmt / assessmentPrice) * 100).toFixed(2));
+            } else {
+                $('#loanRatio').val((0).toFixed(2));
+            }
+        };
+
+        //输入金额限制
+        var AmtInputLimit = function() {
+            $(this).val($(this).val().replace(/[^\d.]/g, "")); //清除“数字”和“.”以外的字符
+            $(this).val($(this).val().replace(/^\./g, "")); //验证第一个字符是数字而不是.
+            $(this).val($(this).val().replace(/\.{2,}/g, ".")); //只保留第一个. 清除多余的.
+        };
+        
+    </script>
+    <!--表单线束-->
+}

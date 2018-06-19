@@ -1,0 +1,68 @@
+﻿<!--表单开始-->
+<div class="row-fluid">
+    <div class="span12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-blue widget-header-flat">
+                <h4 class="lighter">
+                    <button class="btn btn-prev" onclick="history.back()" style="float:right;cursor:pointer;">
+                        <i class="icon-reply"></i>返回
+                    </button>
+                    $DFormInfo.Name$
+                </h4>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div id="fuelux-wizard" class="row-fluid" data-target="#step-container">
+                        <ul class="wizard-steps">
+                            $DFormInfo.SubformList:
+                            {
+                            <li data-target="#step$it.Sort$">
+                                <span class="step">$it.Sort$</span>
+                                <span class="title">$it.Name$</span>
+                            </li>
+                            }$
+                        </ul>
+                    </div>
+                    <hr />
+                    <div class="step-content row-fluid position-relative" id="step-container">
+                        $DFormInfo.SubformList:
+                        {
+                        <div class="step-pane" data-target="#step$it.Sort$" id="step$it.Sort$">
+                            $it.FieldListHTML$
+                        </div>
+                        }$
+
+                    </div>
+                    <hr />
+                    <div class="row-fluid wizard-actions">
+
+
+                        <button class="btn btn-prev">
+                            <i class="icon-arrow-left"></i>
+                            上一步
+                        </button>
+                        <button class="btn btn-primary" id="saveCurrent">
+                            <i class="icon-save"></i>
+                            保存
+                        </button>
+                        <button class="btn btn-success btn-next" data-last="提交申请" data-submitAction="$DFormInfo.Action_Edit$">
+                            下一步
+                            <i class="icon-arrow-right icon-on-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /widget-main -->
+            </div>
+            <!-- /widget-body -->
+        </div>
+    </div>
+</div>
+<!--表单线束-->
+<script type="text/javascript">
+    var appID;
+    jQuery(function () {
+        appID = Utilities.getUrlParam("appid");
+    });
+    
+</script>

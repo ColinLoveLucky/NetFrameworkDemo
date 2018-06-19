@@ -1,0 +1,86 @@
+﻿@Scripts.Render("~/bundles/bootbox")
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">缓存清除</h5>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <form class="form-search">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="input-group">
+                                    <input class="form-control search-query" id="cacheKey" placeholder="缓存前缀" type="text" value="QAPP">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-purple btn-sm" onclick="clearCache();">清除</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">当前缓存</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main" style="height:400px;overflow-y:scroll;">
+                    <ul class="list-unstyled spaced">
+                        @foreach (var item in ViewData["GetALLKey"] as List<string>)
+                        {
+                            <li>
+                                <i class="icon-ok bigger-110 green"></i>
+                                <i class="icon-arrow-up" onclick="setToClear('@item')" title="设置为删除选项" style="cursor:pointer" ></i>
+                                    @item
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    // 清除缓存
+    function clearCache() {
+        var key = $("#cacheKey").val();
+        if (key) {
+            $.ajax({
+                url: "/SystemConfig/ClearCache",   // 提交的页面
+                data: { "groupName": key }, // 从表单中获取数据
+                //async: false,
+                type: "POST",                   // 设置请求类型为"POST"，默认为"GET"
+                cache: false,
+                beforeSend: function () {
+                },
+                error: function (request) {      // 设置表单提交出错
+                    bootbox.alert("表单提交出错，请稍候再试或者联系管理员");
+                },
+                success: function (data) {
+                    bootbox.alert("清除成功  " + data + "  数据受到影响！", function () { location.reload() });
+
+                }
+            });
+        }
+        else {
+            bootbox.alert("请输入缓存前缀");
+        }
+    }
+
+    // 设置缓存清除为当前选中项
+    function setToClear(item) {
+        $("#cacheKey").val(item);
+    }
+</script>

@@ -1,0 +1,245 @@
+﻿@{
+    ViewBag.Title = "ForbidenConfigEdit";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<link href="~/Content/assets/css/chosen.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="ForbidenConfigEditForm" role="form" style="margin-bottom:50px">
+            <input id="ID" name="ID" class="col-sm-12 col-xs-12" type="hidden">
+            <fieldset>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        业务开办城市：
+                        <i class="icon-asterisk red smaller-80"></i>
+                    </label>
+                    <div class="col-sm-4">
+                        <select id="CITY_CODE" name="CITY_CODE" class="col-sm-12 col-xs-12">
+                            <option value="">--请选择城市--</option>
+                            @foreach (var item in ViewBag.City)
+                            {
+                                <option value="@item.CITY_CODE">@item.CITY_NAME</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">屏蔽地区：</label>
+                    <div class="col-xs-12 col-sm-2">
+                        <select class="col-xs-12" id="PROVINCE_CODE" name="PROVINCE_CODE" data-val="true" data-val-required="请填写地址!">
+                            <option value="">选择省份</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-12 col-sm-2">
+                        <select class="col-xs-12" id="Register_City" name="Register_City" data-val="true" data-val-required="请填写地址!">
+                            <option value="">选择市</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 input-group">
+                        <input id="FORBIDEN_AREA" name="FORBIDEN_AREA" class="col-xs-12" type="text" maxlength="40" data-val="true" data-val-length-max="40">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">身份证前六位：<i class="icon-asterisk red smaller-80"></i></label>
+                    <div class="col-sm-4">
+                        <input id="FORBIDEN_ID_START" name="FORBIDEN_ID_START" class="col-sm-12 col-xs-12" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">适用产品：<i class="icon-asterisk red smaller-80"></i></label>
+                    <div class="col-sm-4">
+                        <select id="PRODUCT_LOGO" name="PRODUCT_LOGO" class="col-sm-12 col-xs-12">
+                            <option value="">--请选择产品--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">适用范围：<i class="icon-asterisk red smaller-80"></i></label>
+                    <div class="col-sm-4">
+                        <select id="JUST_FOR_CITY" name="JUST_FOR_CITY" class="col-sm-12 col-xs-12">
+                            <option value="">--请选择--</option>
+                            <option value="1">仅本城市的进件</option>
+                            <option value="0">全国有效</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    &nbsp;
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label ">屏蔽地区说明： </label>
+                    <label class="col-sm-9">
+                        若只选择省份，屏蔽全省；<br />
+                        若选择省+市，屏蔽市；<br />
+                        若选择省+市+自定义内容，则屏蔽某省某市下匹配自定义内容的某个地方。
+                    </label>
+</div>
+            </fieldset>
+        </form>
+
+        <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px;">
+            <button class="btn btn-sm" data-dismiss="modal" onclick="parent.CloseDialog();">
+                <i class="icon-remove"></i>
+                取消
+            </button>
+
+            <button class="btn btn-sm btn-primary" onclick="$('#ForbidenConfigEditForm').submit()">
+                <i class="icon-ok"></i>
+                保存
+            </button>
+        </div>
+    </div>
+</div>
+<script src="/Content/assets/js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url: '/DataDIC/GetDICByParentID?PARENT_ID=' + 10038,
+            type: 'post',
+            cache: true,
+            async: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#PROVINCE_CODE").append('<option value="' + data[i].DATA_CODE + '" data-text="' + data[i].DATA_NAME + '">' + data[i].DATA_NAME + '</option>')
+                }
+            }
+        })
+        $("#PROVINCE_CODE").change(function () {
+            $("#Register_City").html("");
+            $("#Register_City").append('<option value="">选择市</option>');
+            $.ajax({
+                url: '/DataDIC/GetDICByParentCode?DATA_CODE=' + $("#PROVINCE_CODE").val(),
+                type: 'post',
+                cache: true,
+                async: false,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#Register_City").append('<option value="' + data[i].DATA_CODE + '" data-text="' + data[i].DATA_NAME + '">' + data[i].DATA_NAME + '</option>')
+                    }
+                }
+            })
+        })
+        $("#CITY_CODE").change(function () {
+            $("#PRODUCT_LOGO").html("");
+            $.ajax({
+                url: '/SystemConfig/GetCompanyCode?id=' + $("#CITY_CODE").val(),
+                type: 'post',
+                cache: true,
+                async: false,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#PRODUCT_LOGO").append('<option value="' + data[i].logo + '" data-text="' + data[i].logoName + '">' + data[i].logoName + '</option>')
+                    }
+                }
+            })
+        })
+    })
+    if ('@ViewBag.OperateType' == 'edit') {
+        var id = Utilities.getUrlParam("id");
+        $.getJSON("/SystemConfig/ForbidenConfigEntiy?id=" + id, function (data) {
+            var i = data.ForbidenConfigList
+            $("#ID").val(id);
+            $("#CITY_CODE").val(i.CITY_CODE);
+            $("#FORBIDEN_ID_START").val(i.FORBIDEN_ID_START);
+            $("#JUST_FOR_CITY").val(i.JUST_FOR_CITY);
+            $("#FORBIDEN_AREA").val(i.FORBIDEN_AREA);
+            $("#PROVINCE_CODE").val(i.PROVINCE_CODE);
+            $.ajax({
+                url: '/DataDIC/GetDICByParentCode?DATA_CODE=' + i.PROVINCE_CODE,
+                type: 'post',
+                cache: false,
+                async: false,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#Register_City").append('<option value="' + data[i].DATA_CODE + '" data-text="' + data[i].DATA_NAME + '">' + data[i].DATA_NAME + '</option>')
+                    }
+                }
+            })
+            $("#PRODUCT_LOGO").html("");
+            $.ajax({
+                url: '/SystemConfig/GetCompanyCode?id=' + i.CITY_CODE,
+                type: 'post',
+                cache: true,
+                async: false,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#PRODUCT_LOGO").append('<option value="' + data[i].logo + '" data-text="' + data[i].logoName + '">' + data[i].logoName + '</option>')
+                    }
+                }
+            })
+            $("#PRODUCT_LOGO").val(i.PRODUCT_LOGO);
+            $("#Register_City").val(i.PRPVINCE_CITY);
+        });
+    }
+    if ('@ViewBag.OperateType' == 'add') {
+
+        $("#ID").val(0);
+    }
+    $('#ForbidenConfigEditForm').validate({
+        errorElement: 'i',
+        errorPlacement: function (error, element) {
+            $(element).parent().append(error);
+        },
+        rules: {
+            CITY_CODE: { required: true },
+            FORBIDEN_ID_START: { required: true, number: true, min: 100000, max: 999999 },
+            JUST_FOR_CITY: { required: true },
+            PROVINCE_CODE: { required: true },
+        },
+        messages: {
+            CITY_CODE: { required: '<i class="icon-info-sign red">请填写城市!</i>' },
+            FORBIDEN_ID_START: {
+                required: '<i class="icon-info-sign red">请填写身份证后六位!</i>',
+                number: '<i class="icon-info-sign red">请填写数字!</i>',
+                max: '<i class="icon-info-sign red">请填写正确数字!</i>',
+                min: '<i class="icon-info-sign red">请填写正确数字!</i>'
+            },
+            JUST_FOR_CITY: { required: '<i class="icon-info-sign red">请填写!</i>' },
+            PROVINCE_CODE: { required: '<i class="icon-info-sign red">请填写!</i>' },
+        },
+        invalidHandler: function (form, validator) {  //验证不通过
+            return false;
+        },
+        submitHandler: function (form) {  //验证通过
+            if (!$(form).valid()) {
+                return false;
+            }
+
+            SaveData();
+        }
+    });
+
+
+    function SaveData() {
+        var ob =
+            {
+                ID: $("#ID").val(),
+                FORBIDEN_AREA: $.trim($("#FORBIDEN_AREA").val()),
+                PRPVINCE_CITY: $("#Register_City").val(),
+                CITY_CODE: $("#CITY_CODE").val(),
+                FORBIDEN_ID_START: $.trim($("#FORBIDEN_ID_START").val()),
+                JUST_FOR_CITY: $("#JUST_FOR_CITY").val(),
+                PRODUCT_LOGO: $("#PRODUCT_LOGO").val(),
+                PROVINCE_CODE: $("#PROVINCE_CODE").val()
+            }
+        //alert(ob.ID+","+ob.PRODUCT_LOGO+","+ob.FORBIDEN_AREA+","+ob.CITY_CODE+","+ob.JUST_FOR_CITY+","+ob.FORBIDEN_ID_START);
+        $.ajax({
+            url: '/SystemConfig/AddOrUpdateForbidenConfig',
+            type: 'post',
+            cache: false,
+            data: "st=" + JSON.stringify(ob),
+            success: function (data) {
+                if (data) {
+                    Utilities.alertTip(data);
+                }
+                else {
+                    if (parent && parent.CloseDialog) {
+                        parent.CloseDialog();
+                        parent.Utilities.alertTip("保存成功！");
+                    }
+                }
+            }
+        });
+    };
+
+</script>

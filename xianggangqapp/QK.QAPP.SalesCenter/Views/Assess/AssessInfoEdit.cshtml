@@ -1,0 +1,363 @@
+﻿@model QK.QAPP.Entity.APP_QUEUE_ASSESS
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<script src="~/Content/assets/js/date-time/bootstrap-timepicker.min.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/bootstrap-timepicker.css" rel="stylesheet" />
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="formInfo" role="form">
+            @if (ViewData["IsEdit"].ToString() == "1")
+            {
+                <input id="ID" name="ID" type="hidden" value="@Model.ID" />
+                <input id="APP_ID" name="APP_ID" type="hidden" value="@Model.APP_ID" />
+                <input id="PRODUCT_LOGO" name="PRODUCT_LOGO" type="hidden" value="@Model.PRODUCT_LOGO" />
+            }
+            @*申请单号*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="APP_CODE"> 申请单号：</label>
+
+                <div class="col-sm-9">
+                    <input id="APP_CODE" name="APP_CODE" class="col-xs-10 col-sm-5" type="text" value="@Model.APP_CODE" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*客户*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="CUSTOMER_NAME"> 客户姓名：</label>
+
+                <div class="col-sm-9">
+                    <input id="CUSTOMER_NAME" name="CUSTOMER_NAME" class="col-xs-10 col-sm-5" type="text" value="@Model.CUSTOMER_NAME" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*客户电话*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="CUSTOMER_PHONE"> 客户电话：</label>
+
+                <div class="col-sm-9">
+                    <input id="CUSTOMER_PHONE" name="CUSTOMER_PHONE" class="col-xs-10 col-sm-5" type="text" value="@Model.CUSTOMER_PHONE" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+            @*车牌号*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="VEHICLE_NO"> 车牌号码：</label>
+
+                <div class="col-sm-9">
+                    <input id="VEHICLE_NO" name="VEHICLE_NO" class="col-xs-10 col-sm-5" type="text" value="@Model.VEHICLE_NO" readonly="readonly" />
+                </div>
+            </div>
+
+            @*预约评估车辆到店时间*@
+            @if ((bool)ViewData["needAssess"])
+            {
+                <div class="space-1"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="CUSTOMER_BOOK_TIME">
+                        预约评车时间
+                        @if (ViewData["IsEdit"].ToString() == "1")
+                        {
+                            <i class="icon-asterisk red smaller-80"></i>
+                        }
+                        ：
+                    </label>
+
+                    <div class="input-group col-xs-12 col-sm-3">
+                        <input type="text" name="CUSTOMER_BOOK_TIME" id="CUSTOMER_BOOK_TIME" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                               value="@(Model.CUSTOMER_BOOK_TIME == null ? "" : Model.CUSTOMER_BOOK_TIME.Value.ToString("yyyy/MM/dd"))"
+                               data-val="true" disabled="disabled" />
+                        <span class="input-group-addon"
+                              style="cursor:pointer;">
+                            <i class="icon-calendar bigger-110"></i>
+                        </span>
+                    </div>
+                    <div class="input-group bootstrap-timepicker col-xs-12 col-sm-2">
+                        <input id="CUSTOMER_BOOK_TIME2" type="text" class="form-control" disabled="disabled"
+                               value="@(Model.CUSTOMER_BOOK_TIME == null ? "" : Model.CUSTOMER_BOOK_TIME.Value.ToString("HH:mm:ss"))" />
+                        <span class="input-group-addon">
+                            <i class="icon-time bigger-110"></i>
+                        </span>
+                    </div>
+                </div>
+            }
+
+            @*实际到店评车时间*@
+            @if ((bool)ViewData["needAssess"])
+            {
+                <div class="space-1"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="CUSTOMER_ARRIVE_TIME">
+                        实际到店评车时间
+                        @if (ViewData["IsEdit"].ToString() == "1")
+                        {
+                            <i class="icon-asterisk blue smaller-80"></i>
+                        }
+                        ：
+                    </label>
+                    <div class="input-group col-xs-12 col-sm-3">
+                        <input type="text" name="CUSTOMER_ARRIVE_TIME" id="CUSTOMER_ARRIVE_TIME" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                               value="@(Model.CUSTOMER_ARRIVE_TIME == null ? "" : Model.CUSTOMER_ARRIVE_TIME.Value.ToString("yyyy/MM/dd"))"
+                               data-val="true" disabled="disabled" />
+                        <span class="input-group-addon"
+                              style="cursor:pointer;">
+                            <i class="icon-calendar bigger-110"></i>
+                        </span>
+                    </div>
+                    <div class="input-group bootstrap-timepicker col-xs-12 col-sm-2">
+                        <input id="CUSTOMER_ARRIVE_TIME2" type="text" class="form-control" disabled="disabled"
+                               value="@(Model.CUSTOMER_ARRIVE_TIME == null ? "" : Model.CUSTOMER_ARRIVE_TIME.Value.ToString("HH:mm:ss"))" />
+                        <span class="input-group-addon">
+                            <i class="icon-time bigger-110"></i>
+                        </span>
+                    </div>
+                </div>
+            }
+
+            <div class="space-1"></div>
+            @*客户经理*@
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="SALES_NAME"> 客户经理：</label>
+
+                <div class="col-sm-9">
+                    <input id="SALES_NAME" name="SALES_NAME" class="col-xs-10 col-sm-5" type="text" value="@Model.SALES_NAME" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="space-1"></div>
+
+            @if ((bool)ViewData["needAssess"])
+            {
+                if (ViewData["isEdit"].ToString() == "2")
+                {
+                    <div class="space-1"></div>
+                    @*评估师*@
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="VALUATOR_NAME"> 评估师：<i class="icon-asterisk red smaller-80"></i></label>
+
+                        <div class="col-sm-9">
+                            <select id="slctValuator">
+                                @if (ViewData["valuators"] != null && (ViewData["valuators"] as List<QK.QAPP.Entity.APP_CARVALUATORS>).Count > 0)
+                                {
+                                    <option value="">--选择一个评估师--</option>
+                                    foreach(QK.QAPP.Entity.APP_CARVALUATORS V in ViewData["valuators"] as List<QK.QAPP.Entity.APP_CARVALUATORS>)
+                                    {
+                                        if (V.VALUATOR_CODE == @Model.VALUATOR)
+                                        {
+                                            <option value="@V.VALUATOR_CODE" selected="selected">@V.VALUATOR_NAME</option>
+                                        }
+                                        else { 
+                                            <option value="@V.VALUATOR_CODE">@V.VALUATOR_NAME</option>
+                                        }
+                                    }
+                                }
+                                else { 
+                                    <option value="">无可选评估师，请联系IT</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                }
+                else { 
+                    <div class="space-1"></div>
+                    @*评估师*@
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="VALUATOR_NAME"> 评估师：</label>
+
+                        <div class="col-sm-9">
+                            <input id="VALUATOR_NAME" name="VALUATOR_NAME" class="col-xs-10 col-sm-5" type="text" value="@Model.VALUATOR_NAME" readonly="readonly" />
+                        </div>
+                    </div>
+                }
+            }
+
+            <div class="space-1"></div>
+            @*备注*@
+            <div class="form-group" style="padding-bottom:40px;">
+                <label class="col-sm-3 control-label no-padding-right" for="REMARK"> 备注：</label>
+
+                <div class="col-sm-9">
+                    <textarea id="REMARK" name="REMARK" class="col-xs-10 col-sm-7" rows="4" disabled="disabled" maxlength="200">@Model.REMARK</textarea>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px;">
+            <button class="btn btn-sm" data-dismiss="modal" onclick="javascript: parent.CloseInfoDialog();">
+                <i class="icon-remove"></i>
+                关闭
+            </button>
+            @if (ViewData["IsEdit"].ToString() == "")
+            {
+                <button id="btnEdit" class="btn btn-sm btn-primary" onclick="javascript:StartEdit();">
+                    <i class="icon-edit"></i>
+                    编辑
+                </button>
+            }
+            else if (ViewData["IsEdit"].ToString() == "1")
+            {
+                <button id="btnSave" class="btn btn-sm btn-primary" onclick="javascript:SaveData();">
+                    <i class="icon-save"></i>
+                    保存
+                </button>
+
+                <button id="btnSubmit" class="btn btn-sm btn-success" onclick="javascript:SaveData(1);">
+                    <i class="icon-ok"></i>
+                    提交
+                </button>
+            }
+            else if (ViewData["IsEdit"].ToString() == "2")
+            {
+                <button id="btnSubmit" class="btn btn-sm btn-success" onclick="javascript:SaveValuator();">
+                    <i class="icon-ok"></i>
+                    分配
+                </button>
+            }
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function SaveData(f) {
+        var _url = "/Assess/EditAssessInfo?submit=1";
+        var jsonData;
+
+        var book1 = jQuery('#CUSTOMER_BOOK_TIME').val();
+        var book2 = jQuery('#CUSTOMER_BOOK_TIME2').val();
+        var arrive1 = jQuery('#CUSTOMER_ARRIVE_TIME').val();
+        var arrive2 = jQuery('#CUSTOMER_ARRIVE_TIME2').val();
+        /*需要评估*/
+        if (book1 != undefined) {
+            /*提交，而不是保存*/
+            if (f) {
+                if (book1.length < 10) {
+                    Utilities.alertTip("<strong>错误</strong>：需选择预约评车时间！<br />");
+                    return;
+                }
+                if (arrive1.length < 10) {
+                    Utilities.alertTip("<strong>错误</strong>：需选择实际到店评车时间！<br />");
+                    return;
+                }
+            } else {
+                _url = "/Assess/EditAssessInfo";
+            }
+            book1 = (book1 == '' ? 'a' : book1);
+            arrive1 = (arrive1 == '' ? 'a' : arrive1);
+            jsonData = {
+                id: jQuery('#ID').val(),
+                appId: jQuery('#APP_ID').val(),
+                logo: jQuery('#PRODUCT_LOGO').val(),
+                bookTime: book1 + ' ' + book2,
+                arriveTime: arrive1 + ' ' + arrive2,
+                remark: jQuery('#REMARK').val()
+            };
+        } else {
+            if (f) {
+                /* if (jQuery.trim(jQuery('#GPS_PLACE').val()) == '') {
+                    Utilities.alertTip("<strong>错误</strong>：需填写GPS安装地点！<br />");
+                    return;
+                } */
+            } else {
+                _url = "/Assess/EditAssessInfo";
+            }
+            jsonData = {
+                id: jQuery('#ID').val(),
+                appId: jQuery('#APP_ID').val(),
+                logo: jQuery('#PRODUCT_LOGO').val(),
+                /* gpsPlace: jQuery('#GPS_PLACE').val(), */
+                remark: jQuery('#REMARK').val()
+            };
+        }
+        if (f) {
+            jQuery('#btnSubmit').hide();
+        }
+        $.ajax({
+            type: "post",
+            url: _url,
+            data: jsonData,
+            success: function (d) {
+                if (d) {
+                    Utilities.alertTip("<strong>数据保存出错</strong>：" + d + "<br />");
+                } else {
+                    if (f) {
+                        parent.Utilities.alertTip("提交成功！");
+                        parent.CloseInfoDialog();
+                    } else {
+                        Utilities.alertTip("保存成功！");
+                    }
+                }
+            }
+        });
+    }
+
+    function SaveValuator() {
+        var valuator = jQuery('#slctValuator').val();
+        if (!valuator) {
+            Utilities.alertTip("<strong>错误</strong>：请选择评估师！<br />");
+            return;
+        }
+        var vName = jQuery('#slctValuator').find('option:selected').text();
+        var jsonData = {
+            appCode: jQuery('#APP_CODE').val(),
+            valuatorCode: valuator,
+            valuatorName: vName
+        };
+        $.ajax({
+            type: "post",
+            url: "/Assess/SaveValuator",
+            data: jsonData,
+            success: function (d) {
+                if (d) {
+                    Utilities.alertTip("<strong>错误</strong>：" + d + "<br />");
+                } else {
+                    parent.Utilities.alertTip("成功分配评估师！");
+                    parent.CloseInfoDialog();
+                }
+            }
+        });
+    }
+
+    jQuery('.date-picker').datepicker({
+        autoclose: true,
+        changeYear: true,
+        changeMonth: true,
+        language: 'cn'
+    }).next().on(ace.click_event, function () {
+        jQuery(this).prev().focus();
+    });
+
+    jQuery('.bootstrap-timepicker> input').timepicker({
+        minuteStep: 1,
+        showSeconds: true,
+        showMeridian: false,
+        defaultTime: ''
+    }).next().on(ace.click_event, function () {
+        jQuery(this).prev().focus();
+    });
+
+    function StartEdit() {
+        var url = window.location.href + "&isEdit=1";
+        window.location = url;
+    };
+
+    (function BeginEdit() {
+        if (Utilities.getUrlParam('isEdit') == '1') {
+            jQuery('#CUSTOMER_BOOK_TIME').removeAttr('disabled');
+            jQuery('#CUSTOMER_ARRIVE_TIME').removeAttr('disabled');
+            jQuery('#CUSTOMER_BOOK_TIME2').removeAttr('disabled');
+            jQuery('#CUSTOMER_ARRIVE_TIME2').removeAttr('disabled');
+            jQuery('#ASSESS_PLACE').removeAttr('readonly');
+            /*jQuery('#GPS_PLACE').removeAttr('readonly'); */
+            jQuery('#REMARK').removeAttr('disabled');
+            
+        }
+    }());
+</script>

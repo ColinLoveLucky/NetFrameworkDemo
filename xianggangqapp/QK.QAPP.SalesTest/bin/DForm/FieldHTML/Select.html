@@ -1,0 +1,48 @@
+﻿<label class="control-label col-xs-12 col-sm-2">
+    
+    $FieldType.Field_DisplayName$
+    $if(FieldType.Field_Required)$
+    <i class="icon-asterisk red smaller-80" 
+         $if(ReadOnly)$
+           style="display:none"
+        $elseif(FieldType.IsDisabled)$
+           style="display:none"
+         $endif$
+       ></i>
+    $endif$
+    ：
+</label>
+<div class="col-xs-12 col-sm-3">
+    <select class="col-xs-12" id="$FieldType.Field_Key$" name="$FieldType.Field_Key$"
+            data-val="true"
+
+                       $if(FieldType.Field_Required)$
+                        data-val-required="请填写$FieldType.Field_DisplayName$!"
+                       $endif$
+
+                       $if(ReadOnly)$
+                       disabled="disabled"
+                       $elseif(FieldType.IsDisabled)$
+                       disabled="disabled"
+                       $endif$
+                        
+                       $if(FieldType.IsReadOnly)$
+                        onmousedown="return false;" onkeydown="return false;" 
+                        style="background-color:#f5f5f5 !important; "
+                       $endif$
+        >
+        <option value="">----请选择-----</option>
+        $if(FieldType.IsDisplayCode)$
+         $DIC:
+        {
+            <option value="$it.DATA_CODE$" data-text="$it.DATA_NAME$">$it.DATA_CODE$ $it.DATA_NAME$</option>            
+        }$
+        $else$
+        $DIC:
+        {
+            <option value="$it.DATA_CODE$" data-text="$it.DATA_NAME$">$it.DATA_NAME$</option>
+        }$
+        $endif$
+
+    </select>
+</div>

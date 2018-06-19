@@ -1,0 +1,28 @@
+﻿<!--描述：添加拒贷信息
+    时间：2015-03-06
+    添加人：leiz-->
+<div>
+    <fieldset>
+        <legend>拒贷信息</legend>
+        <div class="form-group">
+            <div class="clearfix">
+                <label id="lblRefuseLoanDiscription" class="control-label col-xs-12 center"></label>
+            </div>
+        </div>
+
+    </fieldset>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var appid = Utilities.getUrlParam("app_id") || Utilities.getUrlParam("appid");
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetRefsueLoanInfo",
+            data:{appid :appid},
+            cache: false,
+            success: function (data) {
+                $("#lblRefuseLoanDiscription").text(data);
+            }
+        });
+    });
+</script>

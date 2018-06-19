@@ -1,0 +1,533 @@
+﻿@model IEnumerable<QK.QAPP.Entity.QFFileReadListResult>
+    @{
+        Layout = null;
+    }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>File Upload</title>
+    @Styles.Render("~/Content/assets/css/fileupload")
+</head>
+<body>
+    <div class="main-container">
+        <div class="sidebar sidebar-fixed">
+            @System.Web.Mvc.MvcHtmlString.Create(ViewData["readonly"] == null 
+            ? @"<div id='container'>
+                <button id='pickfiles' title='上传'>
+                    <i class='icon-upload-alt'> 上传</i>
+                </button>
+                <div class='cnfg'>
+                    <i id='SortImg' class='icon-edit' title='编辑(自动保存变更)'></i>
+                    <i id='CloseSortImg' class='icon-check' title='关闭编辑'></i>
+                </div>
+            </div>"
+            : "<div id='container'>&nbsp;</div>")
+
+            <div id="filelist" class="plupload_filelist">
+                @foreach (QK.QAPP.Entity.QFFileReadListResult qfFile in Model)
+                {
+                    <div class="column-@qfFile.id">
+                        <div class="DragImg">
+                            拖动这里排序
+                            @if (!qfFile.createdTime.IsEmpty() && new DateTime(new DateTime(1970,1,1,8,0,0).Ticks + (long.Parse(qfFile.createdTime) * 10000)) > DateTime.Parse(ViewData["NrDateApply"].ToString()))
+                            {
+                                <div class="dltImg icon-remove-sign" onclick="deleteImg('@qfFile.id',this,false);" title="删除">
+                                </div>
+                            }
+                        </div>
+                        <div class="SmallImg">
+                            <div class="portlet-header" id="@qfFile.id">
+                                <img src="@qfFile.flPath" title="@qfFile.flName" />
+                                @qfFile.flName
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="breadcrumbs breadcrumbs-fixed">
+                <i class="icon-undo" onclick="rotateLeft('imageView', 90);" title="左旋"></i>
+                <i class="icon-repeat" onclick="rotateRight('imageView', 90);" title="右旋"></i>
+                <i class="icon-zoom-in" onclick="zoomImg(0.1);" title="放大"></i>
+                <i class="icon-zoom-out" onclick="zoomImg(-0.1);" title="缩小"></i>
+                <a class="icon-download-alt" href="javascript:void(0);" title="下载"></a>
+                <div id="divShowloading"></div>
+            </div>
+            <div class="page-content" id="pageContent">
+            </div>
+        </div>
+    <div id="comfirmDialog" style="display:none;"></div>
+    </div>
+    
+    @Scripts.Render("~/bundles/fileupload")
+
+    <script type="text/javascript">
+        /*本页全局变量集合*/
+        var currentAPP = {};
+        if (navigator.userAgent.indexOf("MSIE") > 0) {
+            currentAPP.isIE = true;
+        }
+        if (navigator.userAgent.indexOf("Firefox") > 0) {
+            currentAPP.isFirefox = true;
+        }
+        else if (navigator.userAgent.indexOf("Chrome") > 0) {
+            currentAPP.isChrome = true;
+        }
+        else if (navigator.userAgent.indexOf("Safari") > 0) {
+            currentAPP.isSafari = true;
+        }
+        else if (navigator.userAgent.indexOf("Camino") > 0) {
+            currentAPP.isCamino = true;
+        }
+        else if (navigator.userAgent.indexOf("Gecko/") > 0) {
+            currentAPP.isGecko = true;
+        }
+        currentAPP.html5 = (typeof (Worker) == "undefined" ? false : true);
+        currentAPP.downloadUrl = "/Fileupload/Download";
+        currentAPP.uploadUrl = "/Fileupload/UploadFile";
+        currentAPP.saveOrderUrl = "/Fileupload/SaveNewSort";
+        currentAPP.deleteFileUrl = "/Fileupload/DeleteFile";
+        currentAPP.bigPicUrl = '@(ViewData["BigPicUrl"])';
+
+        /*************图片上传Begin*************/
+        var idx = 1;
+        var uploader = new plupload.Uploader({
+            runtimes: ((currentAPP.isIE || !currentAPP.html5) ? 'flash,silverlight,html5,html4' : 'html5,flash,silverlight,html4'),
+            browse_button: 'pickfiles',
+            container: document.getElementById('container'),
+            url: currentAPP.uploadUrl,
+            max_file_size: '@(ViewData["UploadMaxSize"])kb',
+            chunk_size: '@(ViewData["UploadChunkSize"])kb',
+            filters: { mime_types: [{ title: "Image files", extensions: '@ViewData["UploadFileFormat"]' }] },
+            flash_swf_url: '/Content/plupload/js/Moxie.swf',
+            silverlight_xap_url: '/Content/plupload/js/Moxie.xap',
+            init: {
+                /* PostInit: function () { jQuery('#filelist').html(''); }, */
+                /*选择文件后触发*/
+                FilesAdded: function (up, files) {
+                    var fhtml = jQuery('#filelist').html();
+                    plupload.each(files, function (file) {
+                        fhtml += '<div class="column-' + idx++ + '">'
+                                    + '<div class="DragImg">拖动这里排序'
+                                        + '<div class="dltImg icon-remove-sign" onclick="deleteImg(\'' + file.id + '\',this,-1);" title="删除"></div>'
+                                    + '</div>'
+                                    + '<div class="SmallImg">'
+                                        + '<div class="portlet-header" id="' + file.id + '">正在上传，请稍候...<br />文件：' + file.name + '<br />大小：' + plupload.formatSize(file.size) + '</div>'
+                                    + '</div>'
+                                + '</div>';
+                        jQuery('#filelist').html(fhtml);
+                    });
+                    /*选择文件后自动上传*/
+                    uploader.start();
+                },
+                /*开始上传时触发*/
+                BeforeUpload: function (up, file) {
+                    /*分块上传时在.NET服务器端使用HttpPostedFileBase读取文件名有误，故将文件名作为参数传递*/
+                    up.settings.multipart_params = {
+                        file__name: file.name,
+                        appId: '@(ViewData["appId"])',
+                        fileType: '@(ViewData["fileType"])',
+                        IsSDStatud: '@(ViewData["IsSDStatud"])',
+                        NrListId: '@(ViewData["NrListId"])'
+                    };
+                },
+                Error: function (up, err) {
+                    var fhtml = jQuery('#filelist').html();
+                    fhtml += '<div class="column-' + idx++ + '">'
+                            + '<div class="dltImg icon-remove-sign" onclick="deleteImg(\'' + idx + '\',this,1);" title="删除"></div>'
+                            + '<div><b>上传时发生错误</b><br />文件：' + err.file.name + "<br />信息：" + err.message + '</div>'
+                            + '</div>';
+                    jQuery('#filelist').html(fhtml);
+                },
+                /*上传完成*/
+                FileUploaded: function (up, file, res) {
+                    try {
+                        /*res.response：服务器返回内容*/
+                        data = JSON.parse(res.response);
+                        if (data) {
+                            jQuery('#' + file.id).html('');
+                            if (data.Status == '1' && data.ReturnObj.FileId != null) {
+                                /*成功上传后创建一个缩略图对象显示在左侧*/
+                                jQuery('#' + file.id).parent().parent().find('.dltImg').attr('onclick', 'deleteImg(\'' + data.ReturnObj.FileId + '\',this,0);');
+                                jQuery('#' + file.id).attr('id', data.ReturnObj.FileId);
+                                jQuery('<img />').attr('src', currentAPP.bigPicUrl + "?id=" + data.ReturnObj.FileId).attr('title', data.ReturnObj.OldFileName).appendTo(jQuery('#' + data.ReturnObj.FileId));
+                                jQuery('#' + data.ReturnObj.FileId).append('<br />' + data.ReturnObj.OldFileName);
+                            } else {
+                                jQuery('#' + file.id).html('<div><b>上传时发生错误</b><br />文件：' + data.ReturnObj.OldFileName + "<br />错误：" + data.Error + '</div>');
+                            }
+                        }
+                    }
+                    catch (e) {
+                        if (res.response.indexOf('<!DOCTYPE') > -1) {
+                            jQuery('#' + file.id).html('<div><b>上传时发生错误</b><br />文件：' + file.name + '<br />错误：登录已失效，须重新登录后再上传。</div>');
+                        } else {
+                            jQuery('#' + file.id).html('<div><b>上传时发生错误</b><br />文件：' + file.name + '<br />错误：' + res.response + '</div>');
+                        }
+                    }
+                },
+                UploadComplete: function (up, file) {
+                    /*为缩略图绑定事件*/
+                    clickSmallPic();
+                }
+            }
+        });
+        uploader.init();
+
+        /*为缩略图绑定事件*/
+        function clickSmallPic(){
+            jQuery('.portlet-header').click(function () {
+                jQuery('#pageContent').html('');
+                var imgId = jQuery(this).attr('id');
+                var imgUrl = "?theName=" + escape(jQuery(this).children('img').attr('title'));
+                imgUrl += "&theId="+imgId;
+                jQuery('<img />').attr('id', 'imageView')
+                    .attr('src', currentAPP.bigPicUrl + "?id=" + imgId)
+                    .attr('rel', currentAPP.bigPicUrl + "?id=" + imgId)
+                    .appendTo(jQuery('#pageContent'));
+
+                currentAPP.rotate = false;
+                currentAPP.imgRatio = undefined;
+                /*为下载按钮指定下载地址*/
+                jQuery('.icon-download-alt').attr('href', currentAPP.downloadUrl + imgUrl).attr('target', '_blank');
+                /*可拖动*/
+                jQuery('#pageContent').imageView({ width: jQuery('#pageContent').width(), height: jQuery('#pageContent').height() });
+                jQuery('.clickedImg').removeClass("clickedImg");
+                jQuery(this).parent().parent().addClass('clickedImg');
+            });
+        }
+        /*************图片上传End*************/
+
+        /*************左侧缩略图拖动和删除Begin*************/
+        jQuery(function () {
+            jQuery("#filelist").each(function (index, value) {
+                jQuery('.column-' + (index + 1)).each(function (idx, vae) {
+                    value.appendChild(vae);
+                });
+            });
+            /*拖动排序*/
+            jQuery("#filelist").sortable({
+                connectWith: "#filelist",
+                revert: true,
+                cursor: "move",
+                opacity: 0.6,
+                scrollSensitivity: 100,
+                scrollSpeed: 100,
+                tolerance: 'pointer',
+                forcePlaceholderSize: true,
+                delay: 200,
+                handle: '.DragImg',
+                /*一次拖动排序完成后自动触发*/
+                update: function (event, ui) {
+                    /*******排序接口，排序**************/
+                    var idList = [];
+                    jQuery('.portlet-header').each(function () {
+                        idList.push(jQuery(this).attr('id'));
+                    })
+                    var ids = idList.join(',');
+                    jQuery.ajax({
+                        type: "post",
+                        url: currentAPP.saveOrderUrl, 
+                        data: { newOrder: ids },
+                        beforeSend: function () {
+                            jQuery('#divShowloading').html("<img src='/Content/assets/images/loading.gif'/> 正在更新...");
+                        },
+                        success: function (msg) {
+                            if (msg.Status=='1') {
+                                jQuery('#divShowloading').html("更新成功！");
+                            }
+                            else {
+                                jQuery('#divShowloading').html("更新失败！");
+                            }
+                        }
+                    });
+                    
+                }
+            });
+            jQuery('#CloseSortImg').hide();
+
+            jQuery('#SortImg').click(function () {
+                jQuery('#SortImg').hide();
+                jQuery('#CloseSortImg').show();
+                jQuery('#pickfiles').hide();
+                jQuery('#container').find('input').hide();
+                jQuery('#container').find('object').hide();
+                jQuery('.DragImg').show(300);
+            });
+            jQuery('#CloseSortImg').click(function () {
+                jQuery('#CloseSortImg').hide();
+                jQuery('#SortImg').show();
+                jQuery('#pickfiles').show();
+                jQuery('#container').find('input').show();
+                jQuery('#container').find('object').show();
+                jQuery('.DragImg').hide(300);
+            });
+        });
+
+        /*删除某缩略图*/
+        function deleteImg(id, el, isClient) {
+            if (isClient == 1) {
+                jQuery(el).parent().remove();
+                return;
+            }
+            if (isClient == -1) {
+                jQuery(el).parent().parent().remove();
+                return;
+            }
+            var targetImg = jQuery('#' + id).children('img');
+            if (confirm('确定要删除文件【' + targetImg.attr('title')+ '】吗？')) {
+                jQuery.ajax({
+                    type: "post",
+                    url: currentAPP.deleteFileUrl, /*服务端处理程序*/
+                    data: {
+                        fileId: id,
+                        appId: '@(ViewData["appId"])',
+                        fileType: '@(ViewData["fileType"])'
+                    },
+                    beforeSend: function () {
+                        jQuery('#divShowloading').html("<img src='/Content/assets/images/loading.gif' class='loadingImg' /> 正在删除【" + targetImg.attr('title') + "】...");
+                        jQuery(el).attr("disabled", "disabled");
+                    },
+                    complete: function () {
+                        jQuery(el).removeAttr("disabled");
+                    },
+                    success: function (msg) {
+                        if (msg.Status == "1") {
+                            jQuery('#divShowloading').html("删除【" + targetImg.attr('title')+"】成功！");
+                            if (targetImg.attr('src') == jQuery('#pageContent').children('img').attr('src')) {
+                                jQuery('#pageContent').html('');
+                                jQuery('.icon-download-alt').attr('href', 'javascript:void(0);').removeAttr('target');
+                            }
+                            jQuery(el).parent().parent().remove();
+                        }
+                        else {
+                            jQuery('#divShowloading').html("删除【" + targetImg.attr('title')+ "】失败！");
+                        }
+                    }, error: function () {
+                        jQuery('#divShowloading').html("删除【" + targetImg.attr('title') + "】时出错！");
+                    }
+                });
+            }
+        };
+        /*************左侧缩略图拖动和删除End*************/
+
+        /*************图片旋转Begin*************/
+        function rotate(id, angle, whence) {
+            var p = document.getElementById(id);
+            if (!p) { return; }
+            if (!whence) {
+                p.angle = ((p.angle == undefined ? 0 : p.angle) + angle) % 360;
+            }
+            else {
+                p.angle = angle;
+            }
+            if (p.angle >= 0) {
+                var rotation = Math.PI * p.angle / 180;
+            }
+            else {
+                var rotation = Math.PI * (360 + p.angle) / 180;
+            }
+            var costheta = Math.cos(rotation);
+            var sintheta = Math.sin(rotation);
+            /*不支持HTML5、IE浏览器*/
+            if (currentAPP.isIE && !currentAPP.html5) {
+                var canvas = document.createElement('img');
+                canvas.src = p.src;
+                canvas.height = p.height;
+                canvas.width = p.width;
+                canvas.style.filter = "progid:DXImageTransform.Microsoft.Matrix(M11=" + costheta + ",M12=" + (-sintheta) + ",M21=" + sintheta + ",M22=" + costheta + ",SizingMethod='auto expand')";
+            }
+            /*支持HTML5的其他浏览器*/
+            else
+            {
+                var canvas = document.createElement('canvas');
+                if (!p.oImage) {
+                    canvas.oImage = new Image();
+                    canvas.oImage.src = p.src;
+                }
+                else {
+                    canvas.oImage = p.oImage;
+                }
+                canvas.style.width = canvas.width = Math.abs(costheta * canvas.oImage.width) + Math.abs(sintheta * canvas.oImage.height);
+                canvas.style.height = canvas.height = Math.abs(costheta * canvas.oImage.height) + Math.abs(sintheta * canvas.oImage.width);
+                var context = canvas.getContext('2d');
+                context.save();
+                if (rotation <= Math.PI / 2) {
+                    context.translate(sintheta * canvas.oImage.height, 0);
+                }
+                else if (rotation <= Math.PI) {
+                    context.translate(canvas.width, -costheta * canvas.oImage.height);
+                }
+                else if (rotation <= 1.5 * Math.PI) {
+                    context.translate(-costheta * canvas.oImage.width, canvas.height);
+                }
+                else {
+                    context.translate(0, -sintheta * canvas.oImage.width);
+                }
+                context.rotate(rotation);
+                context.drawImage(canvas.oImage, 0, 0, canvas.oImage.width, canvas.oImage.height);
+                context.restore();
+                canvas.style.height = p.style.width;
+                canvas.style.width = p.style.height;
+            }
+            canvas.id = p.id;
+            canvas.angle = p.angle;
+            p.parentNode.replaceChild(canvas, p);
+            /*记录是否已经旋转*/
+            currentAPP.rotate = (currentAPP.rotate == true ? false : true)
+            jQuery('#pageContent').imageView({ width: jQuery('#pageContent').width(), height: jQuery('#pageContent').height() });
+        }
+
+        /*向右旋转*/
+        function rotateRight(id, angle) {
+            rotate(id, angle == undefined ? 90 : angle);
+        }
+
+        /*向左旋转*/
+        function rotateLeft(id, angle) {
+            rotate(id, angle == undefined ? -90 : -angle);
+        }
+        /*************图片旋转End*************/
+
+        /*放大或缩小右下侧大图*/
+        function zoomImg(o) {
+            var h = parseInt(jQuery('#imageView').css('height'), 10);
+            var hback = h;
+            var w = parseInt(jQuery('#imageView').css('width'), 10);
+            var wback = w;
+            if (currentAPP.imgRatio == undefined) {
+                if (currentAPP.rotate) {
+                    currentAPP.imgRatio = w / h;
+                } else {
+                    currentAPP.imgRatio = h / w;
+                }
+            }
+            w = parseInt(w * (1 + o), 10);
+            if (w > 10) {
+                if (currentAPP.isIE && !currentAPP.html5) {
+                    if (currentAPP.rotate) {
+                        h = parseInt(w / currentAPP.imgRatio, 10);
+                        jQuery('#imageView').css('height', w).css('width', h);
+                    } else {
+                        h = parseInt(w * currentAPP.imgRatio, 10);
+                        jQuery('#imageView').css('height', h).css('width', w);
+                    }
+                } else
+                {
+                    if (currentAPP.rotate) {
+                        h = parseInt(w / currentAPP.imgRatio, 10);
+                    } else {
+                        h = parseInt(w * currentAPP.imgRatio, 10);
+                    }
+                    jQuery('#imageView').css('height', h).css('width', w);
+                }
+                setPosition(h, w, hback, wback);
+            }
+            return false;
+        }
+
+        /*图片放大时为了将图片控制在可视范围做的处理*/
+        /*h:放大后的height*/
+        /*w:放大后的width*/
+        /*hback:放大前的height*/
+        /*wback:放大前的width*/
+        var setPosition = function (h, w, hback, wback) {
+            var imgWidth = jQuery('#imageView').width();
+            var imgHeight = jQuery('#imageView').height();
+            var parentWidth = jQuery('#pageContent').width();
+            var parentHeight = jQuery('#pageContent').height();
+            /*根据原位置计算出来的left*/
+            var lft = parseInt(jQuery('#imageView').css('left')) + (wback - w) / 2;
+            /*缩小*/
+            if ((wback - w) > 0) {
+                /*图片左上角不进入容器*/
+                if (lft >= 0) {
+                    lft = 0;
+                }
+                    /*图片往左上角移去了，把它移下来*/
+                else if (parentWidth < w && (imgWidth + lft) < parentWidth) {
+                    lft = parseInt(jQuery('#imageView').css('left')) + (wback - w);
+                }
+            } else if (lft < 0 && (parentWidth > w || parentHeight > h)) {
+                lft = 0;
+            }
+            jQuery('#imageView').css('left', lft);
+            /*根据原位置计算出来的top*/
+            var tp = parseInt(jQuery('#imageView').css('top')) + (hback - h) / 2;
+            /*缩小*/
+            if ((hback - h) > 0) {
+                /*图片左上角不进入容器*/
+                if (tp >= 0) {
+                    tp = 0;
+                }
+                    /*图片往左上角移去了，把它移下来*/
+                else if (parentHeight < h && (imgHeight + tp) < parentHeight) {
+                    tp = parseInt(jQuery('#imageView').css('top')) + (hback - h);
+                }
+            } else if (tp < 0 && (parentHeight > h || parentWidth > w)) {
+                tp = 0;
+            }
+            jQuery('#imageView').css('top', tp);
+        }
+
+        /*滚轮触发方法*/
+        var scrollFunc = function (event) {
+            event = event || window.event;/*浏览器兼容*/
+            var direct = 0;
+            /*firefox之外*/
+            if (event.wheelDelta) {
+                direct = event.wheelDelta > 0 ? 0.1 : -0.1;
+            }
+                /*firefox*/
+            else if (event.detail) {
+                direct = event.detail < 0 ? 0.1 : -0.1;
+            }
+            zoomImg(direct);
+            /*禁用浏览器的滚动条以防止滚轮时抖动*/
+            if (event && event.preventDefault) {
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                event.returnvalue = false;
+                return false;
+            }
+        };
+
+        function downloadImg() {
+            var url = jQuery('#imageView').attr('src');
+            url = currentAPP.downloadUrl + url;
+            window.open(url);
+        }
+
+        /*改变浏览器窗口大小时重新计算左下右下高度*/
+        function changeSideHeight() {
+            jQuery('#filelist').height(jQuery(window).height() - 50);
+            jQuery('#pageContent').height(jQuery(window).height() - 70);
+        }
+
+        jQuery(function () {
+            /*计算左下右下高度*/
+            changeSideHeight();
+
+            /*注册大图显示局域的鼠标滚轮事件*/
+            var obj = document.getElementById('pageContent');
+            if (obj.addEventListener && currentAPP.isFirefox) {
+                obj.addEventListener('DOMMouseScroll', scrollFunc, false);
+            } else {
+                obj.onmousewheel = scrollFunc;
+            }
+
+            /*为缩略图绑定事件*/
+            clickSmallPic();
+
+            /*页面禁用选择功能*/
+            jQuery('body').disableSelection();
+        });
+
+        /*改变浏览器窗口大小时重新计算左下右下高度*/
+        jQuery(window).resize(function () { changeSideHeight(); });
+    </script>
+</body>
+</html>

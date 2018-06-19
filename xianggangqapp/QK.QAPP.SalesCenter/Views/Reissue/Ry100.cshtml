@@ -1,0 +1,792 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+
+<div>
+    <ul class="nav nav-tabs" id="sdOrderTab">
+        <li class="nav nav-tabs" style="border:none;">
+            <a href="#need" onclick="javascript:setCurrentGrid(1,this);window.setTimeout(loadNeedPanel,1);">
+                待补件列表
+            </a>
+        </li>
+
+        <li class="nav nav-tabs" style="border:none;">
+            <a href="#had" onclick="javascript:setCurrentGrid(2,this);window.setTimeout(loadHadPanel,1);">
+                已补件列表
+            </a>
+        </li>
+
+        <li class="nav nav-tabs" style="border:none;">
+            <a href="#cancel" onclick="javascript:setCurrentGrid(3,this);window.setTimeout(loadCancelPanel,1);">
+                补件失效列表
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" style="height:auto; overflow-y:auto;">
+        <div id="need-1" class="tab-pane active">
+            <div id="reissue_highSearch_need" style="display:none;">
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">申请单号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber" id="txtAppNumber" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2" id="lblSearchStatus">办理状态：</span>
+                        <div class="col-xs-12 col-sm-3" id="divSearchStatus">
+                            <select name="slctStatus" id="slctStatus" class="col-xs-12">
+                                <option value="">--选择补件状态--</option>
+                                @foreach (KeyValuePair<string, string> kv in ViewData["Order_SD_Status_Need_Ry100"] as Dictionary<string, string>)
+                                {
+                                    <option value="@kv.Key">@kv.Value</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber" id="txtCustomerName" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客户身份证：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtCustomerIDCard" id="txtCustomerIDCard" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">补件提交时间起：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppDateStart" id="txtAppDateStart" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                   data-val="true" />
+                            <span class="input-group-addon"
+                                  style="cursor:pointer;">
+                                <i class="icon-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">补件提交时间止：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppDateEnd" id="txtAppDateEnd" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                   data-val="true" />
+                            <span class="input-group-addon"
+                                  style="cursor:pointer;">
+                                <i class="icon-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">客户经理：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtSales" id="txtSales" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客服专员：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtCsac" id="txtCsac" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <button class="btn btn-sm btn-success" onclick="javascript: doHighSearch();">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                        <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                    </div>
+                </div>
+            </div>
+            <table id="need-grid-table"></table>
+            <div id="need-grid-pager"></div>
+        </div>
+        <div id="had-1" class="tab-pane">
+            <div id="reissue_highSearch_had" style="display:none;">
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">申请单号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber_had" id="txtAppNumber_had" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客户经理：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtSales_had" id="txtSales_had" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber_had" id="txtCustomerName_had" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客户身份证：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber_had" id="txtCustomerIDCard_had" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">申请时间起：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppDateStart_had" id="txtAppDateStart_had" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                   data-val="true" />
+                            <span class="input-group-addon"
+                                  style="cursor:pointer;">
+                                <i class="icon-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">申请时间止：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppDateEnd_had" id="txtAppDateEnd_had" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                   data-val="true" />
+                            <span class="input-group-addon"
+                                  style="cursor:pointer;">
+                                <i class="icon-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">客服专员：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtCsac_had" id="txtCsac_had" class="col-xs-12" />
+                        </div>
+                        <button class="btn btn-sm btn-success" onclick="javascript: doHighSearch();">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                        <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                    </div>
+                </div>
+            </div>
+            <table id="had-grid-table"></table>
+            <div id="had-grid-pager"></div>
+        </div>
+        <div id="cancel-1" class="tab-pane">
+            <div id="reissue_highSearch_cancel" style="display:none;">
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">申请单号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber_cancel" id="txtAppNumber_cancel" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客户经理：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtSales_cancel" id="txtSales_cancel" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber_cancel" id="txtCustomerName_cancel" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客户身份证：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber_cancel" id="txtCustomerIDCard_cancel" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">申请时间起：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppDateStart_cancel" id="txtAppDateStart_cancel" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                   data-val="true" />
+                            <span class="input-group-addon"
+                                  style="cursor:pointer;">
+                                <i class="icon-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">申请时间止：</span>
+                        <div class="input-group col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppDateEnd_cancel" id="txtAppDateEnd_cancel" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                   data-val="true" />
+                            <span class="input-group-addon"
+                                  style="cursor:pointer;">
+                                <i class="icon-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">客服专员：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtCsac_cancel" id="txtCsac_cancel" class="col-xs-12" />
+                        </div>
+                        <button class="btn btn-sm btn-success" onclick="javascript: doHighSearch();">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                        <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                    </div>
+                </div>
+            </div>
+            <table id="cancel-grid-table"></table>
+            <div id="cancel-grid-pager"></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var grid_selector_need = "#need-grid-table";
+    var pager_selector_need = "#need-grid-pager";
+    var grid_selector_had = "#had-grid-table";
+    var pager_selector_had = "#had-grid-pager";
+    var grid_selector_cancel = "#cancel-grid-table";
+    var pager_selector_cancel = "#cancel-grid-pager";
+    var order_SD_AbidanceDay = @(ViewData["Order_SD_AbidanceDay"]);
+    var currentGrid = grid_selector_need;
+    var currentHighSearch = "reissue_highSearch_need";
+    var permissionButtons = @MvcHtmlString.Create(ViewData["Permission_Buttons"].ToString());
+    var sortIndex="";
+    var sortOrder="";
+
+    /*设置当前页签 */
+    function setCurrentGrid(flag,obj){
+        switch(flag){
+            case 1:{
+                currentGrid = grid_selector_need;
+                currentHighSearch = "reissue_highSearch_need";
+            }
+                break;
+            case 2:{
+                currentGrid = grid_selector_had;
+                currentHighSearch = "reissue_highSearch_had";
+            }
+                break;
+            case 3:{
+                currentGrid = grid_selector_cancel;
+                currentHighSearch = "reissue_highSearch_cancel";
+            }
+                break;
+            default:break;
+        }
+        jQuery(".tab-pane").hide();
+        jQuery(jQuery(obj).attr('href')+"-1").show();
+        jQuery(obj).parent().parent().find("li.active").removeClass('active');
+        jQuery(obj).parent().addClass('active');
+    }
+
+    jQuery(function () {
+        /*禁用页面回车键 */
+        document.onkeypress = function(e){
+            e = e || window.event;
+            if(e.keyCode == 13){
+                return false;
+            }
+        }
+
+        /*为Search窗口窗口添加搜索功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function(){doNormalSearch();});
+        jQuery(".input-icon").children("input[type='text']").keypress(function(e){ e=e||event;   if(e.keyCode==13)   { jQuery(".input-icon").children("i").click(); }; });
+        jQuery("<a/>").attr("href", "javascript:;").text("高级查询").attr("onclick", "javascript:showHighSearch();").addClass("label label-lg label-pink arrowed-right").attr("style","top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function(){
+            jQuery(window).resize();
+        });
+
+        /*页面加载时如果没有指定锚点则显示第一个页签*/
+        var hs = window.location.hash;
+        if(!hs){
+            hs = "#need";
+        }
+        jQuery('#sdOrderTab').find('a[href="'+hs+'"]').click();
+
+        /*日期控件加载和绑定 begin*/
+        jQuery("#txtAppDateStart").datepicker({
+            defaultDate: "+1w",
+            changeYear: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            onClose: function( selectedDate ) {
+                jQuery("#txtAppDateEnd").datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        jQuery("#txtAppDateEnd").datepicker({
+            defaultDate: "+1w",
+            changeYear: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            onClose: function( selectedDate ) {
+                jQuery("#txtAppDateStart").datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+
+        jQuery("#txtAppDateStart_had").datepicker({
+            defaultDate: "+1w",
+            changeYear: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            onClose: function( selectedDate ) {
+                jQuery("#txtAppDateEnd_had").datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        jQuery("#txtAppDateEnd_had").datepicker({
+            defaultDate: "+1w",
+            changeYear: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            onClose: function( selectedDate ) {
+                jQuery("#txtAppDateStart_had").datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+
+        jQuery("#txtAppDateStart_cancel").datepicker({
+            defaultDate: "+1w",
+            changeYear: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            onClose: function( selectedDate ) {
+                jQuery("#txtAppDateEnd_cancel").datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        jQuery("#txtAppDateEnd_cancel").datepicker({
+            defaultDate: "+1w",
+            changeYear: true,
+            changeMonth: true,
+            numberOfMonths: 1,
+            onClose: function( selectedDate ) {
+                jQuery("#txtAppDateStart_cancel").datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+
+        jQuery('.date-picker').datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+        /*日期控件加载和绑定 end*/
+    });
+
+    /****************jQuery jqGrid Begin****************/
+    function FirstLoadGrid(_gridId,_pager,_colNames,_colModel,_postData){
+        jQuery(_gridId).jqGrid({
+            url: "/Reissue/GetReissueListRy?logo="+ Utilities.getUrlParam('logo'),
+            datatype: "json",
+            height: jQuery(window).height() - 285,
+            width:jQuery('.tab-content').width(),
+            mtype: "POST",
+            altRows: true,
+            postData: _postData,
+            colNames: _colNames,
+            colModel: _colModel,
+            jsonReader: {
+                root: "ListEnter",
+                total: "TotalPages",
+                page: "CurrentPage",
+                records: "TotalRecords",
+                repeatitems: false
+            },
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [20, 30, 40, 50],
+            pager: _pager,
+            onSortCol:function (colName,iCol,sortorder) {
+                sortIndex=colName;
+                sortOrder=sortorder;
+            },
+            beforeRequest:function () {
+                jQuery(_gridId).jqGrid('setGridParam', {postData:{'sidx':sortIndex,'sord':sortOrder}} );},
+            loadComplete: function () {
+                var table = this;
+                var re_records = jQuery(this).getGridParam('records');
+                if(re_records == 0 || re_records == null){
+                    Utilities.alertTip("对不起，未找到符合条件的记录！");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x","hidden");
+                }, 0);
+
+                jQuery(window).resize();
+            },
+            autowidth: true
+        });
+    }
+
+    /*处理分页控件样式*/
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    };
+    /****************jQuery jqGrid End****************/
+
+    function loadNeedPanel(){
+        /*只初次加载*/
+        if(!jQuery(grid_selector_need))
+            return;
+
+        var colNames = ['<i class="hidden-480 icon-book"></i> 申请号',  '<i class="hidden-480 icon-book"></i> 产品', '<i class="hidden-480 icon-user"></i> 姓名',
+             '<i class="hidden-480 icon-user"></i> 客户身份证','<i class="hidden-480 icon-money"></i> 申请金额',
+             '<i class="hidden-480 icon-money"></i> 合同金额', '<i class="hidden-480 icon-time"></i> 办理状态',
+             '<i class="hidden-480 icon-user"></i> 客户经理', '<i class="hidden-480 icon-user"></i> 客服专员',
+             '<i class="hidden-480 icon-calendar"></i> 补件提交时间','<i class="hidden-480 icon-calendar"></i> 最晚补件时间',
+             '<i class="hidden-480 icon-cogs"></i> 业务办理' ];
+        var colModel = [
+            { name: 'APPCODE', index: 'APPCODE', width: "11%", sorttype: "int" },
+            { name: 'PRODUCTNAME', index: 'PRODUCTNAME', width: "8%", sorttype: "textarea" },
+            { name: 'CUSTOMERNAME', index: 'CUSTOMERNAME', width:  "6%", sorttype: "textarea" },
+            { name: 'CUSTOMERIDCARD', index: 'CUSTOMERIDCARD', width: "11%", sorttype: "textarea" },
+            { name: 'APPLYAMT', index: 'APPLYAMT', width:  "7%",classes:"" },
+            { name: 'LOANAMTOFCONTRACT', index: 'LOANAMTOFCONTRACT', width:  "7%" },
+            { name: 'SORTING', index: 'SORTING', width:  "7%",
+                formatter:function(cellvalue, options, rowobject){
+                    if(rowobject.APPSTATUS == 'SDAPPRWT' || rowobject.APPSTATUS == 'SDAPPRING'){
+                        return '<span class="label label label-warning">'+rowobject.APPSTATUSNAME+'</span>';
+                    }
+                    else if(rowobject.APPSTATUS == 'SDENTRYWT' || rowobject.APPSTATUS == 'SDENTRYING'){
+                        return '<span class="label label label-yellow">'+rowobject.APPSTATUSNAME+'</span>';
+                    }
+                    else{
+                        return '<span class="label label label-danger">'+rowobject.APPSTATUSNAME+'</span>';
+                    }
+                }
+            },
+            { name: 'SALESNAME', index: 'SALESNAME', width:  "8%" },
+            { name: 'CSADNAME', index: 'CSADNAME', width:  "8%" },
+            { name: 'UPDATETIME', index: 'UPDATETIME', width:  "10%", sorttype: "data", formatter: "date",formatoptions:{newformat:'Y-m-d H:i'} },
+            { name: 'UPDATETIME', index: 'UPDATETIME', width:  "10%",
+                formatter:function(cellvalue, options, rowobject){
+                    var day = '';
+                    if(cellvalue){
+                        day = eval("new "+cellvalue.replace('/','').replace('/',''));
+                        day.setDate(day.getDate() + order_SD_AbidanceDay);
+                        day = Utilities.formatDate(day,"yyyy-MM-dd hh:mm");
+                    }
+                    return day;
+                }
+            },
+            {
+                name: 'LOGO', index: 'LOGO', width:  "10%", sortable: false,autowidth:true,
+                formatter: function (cellvalue, options, rowObject) {
+                    var re="";
+                    for(var i = 0; i < permissionButtons.length; i++){
+                        if(permissionButtons[i].Control_ID == "APPLICATION_ENTRY"){
+                            re += "<a style='margin-right:5px;' title='查看申请信息' href='/ProductApplication/RyApplication?app_id="+rowObject.APPID+"'>";
+                            re += "<img src='" + permissionButtons[i].Img + "' />";
+                        }
+                        else if(permissionButtons[i].Control_ID == "browse"){
+                            re += "<a style='margin-right:5px;' title='查看申请单明细' href='/LoanApplication/RyApplication?dformCode="+cellvalue+"&operation=3&appid="+rowObject.APPID+"'>";
+                            re += "<img src='" + permissionButtons[i].Img + "' />";
+                        }
+                        else if(permissionButtons[i].Control_ID == "entryInfo"){
+                            re += "<a style='margin-right:5px;' title='点击进行补件' href='/LoanApplication/RyApplication?dformCode="+cellvalue+"&operation=2&appid="+rowObject.APPID+"'>";
+                            re += "<img src='" + permissionButtons[i].Img + "' />";
+                        }
+                        re += "</a>";
+                    }
+                    return re;
+                }
+            }
+        ];
+        FirstLoadGrid(grid_selector_need,pager_selector_need,colNames,colModel,{});
+    };
+
+    /*加载已补件列表*/
+    function loadHadPanel(){
+        /*只初次加载*/
+        if(!jQuery(grid_selector_had))
+            return;
+
+        var colNames = ['<i class="hidden-480 icon-book"></i> 申请号', '<i class="hidden-480 icon-book"></i> 产品', '<i class="hidden-480 icon-user"></i> 姓名',
+             '<i class="hidden-480 icon-user"></i> 客户身份证', '<i class="hidden-480 icon-money"></i> 申请金额',
+             '<i class="hidden-480 icon-money"></i> 合同金额','<i class="hidden-480 icon-user"></i> 客户经理',
+             '<i class="hidden-480 icon-user"></i> 客服专员','<i class="hidden-480 icon-calendar"></i> 申请时间',
+             '<i class="hidden-480 icon-time"></i> 录入补件','<i class="hidden-480 icon-time"></i> 初审补件',
+             '<i class="hidden-480 icon-cogs"></i> 业务办理'];
+        var colModel = [
+            { name: 'APPCODE', index: 'APPCODE', width: "11%", sorttype: "int" },
+            { name: 'PRODUCTNAME', index: 'PRODUCTNAME', width: "12%", sorttype: "textarea" },
+            { name: 'CUSTOMERNAME', index: 'CUSTOMERNAME', width: "6%", sorttype: "textarea" },
+            { name: 'CUSTOMERIDCARD', index: 'CUSTOMERIDCARD', width: "11%", sorttype: "textarea" },
+            { name: 'APPLYAMT', index: 'APPLYAMT', width: "7%" },
+            { name: 'LOANAMTOFCONTRACT', index: 'LOANAMTOFCONTRACT', width: "7%" },
+            { name: 'SALESNAME', index: 'SALESNAME', width: "8%" },
+            { name: 'CSADNAME', index: 'CSADNAME', width: "8%" },
+            { name: 'CREATEDTIME', index: 'CREATEDTIME', width: "7%", sorttype: "data", formatter: "date",formatoptions:{newformat:'Y-m-d'} },
+            { name: 'APPNRSDSTATUS', index: 'APPNRSDSTATUS', width: "7%", sortable:false,
+                formatter: function(cellvalue, options, rowObject) {
+                    if(cellvalue){
+                        return '<span class="label label label-success"><span class="icon-ok"> 已补件</span></span>';
+                    }
+                    else return "";
+                }
+            },
+            { name: 'APPAPPR1SDSTATUS', index: 'APPAPPR1SDSTATUS', width: "7%" , sortable:false,
+                formatter: function(cellvalue, options, rowObject) {
+                    if(cellvalue){
+                        return '<span class="label label label-success"><span class="icon-ok"> 已补件</span></span>';
+                    }
+                    else return "";
+                }
+            },
+            {
+                name: 'LOGO', index: 'LOGO', width:  "9%", sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    var re="";
+                    for(var i = 0; i < permissionButtons.length; i++){
+                        if(permissionButtons[i].Control_ID == "APPLICATION_ENTRY"){
+                            re += "<a style='margin-right:5px;' title='查看申请信息' href='/ProductApplication/RyApplication?app_id="+rowObject.APPID+"'>";
+                            re += "<img src='" + permissionButtons[i].Img + "' />";
+                        }
+                        else if(permissionButtons[i].Control_ID == "browse"){
+                            re += "<a style='margin-right:5px;' title='查看申请单明细' href='/LoanApplication/RyApplication?dformCode="+cellvalue+"&operation=3&appid="+rowObject.APPID+"'>";
+                            re += "<img src='" + permissionButtons[i].Img + "' />";
+                        }
+                        re += "</a>";
+                    }
+                    return re;
+                }
+            }
+        ];
+        var postData = {enterStasus:"@(ViewData["Order_SD_Status_Had_Ry100"])", searchSD:true};
+        FirstLoadGrid(grid_selector_had,pager_selector_had,colNames,colModel,postData);
+    };
+
+    /*加载补件失效列表*/
+    function loadCancelPanel(){
+        /*只初次加载*/
+        if(!jQuery(grid_selector_cancel))
+            return;
+
+        var colNames = ['<i class="hidden-480 icon-book"></i> 申请号', '<i class="hidden-480 icon-book"></i> 产品', '<i class="hidden-480 icon-user"></i> 姓名',
+             '<i class="hidden-480 icon-user"></i> 客户身份证','<i class="hidden-480 icon-money"></i> 申请金额', '<i class="hidden-480 icon-money"></i> 合同金额',
+            '<i class="hidden-480 icon-user"></i> 客户经理', '<i class="hidden-480 icon-user"></i> 客服专员',
+            '<i class="hidden-480 icon-calendar"></i> 申请时间','<i class="hidden-480 icon-time"></i> 办理状态', '<i class="hidden-480 icon-cogs"></i> 业务办理'];
+        var colModel = [
+            { name: 'APPCODE', index: 'APPCODE', width: "12%", sorttype: "int" },
+            { name: 'PRODUCTNAME', index: 'PRODUCTNAME', width: "12%", sorttype: "textarea" },
+            { name: 'CUSTOMERNAME', index: 'CUSTOMERNAME', width: "6%", sorttype: "textarea" },
+            { name: 'CUSTOMERIDCARD', index: 'CUSTOMERIDCARD', width: "12%", sorttype: "textarea" },
+            { name: 'APPLYAMT', index: 'APPLYAMT', width: "7%" },
+            { name: 'LOANAMTOFCONTRACT', index: 'LOANAMTOFCONTRACT', width: "7%" },
+            { name: 'SALESNAME', index: 'SALESNAME', width: "8%" },
+            { name: 'CSADNAME', index: 'CSADNAME', width: "8%" },
+            { name: 'CREATEDTIME', index: 'CREATEDTIME', width: "7%", sorttype: "data", formatter: "date",formatoptions:{newformat:'Y-m-d'} },
+            { name: 'SORTING', index: 'SORTING', width: "11%",
+                formatter: function(cellvalue, options, rowObject) {
+                    if(cellvalue){
+                        return '<span class="label label label-grey"><span class="icon-ok">'+rowObject.APPSTATUSNAME+'</span></span>';
+                    }
+                    else return "";
+                }
+            },
+            {
+                name: 'LOGO', index: 'LOGO', width:  "11%", sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    var re="";
+                    for(var i = 0; i < permissionButtons.length; i++){
+                        if(permissionButtons[i].Control_ID == "APPLICATION_ENTRY"){
+                            re += "<a style='margin-right:5px;' title='查看申请信息' href='/ProductApplication/RyApplication?app_id="+rowObject.APPID+"'>";
+                            re += "<img src='" + permissionButtons[i].Img + "' />";
+                        }
+                        else if(permissionButtons[i].Control_ID == "browse"){
+                            re += "<a style='margin-right:5px;' title='查看申请单明细' href='/LoanApplication/RyApplication?dformCode="+cellvalue+"&operation=3&appid="+rowObject.APPID+"'>";
+                            re += "<img src='" + permissionButtons[i].Img + "' />";
+                        }
+                        re += "</a>";
+                    }
+                    return re;
+                }
+            }
+        ];
+        var postData = {enterStasus:"@(ViewData["Order_SD_Status_Cancel_Ry100"])"};
+        FirstLoadGrid(grid_selector_cancel,pager_selector_cancel,colNames,colModel,postData);
+    }
+
+    /*开启/关闭高级搜索*/
+    function showHighSearch() {
+        jQuery("#"+currentHighSearch).toggle(300,function(){jQuery(window).resize()});
+    }
+
+    /*点击搜索按钮重新搜索*/
+    function doHighSearch() {
+        jQuery("#nav_search_input").val('');
+        var para;
+        sortIndex='';
+        sortOrder='';
+        switch(currentGrid)
+        {
+            case grid_selector_need:
+                {
+                    para = {
+                        sidx:sortIndex,
+                        appCode: escape(jQuery("#txtAppNumber").val()),
+                        customerName: escape(jQuery("#txtCustomerName").val()),
+                        customerIDCard: escape(jQuery("#txtCustomerIDCard").val()),
+                        applyStart: jQuery("#txtAppDateStart").val(),
+                        applyEnd: jQuery("#txtAppDateEnd").val(),
+                        enterStasus: jQuery("#slctStatus").val(),
+                        sales: escape(jQuery("#txtSales").val()),
+                        csac: escape(jQuery("#txtCsac").val()),
+                        fuzzySearch: 0,/*高级查询*/
+                        needTag:1
+                    }
+                }break;
+            case grid_selector_had:
+                {
+                    para = {
+                        sidx:sortIndex,
+                        appCode: escape(jQuery("#txtAppNumber_had").val()),
+                        customerName: escape(jQuery("#txtCustomerName_had").val()),
+                        customerIDCard: escape(jQuery("#txtCustomerIDCard_had").val()),
+                        applyStart: jQuery("#txtAppDateStart_had").val(),
+                        applyEnd: jQuery("#txtAppDateEnd_had").val(),
+                        enterStasus:"@(ViewData["Order_SD_Status_Had_Ry100"])",
+                        sales: escape(jQuery("#txtSales_had").val()),
+                        csac: escape(jQuery("#txtCsac_had").val()),
+                        searchSD:true,
+                        fuzzySearch: 0,/*高级查询*/
+                        needTag:0
+                    }
+                }break;
+            case grid_selector_cancel:
+                {
+                    para = {
+                        sidx:sortIndex,
+                        appCode: escape(jQuery("#txtAppNumber_cancel").val()),
+                        customerName: escape(jQuery("#txtCustomerName_cancel").val()),
+                        customerIDCard: escape(jQuery("#txtCustomerIDCard_cancel").val()),
+                        applyStart: jQuery("#txtAppDateStart_cancel").val(),
+                        applyEnd: jQuery("#txtAppDateEnd_cancel").val(),
+                        enterStasus:"@(ViewData["Order_SD_Status_Cancel_Ry100"])",
+                        sales: escape(jQuery("#txtSales_cancel").val()),
+                        csac: escape(jQuery("#txtCsac_cancel").val()),
+                        fuzzySearch: 0,/*高级查询*/
+                        needTag:0
+                    }
+                }break;
+            default:break;
+        };
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    /*Search窗口简单查询*/
+    function doNormalSearch() {
+        jQuery("#"+currentHighSearch).find("input[type='text']").each(function () {
+            jQuery(this).val("")
+        });
+        jQuery("#"+currentHighSearch).find("select").each(function () {
+            jQuery(this).val("")
+        });
+        sortIndex='';
+        sortOrder='';
+        var para;
+        switch(currentGrid)
+        {
+            case grid_selector_need:
+                {
+                    para = {
+                        sidx:sortIndex,
+                        appCode: escape(jQuery("#nav_search_input").val()),
+                        customerName: escape(jQuery("#nav_search_input").val()),
+                        page: '1',
+                        applyStart: '',
+                        applyEnd: '',
+                        enterStasus: '',
+                        sales: '',
+                        csac: '',
+                        fuzzySearch: 1,/*简单查询*/
+                        needTag:1
+                    }
+                }break;
+            case grid_selector_had:
+                {
+                    para = {
+                        sidx:sortIndex,
+                        appCode: escape(jQuery("#nav_search_input").val()),
+                        customerName: escape(jQuery("#nav_search_input").val()),
+                        page: '1',
+                        applyStart: '',
+                        applyEnd: '',
+                        enterStasus:"@(ViewData["Order_SD_Status_Had_Ry100"])",
+                        searchSD:true,
+                        sales: '',
+                        csac: '',
+                        fuzzySearch: 1,/*简单查询*/
+                        neesTag:0
+                    }
+                }break;
+            case grid_selector_cancel:
+                {
+                    para = {
+                        sidx:sortIndex,
+                        appCode: escape(jQuery("#nav_search_input").val()),
+                        customerName: escape(jQuery("#nav_search_input").val()),
+                        page: '1',
+                        applyStart: '',
+                        applyEnd: '',
+                        enterStasus:"@(ViewData["Order_SD_Status_Cancel_Ry100"])",
+                        sales: '',
+                        csac: '',
+                        fuzzySearch: 1,/*简单查询*/
+                        neesTag:0
+                    }
+                }break;
+            default:break;
+        };
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    jQuery(window).resize(function(){
+        jQuery(window).unbind("onresize");
+        jQuery(grid_selector_need).setGridHeight(jQuery(window).height() - 285);
+        jQuery(grid_selector_had).setGridHeight(jQuery(window).height() - 285);
+        jQuery(grid_selector_cancel).setGridHeight(jQuery(window).height() - 285);
+        jQuery(grid_selector_need).setGridWidth(jQuery('.tab-content').width());
+        jQuery(grid_selector_had).setGridWidth(jQuery('.tab-content').width());
+        jQuery(grid_selector_cancel).setGridWidth(jQuery('.tab-content').width());
+
+        jQuery(grid_selector_need).setGridHeight(jQuery(window).height() - 285);
+        jQuery(grid_selector_had).setGridHeight(jQuery(window).height() - 285);
+        jQuery(grid_selector_cancel).setGridHeight(jQuery(window).height() - 285);
+        jQuery(grid_selector_need).setGridWidth(jQuery('.tab-content').width());
+        jQuery(grid_selector_had).setGridWidth(jQuery('.tab-content').width());
+        jQuery(grid_selector_cancel).setGridWidth(jQuery('.tab-content').width());
+
+        jQuery('.ui-jqgrid-hbox').each(function(){
+            jQuery(this).find('th').last().css('width',(jQuery(this).find('th').last().width()+ 25) + 'px');
+        });
+
+        jQuery(window).bind("onresize", this);
+    });
+</script>

@@ -1,0 +1,1624 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QK.QAPP.Entity" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="APPEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="APP_BANKCARD" EntityType="QK.QAPP.Entity.APP_BANKCARD" />
+    <EntitySet Name="APP_JOB" EntityType="QK.QAPP.Entity.APP_JOB" />
+    <EntitySet Name="APP_LOAN" EntityType="QK.QAPP.Entity.APP_LOAN" />
+    <EntitySet Name="APP_SALES" EntityType="QK.QAPP.Entity.APP_SALES" />
+    <EntitySet Name="APP_STAFF_ONLY" EntityType="QK.QAPP.Entity.APP_STAFF_ONLY" />
+    <EntitySet Name="APP_DFORM_FIELDATTRIBUTE" EntityType="QK.QAPP.Entity.APP_DFORM_FIELDATTRIBUTE" />
+    <EntitySet Name="APP_DFORM_FORMBUILDER" EntityType="QK.QAPP.Entity.APP_DFORM_FORMBUILDER" />
+    <EntitySet Name="APP_DFORM_FORMFIELD" EntityType="QK.QAPP.Entity.APP_DFORM_FORMFIELD" />
+    <EntitySet Name="APP_DFORM_FORMINFO" EntityType="QK.QAPP.Entity.APP_DFORM_FORMINFO" />
+    <AssociationSet Name="FK_FORMFIELD_FIELDATTRIBUTE" Association="QK.QAPP.Entity.FK_FORMFIELD_FIELDATTRIBUTE">
+      <End Role="APP_DFORM_FORMFIELD" EntitySet="APP_DFORM_FORMFIELD" />
+      <End Role="APP_DFORM_FIELDATTRIBUTE" EntitySet="APP_DFORM_FIELDATTRIBUTE" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FORMINFO_FORMBUILDER" Association="QK.QAPP.Entity.FK_FORMINFO_FORMBUILDER">
+      <End Role="APP_DFORM_FORMBUILDER" EntitySet="APP_DFORM_FORMBUILDER" />
+      <End Role="APP_DFORM_FORMINFO" EntitySet="APP_DFORM_FORMINFO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FORMFIELD_FORMINFO" Association="QK.QAPP.Entity.FK_FORMFIELD_FORMINFO">
+      <End Role="APP_DFORM_FORMINFO" EntitySet="APP_DFORM_FORMINFO" />
+      <End Role="APP_DFORM_FORMFIELD" EntitySet="APP_DFORM_FORMFIELD" />
+    </AssociationSet>
+    <EntitySet Name="APP_CONTACT" EntityType="QK.QAPP.Entity.APP_CONTACT" />
+    <EntitySet Name="APP_MAIN" EntityType="QK.QAPP.Entity.APP_MAIN" />
+    <AssociationSet Name="FK_APP_BANK_2_APP_MAIN" Association="QK.QAPP.Entity.FK_APP_BANK_2_APP_MAIN">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_BANKCARD" EntitySet="APP_BANKCARD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_APP_JOB_2_APP_MAIN" Association="QK.QAPP.Entity.FK_APP_JOB_2_APP_MAIN">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_JOB" EntitySet="APP_JOB" />
+    </AssociationSet>
+    <AssociationSet Name="FK_APP_LOAN_2_APP_MAIN" Association="QK.QAPP.Entity.FK_APP_LOAN_2_APP_MAIN">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_LOAN" EntitySet="APP_LOAN" />
+    </AssociationSet>
+    <AssociationSet Name="FK_APP_STAF_2_APP_MAIN" Association="QK.QAPP.Entity.FK_APP_STAF_2_APP_MAIN">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_STAFF_ONLY" EntitySet="APP_STAFF_ONLY" />
+    </AssociationSet>
+    <EntitySet Name="FL_BIZ" EntityType="QK.QAPP.Entity.FL_BIZ" />
+    <EntitySet Name="FL_LIST" EntityType="QK.QAPP.Entity.FL_LIST" />
+    <FunctionImport Name="P_APP_APPLYNUMBER">
+      <Parameter Name="I_VC_SEQCODE" Mode="In" Type="String" />
+      <Parameter Name="I_VC_CITYCODE" Mode="In" Type="String" />
+      <Parameter Name="I_VC_PRONUM" Mode="In" Type="String" />
+      <Parameter Name="O_VC_RETURNNUM" Mode="Out" Type="String" />
+      <Parameter Name="O_VC_ERRORMSG" Mode="Out" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="APP_FILE_CHECK" EntityType="QK.QAPP.Entity.APP_FILE_CHECK" />
+    <EntitySet Name="V_APPMAIN" EntityType="QK.QAPP.Entity.V_APPMAIN" />
+    <EntitySet Name="APP_NR_LIST" EntityType="QK.QAPP.Entity.APP_NR_LIST" />
+    <AssociationSet Name="FK_APP_NR_LIST_2_APP_MAIN" Association="QK.QAPP.Entity.FK_APP_NR_LIST_2_APP_MAIN">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_NR_LIST" EntitySet="APP_NR_LIST" />
+    </AssociationSet>
+    <EntitySet Name="APP_QUEUE" EntityType="QK.QAPP.Entity.APP_QUEUE" />
+    <AssociationSet Name="FK_APP_QUEUE_2_APP_MAIN" Association="QK.QAPP.Entity.FK_APP_QUEUE_2_APP_MAIN">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_QUEUE" EntitySet="APP_QUEUE" />
+    </AssociationSet>
+    <EntitySet Name="APP_CITY" EntityType="QK.QAPP.Entity.APP_CITY" />
+    <EntitySet Name="APP_MSGBOX_USER" EntityType="QK.QAPP.Entity.APP_MSGBOX_USER" />
+    <EntitySet Name="APP_MSGBOX" EntityType="QK.QAPP.Entity.APP_MSGBOX" />
+    <EntitySet Name="APP_CUSTOMER" EntityType="QK.QAPP.Entity.APP_CUSTOMER" />
+    <AssociationSet Name="FK_APP_CUST_2_APP_MAIN" Association="QK.QAPP.Entity.FK_APP_CUST_2_APP_MAIN">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_CUSTOMER" EntitySet="APP_CUSTOMER" />
+    </AssociationSet>
+    <EntitySet Name="APP_APPLY_SEQUENCE" EntityType="QK.QAPP.Entity.APP_APPLY_SEQUENCE" />
+    <EntitySet Name="APP_GLOBALCONFIG" EntityType="QK.QAPP.Entity.APP_GLOBALCONFIG" />
+    <AssociationSet Name="UK_GLOBALCONFIG_GLOBALCONFIG" Association="QK.QAPP.Entity.UK_GLOBALCONFIG_GLOBALCONFIG">
+      <End Role="APP_GLOBALCONFIG" EntitySet="APP_GLOBALCONFIG" />
+      <End Role="APP_GLOBALCONFIG1" EntitySet="APP_GLOBALCONFIG" />
+    </AssociationSet>
+    <EntitySet Name="APP_AEO" EntityType="QK.QAPP.Entity.APP_AEO" />
+    <EntitySet Name="APP_AUTH" EntityType="QK.QAPP.Entity.APP_AUTH" />
+    <AssociationSet Name="APPAUTH_APPMAIN_FK" Association="QK.QAPP.Entity.APPAUTH_APPMAIN_FK">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_AUTH" EntitySet="APP_AUTH" />
+    </AssociationSet>
+    <FunctionImport Name="P_APP_APPLYNUMBER_EXTEND">
+      <Parameter Name="I_VC_SEQCODE" Mode="In" Type="String" />
+      <Parameter Name="I_VC_CITYCODE" Mode="In" Type="String" />
+      <Parameter Name="I_VC_PRONUM" Mode="In" Type="String" />
+      <Parameter Name="I_VC_OPETYPE" Mode="In" Type="String" />
+      <Parameter Name="O_VC_RETURNNUM" Mode="Out" Type="String" />
+      <Parameter Name="O_VC_ERRORMSG" Mode="Out" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="APP_EXTEND_CONFIG" EntityType="QK.QAPP.Entity.APP_EXTEND_CONFIG" />
+    <EntitySet Name="APP_EXTEND_RELATION" EntityType="QK.QAPP.Entity.APP_EXTEND_RELATION" />
+    <EntitySet Name="APP_CARPRICE" EntityType="QK.QAPP.Entity.APP_CARPRICE" />
+    <EntitySet Name="APP_FORBIDEN_AREA" EntityType="QK.QAPP.Entity.APP_FORBIDEN_AREA" />
+    <EntitySet Name="APP_CARINFO" EntityType="QK.QAPP.Entity.APP_CARINFO" />
+    <AssociationSet Name="FK_APP_CARINFO_APP_MAIN" Association="QK.QAPP.Entity.FK_APP_CARINFO_APP_MAIN">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_CARINFO" EntitySet="APP_CARINFO" />
+    </AssociationSet>
+    <EntitySet Name="PAD_CARJUDGE" EntityType="QK.QAPP.Entity.PAD_CARJUDGE" />
+    <EntitySet Name="APP_CARVALUATORS" EntityType="QK.QAPP.Entity.APP_CARVALUATORS" />
+    <EntitySet Name="APP_QUEUE_ASSESS" EntityType="QK.QAPP.Entity.APP_QUEUE_ASSESS" />
+    <EntitySet Name="APP_CARAGENCY" EntityType="QK.QAPP.Entity.APP_CARAGENCY" />
+    <EntitySet Name="PRE_APP_AUTH" EntityType="QK.QAPP.Entity.PRE_APP_AUTH" />
+    <EntitySet Name="PRE_APP_BANKCARD" EntityType="QK.QAPP.Entity.PRE_APP_BANKCARD" />
+    <EntitySet Name="PRE_APP_CUSTOMER" EntityType="QK.QAPP.Entity.PRE_APP_CUSTOMER" />
+    <EntitySet Name="PRE_APP_JOB" EntityType="QK.QAPP.Entity.PRE_APP_JOB" />
+    <EntitySet Name="PRE_APP_LOAN" EntityType="QK.QAPP.Entity.PRE_APP_LOAN" />
+    <EntitySet Name="PRE_APP_MAIN" EntityType="QK.QAPP.Entity.PRE_APP_MAIN" />
+    <EntitySet Name="PRE_APP_STAFF_ONLY" EntityType="QK.QAPP.Entity.PRE_APP_STAFF_ONLY" />
+    <AssociationSet Name="FK_PRE_APP_AUTH_2_APP_ID" Association="QK.QAPP.Entity.FK_PRE_APP_AUTH_2_APP_ID">
+      <End Role="PRE_APP_MAIN" EntitySet="PRE_APP_MAIN" />
+      <End Role="PRE_APP_AUTH" EntitySet="PRE_APP_AUTH" />
+    </AssociationSet>
+    <AssociationSet Name="FF_PRE_APP_BANKCARD_2_APP_ID" Association="QK.QAPP.Entity.FF_PRE_APP_BANKCARD_2_APP_ID">
+      <End Role="PRE_APP_MAIN" EntitySet="PRE_APP_MAIN" />
+      <End Role="PRE_APP_BANKCARD" EntitySet="PRE_APP_BANKCARD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PRE_APP_CUST_2_PRE_APP_MAIN" Association="QK.QAPP.Entity.FK_PRE_APP_CUST_2_PRE_APP_MAIN">
+      <End Role="PRE_APP_MAIN" EntitySet="PRE_APP_MAIN" />
+      <End Role="PRE_APP_CUSTOMER" EntitySet="PRE_APP_CUSTOMER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PRE_APP_JOB_2_PRE_APP_MAIN" Association="QK.QAPP.Entity.FK_PRE_APP_JOB_2_PRE_APP_MAIN">
+      <End Role="PRE_APP_MAIN" EntitySet="PRE_APP_MAIN" />
+      <End Role="PRE_APP_JOB" EntitySet="PRE_APP_JOB" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PRE_APP_LOAN_2_APP_MAIN" Association="QK.QAPP.Entity.FK_PRE_APP_LOAN_2_APP_MAIN">
+      <End Role="PRE_APP_MAIN" EntitySet="PRE_APP_MAIN" />
+      <End Role="PRE_APP_LOAN" EntitySet="PRE_APP_LOAN" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PRE_APP_STAF_2_PRE_APP_MAIN" Association="QK.QAPP.Entity.FK_PRE_APP_STAF_2_PRE_APP_MAIN">
+      <End Role="PRE_APP_MAIN" EntitySet="PRE_APP_MAIN" />
+      <End Role="PRE_APP_STAFF_ONLY" EntitySet="PRE_APP_STAFF_ONLY" />
+    </AssociationSet>
+    <EntitySet Name="V_PRE_APPMAIN" EntityType="QK.QAPP.Entity.V_PRE_APPMAIN" />
+    <EntitySet Name="APP_HOUSE" EntityType="QK.QAPP.Entity.APP_HOUSE" />
+    <AssociationSet Name="FK_APP_MAIN_APP_HOUSE" Association="QK.QAPP.Entity.FK_APP_MAIN_APP_HOUSE">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_HOUSE" EntitySet="APP_HOUSE" />
+    </AssociationSet>
+    <EntitySet Name="PRE_APP_CARINFO" EntityType="QK.QAPP.Entity.PRE_APP_CARINFO" />
+    <AssociationSet Name="FK_MAIN_CARINFO_APP_ID" Association="QK.QAPP.Entity.FK_MAIN_CARINFO_APP_ID">
+      <End Role="PRE_APP_MAIN" EntitySet="PRE_APP_MAIN" />
+      <End Role="PRE_APP_CARINFO" EntitySet="PRE_APP_CARINFO" />
+    </AssociationSet>
+    <EntitySet Name="V_APP_CONTRACT" EntityType="QK.QAPP.Entity.V_APP_CONTRACT" />
+    <EntitySet Name="APP_CITY_PRODUCT" EntityType="QK.QAPP.Entity.APP_CITY_PRODUCT" />
+    <EntitySet Name="APP_QUANT" EntityType="QK.QAPP.Entity.APP_QUANT" />
+    <EntitySet Name="APP_QUANT_TEMP" EntityType="QK.QAPP.Entity.APP_QUANT_TEMP" />
+    <AssociationSet Name="FK_APPQUANT_APPMAIN" Association="QK.QAPP.Entity.FK_APPQUANT_APPMAIN">
+      <End Role="APP_MAIN" EntitySet="APP_MAIN" />
+      <End Role="APP_QUANT" EntitySet="APP_QUANT" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="APP_BANKCARD">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="BANK_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_ACCOUNT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_SUB" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MAIL_ADDRESS_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MAIL_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MAIL_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MAIL_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="DATE_SIGNATURE" Type="DateTime" Precision="6" />
+    <Property Name="BANK_MOBILE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.FK_APP_BANK_2_APP_MAIN" FromRole="APP_BANKCARD" ToRole="APP_MAIN" />
+  </EntityType>
+  <EntityType Name="APP_JOB">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="COM_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="COM_PROPERTY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COM_PROPERTY_OTHER" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="COM_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COM_TYPE_OTHER" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="COM_TEL_AREA_CODE" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="COM_TEL_NO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="COM_TEL_EXT" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="COM_PROVICE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COM_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COM_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="DATE_COM_REGISTER" Type="DateTime" Precision="6" />
+    <Property Name="COM_REGISTER_CAPITAL_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="COM_PERSONS" Type="Int32" />
+    <Property Name="COM_DEPT" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="COM_POSITION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COM_POSITION_OTHER" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DATE_JOIN" Type="DateTime" Precision="6" />
+    <Property Name="STATION2_COM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SHARE_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="STATION2_COM_OTHER" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.FK_APP_JOB_2_APP_MAIN" FromRole="APP_JOB" ToRole="APP_MAIN" />
+    <Property Name="AEO_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AEO_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="COM_PROFESSION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COM_PROFESSION_DETAIL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WORKING_YEARS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_LOAN">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="LOAN_PURPOSE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MEMO_OF_LOAN_PURPOSE_OTHER" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_BRAND_BUYING" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_MODEL_BUYING" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_PRICE_BUYING" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="APPLY_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CREDITLIMITADVICE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="LOAN_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="LOAN_AMT_OF_CONTRACT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PAY_AMT_MONTHLY_ACCEPTABLE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PAY_AMT_FIRST_MONTHLY" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PAY_AMT_LAST_MONTHLY" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PAY_AMT_MONTHLY" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="DEFAULT_INTEREST_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="LATE_FEE_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="PREPAYMENT_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="SERVICE_CHARGE_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="CONSULTATION_CHARGE_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="RATE_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TERMS" Type="Int16" />
+    <Property Name="RATE" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="PAYTYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CURRENCY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESERVES_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="SERVICE_CHARGE_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CONSULTATION_CHARGE_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RESERVES_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.FK_APP_LOAN_2_APP_MAIN" FromRole="APP_LOAN" ToRole="APP_MAIN" />
+    <Property Name="RISK_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="RISK_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="EXTEND_AMT_OF_CONTRACT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CAR_CHARACTERISTIC" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_PRICE_ADVISE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CAR_DOWN_PAYMENT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CHANNEL_EXPENSE_RATIO" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CAR_DECISION_AMT" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="APP_SALES">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="SALES_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SALES_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="MEMO" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+  </EntityType>
+  <EntityType Name="APP_STAFF_ONLY">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="CHANNEL_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANNEL_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="RECOMMEND_PERSON_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RECOMMEND_PERSON_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="RECOMMEND_PERSON_TEL" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="SALES_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="SALES_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SALES_SIGNATURE" Type="DateTime" Precision="6" />
+    <Property Name="CSAD_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CSAD_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="MEMO" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.FK_APP_STAF_2_APP_MAIN" FromRole="APP_STAFF_ONLY" ToRole="APP_MAIN" />
+    <Property Name="NR_MEMO_FROM_DECISION" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="NR_MEMO_FROM_SALES" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="MOTO_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MOTO_NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="SALES_MOBILE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CREDIT_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREDIT_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="BUSINESS_DEPARTMENT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PUSH_CODE" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_DFORM_FIELDATTRIBUTE">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="FORMFIELD_ID" Type="Int64" />
+    <Property Name="ATTRIBUTE_KEY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ATTRIBUTE_VALUE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_DFORM_FORMFIELD" Relationship="QK.QAPP.Entity.FK_FORMFIELD_FIELDATTRIBUTE" FromRole="APP_DFORM_FIELDATTRIBUTE" ToRole="APP_DFORM_FORMFIELD" />
+  </EntityType>
+  <EntityType Name="APP_DFORM_FORMBUILDER">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VERSION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_ID" Type="Int64" />
+    <Property Name="ACTION_EDIT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ACTION_READ" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_DFORM_FORMINFO" Relationship="QK.QAPP.Entity.FK_FORMINFO_FORMBUILDER" FromRole="APP_DFORM_FORMBUILDER" ToRole="APP_DFORM_FORMINFO" />
+  </EntityType>
+  <EntityType Name="APP_DFORM_FORMFIELD">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="FORMINFO_ID" Type="Int64" />
+    <Property Name="FIELD_KEY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FIELD_DISPLAYNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FIELD_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FIELD_ROWSPAN" Type="Int16" />
+    <Property Name="MAPPER_TABLE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MAPPER_TABLEFIELD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FIELD_GROUP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FIELD_SORT" Type="Int16" />
+    <Property Name="FIELD_REQUIRED" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_DFORM_FIELDATTRIBUTE" Relationship="QK.QAPP.Entity.FK_FORMFIELD_FIELDATTRIBUTE" FromRole="APP_DFORM_FORMFIELD" ToRole="APP_DFORM_FIELDATTRIBUTE" />
+    <NavigationProperty Name="APP_DFORM_FORMINFO" Relationship="QK.QAPP.Entity.FK_FORMFIELD_FORMINFO" FromRole="APP_DFORM_FORMFIELD" ToRole="APP_DFORM_FORMINFO" />
+    <Property Name="ISDISABLED" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="ENABLE" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_DFORM_FORMINFO">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="FB_ID" Type="Int64" />
+    <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VERSION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="READONLY" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="ACTION_EDIT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ACTION_READ" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="Sort" Type="Int32" />
+    <Property Name="ADDMORE" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="ADDMOREKEYWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_DFORM_FORMBUILDER" Relationship="QK.QAPP.Entity.FK_FORMINFO_FORMBUILDER" FromRole="APP_DFORM_FORMINFO" ToRole="APP_DFORM_FORMBUILDER" />
+    <NavigationProperty Name="APP_DFORM_FORMFIELD" Relationship="QK.QAPP.Entity.FK_FORMFIELD_FORMINFO" FromRole="APP_DFORM_FORMINFO" ToRole="APP_DFORM_FORMFIELD" />
+    <Property Name="ENABLE" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_FORMFIELD_FIELDATTRIBUTE">
+    <End Type="QK.QAPP.Entity.APP_DFORM_FORMFIELD" Role="APP_DFORM_FORMFIELD" Multiplicity="0..1" />
+    <End Type="QK.QAPP.Entity.APP_DFORM_FIELDATTRIBUTE" Role="APP_DFORM_FIELDATTRIBUTE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_DFORM_FORMFIELD">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_DFORM_FIELDATTRIBUTE">
+        <PropertyRef Name="FORMFIELD_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FORMINFO_FORMBUILDER">
+    <End Type="QK.QAPP.Entity.APP_DFORM_FORMBUILDER" Role="APP_DFORM_FORMBUILDER" Multiplicity="0..1" />
+    <End Type="QK.QAPP.Entity.APP_DFORM_FORMINFO" Role="APP_DFORM_FORMINFO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_DFORM_FORMBUILDER">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_DFORM_FORMINFO">
+        <PropertyRef Name="FB_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FORMFIELD_FORMINFO">
+    <End Type="QK.QAPP.Entity.APP_DFORM_FORMINFO" Role="APP_DFORM_FORMINFO" Multiplicity="0..1" />
+    <End Type="QK.QAPP.Entity.APP_DFORM_FORMFIELD" Role="APP_DFORM_FORMFIELD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_DFORM_FORMINFO">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_DFORM_FORMFIELD">
+        <PropertyRef Name="FORMINFO_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="APP_CONTACT">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="RELATIONSHIP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RELATIONSHIP_MEMO" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="MOBILE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="COM_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="COM_DEPT" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="COM_POSITION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COM_PROVICE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COM_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COM_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CON_ID_NO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CON_ID_TYPE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CONTACT_PROPERTY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="REGISTER_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="REGISTER_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="REGISTER_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_MAIN">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LOGO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AREA_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AREA_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="STORE_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="STORE_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ENTRY_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APP_STATUS" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="ENTRYNAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="APPLY_CITY_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ENTRY_ORG_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ENTRY_ORG_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IS_VIP" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="IS_REPEAT" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_BANKCARD" Relationship="QK.QAPP.Entity.FK_APP_BANK_2_APP_MAIN" FromRole="APP_MAIN" ToRole="APP_BANKCARD" />
+    <NavigationProperty Name="APP_JOB" Relationship="QK.QAPP.Entity.FK_APP_JOB_2_APP_MAIN" FromRole="APP_MAIN" ToRole="APP_JOB" />
+    <NavigationProperty Name="APP_LOAN" Relationship="QK.QAPP.Entity.FK_APP_LOAN_2_APP_MAIN" FromRole="APP_MAIN" ToRole="APP_LOAN" />
+    <NavigationProperty Name="APP_STAFF_ONLY" Relationship="QK.QAPP.Entity.FK_APP_STAF_2_APP_MAIN" FromRole="APP_MAIN" ToRole="APP_STAFF_ONLY" />
+    <Property Name="PRODUCT_SUIT_CROUD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_NR_LIST" Relationship="QK.QAPP.Entity.FK_APP_NR_LIST_2_APP_MAIN" FromRole="APP_MAIN" ToRole="APP_NR_LIST" />
+    <Property Name="APP_NR_SD_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APP_APPR1_SD_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_QUEUE" Relationship="QK.QAPP.Entity.FK_APP_QUEUE_2_APP_MAIN" FromRole="APP_MAIN" ToRole="APP_QUEUE" />
+    <Property Name="CUSTOMERTYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_CUSTOMER" Relationship="QK.QAPP.Entity.FK_APP_CUST_2_APP_MAIN" FromRole="APP_MAIN" ToRole="APP_CUSTOMER" />
+    <Property Name="NR_SEQ" Type="Int16" />
+    <Property Name="IS_AUDIT_FLAG" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="IS_AUDIT_APPROVE_FLAG" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="STATUS_PHASE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PROD_VERSION" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="APP_AUTH" Relationship="QK.QAPP.Entity.APPAUTH_APPMAIN_FK" FromRole="APP_MAIN" ToRole="APP_AUTH" />
+    <Property Name="DECISION_SCORE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="DECISION_MODEL" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="APPLY_AREA_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRE_APP_ID" Type="Int64" />
+    <NavigationProperty Name="APP_CARINFO" Relationship="QK.QAPP.Entity.FK_APP_CARINFO_APP_MAIN" FromRole="APP_MAIN" ToRole="APP_CARINFO" />
+    <Property Name="GIVE_LOAN_TIME" Type="DateTime" Precision="6" />
+    <Property Name="BACK_LOAN_TIME" Type="DateTime" Precision="6" />
+    <Property Name="HAS_EXTEND" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="CREDIT_CHANNEL_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="OPENID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_HOUSE" Relationship="QK.QAPP.Entity.FK_APP_MAIN_APP_HOUSE" FromRole="APP_MAIN" ToRole="APP_HOUSE" />
+    <Property Name="SUBMIT_TIME" Type="DateTime" Precision="6" />
+    <Property Name="OVERDUE_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MOBILE_HISTORY_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CONTRACT_IS_CREATE" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="PBOC_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NETBANK_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FUND_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_QUANT" Relationship="QK.QAPP.Entity.FK_APPQUANT_APPMAIN" FromRole="APP_MAIN" ToRole="APP_QUANT" />
+  </EntityType>
+  <Association Name="FK_APP_BANK_2_APP_MAIN">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="1" />
+    <End Type="QK.QAPP.Entity.APP_BANKCARD" Role="APP_BANKCARD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_BANKCARD">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_APP_JOB_2_APP_MAIN">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="1" />
+    <End Type="QK.QAPP.Entity.APP_JOB" Role="APP_JOB" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_JOB">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_APP_LOAN_2_APP_MAIN">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="1" />
+    <End Type="QK.QAPP.Entity.APP_LOAN" Role="APP_LOAN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_LOAN">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_APP_STAF_2_APP_MAIN">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="1" />
+    <End Type="QK.QAPP.Entity.APP_STAFF_ONLY" Role="APP_STAFF_ONLY" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_STAFF_ONLY">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="FL_BIZ">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="BIZ_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ID_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ID_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="USER_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="FILE_NUM" Type="Int16" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+  </EntityType>
+  <EntityType Name="FL_LIST">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="FL_ID" Type="Int64" />
+    <Property Name="FL_TYPE" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="FL_SIZE" Type="Int64" />
+    <Property Name="FL_WIDTH" Type="Int64" />
+    <Property Name="FL_HEIGHTH" Type="Int64" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="FL_PATH" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="FL_MEMO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="FL_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="FL_SEQ" Type="Int32" />
+    <Property Name="STATUS" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="SL_FL_PATH" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_FILE_CHECK">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" />
+    <Property Name="FILE_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FILE_IS_UPLOADED" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="V_APPMAIN">
+    <Key>
+      <PropertyRef Name="APPID" />
+    </Key>
+    <Property Name="APPID" Type="Int64" Nullable="false" />
+    <Property Name="APPCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LOGO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCTCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTOMERNAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="APPLYAMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="LOANAMTOFCONTRACT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="SALESNAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="SALESNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CSADNAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CSADNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPSTATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPSTATUSNAME" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="CREATEDTIME" Type="DateTime" Precision="6" />
+    <Property Name="UPDATETIME" Type="DateTime" Precision="6" />
+    <Property Name="SORTING" Type="Decimal" Precision="38" Scale="0" />
+    <Property Name="APPNRSDSTATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPAPPR1SDSTATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATEDUSER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTOMERIDCARD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EXTENDAMTOFCONTRACT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PRODUCTNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BUSINESSDEPARTMENT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_NR_LIST">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" />
+    <Property Name="NR_CODE" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="NR_STATUS" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="NR_DATE_SUBMIT_FIRST" Type="DateTime" Precision="6" />
+    <Property Name="NR_DATE_UPDATE" Type="DateTime" Precision="6" />
+    <Property Name="NR_DATE_APPLY" Type="DateTime" Precision="6" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.FK_APP_NR_LIST_2_APP_MAIN" FromRole="APP_NR_LIST" ToRole="APP_MAIN" />
+    <Property Name="NR_SEQ" Type="Int16" />
+  </EntityType>
+  <Association Name="FK_APP_NR_LIST_2_APP_MAIN">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="0..1" />
+    <End Type="QK.QAPP.Entity.APP_NR_LIST" Role="APP_NR_LIST" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_NR_LIST">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="APP_QUEUE">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="GENDER" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+    <Property Name="AGE" Type="Int16" />
+    <Property Name="ID_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ID_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LOGO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COM_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="APPLY_AMT" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="PAY_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DATE_APPLY" Type="DateTime" Precision="6" />
+    <Property Name="SALES_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SALES_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="AREA_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AREA_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="STORE_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="STORE_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ENTRY_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NO_FIRST" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MANUAL_DECISION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ES_DECISION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APP_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="DCOUT_VIP" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="IS_REPEAT" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="ENTRY_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CSAD_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CSAD_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CONTRACT_AMT" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="DO_ACTION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_STATUS_DONE" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="APP_NR_SD_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APP_APPR1_SD_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DES_RUNNING_TAG" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NO_FINAL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FRAUD_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="QUEUE_ORDER" Type="Int16" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.FK_APP_QUEUE_2_APP_MAIN" FromRole="APP_QUEUE" ToRole="APP_MAIN" />
+    <Property Name="STATUS_ORDER" Type="Decimal" Precision="38" Scale="0" />
+    <Property Name="LOAN_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TERMS" Type="Int16" />
+    <Property Name="DECISION_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LATEST_APP_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LATEST_ACTION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NO_HIST" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPROVE_NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="FRAUD_NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="DCOUT_IS_AUTO_FINAL" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTOMERTYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NO_FIRST_HIST" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IS_FINAL" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="IS_AUDIT_FLAG" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="IS_AUDIT_APPROVE_FLAG" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="IS_AUDO_FINAL" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="STATUS_PHASE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="APPLY_CITY_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ENTRY_ORG_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ENTRYORGNAME" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="IS_LOCK" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="IS_FIRST_LOCK" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="IS_FINAL_LOCK" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="IS_FRAUD_LOCK" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="ENTRY_CHK_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ENTRY_CHK_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NO_ENTRY_CHK_HIST" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="PROC_INS_ID" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+    <Property Name="TASK_ID" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+    <Property Name="DISP_STATUS" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="PROCESS_TEMPLATE" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="APP_TYPE" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="VERSION" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="APPLY_CITY_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="MOBILE_PHONE_NO" Type="String" MaxLength="18" FixedLength="false" Unicode="true" />
+    <Property Name="DEALER_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DEALER_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IS_RE_APPLICATION" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="BILLING_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="VEHICLE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COMPLETE_IMAGE" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="DECISION_NO_FIELD_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NO_FIELD_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NO_FIELD_HIST" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NO_ASSESS_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NO_ASSESS_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DECISION_NO_ASSESS_HIST" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_CARD_NUMBER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPLY_LOGO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPLY_PRODUCT_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPLY_PRODUCT_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPLY_TERMS" Type="Int16" />
+    <Property Name="DCIN_REFUSE_CODE" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="PBOC_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ASSESS_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ASSESS_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="APPL_CDE" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="APPL_SEQ" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="LIST_MESSAGE" Type="String" MaxLength="3500" FixedLength="false" Unicode="false" />
+    <Property Name="IMAGE_MESSAGE" Type="String" MaxLength="3500" FixedLength="false" Unicode="false" />
+    <Property Name="IS_LIST_SYNC" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="IS_IMAGE_SYNC" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="HAVE_DONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_DECISION_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CHANNEL_COOPERATION" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="FK_APP_QUEUE_2_APP_MAIN">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="1" />
+    <End Type="QK.QAPP.Entity.APP_QUEUE" Role="APP_QUEUE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_QUEUE">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="APP_CITY">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="CITY_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="COMPANY_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AREA_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AREA_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ENABLE" Type="Int16" />
+    <Property Name="CREATE_TIME" Type="DateTime" Precision="6" />
+    <Property Name="UPDATE_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CITY_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_CODE" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="CACHE_FLAG" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="AREA_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PLATFORM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_MSGBOX_USER">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="CONNECTIONID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="USERNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATETIME" Type="DateTime" />
+    <Property Name="USERIP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="USERBROWSER" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="USERBROWSERVERSION" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LASTUPDATETIME" Type="DateTime" />
+    <Property Name="ENABLE" Type="Decimal" Precision="38" Scale="0" />
+    <Property Name="MACHINENAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_MSGBOX">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="USERNAME" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="TITLE" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="CONTENT" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="CREATETITME" Type="DateTime" />
+    <Property Name="STATUS" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="PRIORTYLEVEL" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CATEGORY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="APPCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_CUSTOMER">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="GENDER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AGE" Type="Int16" />
+    <Property Name="ID_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ID_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EDUCATION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MARRAGE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HAS_LOCAL_HOUSE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MORTGAGE_AMT_BY_MONTH" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="HASCARS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_BRAND_OWNED" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_MODEL_OWNED" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENTOTHERS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="POSTCODE" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="YEARS_IN_LOCAL" Type="Int16" />
+    <Property Name="RESIDENT_TEL_AREA_CODE" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_TEL_NO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="RELATIONSHIP_OF_RESIDENT_TEL" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MOBILE1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MOBILE2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="REGISTER_ADDR_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="REGISTER_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="REGISTER_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="REGISTER_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="MAX_CREDITLIMIT_OF_CCC" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="NUMS_OF_CCC" Type="Int16" />
+    <Property Name="EMAIL" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="QQ" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="INCOME_ANNUAL" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="INCOME_MONTHLY_FROM_JOB" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="INCOME_MONTHLY_FROM_OTHER" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="MEMO_OF_INCOME_FROM_OTHER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NUMS_OF_PROVIDE" Type="Int16" />
+    <Property Name="MARRAGE_OTHER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BRITHDAY" Type="DateTime" Precision="6" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.FK_APP_CUST_2_APP_MAIN" FromRole="APP_CUSTOMER" ToRole="APP_MAIN" />
+    <Property Name="DRIVING_LICENSE_OWNER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HAS_CHILDREN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREDIT_CARD_PAYBACK" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREDIT_CARD_TIME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MAX_CREDITLIMIT_DATADIC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="INCOME_MONTHLY_DATADIC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPLICANT_IDENTITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTOMER_GROUP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_APP_CUST_2_APP_MAIN">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="1" />
+    <End Type="QK.QAPP.Entity.APP_CUSTOMER" Role="APP_CUSTOMER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_CUSTOMER">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="APP_APPLY_SEQUENCE">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="SEQ_CODE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DESCR" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CURRENT_SEQVALUE" Type="Int64" Nullable="false" />
+    <Property Name="CREATE_TIME" Type="DateTime" />
+    <Property Name="EDIT_TIME" Type="DateTime" />
+    <Property Name="DATA_FORMAT" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LENGTH" Type="Int64" Nullable="false" />
+    <Property Name="INIT_VALUE" Type="Int64" Nullable="false" />
+    <Property Name="RESET_TYPE" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="LAST_DATE" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="IS_RUNNING" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="PREFIX" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="OPE_TYPE" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CITY_CODE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_GLOBALCONFIG">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="KEY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VALUE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="CATEGORY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="REMARK" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="SORT" Type="Int64" />
+    <Property Name="PARENT" Type="Int64" />
+    <NavigationProperty Name="APP_GLOBALCONFIG1" Relationship="QK.QAPP.Entity.UK_GLOBALCONFIG_GLOBALCONFIG" FromRole="APP_GLOBALCONFIG" ToRole="APP_GLOBALCONFIG1" />
+    <NavigationProperty Name="APP_GLOBALCONFIG2" Relationship="QK.QAPP.Entity.UK_GLOBALCONFIG_GLOBALCONFIG" FromRole="APP_GLOBALCONFIG1" ToRole="APP_GLOBALCONFIG" />
+    <Property Name="PLATFORM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="UK_GLOBALCONFIG_GLOBALCONFIG">
+    <End Type="QK.QAPP.Entity.APP_GLOBALCONFIG" Role="APP_GLOBALCONFIG" Multiplicity="0..1" />
+    <End Type="QK.QAPP.Entity.APP_GLOBALCONFIG" Role="APP_GLOBALCONFIG1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_GLOBALCONFIG">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_GLOBALCONFIG1">
+        <PropertyRef Name="PARENT" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="APP_AEO">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="AEO_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AEO_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AEO_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AEO_CATEGORY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="VERSION" Type="Int32" />
+    <Property Name="ENABLE" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="APP_AUTH">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" />
+    <Property Name="APP_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ACCOUNT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PARENT_ORGANIZATION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COMPANY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AREA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HEADQUARTER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.APPAUTH_APPMAIN_FK" FromRole="APP_AUTH" ToRole="APP_MAIN" />
+    <Property Name="BUSINESS_DEPARTMENT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MENUCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="APPAUTH_APPMAIN_FK">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="0..1" />
+    <End Type="QK.QAPP.Entity.APP_AUTH" Role="APP_AUTH" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_AUTH">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="APP_EXTEND_CONFIG">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="ACTION_GROUP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CITY_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PERIOD_AMOUNT_TOTAL" Type="Int32" />
+    <Property Name="PERIOD_AMOUNT" Type="Int32" />
+    <Property Name="SETTLEMENT_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SETTLEMENT_AMOUNT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SERVICE_CHARGE_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SERVICE_CHARGE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CONSULT_CHARGE_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CONSULT_CHARGE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TARGET_PRODUCT_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TARGET_DFORM_VERSION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TARGET_LOGO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_EXTEND_RELATION">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_CODE" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PARENT_APP_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SETTLEMENT_AMOUNT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PERIOD_AMOUNT" Type="Int32" />
+    <Property Name="PERIOD_AMOUNT_USED" Type="Int32" />
+    <Property Name="PERIOD_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ACTION_GROUP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PARENT_CONTRACT_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CONTRACT_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="INIT_CONTRACTID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="INIT_APP_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EXP_RATE" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="EXP_FLOAT_RATE" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="TIMES_NUMBER_USED" Type="Int32" />
+  </EntityType>
+  <EntityType Name="APP_CARPRICE">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="BRAND" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SERIES" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="YEAR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="STYLE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="TRANSMISSION_KIND" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="GEAR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SHAPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NEW_PRICE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ENABLED" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SWEPT_VOLUME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="STYLE_YEAR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AVG_WHOLESALE_PRICE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="AVG_RETAIL_PRICE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="WELL_WHOLESALE_PRICE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="WELL_RETAIL_PRICE" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="APP_FORBIDEN_AREA">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="CITY_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FORBIDEN_AREA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FORBIDEN_ID_START" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_LOGO" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="JUST_FOR_CITY" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PROVINCE_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRPVINCE_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_CARINFO">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" />
+    <Property Name="CAR_BRAND" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_FACTORY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_KIND" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_DATE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_COLOR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VEHICLE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ENGINE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VIN_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DRIVE_OWNER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PERMITTED_OWNER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RELATION_OWNER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PAPER_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="USE_NATURE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="OTHERCAR_BRAND" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="OTHERCAR_FACTORY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VEHICLE_MILES" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="CAR_PRICE" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="CAR_SERIES" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_SELLINGPRICE" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="CARINFO_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MANUFACTURE_DATE" Type="DateTime" Precision="6" />
+    <Property Name="CAR_MODEL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.FK_APP_CARINFO_APP_MAIN" FromRole="APP_CARINFO" ToRole="APP_MAIN" />
+  </EntityType>
+  <Association Name="FK_APP_CARINFO_APP_MAIN">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="0..1" />
+    <End Type="QK.QAPP.Entity.APP_CARINFO" Role="APP_CARINFO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_CARINFO">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PAD_CARJUDGE">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_CODE" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="SURFACE_SCORE" Type="Decimal" Precision="2" Scale="1" />
+    <Property Name="CARCASE_SCORE" Type="Decimal" Precision="2" Scale="1" />
+    <Property Name="INNERTRIM_SCORE" Type="Decimal" Precision="2" Scale="1" />
+    <Property Name="CARDEVICE_SCORE" Type="Decimal" Precision="2" Scale="1" />
+    <Property Name="WHOLE_DESCRIPTION" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="JUDGE_PRICE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ENTOURAGE" Type="Int32" />
+    <Property Name="ENTOURAGE_DESCRIPTION" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="SUBMIT_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VALUATOR_BACKGROUND" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="JUDGE_PRICE_BACKGROUND" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_CARVALUATORS">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="CITY_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CITY_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VALUATOR_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VALUATOR_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_QUEUE_ASSESS">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" />
+    <Property Name="CUSTOMER_BOOK_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CUSTOMER_ARRIVE_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CUSTOMER_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VEHICLE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SALES_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SALES_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SALES_PHONE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="VALUATOR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_LOGO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ASSESS_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APP_CODE" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="VERSION" Type="Int32" />
+    <Property Name="REMARK" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTOMER_PHONE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="VALUATOR_NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_CARAGENCY">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="MOTO_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MOTO_NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="IS_USE" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="MOTO_PRODUCT" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MOTO_LEVEL" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="PRE_APP_AUTH">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" />
+    <Property Name="APP_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ACCOUNT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PARENT_ORGANIZATION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COMPANY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AREA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HEADQUARTER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PRE_APP_MAIN" Relationship="QK.QAPP.Entity.FK_PRE_APP_AUTH_2_APP_ID" FromRole="PRE_APP_AUTH" ToRole="PRE_APP_MAIN" />
+  </EntityType>
+  <EntityType Name="PRE_APP_BANKCARD">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" />
+    <Property Name="BANK_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <NavigationProperty Name="PRE_APP_MAIN" Relationship="QK.QAPP.Entity.FF_PRE_APP_BANKCARD_2_APP_ID" FromRole="PRE_APP_BANKCARD" ToRole="PRE_APP_MAIN" />
+  </EntityType>
+  <EntityType Name="PRE_APP_CUSTOMER">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="GENDER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ID_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ID_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MARRAGE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EDUCATION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HAS_LOCAL_HOUSE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MORTGAGE_AMT_TOTAL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENTOTHERS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MOBILE1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MOBILE2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MAX_CREDITLIMIT_OF_CCC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NUMS_OF_CCC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="AGE" Type="Int32" />
+    <Property Name="NUMS_OF_PROVIDE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREDIT_CARD_TIME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREDIT_CARD_PAYBACK" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="OVERDUE_TIMES" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MARRAGE_OTHER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PRE_APP_MAIN" Relationship="QK.QAPP.Entity.FK_PRE_APP_CUST_2_PRE_APP_MAIN" FromRole="PRE_APP_CUSTOMER" ToRole="PRE_APP_MAIN" />
+    <Property Name="FIRST_LOAN_TIME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LAST_LOAN_TIME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LONGEST_LOAN_TIME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ADDED_LOAN_NUMBER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NEED_LOAN_AMT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOME_TEL_NO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="PRE_APP_JOB">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="COM_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="COM_TEL_NO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="DATE_JOIN" Type="DateTime" Precision="6" />
+    <Property Name="STATION2_COM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SHARE_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="STATION2_COM_OTHER" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <NavigationProperty Name="PRE_APP_MAIN" Relationship="QK.QAPP.Entity.FK_PRE_APP_JOB_2_PRE_APP_MAIN" FromRole="PRE_APP_JOB" ToRole="PRE_APP_MAIN" />
+  </EntityType>
+  <EntityType Name="PRE_APP_LOAN">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="LOAN_PURPOSE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MEMO_OF_LOAN_PURPOSE_OTHER" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="APPLY_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TERMS" Type="Int16" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <NavigationProperty Name="PRE_APP_MAIN" Relationship="QK.QAPP.Entity.FK_PRE_APP_LOAN_2_APP_MAIN" FromRole="PRE_APP_LOAN" ToRole="PRE_APP_MAIN" />
+  </EntityType>
+  <EntityType Name="PRE_APP_MAIN">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LOGO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APP_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTOMERTYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPLY_AREA_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPLY_CITY_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PROD_VERSION" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="APP_REASON" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="DFORM_VERSION" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HAS_APPLY" Type="Int16" />
+    <Property Name="ID_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PROCESSING" Type="Int16" />
+    <NavigationProperty Name="PRE_APP_AUTH" Relationship="QK.QAPP.Entity.FK_PRE_APP_AUTH_2_APP_ID" FromRole="PRE_APP_MAIN" ToRole="PRE_APP_AUTH" />
+    <NavigationProperty Name="PRE_APP_BANKCARD" Relationship="QK.QAPP.Entity.FF_PRE_APP_BANKCARD_2_APP_ID" FromRole="PRE_APP_MAIN" ToRole="PRE_APP_BANKCARD" />
+    <NavigationProperty Name="PRE_APP_CUSTOMER" Relationship="QK.QAPP.Entity.FK_PRE_APP_CUST_2_PRE_APP_MAIN" FromRole="PRE_APP_MAIN" ToRole="PRE_APP_CUSTOMER" />
+    <NavigationProperty Name="PRE_APP_JOB" Relationship="QK.QAPP.Entity.FK_PRE_APP_JOB_2_PRE_APP_MAIN" FromRole="PRE_APP_MAIN" ToRole="PRE_APP_JOB" />
+    <NavigationProperty Name="PRE_APP_LOAN" Relationship="QK.QAPP.Entity.FK_PRE_APP_LOAN_2_APP_MAIN" FromRole="PRE_APP_MAIN" ToRole="PRE_APP_LOAN" />
+    <NavigationProperty Name="PRE_APP_STAFF_ONLY" Relationship="QK.QAPP.Entity.FK_PRE_APP_STAF_2_PRE_APP_MAIN" FromRole="PRE_APP_MAIN" ToRole="PRE_APP_STAFF_ONLY" />
+    <NavigationProperty Name="PRE_APP_CARINFO" Relationship="QK.QAPP.Entity.FK_MAIN_CARINFO_APP_ID" FromRole="PRE_APP_MAIN" ToRole="PRE_APP_CARINFO" />
+  </EntityType>
+  <EntityType Name="PRE_APP_STAFF_ONLY">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="SALES_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SALES_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <NavigationProperty Name="PRE_APP_MAIN" Relationship="QK.QAPP.Entity.FK_PRE_APP_STAF_2_PRE_APP_MAIN" FromRole="PRE_APP_STAFF_ONLY" ToRole="PRE_APP_MAIN" />
+  </EntityType>
+  <Association Name="FK_PRE_APP_AUTH_2_APP_ID">
+    <End Type="QK.QAPP.Entity.PRE_APP_MAIN" Role="PRE_APP_MAIN" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="QK.QAPP.Entity.PRE_APP_AUTH" Role="PRE_APP_AUTH" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRE_APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PRE_APP_AUTH">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FF_PRE_APP_BANKCARD_2_APP_ID">
+    <End Type="QK.QAPP.Entity.PRE_APP_MAIN" Role="PRE_APP_MAIN" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="QK.QAPP.Entity.PRE_APP_BANKCARD" Role="PRE_APP_BANKCARD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRE_APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PRE_APP_BANKCARD">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PRE_APP_CUST_2_PRE_APP_MAIN">
+    <End Type="QK.QAPP.Entity.PRE_APP_MAIN" Role="PRE_APP_MAIN" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="QK.QAPP.Entity.PRE_APP_CUSTOMER" Role="PRE_APP_CUSTOMER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRE_APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PRE_APP_CUSTOMER">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PRE_APP_JOB_2_PRE_APP_MAIN">
+    <End Type="QK.QAPP.Entity.PRE_APP_MAIN" Role="PRE_APP_MAIN" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="QK.QAPP.Entity.PRE_APP_JOB" Role="PRE_APP_JOB" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRE_APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PRE_APP_JOB">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PRE_APP_LOAN_2_APP_MAIN">
+    <End Type="QK.QAPP.Entity.PRE_APP_MAIN" Role="PRE_APP_MAIN" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="QK.QAPP.Entity.PRE_APP_LOAN" Role="PRE_APP_LOAN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRE_APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PRE_APP_LOAN">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PRE_APP_STAF_2_PRE_APP_MAIN">
+    <End Type="QK.QAPP.Entity.PRE_APP_MAIN" Role="PRE_APP_MAIN" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="QK.QAPP.Entity.PRE_APP_STAFF_ONLY" Role="PRE_APP_STAFF_ONLY" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRE_APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PRE_APP_STAFF_ONLY">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="V_PRE_APPMAIN">
+    <Key>
+      <PropertyRef Name="APPID" />
+    </Key>
+    <Property Name="APPID" Type="Int64" Nullable="false" />
+    <Property Name="APPCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LOGO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HAS_APPLY" Type="Int16" />
+    <Property Name="CUSTOMERNAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTOMERIDCARD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCTCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCTNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPCITYNAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="APPLYAMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="APPSTATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SORTING" Type="Decimal" Precision="38" Scale="0" />
+    <Property Name="APPSTATUSNAME" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="CREATEDTIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGEDTIME" Type="DateTime" Precision="6" />
+    <Property Name="CUSTOMERMOBILE1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTOMERMOBILE2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="SALESNAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SALESCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="APP_HOUSE">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="COLLATERAL_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COLLATERAL_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOUSE_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOUSE_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOUSE_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOUSE_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="LIVING_QUARTER_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="COVERED_AREA" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="COMPLETE_AGE" Type="Int16" />
+    <Property Name="PROPERTYRIGHT_PERSONS" Type="Int16" />
+    <Property Name="LOAN_BANK" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="REMAIN_PRINCIPAL" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ASSESSMENT_VALUE" Type="Decimal" Precision="18" Scale="2" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.FK_APP_MAIN_APP_HOUSE" FromRole="APP_HOUSE" ToRole="APP_MAIN" />
+    <Property Name="COLLATERAL_STATUS_OTHER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOUSE_TYPE_OTHER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_APP_MAIN_APP_HOUSE">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="1" />
+    <End Type="QK.QAPP.Entity.APP_HOUSE" Role="APP_HOUSE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_HOUSE">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PRE_APP_CARINFO">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" />
+    <Property Name="VEHICLE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VIN_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ENGINE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PARCEL_DATE" Type="DateTime" Precision="6" />
+    <Property Name="VEHICLE_AGE" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="CREATED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_USER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <NavigationProperty Name="PRE_APP_MAIN" Relationship="QK.QAPP.Entity.FK_MAIN_CARINFO_APP_ID" FromRole="PRE_APP_CARINFO" ToRole="PRE_APP_MAIN" />
+  </EntityType>
+  <Association Name="FK_MAIN_CARINFO_APP_ID">
+    <End Type="QK.QAPP.Entity.PRE_APP_MAIN" Role="PRE_APP_MAIN" Multiplicity="0..1" />
+    <End Type="QK.QAPP.Entity.PRE_APP_CARINFO" Role="PRE_APP_CARINFO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRE_APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PRE_APP_CARINFO">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="V_APP_CONTRACT">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ID_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ID_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MOBILE1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="EMAIL" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_ACCOUNT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="VEHICLE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_BRAND" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_FACTORY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_COLOR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ENGINE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="VIN_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TERMS" Type="Int16" />
+    <Property Name="LOAN_PURPOSE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RATE" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="PAYTYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MEMO_OF_LOAN_PURPOSE_OTHER" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_BRAND_BUYING" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_MODEL_BUYING" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_PRICE_BUYING" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="APPLY_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CREDITLIMITADVICE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="LOAN_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="LOAN_AMT_OF_CONTRACT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PAY_AMT_MONTHLY_ACCEPTABLE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PAY_AMT_FIRST_MONTHLY" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PAY_AMT_LAST_MONTHLY" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PAY_AMT_MONTHLY" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="DEFAULT_INTEREST_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="LATE_FEE_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="PREPAYMENT_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="SERVICE_CHARGE_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="CONSULTATION_CHARGE_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="RATE_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CURRENCY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RESERVES_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="SERVICE_CHARGE_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CONSULTATION_CHARGE_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RESERVES_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RISK_RATIO" Type="Decimal" Precision="8" Scale="5" />
+    <Property Name="RISK_AMT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CHANNEL_EXPENSE_RATIO" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="COLLATERAL_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="COLLATERAL_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOUSE_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOUSE_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOUSE_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOUSE_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="COVERED_AREA" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="COMPLETE_AGE" Type="Int16" />
+    <Property Name="PROPERTYRIGHT_PERSONS" Type="Int16" />
+    <Property Name="LOAN_BANK" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="REMAIN_PRINCIPAL" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ASSESSMENT_VALUE" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="COLLATERAL_STATUS_OTHER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HOUSE_TYPE_OTHER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="POSTCODE" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="RESIDENT_TEL_NO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="REGISTER_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="REGISTER_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="REGISTER_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_SUB" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CAR_SELLINGPRICE" Type="Decimal" Precision="12" Scale="2" />
+  </EntityType>
+  <EntityType Name="APP_CITY_PRODUCT">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="CITY_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PRODUCT_CODE" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="MENU_GROUP" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="ENABLE" Type="Int16" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+  </EntityType>
+  <EntityType Name="APP_QUANT">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APP_ID" Type="Int64" Nullable="false" />
+    <Property Name="CONTRACT_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREDIT_SCORE" Type="Decimal" Precision="8" Scale="2" />
+    <Property Name="REPAYMENT_PLAN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="SUBMIT_DATE" Type="DateTime" Precision="6" />
+    <Property Name="LENDING_DATE" Type="DateTime" Precision="6" />
+    <Property Name="HAS_LENDING" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="FAIL_REASON" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <NavigationProperty Name="APP_MAIN" Relationship="QK.QAPP.Entity.FK_APPQUANT_APPMAIN" FromRole="APP_QUANT" ToRole="APP_MAIN" />
+  </EntityType>
+  <EntityType Name="APP_QUANT_TEMP">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="APPLY_NUMBER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CONTRACT_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NAME" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ID_NO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MOBILE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ADDRESS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BANK" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_CARD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_PROVINCE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BANK_CITY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="APPLY_AMT" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="TERMS" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="CREDIT_SCORE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="REPAYMENT_PLAN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="SUBMIT_DATE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="LENDING_DATE" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="HAS_LENDING" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="FAIL_REASON" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CREATED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="CHANGED_TIME" Type="DateTime" Precision="6" />
+    <Property Name="HANDLE_STATUS" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_APPQUANT_APPMAIN">
+    <End Type="QK.QAPP.Entity.APP_MAIN" Role="APP_MAIN" Multiplicity="1" />
+    <End Type="QK.QAPP.Entity.APP_QUANT" Role="APP_QUANT" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="APP_MAIN">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="APP_QUANT">
+        <PropertyRef Name="APP_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

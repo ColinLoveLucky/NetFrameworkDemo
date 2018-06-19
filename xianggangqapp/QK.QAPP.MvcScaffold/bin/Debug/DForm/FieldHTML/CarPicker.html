@@ -1,0 +1,230 @@
+﻿<div class="clearfix">
+    <label class="control-label col-xs-12 col-sm-2">
+        车辆品牌
+        $if(FieldType.Field_Required)$
+        <i class="icon-asterisk red smaller-80"
+        $if(ReadOnly)$
+           style="display:none"
+        $elseif(FieldType.IsDisabled)$
+           style="display:none"
+        $endif$></i>
+        $endif$
+        ：
+    </label>
+    <div class="col-xs-12 col-sm-5">
+        <div class="input-group">
+            <input type="text"
+                   name="$FieldType.Field_Key$_Brand"
+                   id="$FieldType.Field_Key$_Brand"
+                   class="form-control"
+                   data-val="true"
+                   readonly="readonly"
+                   $if(ReadOnly)$
+                   disabled="disabled"
+                   $elseif(FieldType.IsDisabled)$
+                   disabled="disabled"
+                   $endif$
+                   $if(FieldType.Field_Required)$
+                   data-val-required="请填写车辆品牌!"
+                   $endif$
+                   maxlength="$FieldType.MaxLength$"/>
+            <span class="input-group-addon" $if(!ReadOnly)$ style="cursor: pointer;" $elseif(!FieldType.IsDisabled)$ style="cursor: pointer;" $endif$ id="$FieldType.Field_Key$_SelectButton">
+                <i class="icon-search bigger-110"></i>
+            </span>
+        </div>
+    </div>
+    $if(FieldType.CanInputByCustom)$
+    <div class="col-xs-12 col-sm-3">
+        <select class="col-xs-12" id="$FieldType.Field_Key$_CarType" name="$FieldType.Field_Key$_CarType"
+                $if(ReadOnly)$
+                disabled="disabled"
+                $elseif(FieldType.IsDisabled)$
+                disabled="disabled"
+                $endif$ data-val="true" data-val-required="请选择类型!">
+            <option value="CarInfoType_Library">车辆信息库</option>
+            <option value="CarInfoType_Other">其他</option>
+        </select>
+    </div>
+    $endif$
+</div>
+<div class="form-group"></div>
+<div class="clearfix">
+    <label class="control-label col-xs-12 col-sm-2">
+        车辆系列
+        $if(FieldType.Field_Required)$
+        <i class="icon-asterisk red smaller-80"
+        $if(ReadOnly)$
+           style="display:none"
+        $elseif(FieldType.IsDisabled)$
+           style="display:none"
+        $endif$></i>
+        $endif$
+        ：
+    </label>
+    <div class="col-xs-12 col-sm-3">
+        <input type="text" name="$FieldType.Field_Key$_Series" id="$FieldType.Field_Key$_Series" class="col-xs-12" 
+            data-val="true"
+            readonly="readonly"
+            $if(ReadOnly)$ 
+            disabled="disabled"
+            $elseif(FieldType.IsDisabled)$
+               disabled="disabled"
+               $endif$
+            $if(FieldType.Field_Required)$
+               data-val-required="请填写车辆系列!"
+            $endif$ 
+               maxlength="$FieldType.MaxLength$"/>
+    </div>
+    <label class="control-label col-xs-12 col-sm-2">
+        年款排量
+        $if(FieldType.Field_Required)$
+        <i class="icon-asterisk red smaller-80"
+        $if(ReadOnly)$
+           style="display:none"
+        $elseif(FieldType.IsDisabled)$
+           style="display:none"
+        $endif$></i>
+        $endif$
+        ：
+    </label>
+    <div class="col-xs-12 col-sm-3">
+        <input type="text" name="$FieldType.Field_Key$_Style" id="$FieldType.Field_Key$_Style" class="col-xs-12" 
+            data-val="true"
+            readonly="readonly"
+            $if(ReadOnly)$ 
+            disabled="disabled"
+            $elseif(FieldType.IsDisabled)$
+               disabled="disabled"
+               $endif$
+            $if(FieldType.Field_Required)$
+               data-val-required="请填写年款排量!"
+            $endif$ 
+               maxlength="$FieldType.MaxLength$"/>
+    </div>
+</div>
+<div class="form-group"></div>
+<div class="clearfix hidden">
+    <label class="control-label col-xs-12 col-sm-2 hidden">
+        车辆价格（元）
+        ：
+    </label>
+    <div class="col-xs-12 col-sm-3 hidden">
+        <input type="hidden" name="$FieldType.Field_Key$_Price" id="$FieldType.Field_Key$_Price" class="col-xs-12"
+            data-val="true"
+            readonly="readonly"
+            $if(ReadOnly)$ 
+            disabled="disabled"
+            $elseif(FieldType.IsDisabled)$
+               disabled="disabled"
+               $endif$
+            $if(FieldType.Field_Required)$
+               data-val-required="请填写车辆价格!"
+            $endif$ 
+               maxlength="$FieldType.MaxLength$"/>
+    </div>
+    <label class="control-label col-xs-12 col-sm-2 hidden">
+        生产年份
+        ：
+    </label>
+    <div class="col-xs-12 col-sm-3 hidden">
+        <input type="hidden" name="$FieldType.Field_Key$_Year" id="$FieldType.Field_Key$_Year" class="col-xs-12"
+            readonly="readonly"
+            $if(ReadOnly)$ 
+            disabled="disabled"
+            $elseif(FieldType.IsDisabled)$
+               disabled="disabled"
+               $endif$ />
+    </div>
+</div>
+<div id="$FieldType.Field_Key$_dialog" style="display:none;height:450px">
+    <iframe id="$FieldType.Field_Key$_iframe" style="border: none; width: 100%; height: 450px;"></iframe>
+</div>
+
+$if(!ReadOnly)$
+$if(!FieldType.IsDisabled)$
+<script type="text/javascript">
+    jQuery(function () {
+        jQuery('#$FieldType.Field_Key$_SelectButton').click(function () {
+            var $FieldType.Field_Key$_TypeVal = jQuery("#$FieldType.Field_Key$_CarType").val();
+            if ($FieldType.Field_Key$_TypeVal == 'CarInfoType_Other') {
+                Utilities.alertTip('请手动输入车辆品牌，车辆系列，年款排量等信息！');
+            } else {
+                //弹出选择对话框
+                var href = "/CarPick/CarPick";
+                jQuery('#$FieldType.Field_Key$_iframe').attr('src', href);
+                jQuery('#$FieldType.Field_Key$_dialog').dialog({
+                    title: "<h4 class='smaller'><i class='icon-globe'></i>车辆选择</h4>",
+                    title_html: true,
+                    resizable: false,
+                    width: "70%",
+                    modal: true,
+                    draggable: false,
+                    buttons: [
+                        {
+                            text: "取消",
+                            "class": "btn btn-xs",
+                            click: function() {
+                                jQuery(this).dialog("close");
+                            }
+                        },
+                        {
+                            text: "确认",
+                            "class": "btn btn-primary btn-xs",
+                            click: function() {
+                                //将选中的车辆信息设置到表单中
+                                var cariframe = jQuery("#$FieldType.Field_Key$_iframe");
+                                var carBrand = cariframe.contents().find("#carBrand");
+                                var carSeries = cariframe.contents().find("#carSeries");
+                                var carStyle = cariframe.contents().find("#carStyle");
+                                var carPrice = cariframe.contents().find("#carPrice");
+                                var carYear = cariframe.contents().find("#carYear");
+                                jQuery("#$FieldType.Field_Key$_Brand").val(carBrand.text());
+                                jQuery("#$FieldType.Field_Key$_Series").val(carSeries.text());
+                                jQuery('#$FieldType.Field_Key$_Style').val(carStyle.text());
+                                jQuery('#$FieldType.Field_Key$_Price').val(carPrice.text());
+                                jQuery('#$FieldType.Field_Key$_Year').val(carYear.text());
+                                jQuery(this).dialog("close");
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+        $if(FieldType.CanInputByCustom)$
+        jQuery("#$FieldType.Field_Key$_CarType").change(function (e) {
+            var inputs = [];
+            inputs.push(jQuery("#$FieldType.Field_Key$_Brand"),
+                jQuery("#$FieldType.Field_Key$_Series"),
+                jQuery('#$FieldType.Field_Key$_Style'),
+                jQuery('#$FieldType.Field_Key$_Price'),
+                jQuery('#$FieldType.Field_Key$_Year'));
+            if (!e.isTrigger) {
+                //先清空文本框中的值
+                jQuery(inputs).each(function(i, e) {
+                    e.val('');
+                });
+            }
+
+            if (jQuery(this).val() == 'CarInfoType_Other') {
+                //文本框可输入
+                jQuery(inputs).each(function (i, e) {
+                    e.removeAttr('readonly');
+                });
+                //年份设为禁用
+                jQuery('#$FieldType.Field_Key$_Year').attr('disabled', 'disabled');
+                //车辆价格设为禁用
+                jQuery('$FieldType.Field_Key$_Price').attr('disabled', 'disabled');
+            } else {
+                //设置只读
+                jQuery(inputs).each(function (i, e) {
+                    e.attr('readonly', 'readonly');
+                });
+                jQuery('#$FieldType.Field_Key$_Year').removeAttr('disabled');
+                jQuery('$FieldType.Field_Key$_Price').removeAttr('disabled');
+            }
+        });
+        $endif$
+    });
+</script>
+$endif$
+$endif$

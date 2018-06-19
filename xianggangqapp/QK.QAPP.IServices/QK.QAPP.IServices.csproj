@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{790990FA-2043-48EF-BF78-BFB696BE36AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QK.QAPP.IServices</RootNamespace>
+    <AssemblyName>QK.QAPP.IServices</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ICalcService\ICalcService.cs" />
+    <Compile Include="IQAPPApiService\ISyncBidProductService.cs" />
+    <Compile Include="IQBService\IBidSystemConfigService.cs" />
+    <Compile Include="IQBService\IBID_ContractService.cs" />
+    <Compile Include="IQBService\IBID_PactHistoryService.cs" />
+    <Compile Include="IQBService\IQBAutoJobLogService.cs" />
+    <Compile Include="IQBService\IQBBidJobAmtService.cs" />
+    <Compile Include="IQBService\IQBBidJobConfigService.cs" />
+    <Compile Include="IQBService\IQBQuartzService.cs" />
+    <Compile Include="IQBService\IBID_LabelPactService.cs" />
+    <Compile Include="IQBService\IQBUploadService.cs" />
+    <Compile Include="IQBService\IQuotaAssignService.cs" />
+    <Compile Include="IQBService\IQuotaBidDicConfigService.cs" />
+    <Compile Include="IQBService\IQuotaManageService.cs" />
+    <Compile Include="IQBService\IQuotaUsageService.cs" />
+    <Compile Include="IQBService\IRaisingPlanService.cs" />
+    <Compile Include="IServiceEx\IApplyTableService.cs" />
+    <Compile Include="IServiceEx\IApplicationService.cs" />
+    <Compile Include="IServiceEx\IAPPQueueLogService.cs" />
+    <Compile Include="IServiceEx\IAPP_AEOSERVICE.cs" />
+    <Compile Include="IServiceEx\IAPP_APPLY_SEQUENCEService.cs" />
+    <Compile Include="IServiceEx\IAPP_AssessService.cs" />
+    <Compile Include="IServiceEx\IAPP_BANKSERVICE.cs" />
+    <Compile Include="IServiceEx\IAPP_CARAGENCYSERVICE.cs" />
+    <Compile Include="IServiceEx\IAPP_CARPRICESERVICE.cs" />
+    <Compile Include="IServiceEx\IAPP_CITYSERVICE.cs" />
+    <Compile Include="IServiceEx\IAPP_CITY_PRODUCTSERVICE.cs" />
+    <Compile Include="IServiceEx\IAPP_EXTEND_CONFIGSERVICE.cs" />
+    <Compile Include="IServiceEx\IAPP_GLOBALCONFIGSERVICE.cs" />
+    <Compile Include="IServiceEx\IAPP_MSGBOX_USERSERVICE.cs" />
+    <Compile Include="IServiceEx\IAPP_QUANTERVICE.cs" />
+    <Compile Include="IServiceEx\IAPP_REFUSELOANSERVICE.cs" />
+    <Compile Include="IServiceEx\ICR_DATA_DICService.cs" />
+    <Compile Include="IServiceEx\IExtendApplicationService.cs" />
+    <Compile Include="IServiceEx\IExtendApplyService.cs" />
+    <Compile Include="IServiceEx\IGenesisService.cs" />
+    <Compile Include="IServiceEx\ILoanApplicationService.cs" />
+    <Compile Include="IServiceEx\IMobileHistoryService.cs" />
+    <Compile Include="IServiceEx\IPreApplyService.cs" />
+    <Compile Include="IServiceEx\IQFProductInfoService.cs" />
+    <Compile Include="IServiceEx\IQFUploadService.cs" />
+    <Compile Include="IServiceEx\IQFUserService.cs" />
+    <Compile Include="IServiceEx\IStaffPickService.cs" />
+    <Compile Include="IServiceEx\IV_ORG_ROLE_USERService.cs" />
+    <Compile Include="IService\IAPP_AEOSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_APPLY_SEQUENCESERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_AUTHSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_BANKCARDSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_CARAGENCYSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_CARINFOSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_CARPRICESERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_CARVALUATORSSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_CITYSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_CITY_PRODUCTSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_CONTACTSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_CUSTOMERSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_DFORM_FIELDATTRIBUTESERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_DFORM_FORMBUILDERSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_DFORM_FORMFIELDSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_DFORM_FORMINFOSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_EXTEND_CONFIGSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_EXTEND_RELATIONSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_FILE_CHECKSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_FORBIDEN_AREASERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_GLOBALCONFIGSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_HOUSESERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_JOBSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_LOANSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_MAINSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_MSGBOXSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_MSGBOX_USERSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_NR_LISTSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_QUANTSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_QUANT_TEMPSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_QUEUESERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_QUEUE_ASSESSSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_SALESSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IAPP_STAFF_ONLYSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IFL_BIZSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IFL_LISTSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IPAD_CARJUDGESERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IPRE_APP_AUTHSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IPRE_APP_BANKCARDSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IPRE_APP_CARINFOSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IPRE_APP_CUSTOMERSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IPRE_APP_JOBSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IPRE_APP_LOANSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IPRE_APP_MAINSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IPRE_APP_STAFF_ONLYSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IQAPPService.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IV_APPMAINSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IV_APP_CONTRACTSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IService\IV_PRE_APPMAINSERVICE.cs">
+      <DependentUpon>IQAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QK.APP.Entity\QK.QAPP.Entity.csproj">
+      <Project>{ba44676a-cc87-4e0b-9050-a6e88c589515}</Project>
+      <Name>QK.QAPP.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Global\QK.QAPP.Global.csproj">
+      <Project>{6c5277ae-2aa1-4390-b536-0979bc8c30b1}</Project>
+      <Name>QK.QAPP.Global</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Infrastructure.Data\QK.QAPP.Infrastructure.Data.csproj">
+      <Project>{c7f1c949-84e1-48c2-92f7-11546eeb0748}</Project>
+      <Name>QK.QAPP.Infrastructure.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Infrastructure\QK.QAPP.Infrastructure.csproj">
+      <Project>{007c5112-f4a6-496d-a425-a3ba554ab48c}</Project>
+      <Name>QK.QAPP.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="IService\IQAPPService.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IQAPPService.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,389 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+@Scripts.Render("~/bundles/bootbox")
+<div>
+    <ul class="nav nav-tabs" id="quotaTabs">
+        <li class="active" id="quotaList" style="border:none;">
+            <a href="#qlist" data-toggle="tab" onclick="javascript:SetCurrentGrid(1);">
+                额度列表
+            </a>
+        </li>
+        <li id="quotaHistory" style="border:none;display:none;">
+            <a href="#qhistory" data-toggle="tab" onclick="javascript:SetCurrentGrid(2);">
+                操作历史
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" style="height:auto; overflow-y:auto;">
+        <div id="qlist" class="tab-pane active">
+            <div class="form-horizontal form-group">
+                <div class="clearfix">
+                    <span class="control-label col-xs-12 col-sm-1">区域：</span>
+                    <div class="col-xs-12 col-sm-2">
+                        <select name="district" id="district" class="col-xs-12">
+                            <option value="">--请选择--</option>
+                            @foreach (KeyValuePair<string, string> kv in ViewBag.District as Dictionary<string, string>)
+                            {
+                                <option value="@kv.Key">@kv.Value</option>
+                            }
+                        </select>
+                    </div>
+                    <span class="control-label col-xs-12 col-sm-1">使用日期：</span>
+                    <div class="input-group col-xs-12 col-sm-2">
+                        <input type="text" name="txtUseDate" id="txtUseDate" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                               data-val="true" placeholder="请选择日期" />
+                        <span class="input-group-addon"
+                              style="cursor:pointer;">
+                            <i class="icon-calendar bigger-110"></i>
+                        </span>
+                    </div>
+                    <button class="btn btn-sm btn-success" onclick="Query()">
+                        <i class="icon-search nav-search-icon"></i>查询
+                    </button>
+                    <button class="btn btn-sm btn-primary" onclick="AddAssignQuota()">
+                        <i class="icon-plus nav-search-icon"></i>新增分配额度
+                    </button>
+                </div>
+            </div>
+            <table id="qlist-grid-list"></table>
+            <div id="qlist-grid-pager"></div>
+        </div>
+        <!----暂时无用  以下-->
+        <div id="qhistory" class="tab-pane">
+            <div class="form-group">
+                <div class="clearfix">
+                    <span class="control-label col-xs-12 col-sm-1">使用日期：</span>
+                    <div class="input-group col-xs-12 col-sm-2">
+                        <input type="text" name="txtUseDateHistory" id="txtUseDateHistory" class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                               data-val="true" readonly="readonly" />
+                        <span class="input-group-addon"
+                              style="cursor:pointer;">
+                            <i class="icon-calendar bigger-110"></i>
+                        </span>
+                    </div>
+                    <button class="btn btn-sm btn-success" onclick="">
+                        <i class="icon-search nav-search-icon"></i>查询
+                    </button>
+                </div>
+            </div>
+            <table id="qhistory-grid-list"></table>
+            <div id="qhistory-grid-pager"></div>
+        </div>
+        <!----暂时无用  以上-->
+    </div>
+</div>
+<!--新增额度-->
+<div id="addAssign_dialog" style="display:none;height:300px">
+    <iframe id="addAssign_iframe" style="border: none; width: 100%; height: 300px;"></iframe>
+</div>
+<!--调整额度-->
+<div id="adjustAssign_dialog" style="display:none;height:350px">
+    <iframe id="adjustAssign_iframe" style="border: none; width: 100%; height: 350px; "></iframe>
+</div>
+<script type="text/javascript">
+    jQuery(function () {
+        jQuery("#txtUseDate").datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+        jQuery("#txtUseDateHistory").datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+        //
+        var hs = window.location.hash;
+        if (!hs) {
+            hs = "#qlist";
+        }
+        jQuery('#quotaTabs').find('a[href="' + hs + '"]').click();
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function () {
+            jQuery(window).resize();
+        });
+
+        //override dialog's title function to allow for HTML titles
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                var $title = this.options.title || '&nbsp;';
+                if (("title_html" in this.options) && this.options.title_html == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+
+        /*为额度列表添加智能查询功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function () { IntelligentQuery(); });
+        jQuery(".input-icon").children("input[type='text']").keypress(function (e) { e = e || event; if (e.keyCode == 13) { jQuery(".input-icon").children("i").click(); }; });
+        jQuery("<a/>").attr("href", "javascript:;").text("智能查询").attr("onclick", "javascript:IntelligentQuery();").addClass("label label-lg label-pink arrowed-right").attr("style", "top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+    });
+
+    var qlist_grid_list = "#qlist-grid-list";
+    var qlist_grid_pager = "#qlist-grid-pager";
+    var qhistory_grid_list = "#qhistory-grid-list";
+    var qhistory_grid_pager = "#qhistory-grid-pager";
+    var currentGrid = qlist_grid_list;
+    /*设置当前页签 */
+    function SetCurrentGrid(flag) {
+        $("#nav_search_input").val('');//清空智能查询框
+        switch (flag) {
+            case 1: {
+                currentGrid = qlist_grid_list;
+                //加载额度列表
+                LoadQuotaAssignList();
+            }
+                break;
+            case 2: {
+                currentGrid = qhistory_grid_list;
+                //加载历史列表
+                LoadQuotaAssignHistoryList();
+            }
+                break;
+            default: break;
+
+        }
+    }
+    //加载额度列表
+    function LoadQuotaAssignList() {
+        var url = "/QuotaAssign/GetQuotaAssignList"; //请求地址
+        var colNames = ['<i class="hidden-480 icon-book"></i> 区域',
+            '<i class="hidden-480 icon-money"></i> 分配金额(元)', '<i class="hidden-480 icon-calendar"></i> 使用日期',
+            '<i class="hidden-480 icon-cogs"></i> 业务办理'];
+        var colModel = [
+            { name: 'AMT_ASSIGN_AREA_NM', index: 'AMT_ASSIGN_AREA_NM', width: '25%' },
+            { name: 'AMT_ASSIGN', index: 'AMT_ASSIGN', width: '25%', formatter: 'number', formatoptions: { thousandsSeparator: ',' } },
+            { name: 'AMT_ASSIGN_USE_DATE', index: 'AMT_ASSIGN_USE_DATE', width: '25%', formatter: 'date', formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' } },
+            {
+                width: '25%',
+                formatter: function (cellvalue, options, rowObject) {
+                    //分配的挂标额度在使用日期前可以调整
+                    var html = "--";
+                    var datetime = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());//当前时间
+                    var amt_assign_use_date = new Date(new Date(rowObject.AMT_ASSIGN_USE_DATE).toDateString()); //开始使用日期
+                    if (amt_assign_use_date >= datetime)
+                    {
+                        html = "<a style='margin-right:5px;cursor:pointer;' title='调整' onclick=\"AdjustAssign('" + rowObject.ID + "')\">调整</a>";
+                    }                                                                                                             
+                    return html;
+                }
+            }
+        ];
+        LoadGrid(qlist_grid_list, qlist_grid_pager, url, colNames, colModel, {})
+    }
+    //加载额度历史列表  --暂时无用
+    function LoadQuotaAssignHistoryList() {
+        var url = ""; //请求地址
+        var gData =
+       [
+           { AMT_OPERATE_TYPE: "理财P2P历史", AMT_OCCUR: "10000.00", AMT_REMAINING: "8000.00", BES_ID: "fa15060817", AMT_OCCUR_TYPE: "登记", USE_DATE: "2015-12-23", CREATE_DATE: "2015-12-23 12:12", UPDATE_USER_NAME: "老炮儿[110120119]" },
+            { AMT_OPERATE_TYPE: "理财P2P历史", AMT_OCCUR: "10000.00", AMT_REMAINING: "8000.00", BES_ID: "fa15060817", AMT_OCCUR_TYPE: "调整", USE_DATE: "2015-12-23", CREATE_DATE: "2015-12-23 12:12", UPDATE_USER_NAME: "老炮儿[110120119]" },
+            { AMT_OPERATE_TYPE: "理财P2P历史", AMT_OCCUR: "10000.00", AMT_REMAINING: "8000.00", BES_ID: "fa15060817", AMT_OCCUR_TYPE: "复核", USE_DATE: "2015-12-23", CREATE_DATE: "2015-12-23 12:12", UPDATE_USER_NAME: "老炮儿[110120119]" },
+            { AMT_OPERATE_TYPE: "理财P2P历史", AMT_OCCUR: "10000.00", AMT_REMAINING: "8000.00", BES_ID: "fa15060817", AMT_OCCUR_TYPE: "删除", USE_DATE: "2015-12-23", CREATE_DATE: "2015-12-23 12:12", UPDATE_USER_NAME: "老炮儿[110120119]" },
+            { AMT_OPERATE_TYPE: "理财P2P历史", AMT_OCCUR: "10000.00", AMT_REMAINING: "8000.00", BES_ID: "fa15060817", AMT_OCCUR_TYPE: "修改", USE_DATE: "2015-12-23", CREATE_DATE: "2015-12-23 12:12", UPDATE_USER_NAME: "老炮儿[110120119]" },
+            { AMT_OPERATE_TYPE: "理财P2P历史", AMT_OCCUR: "10000.00", AMT_REMAINING: "8000.00", BES_ID: "fa15060817", AMT_OCCUR_TYPE: "修改", USE_DATE: "2015-12-23", CREATE_DATE: "2015-12-23 12:12", UPDATE_USER_NAME: "老炮儿[110120119]" },
+            { AMT_OPERATE_TYPE: "理财P2P历史", AMT_OCCUR: "10000.00", AMT_REMAINING: "8000.00", BES_ID: "fa15060817", AMT_OCCUR_TYPE: "修改", USE_DATE: "2015-12-23", CREATE_DATE: "2015-12-23 12:12", UPDATE_USER_NAME: "老炮儿[110120119]" }
+       ];
+        var colNames = ['<i class="hidden-480 icon-book"></i> 额度类型',
+            '<i class="hidden-480 icon-book"></i> 操作金额(元)', '<i class="hidden-480 icon-user"></i> 剩余金额(元)',
+            '<i class="hidden-480 icon-money"></i> 业务编号', '<i class="hidden-480 icon-money"></i> 操作阶段',
+            '<i class="hidden-480 icon-calendar"></i> 使用日期', '<i class="hidden-480 icon-calendar"></i> 操作时间',
+            '<i class="hidden-480 icon-user"></i> 操作员'];
+        var colModel = [
+            { name: 'AMT_OPERATE_TYPE', index: 'AMT_OPERATE_TYPE', width: '10%', sorttype: 'text' },
+            { name: 'AMT_OCCUR', index: 'AMT_OCCUR', width: '8%' },
+            { name: 'AMT_REMAINING', index: 'AMT_REMAINING', width: '8%' },
+            { name: 'BES_ID', index: 'BES_ID', width: '8%' },
+            { name: 'AMT_OCCUR_TYPE', index: 'AMT_OCCUR_TYPE', width: '9%' },
+            { name: 'USE_DATE', index: 'USE_DATE', width: '10%' },
+            { name: 'CREATE_DATE', index: 'CREATE_DATE', width: '8%' },
+            { name: 'UPDATE_USER_NAME', index: 'UPDATE_USER_NAME', width: '10%' }
+        ];
+        LoadGrid(qhistory_grid_list, qhistory_grid_pager, url, colNames, colModel, gData)
+    }
+    /****************jQuery jqGrid Begin****************/
+    function LoadGrid(_gridId, _pager, _url, _colNames, _colModel, _postData) {
+        jQuery(_gridId).jqGrid({
+            url: _url,
+            //data: _data,
+            datatype: "json",
+            mtype: "POST",
+            height: jQuery(window).height() - 335,
+            width: jQuery('.tab-content').width() - 100,
+            colNames: _colNames,
+            colModel: _colModel,
+            postData: _postData,
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: _pager,
+            loadui: "disable",//隐藏loading
+            //onSortCol: function (colName, iCol, sortorder) {
+            //    sortIndex = colName;
+            //    sortOrder = sortorder;
+            //},
+            //beforeRequest: function () {
+            //    jQuery(_gridId).jqGrid('setGridParam', { postData: { 'sidx': sortIndex, 'sord': sortOrder } });
+            //},
+            altRows: true,
+            jsonReader: {
+                root: "DataList",
+                total: "TotalRecords",
+                page: "CurrentPage",
+                records: "TotalCount",
+                repeatitems: false
+            },
+            loadComplete: function () {
+                var table = this;
+                var re_records = jQuery(this).getGridParam('records');
+                if (re_records == 0 || re_records == null) {
+                    //Utilities.alertTip("对不起，未找到符合条件的记录！");
+                    Utilities.ShowMsg(3000, "对不起，未找到符合条件的记录！", 300, "warning");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+                jQuery(window).resize();
+            },
+            autowidth: true
+
+        });
+
+    }
+    /*处理分页控件样式*/
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    };
+    jQuery(window).resize(function () {
+        jQuery(window).unbind("onresize");
+        jQuery(qlist_grid_list).setGridHeight(jQuery(window).height() - 335);
+        jQuery(qlist_grid_list).setGridWidth(jQuery('.tab-content').width());
+        jQuery(qhistory_grid_list).setGridHeight(jQuery(window).height() - 335);
+        jQuery(qhistory_grid_list).setGridWidth(jQuery('.tab-content').width());
+        jQuery('.ui-jqgrid-hbox').each(function () {
+            jQuery(this).find('th').last().css('width', (jQuery(this).find('th').last().width() + 25) + 'px');
+        });
+        jQuery(window).bind("onresize", this);
+    });
+    /****************jQuery jqGrid End****************/
+
+    //查询额度列表
+    function Query() {
+        var para = { area: $("#district").val(), useDate: $("#txtUseDate").val() };
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            page: 1,
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    //新增额度分配
+    function AddAssignQuota() {
+        jQuery("#addAssign_iframe").attr("src", "/QuotaAssign/QuotaAssignAdd");
+        jQuery("#addAssign_dialog").dialog({
+            title: "<h4><i class='icon-plus'></i> 新增额度分配</h4>",//class='smaller'
+            title_html: true,
+            resizable: false,
+            width: "30%",
+            modal: true,
+            draggable: false,
+            close: function (event, ui) {
+                //重新加载列表
+                $("#qlist-grid-list").jqGrid('setGridParam').trigger("reloadGrid");
+            }
+        });
+    }
+
+    //调整额度
+    function AdjustAssign(key) {
+        jQuery("#adjustAssign_iframe").attr("src", "/QuotaAssign/QuotaAssignAdjust?id=" + key);
+        jQuery("#adjustAssign_dialog").dialog({
+            title: "<h4 class=''><i class='icon-exchange'></i> 调整额度分配</h4>",
+            title_html: true,
+            resizable: false,
+            width: "30%",
+            modal: true,
+            draggable: false,
+            close: function (event, ui) {
+                //重新加载列表
+                $("#qlist-grid-list").jqGrid('setGridParam').trigger("reloadGrid");
+            }
+        });
+    }
+    //智能查询
+    function IntelligentQuery() {
+        var keyword = $("#nav_search_input").val();
+        var para;
+        switch (currentGrid) {
+            case qlist_grid_list:
+                {
+                    para = {
+                        keyWord: keyword
+                    }
+                }
+                break;
+            case qhistory_grid_list:
+                {
+                    para = {
+                        keyWord: keyword
+                    }
+                }
+            default:
+                break;
+        }
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            page: 1,
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    /*关闭Dialog 子窗口调用*/
+    function CloseDialog(e) {
+        jQuery(e).dialog("close");
+    }
+    /*顶部提示信息 子窗口调用*/
+    function MsgTip(timeOut, msg, type) {
+        Utilities.ShowMsg(timeOut, msg, 300, type);
+    }
+</script>

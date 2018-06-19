@@ -1,0 +1,165 @@
+﻿@Scripts.Render("~/bundles/bootbox")
+<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+
+<div class="widget-box">
+    <div class="widget-header widget-header-small">
+        <h5 class="lighter">展期配置列表</h5>
+        <button class="btn btn-purple" id="addExtendConfig" onclick="EditExtend()" style="float:right">添加展期配置</button>
+    </div>
+    <div class="widget-body" style="height:auto; overflow-y:auto;width:auto;">
+        <div class="widget-main">
+            <table id="grid-table"></table>
+            <div id="grid-pager"></div>
+        </div>
+    </div>
+</div>
+<div id="EditExtend_Dialog" style="display:none;height:500px">
+    <iframe id="EditExtend_iframe" style="border: none; width: 100%; height: 500px;"></iframe>
+</div>
+<script type="text/javascript">
+    var sortIndex = "";
+    var sortOrder = "";
+    $(function () {
+        jQuery("#grid-table").jqGrid({
+            url: "/SystemConfig/GetExtendConfigList",
+            datatype: "json",
+            height: jQuery(window).height() - 293,
+            width: jQuery('.widget-main').width(),
+            autowidth: true,
+            shrinkToFit: true,
+            mtype: "POST",
+            altRows: true,
+            colNames: ['<i class="hidden-480 icon-wrench"></i> 操作', '<i class="hidden-480 icon-archive"></i> 产品  ',
+                '<i class="hidden-480 icon-building"></i> 城市', '<i class="hidden-480 icon-archive"></i> 目标表单', '<i class="hidden-480 icon-book"></i> 目标产品列表',
+                '<i class="hidden-480 icon-book"></i> 目标表单版本', '<i class="hidden-480 icon-edit"></i> 可续展总期数',
+                '<i class="hidden-480 icon-edit"></i> 每次续展期数', '<i class="hidden-480 icon-filter"></i> 结算金额类型',
+                '<i class="hidden-480 icon-money"></i> 结算金额', '<i class="hidden-480 icon-filter"></i> 借款服务费类型',
+                '<i class="hidden-480 icon-money"></i> 借款服务费', '<i class="hidden-480 icon-filter"></i> 借款咨询费类型',
+                '<i class="hidden-480 icon-money"></i> 借款咨询费', '<i class="hidden-480 icon-cogs"></i> 业务办理'],
+
+            colModel: [
+                { name: 'ACTION_GROUP', index: 'ACTION_GROUP', width: "10%" },
+                { name: 'PRODUCT_CODE', index: 'PRODUCT_CODE', width: "20%" },
+                { name: 'CITY_CODE', index: 'CITY_CODE', width: "10%" },
+                { name: 'TARGET_LOGO', index: 'TARGET_LOGO', width: "10%" },
+                { name: 'TARGET_PRODUCT_CODE', index: 'TARGET_PRODUCT_CODE', width: "15%" },
+                { name: 'TARGET_DFORM_VERSION', index: 'TARGET_DFORM_VERSION', width: "20%" },
+                { name: 'PERIOD_AMOUNT_TOTAL', index: 'PERIOD_AMOUNT_TOTAL', width: "10%" },
+                { name: 'PERIOD_AMOUNT', index: 'PERIOD_AMOUNT', width: "10%" },
+                { name: 'SETTLEMENT_TYPE', index: 'SETTLEMENT_TYPE', width: "10%", hidden: true },
+                { name: 'SETTLEMENT_AMOUNT', index: 'SETTLEMENT_AMOUNT', width: "10%", hidden: true },
+                { name: 'SERVICE_CHARGE_TYPE', index: 'SERVICE_CHARGE_TYPE', width: "10%", hidden: true },
+                { name: 'SERVICE_CHARGE', index: 'SERVICE_CHARGE', width: "10%", hidden: true },
+                { name: 'CONSULT_CHARGE_TYPE', index: 'CONSULT_CHARGE_TYPE', width: "10%", hidden: true },
+                { name: 'CONSULT_CHARGE', index: 'CONSULT_CHARGE', width: "10%", hidden: true },
+                {
+                    width: "15%", align: "center", sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var htmlEdit = '<a class="blue" href="javascript:void(0);" onclick="EditExtend(' + rowObject.ID + ')" title="编辑" data-toggle="modal" data-target="#myModal"><i class="icon-edit bigger-130"></i></a>';
+                        var htmlDelete = '<a class="red" href="javascript:void(0);" onclick="DeleteExtend(' + rowObject.ID + ')" title="删除"><i class="icon-trash bigger-130"></i></a>';
+                        return htmlEdit + "  " + htmlDelete;
+
+                    }
+                }
+            ],
+            jsonReader: {
+                root: "ViewList",
+                total: "TotalPages",
+                page: "CurrentPage",
+                records: "TotalRecords",
+                repeatitems: false
+            },
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: "#grid-pager",
+            onSortCol: function (colName, iCol, sortorder) {
+                sortIndex = colName;
+                sortOrder = sortorder;
+            },
+            beforeRequest: function () {
+                jQuery("#grid-table").jqGrid('setGridParam', { postData: { 'sidx': sortIndex, 'sord': sortOrder } });
+            },
+            loadComplete: function () {
+                var table = this;
+                var reRecords = jQuery(this).getGridParam('records');
+                if (reRecords == 0 || reRecords == null) {
+                    Utilities.alertTip("对不起，未找到符合条件的记录！");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+
+                jQuery(window).resize();
+            },
+        });
+
+        function updatePagerIcons(table) {
+            var replacement =
+            {
+                'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+                'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+                'ui-icon-seek-next': 'icon-angle-right bigger-140',
+                'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+            };
+            $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                var icon = $(this);
+                var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+                if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+            });
+        };
+    });
+    function EditExtend(id) {
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                var $title = this.options.title || '&nbsp;';
+                if (("title_html" in this.options) && this.options.title_html == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+
+        $("#EditExtend_iframe").attr("src", "/SystemConfig/ExtendConfigEdit?id=" + id);
+        jQuery('#EditExtend_Dialog').dialog({
+            title: "<h4 class='smaller'><i class='icon-edit'></i>编辑展期配置信息</h4>",
+            title_html: true,
+            resizable: false,
+            width: "50%",
+            modal: true,
+            draggable: false,
+            close: function (event, ui) {
+                jQuery("#grid-table").trigger("reloadGrid");
+            }
+        });
+    }
+
+    function DeleteExtend(id) {
+        bootbox.confirm("确定要删除吗？", function (data) {
+            if (data) {
+                $.ajax({
+                    url: '/SystemConfig/DeleteExtendConfig',
+                    type: 'post',
+                    data: { id: id },
+                    success: function (msg) {
+                        if (msg) {
+                            Utilities.alertTip(msg);
+                        } else {
+                            Utilities.alertTip("删除成功！");
+                            jQuery("#grid-table").trigger("reloadGrid");
+                        }
+                    }
+                });
+            }
+        });
+    }
+    function CloseDialog() {
+        jQuery('#EditExtend_Dialog').dialog("close");
+    };
+</script>

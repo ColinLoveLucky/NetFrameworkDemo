@@ -1,0 +1,259 @@
+﻿@{
+    ViewBag.Title = "DFormFieldEdit";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<style>
+    .form-group {
+        margin-bottom: 2px;
+    }
+</style>
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="frmFieldBaseInfo" role="form">
+            <fieldset>
+                <legend>基本信息</legend>
+                @*显示名*@
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="FORMINFO_ID"> 所属表单</label>
+
+                    <div class="col-sm-9">
+                        <select id="FORMINFO_ID" class="col-xs-10 col-sm-5">
+                            <option value=''>--请选择--</option>
+                            @foreach (var item in ViewData["FormList"] as Dictionary<string, string>)
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+
+                        </select>
+                    </div>
+                </div>
+
+
+                @*显示名*@
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="FIELD_DISPLAYNAME"> 字段显示名</label>
+
+                    <div class="col-sm-9">
+                        <input id="FIELD_DISPLAYNAME" class="col-xs-10 col-sm-5" type="text">
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+                @*字段主键*@
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="FIELD_KEY"> 字段主键</label>
+
+                    <div class="col-sm-9">
+                        <input id="FIELD_KEY" class="col-xs-10 col-sm-5" type="text">
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+                @*字段类型*@
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="FIELD_TYPE"> 字段类型</label>
+
+                    <div class="col-sm-9">
+                        <select id="FIELD_TYPE" class="col-xs-10 col-sm-5" onchange="loadTypeEdit($(this).val());">
+                            <option value=''>--请选择--</option>
+                            @foreach (Type item in ViewData["TypeList"] as List<Type>)
+                            {
+                                <option value="@item.Name">@item.Name</option>
+                            }
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+                @* 字段占用列数 *@
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="FIELD_ROWSPAN"> 字段占用列数</label>
+
+                    <div class="col-sm-9">
+                        <select id="FIELD_ROWSPAN" class="col-xs-10 col-sm-5">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2" selected="selected">2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="MAPPER_TABLE"> 匹配的表格</label>
+
+                    <div class="col-sm-9">
+                        <select id="MAPPER_TABLE" class="col-xs-10 col-sm-5" onchange="loadFiled($(this).val());">
+                            <option value=''>--请选择--</option>
+                            @foreach (Type item in ViewData["EntityList"] as List<Type>)
+                            {
+                                <option value="@item.Name">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="MAPPER_TABLEFIELD"> 匹配表格的字段</label>
+
+                    <div class="col-sm-9">
+                        <select id="MAPPER_TABLEFIELD" class="col-xs-10 col-sm-5"></select>
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="FIELD_GROUP"> 分组</label>
+
+                    <div class="col-sm-9">
+                        <input id="FIELD_GROUP" class="col-xs-10 col-sm-5" type="text">
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="FIELD_SORT"> 字段排序</label>
+
+                    <div class="col-sm-9">
+                        <input id="FIELD_SORT" class="col-xs-10 col-sm-5" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="FIELD_REQUIRED"> 是否必填</label>
+
+                    <div class="col-sm-9">
+                        <select id="FIELD_REQUIRED" class="col-xs-10 col-sm-5">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-1"></div>
+            </fieldset>
+        </form>
+        <form class="form-horizontal" id="frmFieldAttrInfo" style="margin-bottom:50px" role="form">
+            <fieldset>
+                <legend>字段特性</legend>
+                <div id="typeHTML">
+
+                </div>
+            </fieldset>
+
+        </form>
+        <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px;">
+            <button class="btn btn-sm" data-dismiss="modal" onclick="parent.CloseDialog();">
+                <i class="icon-remove"></i>
+                取消
+            </button>
+
+            <button class="btn btn-sm btn-primary" onclick="saveData();">
+                <i class="icon-ok"></i>
+                保存
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        //全局设置 同步
+        $.ajaxSetup({
+            async: false
+        });
+        loadFieldData();
+    })
+
+    //异步加载表格字段
+    function loadFiled(tableName) {
+        $.getJSON("/SystemConfig/DFormFiledList?tableName=" + tableName, function (data) {
+            var html = "<option value=''>--请选择--</option>";
+            for (var i = 0; i < data.length; i++) {
+                html += "<option value='" + data[i] + "'>" + data[i] + "</option>";
+            }
+            $("#MAPPER_TABLEFIELD").html(html);
+        });
+    }
+    function loadTypeEdit(typeName) {
+        var html = "";
+        $.getJSON("/SystemConfig/GetTypeFiledList?typeName=" + typeName, function (data) {
+            for (var i in data) {
+                html += "<div class='form-group'> ";
+                html += "      <label class='col-sm-3 control-label no-padding-right' for='" + i + "'>" + data[i] + "</label> ";
+                html += "      <div class='col-sm-9'> ";
+                html += "          <input id='" + i + "' class='col-xs-10 col-sm-5' type='text'>";
+                html += "      </div> ";
+                html += "  </div>";
+                //html += "<div class='space-1'></div>";
+            }
+
+            $("#typeHTML").html(html);
+        });
+    }
+    function loadFieldData() {
+        var id = Utilities.getUrlParam("id");
+        $.getJSON("/SystemConfig/GetFieldEntity?fieldID=" + id, function (data) {
+            for (var i in data) {
+                $("#" + i).val(data[i]).change();
+            }
+        });
+        $.getJSON("/SystemConfig/GetFieldTypeEntity?fieldID=" + id, function (data) {
+            for (var i in data) {
+                $("#" + i).val(data[i]).change();
+            }
+        });
+    }
+    function saveData() {
+        var error = "";
+        var id = Utilities.getUrlParam("id");
+        //保存基本数据
+        var jsonD = {};
+        $("#frmFieldBaseInfo").find(":input").each(function () {
+            jsonD[$(this).attr("id")] = $(this).val();
+
+        });
+        jsonD.ID = id;
+        $.ajax({
+            type: "post",
+            url: "/SystemConfig/UpdateFieldEntity",
+            data: jsonD,
+            success: function (d) {
+                if (d) {
+                    error += "<strong>基础数据保存出错</strong>：" + d + "<br />";
+                }
+            }
+        });
+        var josnA = {};
+        $("#frmFieldAttrInfo").find(":input").each(function () {
+            josnA[$(this).attr("id")] = $(this).val();
+
+        });
+        josnA.ID = id;
+        $.ajax({
+            type: "post",
+            url: "/SystemConfig/UpdateFieldAttrEntity",
+            data: josnA,
+            success: function (d) {
+                if (d) {
+                    error += "<strong>特性数据保存出错</strong>：" + d + "<br />";
+                }
+            }
+        });
+        if (error) {
+            Utilities.alertTip(error);
+        }
+        else {
+            Utilities.alertTip("保存成功!");
+        }
+    }
+</script>

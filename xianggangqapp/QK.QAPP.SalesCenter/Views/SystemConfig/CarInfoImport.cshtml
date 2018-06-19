@@ -1,0 +1,90 @@
+﻿@Scripts.Render("~/bundles/bootbox")
+<div class="row">
+    <div class="col-xs-12">
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="lighter">车辆信息导入</h5>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+                            @{
+                                if (ViewData["lastImportTime"] != null)
+                                {
+                                    <span class="header blue">上次导入时间：@ViewData["lastImportTime"]</span>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            <div class="col-sm-5 col-xs-12">
+                                <input type="file" id="excelFile" name="excelFile">
+                            </div>
+                            <button class="btn btn-purple btn-sm" type="button" id="importBtn">导入</button>
+                        </form>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+                            <span class="red">提示：根据导入数据量的不同，此操作可能需要几分钟时间，请耐心等待，谢谢。</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/assets/js/ajaxfileupload.js"></script>
+<script>
+    $(function () {
+        //初始化
+        InitAceFileInput();
+        $('#importBtn').click(function () {
+            if ($("#excelFile").val().length > 0) {
+                bootbox.confirm('确定要导入新数据吗？（此操作会先清空所有原车辆数据，并导入新的数据）', function (result) {
+                    if (result) {
+                        //上传
+                        UploadCarInfoData();
+                    }
+                });
+            }
+            else {
+                Utilities.alertTip("请选择文件！");
+            }
+        });
+    });
+
+    //初始化文件上传控件
+    function InitAceFileInput() {
+        $('#excelFile').ace_file_input({
+            no_file: '未选择任何文件...',
+            btn_choose: '选择文件',
+            btn_change: '重新选择',
+            droppable: false,
+            onchange: null,
+            thumbnail: false, //| true | large
+            whitelist: 'xlsx|xls'
+            //blacklist:'exe|php'
+        });
+    }
+    //上传车辆信息数据（Excel）
+    function UploadCarInfoData() {
+        $.ajaxFileUpload({
+            url: '/SystemConfig/CarInfoFileUpload',
+            type: 'post',
+            secureuri: false, //一般设置为false
+            fileElementId: 'excelFile', // 上传文件的id、name属性名
+            dataType: 'text', //返回值类型，一般设置为json、application/json
+            //elementIds: elementIds, //传递参数到服务器
+            success: function (data, status) {
+                Utilities.alertTip(data);
+            },
+            error: function (data, status, e) {
+                Utilities.alertTip("导入数据时出错！");
+            }
+        });
+    }
+</script>
+

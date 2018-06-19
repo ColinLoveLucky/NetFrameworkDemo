@@ -1,0 +1,145 @@
+﻿<log4net>
+  <logger name="logbiz">
+    <level value="ALL" />
+    <appender-ref ref="AdoNetBizAppender" />
+  </logger>
+  <logger name="logsys">
+    <level value="ALL" />
+    <appender-ref ref="AdoNetSysAppender" />
+  </logger>
+  <appender name="LogFileAppender" type="log4net.Appender.RollingFileAppender">
+    <param name="File" value="Log4net/log_" />
+    <param name="AppendToFile" value="true" />
+    <param name="MaxFileSize" value="10" />
+    <param name="MaxSizeRollBackups" value="100" />
+    <param name="StaticLogFileName" value="false" />
+    <param name="DatePattern" value="yyyyMMdd&quot;.log&quot;" />
+    <param name="RollingStyle" value="Date" />
+    <layout type="log4net.Layout.PatternLayout">
+    </layout>
+  </appender>
+  <appender name="AdoNetBizAppender" type="log4net.Appender.AdoNetAppender">
+    <bufferSize value="1" />
+    <connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <connectionString value="data source=QF-ORACLE-01\MSSQL_COREDEV;initial catalog=AppLog;integrated security=false;persist security info=True;user id=app;password=app" />
+    <commandText value="INSERT INTO AppBizLog ([UserName],[UserId],[Function],[Machine],[Key],[Description],[Entity],[DateTime]) VALUES (@username, @userid, @function, @machine, @key, @description, @entity, @datetime)" />
+    <parameter>
+      <parameterName value="@username" />
+      <dbType value="String" />
+      <size value="100" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{UserName}"/>
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@userid" />
+      <dbType value="String" />
+      <size value="100" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{UserId}"/>
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@function" />
+      <dbType value="String" />
+      <size value="255" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{Function}"/>
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@machine" />
+      <dbType value="String" />
+      <size value="50" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{Machine}" />
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@key" />
+      <dbType value="String" />
+      <size value="50" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{Key}" />
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@description" />
+      <dbType value="String" />
+      <size value="1000" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{Description}" />
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@entity" />
+      <dbType value="String" />
+      <size value="5000" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{Entity}" />
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@datetime" />
+      <dbType value="DateTime" />
+      <layout type="log4net.Layout.RawTimeStampLayout" />
+    </parameter>
+  </appender>
+  <appender name="AdoNetSysAppender" type="log4net.Appender.AdoNetAppender">
+    <bufferSize value="1" />
+    <connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <connectionString value="data source=QF-ORACLE-01\MSSQL_COREDEV;initial catalog=AppLog;integrated security=false;persist security info=True;user id=app;password=app" />
+    <commandText value="INSERT INTO AppSysLog ([Date],[Level],[Message],[Exception],[UserName],[UserId],[Host]) VALUES (@log_date, @log_level, @message, @exception,@userName,@userId,@host)" />
+    <parameter>
+      <parameterName value="@log_date" />
+      <dbType value="DateTime" />
+      <layout type="log4net.Layout.RawTimeStampLayout" />
+    </parameter>
+    <parameter>
+      <parameterName value="@log_level" />
+      <dbType value="String" />
+      <size value="50" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%level" />
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@message" />
+      <dbType value="String" />
+      <size value="4000" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{Description}"/>
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@exception" />
+      <dbType value="String" />
+      <size value="2000" />
+      <layout type="log4net.Layout.ExceptionLayout" />
+    </parameter>
+    <parameter>
+      <parameterName value="@username" />
+      <dbType value="String" />
+      <size value="100" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{UserName}"/>
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@userid" />
+      <dbType value="String" />
+      <size value="100" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{UserId}"/>
+      </layout>
+    </parameter>
+    <parameter>
+      <parameterName value="@host" />
+      <dbType value="String" />
+      <size value="100" />
+      <layout type="QK.QAPP.Infrastructure.Log4Net.CustomerPatternLayout,QK.QAPP.Infrastructure" >
+        <param name="ConversionPattern" value="%property{Host}"/>
+      </layout>
+    </parameter>
+  </appender>
+</log4net>

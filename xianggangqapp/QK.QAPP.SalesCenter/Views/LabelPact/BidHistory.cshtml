@@ -1,0 +1,195 @@
+﻿@{
+    ViewBag.Title = "BidHistory";
+}
+<div class="row-fluid">
+    <div>
+        <div class="widget-box">
+            <div class="widget-header widget-header-blue widget-header-flat">
+                @*<h4 class="lighter">额度复核</h4>*@
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-1">使用日期：</span>
+                        <div class="input-group col-xs-12 col-sm-2">
+                            <input type="text" name="txtUseDate" id="txtUseDate" class="form-control date-picker" data-date-format="yy-mm-dd"
+                                   data-val="true" placeholder="请选择日期" />
+                            <span class="input-group-addon"
+                                  style="cursor:pointer;">
+                                <i class="icon-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                        <button class="btn btn-sm btn-success" onclick="Query()">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="widget-body" style="height:auto; overflow-y:auto;width:auto;">
+                <div class="widget-main">
+                    <table id="grid-table"></table>
+                    <div id="grid-pager"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .col-top {
+        top: 4px;
+    }
+</style>
+<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<script>
+    var dept = Utilities.getUrlParam("dept"); //department info 该参数配置在权限系统菜单上
+    var grid_table = "#grid-table";
+    var grid_pager = "#grid-pager";
+    jQuery(function () {
+        jQuery("#txtUseDate").datepicker({
+            autoclose: true,
+            changeYear: true,
+            changeMonth: true,
+            language: 'cn',
+            beforeShow: function () {
+                setTimeout(function () {
+                    jQuery('.ui-datepicker').css('z-index', function (index, value) {
+                        return parseFloat(value) + 5;
+                    });
+                }, 0);
+            }
+        }).next().on(ace.click_event, function () {
+            jQuery(this).prev().focus();
+        });
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function () {
+            jQuery(window).resize();
+        });
+
+        /*为额度列表添加智能查询功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function () { IntelligentQuery(); });
+        jQuery(".input-icon").children("input[type='text']").keypress(function (e) { e = e || event; if (e.keyCode == 13) { jQuery(".input-icon").children("i").click(); }; });
+        jQuery("<a />").attr("href", "javascript:;").text("智能查询").attr("onclick", "javascript:IntelligentQuery();").addClass("label label-lg label-pink arrowed-right").attr("style", "top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+        /*加载标的历史列表*/
+        LoadBidHistoryList();
+    });
+
+    //加载标的历史列表
+    function LoadBidHistoryList() {
+        var url = "/BidHistory/GetBidHistoryList";
+        var colNames = ['<i class="hidden-480 icon-book"></i> 额度类型',
+            '<i class="hidden-480 icon-money"></i> 操作金额(元)', '<i class="hidden-480 icon-money"></i> 剩余金额(元)',
+            '<i class="hidden-480 icon-book"></i> 业务编号', '<i class="hidden-480 icon-tags"></i> 操作阶段',
+            '<i class="hidden-480 icon-calendar"></i> 使用开始日期', '<i class="hidden-480 icon-calendar"></i> 使用结束日期',
+            '<i class="hidden-480 icon-calendar"></i> 操作时间', '<i class="hidden-480 icon-user"></i> 操作员'];
+        var colModel = [
+            { name: 'AMT_OPERATE_NAME', index: 'AMT_OPERATE_NAME', width: '10%', sorttype: 'text' },
+            { name: 'AMT_OCCUR', index: 'AMT_OCCUR', width: '8%', formatter: 'number', formatoptions: { thousandsSeparator: ',' } },
+            { name: 'AMT_REMAINING', index: 'AMT_REMAINING', width: '8%' },
+            { name: 'BES_ID', index: 'BES_ID', width: '8%' },
+            { name: 'AMT_OCCUR_NAME', index: 'AMT_OCCUR_TYPE', width: '9%' },
+            { name: 'USE_START_DATE', index: 'USE_START_DATE', width: '10%', formatter: 'date', formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' } },
+            { name: 'USE_END_DATE', index: 'USE_END_DATE', width: '10%', formatter: 'date', formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' } },
+            { name: 'CREATE_DATE', index: 'CREATE_DATE', width: '8%', formatter: 'date', formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s' }, datefmt: 'Y-m-d H:i:s' },
+            { name: 'UPDATE_USER_NAME', index: 'UPDATE_USER_NAME', width: '10%' }
+        ];
+        var postData = { useDate: $("#txtUseDate").val(), keyWord: $("#nav_search_input").val(), dept: dept }
+        LoadGrid(grid_table, grid_pager, url, colNames, colModel, postData)
+    }
+    /****************jQuery jqGrid Begin****************/
+    function LoadGrid(_gridId, _pager, _url, _colNames, _colModel, _postData) {
+        jQuery(_gridId).jqGrid({
+            url: _url,
+            datatype: "json",
+            mtype: "POST",
+            height: jQuery(window).height() - 335,
+            //width: jQuery('.tab-content').width(),
+            colNames: _colNames,
+            colModel: _colModel,
+            postData: _postData,
+            viewrecords: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: _pager,
+            loadui: "disable",//隐藏loading
+            //onSortCol: function (colName, iCol, sortorder) {
+            //    sortIndex = colName;
+            //    sortOrder = sortorder;
+            //},
+            //beforeRequest: function () {
+            //    jQuery(_gridId).jqGrid('setGridParam', { postData: { 'sidx': sortIndex, 'sord': sortOrder } });
+            //},
+            altRows: true,
+            jsonReader: {
+                root: "DataList",
+                total: "TotalRecords",
+                page: "CurrentPage",
+                records: "TotalCount",
+                repeatitems: false
+            },
+            loadComplete: function () {
+                var table = this;
+                var re_records = jQuery(this).getGridParam('records');
+                if (re_records == 0 || re_records == null) {
+                    //Utilities.alertTip("对不起，未找到符合条件的记录！");
+                    Utilities.ShowMsg(3000, "对不起，未找到符合条件的记录！", 300, "warning");
+                };
+                setTimeout(function () {
+                    updatePagerIcons(table);
+                    jQuery('.ui-jqgrid-bdiv').css("overflow-x", "hidden");
+                }, 0);
+                jQuery(window).resize();
+            },
+            autowidth: true
+
+        });
+
+    }
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    };
+    jQuery(window).resize(function () {
+        jQuery(window).unbind("onresize");
+        jQuery(grid_table).setGridHeight(jQuery(window).height() - 293);
+        jQuery(grid_table).setGridWidth(jQuery('.widget-main').width());
+        jQuery('.ui-jqgrid-hbox').each(function () {
+            jQuery(this).find('th').last().css('width', (jQuery(this).find('th').last().width() + 25) + 'px');
+        });
+        jQuery(window).bind("onresize", this);
+    });
+    /****************jQuery jqGrid End****************/
+
+    //标的历史查询--查询全部
+    function Query() {
+        jQuery(grid_table).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: { useDate: $("#txtUseDate").val(), keyWord: "" }  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    //智能查询
+    function IntelligentQuery() {
+        var para = { useDate: $("#txtUseDate").val(), keyWord: $("#nav_search_input").val() };
+        jQuery(grid_table).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+</script>

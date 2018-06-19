@@ -1,0 +1,156 @@
+﻿<div class="row-fluid">
+    <div class="widget-box">
+        <div class="widget-header widget-header-blue widget-header-flat">
+            <div class="form-group">
+                <div class="clearfix">
+                    <span class="control-label col-xs-12 col-sm-1">区域：</span>
+                    <div class="col-xs-12 col-sm-2 col-top">
+                        <select name="quotaType" id="quotaType" class="col-xs-12">
+                            <option value="">--请选择--</option>
+                            @foreach (KeyValuePair<string, string> kv in ViewBag.District as Dictionary<string, string>)
+                            {
+                                <option value="@kv.Key">@kv.Value</option>
+                            }
+                        </select>
+                    </div>
+                    <button class="btn btn-sm btn-success" onclick="Query()">
+                        <i class="icon-search nav-search-icon"></i>查询
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="tree-table">
+                <thead style="text-align:center;">
+                    <tr>
+                        <td colspan="3" rowspan="2"></td>
+                        <td colspan="6">理财P2P</td>
+                        <td colspan="10">直投P2P</td>
+                        <!--<td colspan="2">消费信贷P2P</td>-->
+                        <td colspan="8">T2P</td>
+                    </tr>
+                    <tr>
+                        <!--P2P理财-->
+                        <td colspan="2">铜板街</td>
+                        <td colspan="2">人人聚财</td>
+                        @*<td colspan="2">抵押房贷</td>
+                        <td colspan="2">极客贷</td>*@
+                        <td colspan="2">其他P2P</td>
+                        <!--P2P直投-->
+                        <td colspan="2">铜板街</td>
+                        <td colspan="2">人人聚财</td>
+                        <td colspan="2">58钱柜</td>
+                        <td colspan="2">北银消费</td>
+                        <td colspan="2">点融其他</td>
+                        <!--P2P消费信贷-->
+                        @*<td colspan="2">消费信贷</td>*@
+                        <!--T2P-->
+                        <td colspan="2">外贸抵押车贷</td>
+                        @*<td colspan="2">外贸房贷</td>*@
+                        <td colspan="2">外贸其他</td>
+                        <td colspan="2">中航抵押车贷</td>
+                        @*<td colspan="2">中航房贷</td>*@
+                        <td colspan="2">中航其他</td>
+                    </tr>
+                    <tr>
+                        <td><div style="width:155px;">组织机构名称</div></td>
+                        <td><div style="width:95px;">限额计划</div></td>
+                        <td><div style="width:95px;">可挂标额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        @*<td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>
+                        <td><div style="width:95px;">已挂标额度</div></td>
+                        <td><div style="width:95px;">已协议确认额度</div></td>*@
+                    </tr>
+                </thead>
+                <tbody id="tree-table-body">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<style type="text/css">
+    .col-top {
+        top: 4px;
+    }
+</style>
+<script src="~/Content/assets/TreeTable/jquery.treeTable.js"></script>
+<link href="~/Content/assets/TreeTable/css/jquery.treeTable.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(function () {
+        ReSetTableSize();
+        jQuery(window).resize(function () {
+            ReSetTableSize();
+        });
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function () {
+            jQuery(window).resize();
+        });
+
+        /*加载treeTable*/
+        LoadTreeTable();
+    });
+
+    var LoadTreeTable = function () {
+        $.ajax({
+            type: 'post',
+            dataType: "text",
+            url: '/QuotaUsage/GetQuotaUsage',
+            data: { area: $("#quotaType").val() },
+            cache: false,
+            async: false,/*同步*/
+            success: function (data) {
+                $("#tree-table-body").html(data);
+            }
+        });
+        $("#tree-table").treeTable({
+            initialState: "expanded" //collapsed 收缩 expanded  展开的
+        });
+    }
+
+    jQuery(window).resize(function () {
+        jQuery(window).unbind("onresize");
+        ReSetTableSize();
+        jQuery(window).bind("onresize", this);
+    });
+    /*重新计算table宽高*/
+    var ReSetTableSize = function () {
+        $(".table-responsive").css({
+            "height": jQuery(window).height() - 168,
+            "width": $(".widget-box").width(),
+            "overflow": "auto"
+        });
+    };
+    /*查询*/
+    var Query = function () {
+        LoadTreeTable();
+    };
+</script>

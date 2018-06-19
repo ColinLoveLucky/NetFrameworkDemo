@@ -1,0 +1,457 @@
+﻿<script src="~/Content/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Content/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Content/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="~/Content/assets/js/date-time/datepicker-zh-TW.js"></script>
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+
+<div>
+    <div class="widget-header widget-header-blue widget-header-flat">
+        <h4 class="lighter">评估列表</h4>
+    </div>
+
+    <div class="widget-body" style="height:auto; overflow-y:auto;width:auto;">
+        <div class="widget-main">
+            <div id="extend_highSearch_assess" style="display:none;">
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">申请单号：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber" id="txtAppNumber" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2" id="lblSearchStatus">评估状态：</span>
+                        <div class="col-xs-12 col-sm-3" id="divSearchStatus">
+                            <select name="slctStatus" id="slctStatus" class="col-xs-12">
+                                <option value="">--选择评估状态--</option>
+                                @foreach (KeyValuePair<string, string> kv in ViewData["AssessQueueStatus"] as Dictionary<string, string>)
+                                {
+                                    string[] statuName = kv.Value.Split(',');
+                                    <option value="@kv.Key" contextmenu="@statuName[1]">@statuName[0]</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <span class="control-label col-xs-12 col-sm-2">客户姓名：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtAppNumber" id="txtCustomerName" class="col-xs-12" />
+                        </div>
+                        <span class="control-label col-xs-12 col-sm-2">客户经理：</span>
+                        <div class="col-xs-12 col-sm-3">
+                            <input type="text" name="txtSales" id="txtSales" class="col-xs-12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="clearfix">
+                        <button class="btn btn-sm btn-success" onclick="javascript: doHighSearch();">
+                            <i class="icon-search nav-search-icon"></i>查询
+                        </button>
+                        <a href="javascript:;" onclick="javascript:showHighSearch();">隐藏高级查询↑</a>
+                    </div>
+                </div>
+            </div>
+            <table id="assess-grid-table"></table>
+            <div id="assess-grid-pager"></div>
+        </div>
+    </div>
+    <div id="valuatorAllocate_dialog" style="display:none;">
+        <iframe id="valuatorAllocate_iframe" style="border: none; width: 100%; height: 440px;"></iframe>
+    </div>
+</div>
+<div id="valuatorAllocate_dialog3" style="display:none;">
+    <iframe id="valuatorAllocate_iframe3" style="border: none; width: 100%; height: 440px;"></iframe>
+</div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    var grid_selector_assess = "#assess-grid-table";
+    var pager_selector_assess = "#assess-grid-pager";
+    var currentGrid = grid_selector_assess;
+    var currentHighSearch = "extend_highSearch_assess";
+    var permissionButtons = @MvcHtmlString.Create(ViewData["Permission_Buttons"].ToString());
+    var sortIndex="";
+    var sortOrder="";
+
+    jQuery(function () {
+        /*禁用页面回车键 */
+        document.onkeypress = function(e){
+            e = e || window.event;
+            if(e.keyCode == 13){
+                return false;
+            }
+        }
+
+        /*为Search窗口窗口添加搜索功能*/
+        jQuery("#nav-search").removeClass("hide");
+        jQuery(".input-icon").children("i").css("cursor", "pointer").click(function(){doNormalSearch();});
+        jQuery(".input-icon").children("input[type='text']").keypress(function(e){ e=e||event;   if(e.keyCode==13)   { jQuery(".input-icon").children("i").click(); }; });
+        jQuery("<a/>").attr("href", "javascript:;").text("高级查询").attr("onclick", "javascript:showHighSearch();").addClass("label label-lg label-pink arrowed-right").attr("style","top:-2px;").appendTo(jQuery("#nav-search").children('.form-search'));
+
+        /*侧边栏收放的时候重新计算内容宽度*/
+        jQuery('#sidebar-collapse').click(function(){
+            jQuery(window).resize();
+        });
+
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                var $title = this.options.title || '&nbsp;'
+                if (("title_html" in this.options) && this.options.title_html == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+    });
+
+    /****************jQuery jqGrid Begin****************/
+    /*页面加载时按所有查询条件列出进件*/
+    jQuery(grid_selector_assess).jqGrid({
+        url: '/Assess/GetAssessList?menuCode=@ViewData["menuCode"]',
+        datatype: "json",
+        height: jQuery(window).height() - 293,
+        width:jQuery('.widget-main').width(),
+        autowidth: true,
+        shrinkToFit: true,
+        mtype: "POST",
+        altRows: true,
+        colNames:['<i class="hidden-480 icon-book"></i> 申请号', '<i class="hidden-480 icon-user"></i> 客户姓名',
+            '<i class="hidden-480 icon-phone"></i> 客户电话', '<i class="hidden-480 icon-calendar"></i> 预约时间',
+            '<i class="hidden-480 icon-calendar"></i> 到店时间', '<i class="hidden-480 icon-user"></i> 评估师',
+            '<i class="hidden-480 icon-user"></i> 客户经理', '<i class="hidden-480 icon-time"></i> 评估状态',
+             '<i class="hidden-480 icon-cogs"></i> 业务办理'],
+
+        colModel: [
+            { name: 'APP_CODE', index: 'AppCode', width: "12%", sorttype: "int" },
+            { name: 'CUSTOMER_NAME', index: 'CustomerName', width: "9%", sorttype: "textarea" },
+            { name: 'CUSTOMER_PHONE', index: 'CustomerPhone', width: "12%", sorttype: "textarea" },
+            { name: 'CUSTOMER_BOOK_TIME', index: 'CustomerBookTime', width: "12%", sorttype: "data", formatter: "date", formatoptions: { newformat: 'Y-m-d H:i:s' } },
+            { name: 'CUSTOMER_ARRIVE_TIME', index: 'CustomerArriveTime', width: "12%", sorttype: "data", formatter: "date", formatoptions: { newformat: 'Y-m-d H:i:s' } },
+            { name: 'VALUATOR_NAME', index: 'Valuator', width: "10%" },
+            { name: 'SALES_NAME', index: 'SalesName', width: "10%" },
+            { name: 'ASSESS_STATUS', index: 'ASSESS_STATUS', width: "10%" ,
+                formatter: function(cellvalue, options, rowObject) {
+                    var c = jQuery('#slctStatus').find('option[value="' + rowObject.ASSESS_STATUS + '"]').attr('contextmenu');
+                    if(!c){
+                        c = 'info';
+                    }
+                    var text = jQuery('#slctStatus').find('option[value="' + rowObject.ASSESS_STATUS + '"]').text();
+                    return "<span class='label label-" + c + "'>" + text + "</span>";
+                }
+            },
+            {
+                name: 'PRODUCT_LOGO', index: 'PRODUCT_LOGO', width:  "10%", sortable: false,autowidth:true,
+                formatter: function (cellvalue, options, rowObject) {
+                    var re="";
+                    var status = rowObject.ASSESS_STATUS;
+                    var id=rowObject.ID;
+                    var appCode=rowObject.APP_CODE;
+                    for(var i = 0; i < permissionButtons.length; i++){
+                        if(status == "CarAssessToBeAssess" && permissionButtons[i].Control_ID == "AddMember")
+                        {
+                            re += "<a style='margin-right:5px;' title='分配评估师' href='javascript:void(0);' onclick=\"allocatValuator('" + id + "','" + rowObject.PRODUCT_LOGO + "');\">";
+                            re += "<img src='" + permissionButtons[i].Img + "' />";
+                        }
+                        else if(status == "CarAssessCustomerHesitate" )
+                        {
+                            if(permissionButtons[i].Control_ID == "refuse"){
+                                re += "<a style='margin-right:5px;' title='客户取消' href='javascript:;' onclick='javascript:HesitateRefuse(" + id +",\""+ cellvalue + "\", this);'>";
+                                re += "<img src='" + permissionButtons[i].Img + "' />";
+                            }
+                            if(permissionButtons[i].Control_ID == "hesitateAgree"){
+                                re += "<a style='margin-right:5px;' title='提交评估' href='javascript:;' onclick='javascript:HesitateAgree("+id+",\""+cellvalue+"\",this);'>";
+                                re += "<img src='" + permissionButtons[i].Img + "' />";
+                            }
+                            if(permissionButtons[i].Control_ID == "carAssessDedtail"){
+                                re += "<a style='margin-right:5px;' title='查看车况评估结果' href='javascript:;' onclick='javascript:OpenCarAssessInfoDialog(\""+appCode+"\");'>";
+                                re += "<img src='" + permissionButtons[i].Img + "' />";
+                            }
+                        }
+                        else
+                        {
+                            if(permissionButtons[i].Control_ID == "ModuleFieldMovable"){
+                                re += "<a style='margin-right:5px;' title='查看评估信息' href='javascript:;' onclick='javascript:OpenInfoDialog("+id+",\""+rowObject.PRODUCT_LOGO+"\");'>";
+                                re += "<img src='" + permissionButtons[i].Img + "' />";
+                            }
+                        }
+                        re += "</a>";
+                    }
+                    return re;
+                }
+            }
+        ],
+        jsonReader: {
+            root: "ListEnter",
+            total: "TotalPages",
+            page: "CurrentPage",
+            records: "TotalRecords",
+            repeatitems: false
+        },
+        viewrecords: true,
+        rowNum: 20,
+        rowList: [20, 30, 40, 50],
+        pager: pager_selector_assess,
+        onSortCol:function (colName,iCol,sortorder) {
+            sortIndex=colName;
+            sortOrder=sortorder;
+        },
+        beforeRequest:function () {
+            jQuery(grid_selector_assess).jqGrid('setGridParam', {postData:{'sidx':sortIndex,'sord':sortOrder}} );},
+        loadComplete: function () {
+            var table = this;
+            var re_records = jQuery(this).getGridParam('records');
+            if(re_records == 0 || re_records == null){
+                Utilities.alertTip("对不起，未找到符合条件的记录！");
+            };
+            setTimeout(function () {
+                updatePagerIcons(table);
+                jQuery('.ui-jqgrid-bdiv').css("overflow-x","hidden");
+            }, 0);
+
+            jQuery(window).resize();
+        },
+    });
+
+    /*客户拒绝*/
+    function HesitateRefuse(Id,cellvalue, obj) {
+        var choice=confirm("确定客户拒绝接受评估结果，并取消此次借款申请吗？", function() { }, null);
+        if(choice){
+            //状态改变动作
+            $.ajax({
+                type: "POST",
+                url: "/Assess/HesitateRefuse",
+                data: { id: Id}, //在这里可以设置需要传递的参数
+                //contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    if(msg==true)
+                    {
+                        Utilities.alertTip("处理成功！");
+                    }
+                    else
+                    {
+                        Utilities.alertTip("处理时出错，请联系管理员！");
+                        return;
+                    }
+                    var td=jQuery(obj).parent().parent();
+                    var c = jQuery('#slctStatus').find('option[value="CarAssessCustomerReject"]').attr('contextmenu');
+                    if(!c){
+                        c = 'info';
+                    }
+                    var re = "";
+                    for(i=0;i< permissionButtons.length;i++)
+                    {
+                        if(permissionButtons[i].Control_ID == "ModuleFieldMovable"){
+                            re += "<a style='margin-right:5px;' title='查看评估信息' href='javascript:;' onclick='javascript:OpenInfoDialog("+Id+",\""+cellvalue+"\");'>";
+                            re += "<img src='" + permissionButtons[i].Img + "' />";
+                            re += '</a>';
+                        }
+
+                    }
+                    td.find('td[aria-describedby="assess-grid-table_PRODUCT_LOGO"]').html(re);
+                    td.find("td[aria-describedby='assess-grid-table_ASSESS_STATUS']").html('<span class="label label-' + c + '">客户取消</span>');
+                },
+                error: function () {
+                }
+
+            });
+        }
+    }
+
+    /*评估提交*/
+    function HesitateAgree(Id,cellvalue, obj) {
+        var choice=confirm("确定提交评估吗？", function() { }, null);
+        if(choice){
+            //状态改变动作
+            $.ajax({
+                type: "POST",
+                url: "/Assess/HesitateAgree",
+                data: { id: Id}, //在这里可以设置需要传递的参数
+                //contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    if(msg==true)
+                    {
+                        Utilities.alertTip("处理成功！");
+                    }
+                    else
+                    {
+                        Utilities.alertTip("处理时出错，请联系管理员！");
+                        return;
+                    }
+                    var td=jQuery(obj).parent().parent();
+                    var c = jQuery('#slctStatus').find('option[value="CarAssessSubmitted"]').attr('contextmenu');
+                    if(!c){
+                        c = 'info';
+                    }
+                    var re = "";
+                    for(i=0;i< permissionButtons.length;i++)
+                    {
+                        if(permissionButtons[i].Control_ID == "ModuleFieldMovable"){
+                            re += "<a style='margin-right:5px;' title='查看评估信息' href='javascript:;' onclick='javascript:OpenInfoDialog("+Id+",\""+cellvalue+"\");'>";
+                            re += "<img src='" + permissionButtons[i].Img + "' />";
+                            re += '</a>';
+                        }
+
+                    }
+                    td.find('td[aria-describedby="assess-grid-table_PRODUCT_LOGO"]').html(re);
+                    td.find("td[aria-describedby='assess-grid-table_ASSESS_STATUS']").html('<span class="label label-' + c + '">评估已提交</span>');
+                },
+                error: function () {
+                }
+
+            });
+        }
+    }
+
+    /*车况评估详情*/
+    function OpenCarAssessInfoDialog(appCode){
+        jQuery('#valuatorAllocate_iframe3').attr('src','/Assess/CarAssessInfo?appCode='+appCode);
+        jQuery('#valuatorAllocate_dialog3').dialog({
+            title: "<h4 class='smaller'><i class='icon-edit'></i> 车况评估详情</h4>",
+            title_html: true,
+            resizable: false,
+            width: "800",
+            height:"488",
+            modal: true,
+            draggable: false
+        })
+    }
+
+    /*处理分页控件样式*/
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+            'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+            'ui-icon-seek-next': 'icon-angle-right bigger-140',
+            'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    }
+    /****************jQuery jqGrid End****************/
+
+    /*开启/关闭高级搜索*/
+    function showHighSearch() {
+        jQuery("#"+currentHighSearch).toggle(300,function(){jQuery(window).resize()});
+    }
+
+    /*点击搜索按钮重新搜索*/
+    function doHighSearch() {
+        jQuery("#nav_search_input").val('');
+        var para;
+        sortIndex='';
+        sortOrder='';
+        para = {
+            sidx:sortIndex,
+            appCode: escape(jQuery("#txtAppNumber").val()),
+            customerName: escape(jQuery("#txtCustomerName").val()),
+            assessStasus: jQuery("#slctStatus").val(),
+            sales: escape(jQuery("#txtSales").val()),
+            fuzzySearch: 0,/*高级查询*/
+            assessTag:0
+        }
+
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    /*Search窗口简单查询*/
+    function doNormalSearch() {
+        jQuery("#"+currentHighSearch).find("input[type='text']").each(function () {
+            jQuery(this).val("")
+        });
+        jQuery("#"+currentHighSearch).find("select").each(function () {
+            jQuery(this).val("")
+        });
+        sortIndex='';
+        sortOrder='';
+        var para;
+        para = {
+            sidx:sortIndex,
+            appCode: escape(jQuery("#nav_search_input").val()),
+            customerName: escape(jQuery("#nav_search_input").val()),
+            page: '1',
+            assessStasus: '',
+            sales: '',
+            fuzzySearch: 1,/*简单查询*/
+            assessTag:0
+        }
+
+        jQuery(currentGrid).jqGrid('setGridParam', {
+            datatype: 'json',
+            postData: para  /*发送数据 */
+        }).trigger("reloadGrid"); /*重新载入  */
+    }
+
+    function allocatValuator(id,logo) {
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                var $title = this.options.title || '&nbsp;';
+                if (("title_html" in this.options) && this.options.title_html == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+        var url = '/Assess/AssessInfoEdit?id='+id+'&logo='+logo+'&isEdit=2';
+        jQuery('#valuatorAllocate_iframe').attr('src',url);
+        jQuery('#valuatorAllocate_dialog').dialog({
+            title: "<h4 class='smaller'><i class='icon-edit'></i> 分配评估师</h4>",
+            title_html: true,
+            resizable: false,
+            width: "800",
+            height:"488",
+            modal: true,
+            draggable: false
+        })
+    };
+
+    function OpenInfoDialog(id,logo){
+        jQuery('#valuatorAllocate_iframe').attr('src','/Assess/AssessInfoEdit?id='+id+'&logo='+logo+'&isEdit=0');
+        jQuery('#valuatorAllocate_dialog').dialog({
+            title: "<h4 class='smaller'><i class='icon-edit'></i> 详细信息</h4>",
+            title_html: true,
+            resizable: false,
+            width: "800",
+            height:"488",
+            modal: true,
+            draggable: false
+        })
+    }
+
+    function CloseInfoDialog() {
+        jQuery('#valuatorAllocate_dialog').dialog("close");
+        doHighSearch();
+    }
+
+    function CloseInfoDialog3(){
+        jQuery('#valuatorAllocate_dialog3').dialog("close");
+    }
+
+    jQuery(window).resize(function(){
+        jQuery(window).unbind("onresize");
+        jQuery(grid_selector_assess).setGridHeight(jQuery(window).height() - 293);
+        jQuery(grid_selector_assess).setGridWidth(jQuery('.widget-main').width());
+
+        jQuery(grid_selector_assess).setGridHeight(jQuery(window).height() - 293);
+        jQuery(grid_selector_assess).setGridWidth(jQuery('.widget-main').width());
+
+        jQuery('.ui-jqgrid-hbox').each(function(){
+            jQuery(this).find('th').last().css('width',(jQuery(this).find('th').last().width()+ 25) + 'px');
+        });
+
+        jQuery(window).bind("onresize", this);
+    });
+</script>

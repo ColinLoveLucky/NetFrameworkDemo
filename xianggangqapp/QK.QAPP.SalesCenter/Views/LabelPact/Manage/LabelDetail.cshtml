@@ -1,0 +1,291 @@
+﻿<link href="~/Content/assets/css/jquery-ui-1.10.3.full.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ui.jqgrid.css" rel="stylesheet" />
+<link href="~/Content/assets/css/ace.min.css" rel="stylesheet" />
+
+<style type="text/css">
+    .clearfix div {
+        margin-bottom: 0;
+        margin-top: 0;
+        padding-top: 7px;
+    }
+</style>
+<div>
+    <ul class="nav nav-tabs" id="sdOrderTab">
+        <li class="nav nav-tabs" style="border:none;">
+            <a href="#labelInfo" onclick="javascript:setCurrentGrid(1,this);">
+                发标信息
+            </a>
+        </li>
+<!--
+        <li class="nav nav-tabs" style="border:none;">
+            <a href="#labelRecord" onclick="javascript:setCurrentGrid(2,this);">
+                投标记录
+            </a>           
+        </li>
+    -->
+        <li style="float:right;">
+            <button class="btn btn-sm" onclick="javascript: goBack();">
+                <i class="icon-reply nav-search-icon"></i>返回
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content" style="height:auto; overflow-y:auto;">
+        <form class="form-horizontal">
+            <div id="labelInfo-1" class="tab-pane active">
+                    @MvcHtmlString.Create(ViewBag.CreateBidInfo)
+                @*注释掉改用动态生成明细
+    <div class="form-group">
+        <div class="clearfix">
+             <span class="control-label col-xs-12 col-sm-2">合同号：</span>
+            <div id="bidContractNo" class="col-xs-13 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_CONTRACT_NO != null)
+            {@ViewBag.BidDetailInfo.BID_CONTRACT_NO
+            }
+            </div>
+             <span class="control-label col-xs-12 col-sm-2">进件编号：</span>
+             <div class="col-xs-12 col-sm-3"><a style='text-decoration:underline;' id="bidAppCode" href="/LoanApplication/Application?dformCode=@ViewData["logo"]&operation=3&appid=@ViewData["appid"]">
+                 @if (ViewBag.BidDetailInfo.BID_APP_CODE!= null)
+                    {@ViewBag.BidDetailInfo.BID_APP_CODE
+                    }</a></div>
+           </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+            <span class="control-label col-xs-12 col-sm-2">客户名称：</span>
+            <div id="bidCustomerName" class="col-xs-12 col-sm-3">
+               @if (ViewBag.BidDetailInfo.BID_CUSTOMER_NAME != null)
+               {@ViewBag.BidDetailInfo.BID_CUSTOMER_NAME
+               }
+            </div>
+            <span class="control-label col-xs-12 col-sm-2">共同借款人：</span>
+            <div id="bidCoBorrower" class="col-xs-12 col-sm-3">
+               @if (ViewBag.BidDetailInfo.BID_CO_BORROWER != null)
+               {@ViewBag.BidDetailInfo.BID_CO_BORROWER
+               }
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">业务品种：</span>
+            <div id="bidBusType" class="col-xs-12 col-sm-3">
+                @if (ViewBag.BidDetailInfo.BID_BUS_NAME != null)
+                {@ViewBag.BidDetailInfo.BID_BUS_NAME}
+             </div>
+            <span class="control-label col-xs-12 col-sm-2">发标金额：</span>
+            <div id="bidAmt" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_AMT != null)
+            {@ViewBag.BidDetailInfo.BID_AMT}
+            元</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">还款方式：</span>
+            <div id="bidRepayType" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_REPAY_TYPE != null)
+            {@ViewBag.BidDetailInfo.BID_REPAY_TYPE}
+             </div>
+            <span class="control-label col-xs-12 col-sm-2">计息方式：</span>
+            <div id="bidInterestType" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_INTEREST_TYPE != null)
+            {@ViewBag.BidDetailInfo.BID_INTEREST_TYPE}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+            <span class="control-label col-xs-12 col-sm-2">利率类型：</span>
+            <div id="bidRateType" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_RATE_TYPE != null)
+            {@ViewBag.BidDetailInfo.BID_RATE_TYPE}
+             </div>
+            <span class="control-label col-xs-12 col-sm-2">申请利率：</span>
+            <div id="bidApplyAmt" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_APPLY_AMT != null)
+            {@ViewBag.BidDetailInfo.BID_APPLY_AMT}
+            %</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">罚息利率：</span>
+            <div id="bidPunitiveRate" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_PUNITIVE_RATE != null)
+            {@ViewBag.BidDetailInfo.BID_PUNITIVE_RATE}
+            ‰</div>
+            <span class="control-label col-xs-12 col-sm-2">合同类型：</span>
+            <div id="bidContractType" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_CONTRACT_TYPE != null)
+            {@ViewBag.BidDetailInfo.BID_CONTRACT_TYPE}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">贷款期限：</span>
+            <div id="bidLoanDeadline" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_LOAN_DEADLINE != null)
+            {@ViewBag.BidDetailInfo.BID_LOAN_DEADLINE}
+            </div>
+            <span class="control-label col-xs-12 col-sm-2">借款咨询费(含风险金)：</span>
+            <div id="bidBorrowFee" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_BORROW_FEE != null)
+            {@ViewBag.BidDetailInfo.BID_BORROW_FEE}
+            元</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">借款服务费：</span>
+            <div id="bidLoanServiceFee" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_LOAN_SERVICE_FEE != null)
+            {@ViewBag.BidDetailInfo.BID_LOAN_SERVICE_FEE}
+            元</div>
+            <span class="control-label col-xs-12 col-sm-2">风险准备金：</span>
+            <div id="bidLoanLossProvision" class="col-xs-12 col-sm-3">
+            @if (ViewBag.BidDetailInfo.BID_LOAN_LOSS_PROVISION != null)
+            {@ViewBag.BidDetailInfo.BID_LOAN_LOSS_PROVISION}
+            元</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">到手金额：</span>
+            <div id="bidHandAmt" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_HAND_AMT != null)
+                                                            {@ViewBag.BidDetailInfo.BID_HAND_AMT}元</div>
+            <span class="control-label col-xs-12 col-sm-2">担保方式：</span>
+            <div id="bidGuarantyType" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_GUARANTY_TYPE != null)
+                                                                 {@ViewBag.BidDetailInfo.BID_GUARANTY_TYPE}</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">贷款用途：</span>
+            <div id="bidLoanUse" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_LOAN_USE != null)
+                                                            {@ViewBag.BidDetailInfo.BID_LOAN_USE}</div>
+            <span class="control-label col-xs-12 col-sm-2">还款账户：</span>
+            <div id="bidRepayAccount" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_REPAY_ACCOUNT != null)
+                                                                 {@ViewBag.BidDetailInfo.BID_REPAY_ACCOUNT}</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">还款账号：</span>
+            <div id="bidRepayAccountNo" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_REPAY_ACCOUNT_NO != null)
+                                                                   {@ViewBag.BidDetailInfo.BID_REPAY_ACCOUNT_NO}</div>
+            <span class="control-label col-xs-12 col-sm-2">还款账户开户行：</span>
+            <div id="bidRepayAccountBank" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_REPAY_BANK != null)
+                                                                     {@ViewBag.BidDetailInfo.BID_REPAY_BANK}</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">还款账户开户支行：</span>
+            <div id="bidRepayAccountSubbranch" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_REPAY_SUB_BANK != null)
+                                                                          {@ViewBag.BidDetailInfo.BID_REPAY_SUB_BANK}</div>
+            <span class="control-label col-xs-12 col-sm-2">收款账户：</span>
+            <div id="bidColAccount" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_COL_ACCOUNT != null)
+                                                               {@ViewBag.BidDetailInfo.BID_COL_ACCOUNT}</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">收款账号：</span>
+            <div id="bidColAccountNo" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_COL_ACCOUNT_NO != null)
+                                                                 {@ViewBag.BidDetailInfo.BID_COL_ACCOUNT_NO}</div>
+            <span class="control-label col-xs-12 col-sm-2">是否是固定还款日：</span>
+            <div id="bidIsFixRepay" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_IS_FIX_REPAY != null)
+                                                               {@ViewBag.BidDetailInfo.BID_IS_FIX_REPAY}</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="clearfix">
+
+            <span class="control-label col-xs-12 col-sm-2">发生类型：</span>
+            <div id="bidOccurType" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.OCCUR_TYPENAME != null)
+                                                              {@ViewBag.BidDetailInfo.OCCUR_TYPENAME}</div>
+            <span class="control-label col-xs-12 col-sm-2">原合同号：</span>
+            <div id="bidoldContractNo" class="col-xs-12 col-sm-3">@if (ViewBag.BidDetailInfo.BID_RO_CONTRACT_NO != null)
+                                                                  {@ViewBag.BidDetailInfo.BID_RO_CONTRACT_NO}</div>
+        </div>
+    </div>
+*@
+            </div>
+        </form>
+        <!--
+        <div id="labelRecord-1" class="tab-pane">
+            <table id="sample-table-2" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th><i class="hidden-480 icon-user"></i>投标人</th>
+                        <th><i class="hidden-480 icon-money"></i>投标金额（元）</th>
+                        <th><i class="hidden-480 icon-time"></i>投标时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>张三</td>
+                        <td>32,967.03</td>
+                        <td>2014-09-30 01:12:22</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>李四</td>
+                        <td>32,967.03</td>
+                        <td>2014-09-30 01:12:22</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>王五</td>
+                        <td>32,967.03</td>
+                        <td>2014-09-30 01:12:22</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        -->
+    </div>
+</div>
+<script type="text/javascript">
+    var step = 0;
+    jQuery(function () {
+        /*页面加载时如果没有指定锚点则显示第一个页签*/
+        var hs = window.location.hash;
+        if (!hs) {
+            hs = "#labelInfo";
+        }
+        jQuery('#sdOrderTab').find('a[href="' + hs + '"]').click();
+    });
+
+    /*设置当前页签 */
+    function setCurrentGrid(flag, obj) {
+        var hs = window.location.hash;
+        if (hs) {
+            var hs1 = jQuery(obj).attr('href');
+            if (hs == hs1)
+                return;
+        }
+        jQuery(".tab-pane").hide();
+        jQuery(jQuery(obj).attr('href') + "-1").show();
+        jQuery(obj).parent().parent().find("li.active").removeClass('active');
+        jQuery(obj).parent().addClass('active');
+        step--;
+    }
+
+    function goBack() {
+        window.history.go(step);
+    }
+</script>

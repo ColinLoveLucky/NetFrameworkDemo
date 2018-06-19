@@ -1,0 +1,280 @@
+﻿<!-- 需要引用jQuery -->
+<style type="text/css">
+    .fileviewerfieldset {border: 1px solid #e5e5e5;padding:5px;-moz-border-radius:4px;-webkit-brder-radius:4px;border-radius:4px;}
+    .fileviewerfieldset legend{border:none;margin:0;padding:0 5px;width:auto;font-size:1.1em;}
+    .fileviewercolumn{border: 1px solid #eee;box-shadow: 6px 6px 6px -1px #abbac3;display: table;float: left;width: 112px;margin: 8px;background-color: #FFF;height:127px;position: relative;}
+    .fileviewercolumn:hover, .fileviewercolumn:active, .fileviewercolumn:focus {background-color: #eee;box-shadow: 2px 2px 5px 0 #6fb3e0;}
+    .fileviewercolumn .SmallImg {padding: 6px;width: inherit;height: inherit;overflow:hidden;text-overflow: ellipsis;-o-text-overflow: ellipsis;-webkit-text-overflow: ellipsis;-moz-text-overflow: ellipsis;white-space: nowrap;}
+    .fileviewercolumn .SmallImg a{display:block; }
+    .fileviewercolumn .SmallImg img{width: 100px;height: 100px;}
+    .alert-with-direction ::after{content:""; display:block;background-color:#dff0d8;border:none;border-left:solid #d6e9c6 2px;border-bottom:solid #d6e9c6 2px;height:12px;width:12px;transform:rotate(-45deg);-webkit-transform:rotate(-45deg);position:absolute;left:15px;bottom:-8px;-webkit-box-sizing:content-box;box-sizing:content-box;}
+</style>
+<div id="$FieldType.Field_Key$_Tips">
+</div>
+<fieldset class="fileviewerfieldset">
+    <legend id="$FieldType.Field_Key$_legend">
+    </legend>
+    <div id="$FieldType.Field_Key$" class="FileViewerKeyNames">正在加载“$FieldType.Field_DisplayName$”信息...</div>
+    <div class="col-$FieldType.Field_Key$" id="$FieldType.Field_Key$_checkFieldset">
+        <input type="text" style="padding: 0; margin: 0; height: 15px; width: 2px; background-color: transparent !important; border: none; color: transparent !important; " 
+        id="$FieldType.Field_Key$_hidden" 
+        name="$FieldType.Field_Key$_hidden"
+        readonly="readonly"
+        data-val="true"
+        $if(FieldType.Field_Required)$
+        data-val-required="请上传$FieldType.Field_DisplayName$!"
+        $endif$
+        $if(FieldType.HasFileAmount)$
+        data-val-range-min="$FieldType.FileAmountAtleast$" data-val-range="请上传至少{0}张$FieldType.Field_DisplayName$!"
+        $endif$
+          />
+    </div>
+</fieldset>
+<div id="$FieldType.Field_Key$_dialog" style="display:none;height:100%;">
+    <iframe id="$FieldType.Field_Key$_iframe" style="border:none;width:100%;height:100%;"></iframe>
+</div>
+<div id="$FieldType.CheckSDUrl$" class="FileViewerCheckSDUrl"></div>
+<div id="$FieldType.FileGetUrl$" class="FileViewerFileGetUrl"></div>
+<div id="$FieldType.FileUploadUrl$" class="FileViewerFileUploadUrl"></div>
+<div id="$FieldType.Field_Key$_optionalGroup" data-group="$FieldType.OptionalGroup$"></div>
+<script type="text/javascript">
+
+    jQuery(function () {
+        jQuery('#$FieldType.Field_Key$_iframe').css('height', jQuery(window).height()-100+'px');
+
+    });
+
+    /**内部无ajax请求**/
+    function $FieldType.FileType$_ViewOrEdit(href, edit, p_appId){
+        /**可以上传或者编辑**/
+        if(edit){
+            var v = '<div class="btn-group">';
+            v += '<button class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown">$FieldType.Field_DisplayName$';
+            $if(FieldType.Field_Required)$
+            if('$FieldType.OptionalGroup$' == '')
+                v += ' <i class="icon-asterisk red smaller-80"></i>';
+            else
+                v += ' <i class="icon-asterisk dark smaller-80"></i>';
+            $endif$
+            v += '<span class="icon-caret-down icon-on-right"></span></button>';
+            v += '<ul class="dropdown-menu dropdown-info"><li id="$FieldType.Field_Key$_SelectButton"><lable class="btn btn-xs btn-info" style="width:100%;">上传或编辑</lable></li></ul></div>';
+            jQuery('#$FieldType.Field_Key$_legend').html(v);
+
+            if('$FieldType.Tips$' != ''){
+                v = '<div class="alert alert-success alert-with-direction" style="padding:8px 15px;margin-bottom:12px;position:relative;">';
+                v += '  <button type="button" class="close" data-dismiss="alert">';
+                v += '    <i class="icon-remove"></i>';
+                v += '  </button>';
+                v += '$FieldType.Tips$';
+                v += '</div>';
+                jQuery('#$FieldType.Field_Key$_Tips').html(v);
+            }
+            
+        }else{
+            var v = '<div class="btn-group">';
+            v += '<label class="btn btn btn-xs dropdown-toggle" data-toggle="dropdown">$FieldType.Field_DisplayName$<span class="icon-caret-down icon-on-right"></span></label>';
+            v += '<ul class="dropdown-menu dropdown-info"><li id="$FieldType.Field_Key$_SelectButton"><a href="javascript:void(0);">查看详细</a></li></ul></div>';
+            jQuery('#$FieldType.Field_Key$_legend').html(v);
+
+            /*不验证必须上传*/
+            jQuery('#$FieldType.Field_Key$_checkFieldset').remove();
+        }
+        
+        jQuery('#$FieldType.Field_Key$_SelectButton').click(function(){
+            jQuery('#$FieldType.Field_Key$_iframe').html('');
+            jQuery('#$FieldType.Field_Key$_iframe').attr('src', href);
+            jQuery('#$FieldType.Field_Key$_dialog').dialog({
+                resizable: false,
+                width:'95%',
+                title: "<h4 class='smaller'><i class='icon-ok'></i> $FieldType.Field_DisplayName$</h4>",
+                title_html: true,
+                modal: true,
+                draggable: false,
+                close:
+                    function () {
+                        /*如果是ADD或者Edit，关闭窗口时刷新缩略图*/
+                        if(edit){
+                            $FieldType.FileType$_loadExists(p_appId);
+                        }
+                    }
+            });
+        });
+    };
+
+    /**内部有ajax请求，仅控件内调用**/
+    function $FieldType.FileType$_loadExists(p_appId){
+        jQuery.ajax({
+            type: "post",
+            url: '$FieldType.FileGetUrl$',
+            data: { appId: p_appId, FileType: '$FieldType.FileType$' },
+            beforeSend: function () {
+                jQuery('#$FieldType.Field_Key$').html("正在加载“$FieldType.Field_DisplayName$”信息...");
+            },
+            success:function(msg){ $FieldType.FileType$_showExists(msg,p_appId); },
+            error:function(){ $FieldType.FileType$_showLoadError(p_appId);}
+        });
+    }
+
+    /**内部无ajax请求**/
+    function $FieldType.FileType$_showExists(data,p_appId){
+        if (data.Status) {
+            if (data.ReturnObj.length == 0) {
+                jQuery('#$FieldType.Field_Key$').html("暂无。");
+                $FieldType.FileType$_Verify(-2,0,p_appId);
+            } else {
+                jQuery('#$FieldType.Field_Key$').html("");
+
+                var h = '<div class="fileviewercolumn">';
+                h += '      <div class="SmallImg">';
+                var hh = '</div></div>';
+                for (var i = 0; i < data.ReturnObj.length; i++) {
+                    /*var img = '<img src="' + data.ReturnObj[i].flPath + '" title="' + data.ReturnObj[i].flName + '" /><br />';*/
+                    /*修改为本地图片，加快图片加载效率*/
+                    var img = '<img src="../Content/images/default.png" title="' + data.ReturnObj[i].flName + '" /><br />';
+                    img += data.ReturnObj[i].flName;
+                    jQuery('#$FieldType.Field_Key$').append(h + img + hh);
+                }
+                /*控制文件数量，added by lys 2015-7-19*/
+                //var leastFiles = parseInt(jQuery('#$FieldType.Field_Key$_leastFiles').val(),10);
+                //if(data.ReturnObj.length <= 0)
+                //{
+                //    $FieldType.FileType$_Verify(-2,0,p_appId);
+                //}else{
+                //    $FieldType.FileType$_Verify(2,data.ReturnObj.length);
+                //}
+                $FieldType.FileType$_Verify(2,data.ReturnObj.length);
+            }
+        }
+        else {
+            jQuery('#$FieldType.Field_Key$').html("“$FieldType.Field_DisplayName$”信息加载失败！");
+            $FieldType.FileType$_Verify(-2,0,p_appId);
+        }
+    }
+
+    /**内部无ajax请求，供外部调用**/
+    function $FieldType.FileType$_showExistsBy(data,p_appId){
+        if (data) {
+            if (data.length == 0) {
+                jQuery('#$FieldType.Field_Key$').html("暂无。");
+                $FieldType.FileType$_Verify(-2,0,p_appId);
+            } else {
+                jQuery('#$FieldType.Field_Key$').html("");
+
+                var h = '<div class="fileviewercolumn">';
+                h += '      <div class="SmallImg">';
+                var hh = '</div></div>';
+                for (var i = 0; i < data.length; i++) {
+                    /*var img = '<img src="' + data[i].flPath + '" title="' + data[i].flName + '" /><br />';*/
+                    /*修改为本地图片，加快图片加载效率*/
+                    var img = '<img src="../Content/images/default.png" title="' + data[i].flName + '" /><br />';
+                    img += data[i].flName;
+                    jQuery('#$FieldType.Field_Key$').append(h + img + hh);
+                }
+                /*控制文件数量，added by lys 2015-7-19*/
+                //var leastFiles = parseInt(jQuery('#$FieldType.Field_Key$_leastFiles').val(),10);
+                //if(data.length <= 0)
+                //{
+                //    $FieldType.FileType$_Verify(-2,0,p_appId);
+                //}else{
+                //    $FieldType.FileType$_Verify(2,data.length);
+                //}
+                $FieldType.FileType$_Verify(2,data.length);
+            }
+        }
+        else {
+            jQuery('#$FieldType.Field_Key$').html("“$FieldType.Field_DisplayName$”信息加载失败！");
+            $FieldType.FileType$_Verify(-2,0,p_appId);
+        }
+    }
+
+    /**内部无ajax请求**/
+    function $FieldType.FileType$_showLoadError(p_appId){
+        jQuery('#$FieldType.Field_Key$').html("“$FieldType.Field_DisplayName$”信息加载失败！"); 
+        $FieldType.FileType$_Verify(-2,0,p_appId);
+    }
+
+    /*控制验证是否上传。内部无ajax请求，这是一个private方法，被showExists和showLoadError调用。
+    localFireFlag：
+    undefined 表单提交时触发的验证；
+    2 本控件触发，有文件；
+    -2 本控件触发，没有文件；  */
+    function $FieldType.FileType$_Verify(localFireFlag,fileAmt,p_appId){
+        /*非只读时需要控制表单验证*/
+        $if(!ReadOnly)$
+
+        /*更改提示信息*/
+        //var showText = jQuery('#$FieldType.Field_Key$_hidden').attr("data-val-required");
+        //if(showText)
+        //{
+        //    showText = showText.replace("#NUMBER#",jQuery('#$FieldType.Field_Key$_leastFiles').val());
+        //    jQuery('#$FieldType.Field_Key$_hidden').attr("data-val-required",showText);
+        //    jQuery('#$FieldType.Field_Key$_checkFieldset').find('i').attr('title',showText);
+        //    jQuery('#$FieldType.Field_Key$_checkFieldset').find('i').text(showText);
+        //}
+
+        if(localFireFlag == -2){
+            jQuery('#$FieldType.Field_Key$_hidden').val('').change();
+            jQuery('#$FieldType.Field_Key$_hidden').show();
+            
+
+            var needIfAmout = $FieldType.NeedIfAmout$;
+            if(needIfAmout > 0){
+                var actualAmount = DFormAction.GetLoanValue(p_appId);
+                if(actualAmount < needIfAmout){
+                    jQuery('#$FieldType.Field_Key$_legend').find('i').remove();
+
+                    jQuery('#$FieldType.Field_Key$_hidden').val('1').change();
+                    jQuery('#$FieldType.Field_Key$_hidden').hide();
+                    jQuery('.col-$FieldType.Field_Key$').children('i').remove();
+                }
+            }
+        }
+        else if(localFireFlag == 2){
+            /*如果有文件，则将值设置为文件个数*/
+            jQuery('#$FieldType.Field_Key$_hidden').val(fileAmt).change();
+            //jQuery('#$FieldType.Field_Key$_hidden').hide();
+            jQuery('.col-$FieldType.Field_Key$').children('i').remove();
+        }
+
+        var optionalGroup = '$FieldType.OptionalGroup$';
+        if(jQuery.trim(optionalGroup) != ''){
+            var optionalGroupList = optionalGroup.split(',');
+            var countFullCtrls = 0;
+            for(var p = 0 ; p < optionalGroupList.length ; p ++){
+                if(jQuery.trim(optionalGroupList[p]) != ''){
+                    var h = jQuery('#'+jQuery.trim(optionalGroupList[p])).html();
+                    /*有文件*/
+                    if(h && h.indexOf('信息加载失败！') < 0 && h.indexOf('正在加载') < 0 && h.indexOf('暂无。') < 0){
+                        countFullCtrls ++;
+                    }
+                }
+            }
+            if(countFullCtrls >= $FieldType.OptionalCount$){
+                for(var q = 0 ; q < optionalGroupList.length ; q ++){
+                    if(jQuery.trim(optionalGroupList[q]) != ''){
+                        jQuery('#'+jQuery.trim(optionalGroupList[q])+'_hidden').val('1').change();
+                        jQuery('#'+jQuery.trim(optionalGroupList[q])+'_hidden').hide();
+                        jQuery('.col-'+jQuery.trim(optionalGroupList[q])).children('i').remove();
+                    }
+                }
+            }else{
+                for(var pp = 0 ; pp < optionalGroupList.length ; pp ++){
+                    if(jQuery.trim(optionalGroupList[pp]) != ''){
+                        var h = jQuery('#'+jQuery.trim(optionalGroupList[pp])).html();
+                        /*无文件*/
+                        if(!h || h.indexOf('信息加载失败！') > -1 || h.indexOf('正在加载') > -1 || h.indexOf('暂无。') > -1){
+                            jQuery('#'+jQuery.trim(optionalGroupList[pp])+'_hidden').val('').change();
+                            jQuery('#'+jQuery.trim(optionalGroupList[pp])+'_hidden').show();
+                        }
+                    }
+                }
+            }
+        }
+
+       $endif$
+    }
+
+    jQuery(window.parent).resize(function () {
+        jQuery('#$FieldType.Field_Key$_iframe').css('height', jQuery(window).height() - 100 + 'px');
+    });
+</script>

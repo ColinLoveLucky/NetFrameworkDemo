@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "RaisingPlanDetail";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+<form class="form-horizontal">
+    <div class="form-group">
+        <span class="control-label col-xs-2 text-right"><b>募集计划编号：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.RAISE_FUND_NO</p>
+        </div>
+        <span class="control-label col-xs-2 text-right"><b>募集计划名称：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.RAISE_FUND_NAME</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-2 text-right"><b>募集计划金额：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.RAISE_FUND_AMT.ToString("N") 元</p>
+        </div>
+        <span class="control-label col-xs-2 text-right"><b>募集计划开始日期：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.RAISE_FUND_BEG_DATE</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-2 text-right"><b>募集计划天数：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@(string.IsNullOrEmpty(Model.RAISE_FUND_TERM_DAY)? "0" : Model.RAISE_FUND_TERM_DAY) 天</p>
+        </div>
+        <span class="control-label col-xs-2 text-right"><b>募集计划拒件比例：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.RAISE_FUND_REJECT_PER%</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-2 text-right"><b>退出银行卡号：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.ACCOUNT_NUMBER</p>
+        </div>
+        <span class="control-label col-xs-2 text-right"><b>退出银行卡开户名称：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.ACCOUNT_NAME</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-2 text-right"><b>退出银行卡开户行：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.ACCOUNT_BANK_NAME</p>
+        </div>
+        <span class="control-label col-xs-2 text-right"><b>退出银行卡开户行分支行：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.ACCOUNT_BRANCH_NAME</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-2 text-right"><b>退出银行卡开户行所在省：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.ACCOUNT_PROVINCE</p>
+        </div>
+        <span class="control-label col-xs-2 text-right"><b>退出银行卡开户行所在市：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.ACCOUNT_CITY</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-2 text-right"><b>退出银行卡开户行分支行区(县)：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.ACCOUNT_ZONE</p>
+        </div>
+        <span class="control-label col-xs-2 text-right"><b>退出银行卡开户行分支行地址：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.ACCOUNT_BRANCH_ADDR</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-2 text-right"><b>起息时间：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.QX_DATE</p>
+        </div>
+        <span class="control-label col-xs-2 text-right"><b>到期时间：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.MTR_DATE</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="control-label col-xs-2 text-right"><b>创建时间：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.CREATE_DATE</p>
+        </div>
+        <span class="control-label col-xs-2 text-right"><b>募集计划来源：</b></span>
+        <div class="col-xs-4">
+            <p class="form-control-static">@Model.RAISE_SOURCE_NAME</p>
+        </div>
+    </div>
+    <div class="modal-footer" style="position: fixed; width: 100%; bottom: 0; height: 50px; z-index: 0">
+        <a class="btn btn-sm" data-dismiss="modal" onclick="CloseDialog()">
+            <i class="icon-remove"></i>
+            取消
+        </a>
+    </div>
+</form>
+<script type="text/javascript">
+
+    var CloseDialog = function () {
+        parent.CloseDialog("#viewDetail_dialog");  //父窗口对话框ID
+    }
+</script>

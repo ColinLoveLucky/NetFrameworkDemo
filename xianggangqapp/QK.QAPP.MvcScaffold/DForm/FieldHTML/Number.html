@@ -1,0 +1,74 @@
+﻿
+<label class="control-label col-xs-12 col-sm-2">
+    
+    $FieldType.Field_DisplayName$
+    $if(FieldType.Field_Required)$
+    <i class="icon-asterisk red smaller-80" 
+         $if(ReadOnly)$
+           style="display:none"
+        $elseif(FieldType.IsDisabled)$
+           style="display:none"
+         $endif$
+       ></i>
+    $endif$
+    ：
+</label>
+<div class="ace-spinner col-xs-12 col-sm-3" >
+    <div class="input-group">
+        <input type="text" class="input-mini spinner-input form-control"
+               id="$FieldType.Field_Key$" name="$FieldType.Field_Key$"
+               data-val="true"
+               $if(FieldType.Field_Required)$
+               data-val-required="请填写$FieldType.Field_DisplayName$!"
+               $endif$
+               $if(ReadOnly)$
+               disabled="disabled"
+               $elseif(FieldType.IsDisabled)$
+               disabled="disabled"
+               $endif$
+               data-val-range="可输入的值必须在$FieldType.MinValue$和$FieldType.MaxValue$之间!"
+               data-val-range-max="$FieldType.MaxValue$"
+               data-val-range-min="$FieldType.MinValue$"
+
+               maxlength="$FieldType.MaxBit$"
+               data-val-length-max="$FieldType.MaxBit$"               
+               data-val-length="可输入位数不超过$FieldType.MaxBit$位!">
+    </div>
+</div>
+ $if(!FieldType.IsDisabled)$
+<script type="text/javascript">
+
+    jQuery(function () {
+        jQuery('#$FieldType.Field_Key$').spinner({
+            min: $FieldType.MinValue$,
+            max: $FieldType.MaxValue$,
+            step: $FieldType.Step$
+        }).parent().append("$FieldType.Unit$");
+        if ($FieldType.DefaultValue$ != 0) {
+            jQuery('#$FieldType.Field_Key$').val("$FieldType.DefaultValue$");
+        }
+        jQuery('#$FieldType.Field_Key$').closest(".ace-spinner");
+        jQuery('#$FieldType.Field_Key$').focus(function () {
+            jQuery(this).keyup(function () {
+                jQuery(this).val(jQuery(this).val().replace(/[^\d.]/g, ""));  //清除“数字”和“.”以外的字符
+                jQuery(this).val(jQuery(this).val().replace(/^\./g, ""));  //验证第一个字符是数字而不是.
+                jQuery(this).val(jQuery(this).val().replace(/\.{2,}/g, ".")); //只保留第一个. 清除多余的.
+                //jQuery(this).val(Utilities.checkLength(jQuery(this).val(), $FieldType.MaxBit$)); //长度控制
+            });
+        }).blur(function () {
+            jQuery(this).unbind('keyup');
+        });       
+       
+
+        if ("$ReadOnly$".toLowerCase() == 'true')
+        {
+            jQuery("#$FieldType.Field_Key$+.spinner-buttons").hide();
+        }
+
+        //jQuery('#$FieldType.Field_Key$').change(function (val) {
+        //    jQuery(this)
+        //});
+
+    });
+</script>
+$endif$

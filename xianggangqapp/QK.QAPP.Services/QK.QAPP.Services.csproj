@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{56657C46-1227-4B08-9956-55C7E68C0C7D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QK.QAPP.Services</RootNamespace>
+    <AssemblyName>QK.QAPP.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\QK.QAPP.SalesCenter\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\QK.QAPP.SalesCenter\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\01.Depends\Practices\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CalcService\CalcService.cs" />
+    <Compile Include="QAPPApiService\SyncBidProductService.cs" />
+    <Compile Include="QAPPCoreService\APP_CARAGENCYSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_CARPRICESERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_CARVALUATORSSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_CITY_PRODUCTSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_FORBIDEN_AREASERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_HOUSESERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_QUANTSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_QUANT_TEMPSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\PAD_CARJUDGESERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\PRE_APP_AUTHSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\PRE_APP_BANKCARDSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\PRE_APP_CARINFOSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\PRE_APP_CUSTOMERSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\PRE_APP_JOBSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\PRE_APP_LOANSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\PRE_APP_MAINSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\PRE_APP_STAFF_ONLYSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\V_APP_CONTRACTSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\V_PRE_APPMAINSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPServiceExtends\APP_AssessService.cs" />
+    <Compile Include="QAPPServiceExtends\APP_CARAGENCYSERVICE.cs" />
+    <Compile Include="QAPPServiceExtends\APP_CARPRICESERVICE.cs" />
+    <Compile Include="QAPPServiceExtends\APP_CITY_PRODUCTSERVICE.cs" />
+    <Compile Include="QAPPServiceExtends\APP_EXTEND_CONFIGSERVICE.cs" />
+    <Compile Include="QAPPServiceExtends\APP_QUANTSERVICE.cs" />
+    <Compile Include="QAPPServiceExtends\APP_REFUSELOANSERVICE.cs" />
+    <Compile Include="QAPPServiceExtends\ExtendApplicationService.cs" />
+    <Compile Include="QAPPCoreService\APP_AUTHSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_EXTEND_CONFIGSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_EXTEND_RELATIONSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_QUEUE_ASSESSSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPServiceExtends\APP_AEOSERVICE.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QAPPCoreService\APP_AEOSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_APPLY_SEQUENCESERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_BANKCARDSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_CARINFOSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_CITYSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_CONTACTSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_CUSTOMERSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_DFORM_FIELDATTRIBUTESERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_DFORM_FORMBUILDERSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_DFORM_FORMFIELDSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_DFORM_FORMINFOSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_FILE_CHECKSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_GLOBALCONFIGSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_JOBSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_LOANSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_MAINSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_MSGBOXSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_MSGBOX_USERSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_NR_LISTSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_QUEUESERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_SALESSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\APP_STAFF_ONLYSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\FL_BIZSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\FL_LISTSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\QAPPService.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPCoreService\V_APPMAINSERVICE.cs">
+      <DependentUpon>QAPPService.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QAPPServiceExtends\ApplyTableService.cs" />
+    <Compile Include="QAPPServiceExtends\APPQueueLogService.cs" />
+    <Compile Include="QAPPServiceExtends\APP_APPLY_SEQUENCEService.cs" />
+    <Compile Include="QAPPServiceExtends\APP_BANKSERVICE.cs" />
+    <Compile Include="QAPPServiceExtends\APP_CITYSERVICE.cs" />
+    <Compile Include="QAPPServiceExtends\APP_GLOBALCONFIGSERVICE.cs" />
+    <Compile Include="QAPPServiceExtends\APP_MSGBOX_USERSERVICE.cs" />
+    <Compile Include="QAPPServiceExtends\CR_DATA_DICService.cs" />
+    <Compile Include="QAPPServiceExtends\ApplicationService.cs" />
+    <Compile Include="QAPPServiceExtends\ExtendApplyService.cs" />
+    <Compile Include="QAPPServiceExtends\GenesisService.cs" />
+    <Compile Include="QAPPServiceExtends\LoanApplicationService.cs" />
+    <Compile Include="QAPPServiceExtends\MobileHistoryService.cs" />
+    <Compile Include="QAPPServiceExtends\PreApplyService.cs" />
+    <Compile Include="QAPPServiceExtends\QFProductInfoService.cs" />
+    <Compile Include="QAPPServiceExtends\QFUploadService.cs" />
+    <Compile Include="QAPPServiceExtends\QFUserService.cs" />
+    <Compile Include="QAPPServiceExtends\StaffPickService.cs" />
+    <Compile Include="QAPPServiceExtends\V_ORG_ROLE_USERService.cs" />
+    <Compile Include="QBService\BidSystemConfigService.cs" />
+    <Compile Include="QBService\BID_ContractService.cs" />
+    <Compile Include="QBService\BID_PactHistoryService.cs" />
+    <Compile Include="QBService\QBAutoJobLogService.cs" />
+    <Compile Include="QBService\QBBidJobAmtService.cs" />
+    <Compile Include="QBService\QBQuartzService.cs" />
+    <Compile Include="QBService\QBBidJobConfigService.cs" />
+    <Compile Include="QBService\BID_LabelPactService.cs" />
+    <Compile Include="QBService\QBUploadService.cs" />
+    <Compile Include="QBService\QuotaAssignService.cs" />
+    <Compile Include="QBService\QuotaBidDicConfigService.cs" />
+    <Compile Include="QBService\QuotaManageService.cs" />
+    <Compile Include="QBService\QuotaUsageService.cs" />
+    <Compile Include="QBService\RaisingPlanService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QK.APP.Entity\QK.QAPP.Entity.csproj">
+      <Project>{ba44676a-cc87-4e0b-9050-a6e88c589515}</Project>
+      <Name>QK.QAPP.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.JobExcute\QK.JobExcute.csproj">
+      <Project>{272b33c5-9da9-457a-aa55-437491585583}</Project>
+      <Name>QK.JobExcute</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Data\QK.QAPP.Data.csproj">
+      <Project>{c4073c60-1f73-4b97-a4b0-2bda7be53fc1}</Project>
+      <Name>QK.QAPP.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Global\QK.QAPP.Global.csproj">
+      <Project>{6c5277ae-2aa1-4390-b536-0979bc8c30b1}</Project>
+      <Name>QK.QAPP.Global</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Infrastructure.Data\QK.QAPP.Infrastructure.Data.csproj">
+      <Project>{c7f1c949-84e1-48c2-92f7-11546eeb0748}</Project>
+      <Name>QK.QAPP.Infrastructure.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.Infrastructure\QK.QAPP.Infrastructure.csproj">
+      <Project>{007c5112-f4a6-496d-a425-a3ba554ab48c}</Project>
+      <Name>QK.QAPP.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QK.QAPP.IServices\QK.QAPP.IServices.csproj">
+      <Project>{790990fa-2043-48ef-bf78-bfb696be36ad}</Project>
+      <Name>QK.QAPP.IServices</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="QAPPCoreService\QAPPService.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>QAPPService.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

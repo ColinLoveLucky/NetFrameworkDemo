@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BA44676A-CC87-4E0B-9050-A6E88C589515}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QK.QAPP.Entity</RootNamespace>
+    <AssemblyName>QK.QAPP.Entity</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.DataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\app\HaoZh\product\12.1.0\client_1\odp.net\bin\4\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="APP_AEO.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_APPLY_SEQUENCE.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_AUTH.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_BANKCARD.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_CARAGENCY.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_CARINFO.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_CARPRICE.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_CARVALUATORS.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_CITY.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_CITY_PRODUCT.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_CONTACT.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_CUSTOMER.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_DFORM_FIELDATTRIBUTE.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_DFORM_FORMBUILDER.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_DFORM_FORMFIELD.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_DFORM_FORMINFO.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_EXTEND_CONFIG.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_EXTEND_RELATION.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_FILE_CHECK.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_FORBIDEN_AREA.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_GLOBALCONFIG.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_HOUSE.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_JOB.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_LOAN.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_MAIN.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExtendEntity\APP_MAIN_SYSDISUSED_WEEKEND.cs" />
+    <Compile Include="APP_MSGBOX.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_MSGBOX_USER.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_NR_LIST.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_QUANT.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_QUANT_TEMP.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_QUEUE.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_QUEUE_ASSESS.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_SALES.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="APP_STAFF_ONLY.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExtendEntity\ArrangementActivityItfDTO.cs" />
+    <Compile Include="ExtendEntity\BidContractSearchPara.cs" />
+    <Compile Include="ExtendEntity\ContractRequest.cs" />
+    <Compile Include="ExtendEntity\ContractResult.cs" />
+    <Compile Include="ExtendEntity\LoanBaseResponse.cs" />
+    <Compile Include="ExtendEntity\GenesisResult.cs" />
+    <Compile Include="ExtendEntity\GenesisStatusEntity.cs" />
+    <Compile Include="FL_BIZ.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FL_LIST.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PAD_CARJUDGE.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_APP_AUTH.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_APP_BANKCARD.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_APP_CARINFO.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_APP_CUSTOMER.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_APP_JOB.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_APP_LOAN.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_APP_MAIN.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRE_APP_STAFF_ONLY.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QbEntity\BidAgreementRequest.cs" />
+    <Compile Include="QbEntity\BidDetailRequest.cs" />
+    <Compile Include="QbEntity\BidSysConfigId.cs" />
+    <Compile Include="QbEntity\BidSystemConfigInfo.cs" />
+    <Compile Include="QbEntity\ContractHistoryRequestType.cs" />
+    <Compile Include="QbEntity\ContractOperateRequest.cs" />
+    <Compile Include="QbEntity\ContractOPTYPE.cs" />
+    <Compile Include="QbEntity\PreCalcRequest.cs" />
+    <Compile Include="QbEntity\QB_CONTRACT_HISTORY.cs" />
+    <Compile Include="QbEntity\QB_P2P_TRUST.cs" />
+    <Compile Include="QbEntity\QB_PRODUCT_MAP.cs" />
+    <Compile Include="QbEntity\QB_V_BID_DETAIL.cs" />
+    <Compile Include="QBThirdEntity\CalcRequest.cs" />
+    <Compile Include="QBThirdEntity\CalcResponse.cs" />
+    <Compile Include="QBThirdEntity\ContractDeleteRequest.cs" />
+    <Compile Include="QBThirdEntity\ContractDownLoadRequest.cs" />
+    <Compile Include="ExtendEntity\APPQueueLog.cs" />
+    <Compile Include="ExtendEntity\ApproveFlagType.cs" />
+    <Compile Include="ExtendEntity\APP_BANK.cs" />
+    <Compile Include="ExtendEntity\APP_BL_MAIN_BL_CODE.cs" />
+    <Compile Include="ExtendEntity\APP_CITY.cs" />
+    <Compile Include="ExtendEntity\APP_DCIN.cs" />
+    <Compile Include="ExtendEntity\AssessListSearchPara.cs" />
+    <Compile Include="ExtendEntity\AssessQueueViewFieldList.cs" />
+    <Compile Include="ExtendEntity\AssessStatusType.cs" />
+    <Compile Include="ExtendEntity\CarListSearchPara.cs" />
+    <Compile Include="ExtendEntity\CFCAPaymentResult.cs" />
+    <Compile Include="ExtendEntity\CreditChannel.cs" />
+    <Compile Include="ExtendEntity\EnterListSearchPara.cs" />
+    <Compile Include="ExtendEntity\APPMenu.cs" />
+    <Compile Include="ExtendEntity\CR_DATA_DIC.cs" />
+    <Compile Include="ExtendEntity\EnterListViewFiledList.cs" />
+    <Compile Include="ExtendEntity\EnterStatusType.cs" />
+    <Compile Include="ExtendEntity\ENUM_FormOperation.cs" />
+    <Compile Include="ExtendEntity\ExcelImportPara.cs" />
+    <Compile Include="ExtendEntity\ExtendApplySearchPara.cs" />
+    <Compile Include="ExtendEntity\ExtendApplyViewFieldList.cs" />
+    <Compile Include="ExtendEntity\ExtendLoanPara.cs" />
+    <Compile Include="ExtendEntity\ExtendStatusType.cs" />
+    <Compile Include="ExtendEntity\MessageStatus.cs" />
+    <Compile Include="ExtendEntity\MobileHistoryStatus.cs" />
+    <Compile Include="ExtendEntity\OnlineUserSearchPara.cs" />
+    <Compile Include="ExtendEntity\OnlineUserViewField.cs" />
+    <Compile Include="ExtendEntity\OverdueStatus.cs" />
+    <Compile Include="ExtendEntity\PInfoInterfaceURLAccount.cs" />
+    <Compile Include="ExtendEntity\PreEnterListSearchPara.cs" />
+    <Compile Include="ExtendEntity\PreEnterListViewFiledList.cs" />
+    <Compile Include="ExtendEntity\PushMessageType.cs" />
+    <Compile Include="QbEntity\AmtAssignListPara.cs" />
+    <Compile Include="QbEntity\AutoJobLogListPara.cs" />
+    <Compile Include="QbEntity\BidSysConfigDic.cs" />
+    <Compile Include="QbEntity\JobAmtInfo.cs" />
+    <Compile Include="QbEntity\ListViewBase.cs" />
+    <Compile Include="QbEntity\QBFileLogTemp.cs" />
+    <Compile Include="QbEntity\QB_AMT_INFO.cs" />
+    <Compile Include="QbEntity\QB_AMT_LIMIT_ASSIGN.cs" />
+    <Compile Include="QbEntity\QB_AUTO_JOB_LOG.cs" />
+    <Compile Include="QbEntity\QB_JOB_AMT_INFO.cs" />
+    <Compile Include="QbEntity\QB_JOB_CONFIG_INFO.cs" />
+    <Compile Include="ExtendEntity\QFAuthInfo.cs" />
+    <Compile Include="ExtendEntity\QFFile.cs" />
+    <Compile Include="ExtendEntity\QFFileLogTemp.cs" />
+    <Compile Include="ExtendEntity\QFFileReadList.cs" />
+    <Compile Include="ExtendEntity\QFFileReadListResult.cs" />
+    <Compile Include="ExtendEntity\QFFileReadListResultList.cs" />
+    <Compile Include="ExtendEntity\QFFileUpload.cs" />
+    <Compile Include="ExtendEntity\QFFileUploadResult.cs" />
+    <Compile Include="ExtendEntity\QFProductInfoList.cs" />
+    <Compile Include="ExtendEntity\QFUser.cs" />
+    <Compile Include="ExtendEntity\BasicEntity.cs" />
+    <Compile Include="ExtendEntity\QuantHandleResult.cs" />
+    <Compile Include="ExtendEntity\QuantImportResult.cs" />
+    <Compile Include="ExtendEntity\QuantStatus.cs" />
+    <Compile Include="ExtendEntity\RmsOrganization.cs" />
+    <Compile Include="ExtendEntity\SequenceAttribute.cs" />
+    <Compile Include="ExtendEntity\StaffUnit.cs" />
+    <Compile Include="ExtendEntity\ViewListByPage.cs" />
+    <Compile Include="ExtendEntity\V_APPMAIN_EXTEND.cs" />
+    <Compile Include="ExtendEntity\V_ORG_ROLE_USER.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QAPP.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QbEntity\AmtLimitListPara.cs" />
+    <Compile Include="QbEntity\BidListQueryPara.cs" />
+    <Compile Include="QbEntity\BidMatchTip.cs" />
+    <Compile Include="QbEntity\BidOperateRequest.cs" />
+    <Compile Include="QbEntity\BidStatusQueryType.cs" />
+    <Compile Include="QbEntity\PageData.cs" />
+    <Compile Include="QbEntity\QB_AMT_LIMIT.cs" />
+    <Compile Include="QbEntity\QB_AMT_LIMIT_ATTRIBUTE.cs" />
+    <Compile Include="QbEntity\QB_DICTIONARY.cs" />
+    <Compile Include="QbEntity\QB_RAISEPLAN.cs" />
+    <Compile Include="QbEntity\QB_RAISEPLAN_HISTORY.cs" />
+    <Compile Include="QbEntity\QB_SYS_CONFIG_INFO.cs" />
+    <Compile Include="QbEntity\QB_V_AMTLIMIT.cs" />
+    <Compile Include="QbEntity\QB_V_AMT_ATTRIBUTE.cs" />
+    <Compile Include="QbEntity\QB_V_AMT_ATTR_DETAIL.cs" />
+    <Compile Include="QbEntity\QB_V_AMT_USE_SUMMARY.cs" />
+    <Compile Include="QbEntity\QB_V_BIDLIST.cs" />
+    <Compile Include="QbEntity\QB_V_AMT_OP_HISTORY.cs" />
+    <Compile Include="QbEntity\RaisePlanListPara.cs" />
+    <Compile Include="QBThirdEntity\BIZ_KEY_VAL.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\BIZ_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\CA_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractCreateRequest.cs" />
+    <Compile Include="QBThirdEntity\ContractCreateResponse.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\BASE_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\BOWR_DETAIL.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\BOWR_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\CLTR_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\DEBT_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\GART_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\G_BOWR_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\INDICATOR.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\LDER_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\PROD_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\PTOPMICAR.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\REPAYMENT.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\RLOV_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\STORE_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\TCLTRINFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\TC_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\test.cs" />
+    <Compile Include="QBThirdEntity\ContractInfo\TRUT_INFO.cs" />
+    <Compile Include="QBThirdEntity\ContractManualSign.cs" />
+    <Compile Include="QBThirdEntity\ContractResultMsg.cs" />
+    <Compile Include="QBThirdEntity\ContractSignUrl.cs" />
+    <Compile Include="QBThirdEntity\ContractUploadRequest.cs" />
+    <Compile Include="QBThirdEntity\ContractViewRequest.cs" />
+    <Compile Include="QBThirdEntity\FILE_LIST.cs" />
+    <Compile Include="QBThirdEntity\MsgInfo.cs" />
+    <Compile Include="V_APPMAIN.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_APP_CONTRACT.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_PRE_APPMAIN.cs">
+      <DependentUpon>QAPP.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="QAPP.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>QAPP.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

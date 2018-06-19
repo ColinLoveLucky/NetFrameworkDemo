@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <style>
+        li {
+           padding-top:20px;
+           padding-bottom:20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div>
+        <ul>
+            <li>  @ViewBag.IocGetServiceTestMessage </li>
+            <li>  @ViewBag.TransactionScopeTestMessage ---运行时间 @ViewBag.TransactionScopeTestTime--</li>
+            <li>  @ViewBag.RepositoryTransactionTestMessage  ---运行时间 @ViewBag.RepositoryTransactionTestTime--</li>
+            <li> @ViewBag.RepositoryUnitWorkSelectTestMessage </li>
+            <li> @ViewBag.RepositoryBaseTransactionTestMessage </li>
+
+       
+        </ul>
+   
+    </div>
+</body>
+</html>
